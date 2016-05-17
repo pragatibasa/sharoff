@@ -61,7 +61,7 @@
 		<fieldset>
 			<legend>Cutting Details</legend>
 			<table width="100%" cellpadding="0" cellspacing="0" border="0">
-			<div id="contentsholder" class="flexcroll" style="width:100%; height:350px; overflow-x:hidden; overflow-y:auto;">
+			<div id="contentsholder" class="flexcroll" style="width:100%; overflow-x:hidden; overflow-y:auto;">
 			<div id="content" style="width:100%; min-height:350px; overflow:hidden;"> 
 			<div id="DynamicGrid_2">
 				No Record!
@@ -121,8 +121,11 @@ function loadfolderlist(account, accname){
             for (var i = 0; i < msg.length; i++) {
             var item = msg[i];
             var thisdata = {}
+			var disabled = "";
+			if(item.balance == 0)
+				disabled = "disabled=true";
 			
-			var selectcoil = '<input type="checkbox" name="chk[]" class="checkbundle" id="check_'+item.bundlenumber+'" name="list" value="'+item.bundlenumber+'" Onclick=updateTextArea("'+item.bundlenumber+'") />';
+			var selectcoil = '<input type="checkbox" '+disabled+' name="chk[]" class="checkbundle" id="check_'+item.bundlenumber+'" name="list" value="'+item.bundlenumber+'" Onclick=updateTextArea("'+item.bundlenumber+'") />';
 			thisdata["select"] = selectcoil;
 			thisdata["bundlenumber"] = item.bundlenumber;
             thisdata["length"] = item.length;

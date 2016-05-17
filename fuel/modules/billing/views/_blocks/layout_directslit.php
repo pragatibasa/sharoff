@@ -8,7 +8,7 @@
 		<span><label>Bill Number:</label></span>
 	</td> 
 	<td>
-		<input id="billid" name="billid" type="text"/>
+		<input id="billid" name="billid" value="<?php echo $billid; ?>" type="text"/>
 	</td>
 </tr>
 </table>	
@@ -505,9 +505,9 @@ function subtotalvalue(){
 
 function taxspec(){
 	var txtslitsubtotal = $('#txtslitsubtotal').val();
-	var servicetax= 0.12 * parseInt(txtslitsubtotal);
-	var eductax= 0.02 * parseInt(servicetax);
-	var secedutax= 0.01 * parseInt(servicetax);
+	var servicetax= 0.145 * parseInt(txtslitsubtotal);
+	var eductax= 0 * parseInt(servicetax);
+	var secedutax= 0 * parseInt(servicetax);
 	var grandtotal= parseInt(txtslitsubtotal)+ parseInt(servicetax)+ parseInt(eductax)+ parseInt(secedutax);
 	document.getElementById("txtservicetax").value = servicetax;
 	document.getElementById("txteductax").value = eductax;

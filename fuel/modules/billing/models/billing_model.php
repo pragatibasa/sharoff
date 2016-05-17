@@ -45,7 +45,20 @@ class Billing_model extends Base_module_model {
 	}
 
 	
-	
+        function getNextBillNo(){
+	  $sqlpcheck= "select max(nBillNo)+1 as nextBillNo from aspen_tblbilldetails where nBillNo < 865930";
+	  $query = $this->db->query($sqlpcheck);
+          $nextBillNo='';
+          if ($query->num_rows() > 0) {
+             foreach ($query->result() as $row)
+             {
+                $nextBillNo= $row->nextBillNo;
+             }
+          } 
+	  return $nextBillNo;
+
+	}
+
 	function billingpreviewviewmodel($pid, $pname,$nsno){
 		if(isset($pid) && isset($pname)) {
 			$partyname = $pname;
@@ -313,7 +326,6 @@ left join aspen_tblbillingstatus on aspen_tblinwardentry.vIRnumber=aspen_tblbill
 			}
 		}	
 		return $arr;
-	
 	}  
 	
 	
@@ -769,24 +781,35 @@ left join aspen_tblbillingstatus on aspen_tblinwardentry.vIRnumber=aspen_tblbill
     return $arra;
   }
   
-	function bundlelistdetails($partyid = '',$nsno = '') 
-	{
-	$sqlbu = "select Distinct aspen_tblbillingstatus.nSno as bundlenumber,aspen_tblcuttinginstruction.nBundleweight as weight ,aspen_tblcuttinginstruction.nNoOfPieces as actualnumber,aspen_tblcuttinginstruction.nLength as length,aspen_tblbillingstatus.nActualNo as notobebilled,aspen_tblbillingstatus.fbilledWeight as billedweight from aspen_tblcuttinginstruction
-	LEFT JOIN aspen_tblbillingstatus  ON aspen_tblcuttinginstruction.vIRnumber=aspen_tblbillingstatus.vIRnumber  	
-	WHERE aspen_tblcuttinginstruction.nSno = aspen_tblbillingstatus.nSno and  aspen_tblbillingstatus.vIRnumber='".$partyid."' and aspen_tblbillingstatus.nSno IN(".$nsno.")  group by aspen_tblbillingstatus.nSno";
-	
-/*	$sqlins = "UPDATE aspen_tblbillingstatus SET fbilledWeight='". $nsno. "' WHERE vIRnumber='".$partyid."' and nSno='".$nsno."'";*/
+function bundlelistdetails($partyid = '',$nsno = '') {
+	$sqlbu = "select 
+				aspen_tblbillingstatus.nSno as bundlenumber,
+				aspen_tblcuttinginstruction.nBundleweight as weight ,
+				aspen_tblcuttinginstruction.nNoOfPieces as actualnumber,
+				aspen_tblcuttinginstruction.nLength as length,
+				aspen_tblbillingstatus.nActualNo as notobebilled,
+				aspen_tblbillingstatus.fbilledWeight as billedweight,
+				COALESCE((aspen_tblcuttinginstruction.nNoOfPieces - sum( aspen_tblbilldetails.ntotalpcs )),aspen_tblcuttinginstruction.nNoOfPieces) as balance
+			from aspen_tblcuttinginstruction 
+			LEFT JOIN aspen_tblbillingstatus ON aspen_tblcuttinginstruction.vIRnumber=aspen_tblbillingstatus.vIRnumber  
+			LEFT JOIN aspen_tblbilldetails on aspen_tblbilldetails.vIRnumber = aspen_tblbillingstatus.vIRnumber  and aspen_tblbillingstatus.nSno = aspen_tblbilldetails.nBundelNumber
+			where aspen_tblbillingstatus.vIRnumber = '".$partyid."'  and 
+					aspen_tblcuttinginstruction.nSno = aspen_tblbillingstatus.nSno 
+			 		and aspen_tblbillingstatus.nSno IN (".$nsno.")
+			group by aspen_tblbillingstatus.nSno";
+
+	/*	$sqlins = "UPDATE aspen_tblbillingstatus SET fbilledWeight='". $nsno. "' WHERE vIRnumber='".$partyid."' and nSno='".$nsno."'";*/
 	$query = $this->db->query($sqlbu);
-		$arr='';
-		if ($query->num_rows() > 0)
-		{
-		   foreach ($query->result() as $row)
-		   {
-		      $arr[] =$row;
-		   }
-		}
-		return $arr;
+	$arr='';
+	if ($query->num_rows() > 0)
+	{
+	   foreach ($query->result() as $row)
+	   {
+	      $arr[] =$row;
+	   }
 	}
+	return $arr;
+}
 	
 		function listbundledetailsslit($partyid = '',$slno = '') 
 	{
@@ -1305,11 +1328,11 @@ left join aspen_tblbillingstatus on aspen_tblinwardentry.vIRnumber=aspen_tblbill
 			</tr>
 			<tr>
 				<td align="left">
-					<h1><b>Total Pieces :</b></h1></td><td align="left"><h1> '.$totalpcs.'</h1></td>
+					<h1><b>Total Pieces :</b></h1></td><td align="left"><h1> 1 </h1></td>
 			</tr>	
 			<tr>
 				<td align="left">
-					<h1><b>Total Amount:</b> </h1></td><td align="left"><h1>'.$totamount.'</h1></td>
+					<h1><b>Description of Coil:</b> </h1></td><td align="left"><h1>'.$totamount.'</h1></td>
 			</tr>	
 			<tr>
 				<td align="left">
@@ -1490,11 +1513,12 @@ left join aspen_tblbillingstatus on aspen_tblinwardentry.vIRnumber=aspen_tblbill
 
 	function savebilldetails_model($billid,$partyid,$txtamount,$txttotalweight,$txtscrap,$txtoutward_num,$txttotalpcs,$mat_desc,$thic,$actualnumberbundle,$pname,$wid,$len,$wei,$txttotallength,$txtweighttotal,$txtwidthtotal,$txtadditional_type,$txtamount_mt,$txtnsubtotal,$txtservicetax,$txteductax,$txtsecedutax,$txtgrandtotal,$container){
 		$sql = "Insert into aspen_tblbilldetails (
-		   nBillNo,dBillDate, vIRnumber, fTotalWeight, fWeightAmount, fServiceTax, fEduTax, fSHEduTax, fGrantTotal, nScrapSent, vOutLorryNo, nPartyId, vBillType, BillStatus, ntotalpcs, ntotalamount, ocwtamount, ocwidthamount, oclengthamount,vAdditionalChargeType,fAmount,nsubtotal,grandtot_words) 
+		   nBillNo,dBillDate, vIRnumber, fTotalWeight, fWeightAmount, fServiceTax, fEduTax, fSHEduTax, fGrantTotal, nScrapSent, vOutLorryNo, nPartyId, vBillType, BillStatus, ntotalpcs, ntotalamount, ocwtamount, ocwidthamount, oclengthamount,vAdditionalChargeType,fAmount,nsubtotal,grandtot_words,nBundelNumber) 
 		  VALUES('". $billid. "',now(),'". $partyid. "','". $txttotalweight. "',(select DISTINCT nAmount as rate from aspen_tblpricetype1
 		left join aspen_tblmatdescription on aspen_tblmatdescription.nMatId=aspen_tblpricetype1.nMatId
 		left join aspen_tblinwardentry on aspen_tblinwardentry.nMatId=aspen_tblmatdescription.nMatId
-		left join aspen_tblbillingstatus on aspen_tblinwardentry.vIRnumber=aspen_tblbillingstatus.vIRnumber where '".$thic."' between nMinThickness and nMaxThickness and aspen_tblmatdescription.vDescription= '".$mat_desc."' and aspen_tblinwardentry.vIRnumber='".$partyid."' and aspen_tblbillingstatus.nSno IN( ".$actualnumberbundle.") order by aspen_tblbillingstatus.nActualNo asc),'". $txtservicetax. "','". $txteductax. "','". $txtsecedutax. "','". $txtgrandtotal. "','". $txtscrap. "','". $txtoutward_num. "',(SELECT aspen_tblpartydetails.nPartyId  FROM aspen_tblpartydetails where aspen_tblpartydetails.nPartyName = '". $pname. "'),'Cutting','Billing','".$txttotalpcs."' ,'".$txtamount."','". $txtweighttotal. "','". $txtwidthtotal. "','". $txttotallength. "','". $txtadditional_type. "','". $txtamount_mt. "','". $txtnsubtotal. "','". $container. "')";
+		left join aspen_tblbillingstatus on aspen_tblinwardentry.vIRnumber=aspen_tblbillingstatus.vIRnumber 
+		where '".$thic."' between nMinThickness and nMaxThickness and aspen_tblmatdescription.vDescription= '".$mat_desc."' and aspen_tblinwardentry.vIRnumber='".$partyid."' and aspen_tblbillingstatus.nSno IN( ".$actualnumberbundle.") order by aspen_tblbillingstatus.nActualNo asc),'". $txtservicetax. "','". $txteductax. "','". $txtsecedutax. "','". $txtgrandtotal. "','". $txtscrap. "','". $txtoutward_num. "',(SELECT aspen_tblpartydetails.nPartyId  FROM aspen_tblpartydetails where aspen_tblpartydetails.nPartyName = '". $pname. "'),'Cutting','Billing','".$txttotalpcs."' ,'".$txtamount."','". $txtweighttotal. "','". $txtwidthtotal. "','". $txttotallength. "','". $txtadditional_type. "','". $txtamount_mt. "','". $txtnsubtotal. "','". $container. "', '".$actualnumberbundle."')";
 
 		$sql54 = "Insert into aspen_hist_tbl_billdetails (
 		 nBillNo,dBillDate, vIRnumber, fTotalWeight, fWeightAmount, fServiceTax, fEduTax, fSHEduTax, fGrantTotal, nScrapSent, vOutLorryNo, nPartyId, vBillType, BillStatus, ntotalpcs, ntotalamount, ocwtamount, ocwidthamount, oclengthamount,vAdditionalChargeType,fAmount,nsubtotal,grandtot_words,fStatus) 
@@ -1510,20 +1534,17 @@ left join aspen_tblbillingstatus on aspen_tblinwardentry.vIRnumber=aspen_tblbill
 		$sql13="UPDATE aspen_tblcuttinginstruction SET vStatus='Billed' WHERE vIRnumber='".$partyid."' and  
 		aspen_tblcuttinginstruction.nSno IN( ".$actualnumberbundle.") order by aspen_tblcuttinginstruction.nNoOfPieces asc";
 		
-		$sql14="UPDATE aspen_tblinwardentry 
-		SET aspen_tblinwardentry.fpresent= 
-		aspen_tblinwardentry.fQuantity-(select (SUM( aspen_tblbillingstatus.fbilledWeight ) *1000)
-		from aspen_tblbillingstatus 
-		where aspen_tblbillingstatus.vIRnumber='".$partyid."'  group by aspen_tblbillingstatus.vIRnumber) 
-		where aspen_tblinwardentry.vIRnumber='".$partyid."' ";
-		
-		$sql14="UPDATE aspen_tblinwardentry 
-		SET aspen_tblinwardentry.fpresent= 
-		aspen_tblinwardentry.fQuantity-(select (SUM( aspen_tblbillingstatus.fbilledWeight ) *1000)
-		from aspen_tblbillingstatus 
-		where aspen_tblbillingstatus.vIRnumber='".$partyid."'  group by aspen_tblbillingstatus.vIRnumber) 
-		where aspen_tblinwardentry.vIRnumber='".$partyid."' ";
-		
+		$sql14="UPDATE aspen_tblinwardentry p,
+						( select 
+							( aspen_tblinwardentry.fpresent - (aspen_tblbillingstatus.fbilledWeight*1000)) as present
+						  from aspen_tblinwardentry
+						  left join aspen_tblbillingstatus on aspen_tblinwardentry.vIRnumber = aspen_tblbillingstatus.vIRnumber
+						  where 
+							aspen_tblbillingstatus.vIRnumber='".$partyid."' and 
+							aspen_tblbillingstatus.nSno=".$actualnumberbundle."  ) p1	
+				SET p.fpresent = p1.present
+				where p.vIRnumber='".$partyid."'";
+
 		$sql148="UPDATE aspen_hist_tblinwardentry 
 		SET aspen_hist_tblinwardentry.fpresent= 
 		aspen_hist_tblinwardentry.fQuantity-(select (SUM( aspen_tblbillingstatus.fbilledWeight ) *1000)
@@ -1977,7 +1998,7 @@ $sql66="UPDATE aspen_tblinwardentry
 	}
 	
 	
-		function finalbillgeneratemodel($partyid='',$actualnumberbundle='',$cust_add='',$cust_rm='',$billid='') {
+		function finalbillgeneratemodel($partyid='',$actualnumberbundle='',$cust_add='',$cust_rm='',$billid='',$args) {
 	$sqlbilling= "select aspen_tblbilldetails.nBillNo as billnumber,DATE_FORMAT(aspen_tblbilldetails.dBillDate, '%d/%m/%Y') as billdate,aspen_tblpartydetails.nPartyName as partyname,aspen_tblpartydetails.nTinNumber as tinnmber,aspen_tblpartydetails.vAddress1 as address1,aspen_tblpartydetails.vAddress2 as address2,aspen_tblpartydetails.vCity as city,aspen_tblbilldetails.vOutLorryNo as trucknumber,aspen_tblmatdescription.vDescription as materialdescription, aspen_tblbillingstatus.fWeight as wei, aspen_tblinwardentry.vInvoiceNo as invoiceno,DATE_FORMAT(aspen_tblinwardentry.dInvoiceDate, '%d/%m/%Y') as invoicedate ,aspen_tblinwardentry.fWidth as width,aspen_tblinwardentry.fThickness as thickness,aspen_tblbillingstatus.nSno as Sno,aspen_tblbillingstatus.nActualNo as Length,aspen_tblpricetype1.nAmount as rate,aspen_tblbillingstatus.nActualNo as noofpcs,
 	aspen_tblbillingstatus.fbilledWeight as weight,aspen_tblbilldetails.ntotalpcs as totalpcs,aspen_tblbilldetails.fTotalWeight as totalweight,round(aspen_tblbilldetails.fWeightAmount+ '".$cust_add."'- '".$cust_rm."' ) as weihtamount,aspen_tblbilldetails.ntotalamount as totalamount,aspen_tblbilldetails.nScrapSent as Scrapsent,round(aspen_tblbilldetails.ocwtamount) as wtamount,round(aspen_tblbilldetails.ocwidthamount) as widthamount,aspen_tblbilldetails.oclengthamount as lengthamount,round(aspen_tblbilldetails.fServiceTax) as servicetax,round(aspen_tblbilldetails.fEduTax) as edutax,aspen_tblbilldetails.fSHEduTax as shedutax,aspen_tblbilldetails.fGrantTotal as grandtotal,aspen_tblbilldetails.vAdditionalChargeType as additionalchargetype,round(aspen_tblbilldetails.fAmount) as amount,round(aspen_tblbilldetails.nsubtotal) as subtotal,aspen_tblbilldetails.grandtot_words as container from aspen_tblinwardentry LEFT JOIN aspen_tblmatdescription  ON aspen_tblmatdescription.nMatId=aspen_tblinwardentry.nMatId LEFT JOIN aspen_tblpartydetails ON aspen_tblpartydetails .nPartyId=aspen_tblinwardentry.nPartyId
 	left join aspen_tblpricetype1 on aspen_tblpricetype1.nMatId=aspen_tblmatdescription.nMatId
@@ -1985,9 +2006,7 @@ $sql66="UPDATE aspen_tblinwardentry
 	LEFT JOIN aspen_tblbilldetails ON aspen_tblbilldetails.vIRnumber=aspen_tblinwardentry.vIRnumber
 	LEFT JOIN aspen_tbladditionalbillchargetype ON aspen_tbladditionalbillchargetype.nBillNo=aspen_tblbilldetails.nBillNo where aspen_tblinwardentry.vIRnumber ='".$partyid."' and  aspen_tblbilldetails.nBillNo='".$billid."' ";
 	
-		
 		$querymain = $this->db->query($sqlbilling);
-		
 		
 		$billnumber = $querymain->row(0)->billnumber;
 		$billdate = $querymain->row(0)->billdate;
@@ -2256,6 +2275,52 @@ $sql66="UPDATE aspen_tblinwardentry
 		</tr>
 		
 		</table>';
+		// Button to validate and print
+		$pdf->Button('print', 30, 10, 'Print', 'PrintDoc()', array('lineWidth'=>2, 'borderStyle'=>'beveled', 'fillColor'=>array(128, 196, 255), 'strokeColor'=>array(64, 64, 64)));
+
+		// Form validation functions
+		$js = <<<EOD
+	var billid = {$args['billid']};
+	var partyid = {$args['partyid']};
+	var txtamount = {$args['txtamount']};
+
+	var fuel_url = 'http://localhost/miniERP/index.php/fuel/billing/finalbillgenerate';
+var dataString =  '&billid='+billid+'&partyid='+partyid+'&txtamount='+txtamount;
+function PrintDoc() {
+var nRslt = app.alert('Have you checked the final bill ? Click Ok,to print and save / No to cancel', 3, 2,  "Welcome");
+if(nRslt == 4) {
+ajax = app.trustedFunction(function(fURL) {
+    app.beginPriv();
+    var params =
+    {
+            cVerb: "POST",
+            cURL: fURL,
+            oHandler:
+            {
+                    response: function(msg, uri, e,h){
+                            var stream = msg;
+                            var string = "";
+                            string = SOAP.stringFromStream( stream );
+                            app.alert( string );
+                    }
+            }
+    };
+
+    Net.HTTP.request(params);
+    app.endPriv();
+});
+app.addMenuItem({
+     cName: "Go PHP", cParent: "File",
+     cExec: 'ajax("http://localhost/myPage.php");',
+     cEnable: "event.rc = (event.target != null);",
+     nPos: 0});
+}
+}
+EOD;
+
+		// Add Javascript code
+		$pdf->IncludeJS($js);
+
 		$pdf->writeHTML($html, true, 0, true, true);
 		$pdf->Ln();
 		$pdf->lastPage();

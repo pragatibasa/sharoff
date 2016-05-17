@@ -8,7 +8,7 @@
 		<span><label>Bill Number:</label></span>
 	</td> 
 	<td>
-		<input id="billid" name="billid" type="text" onchange="billexist();"/>
+		<input id="billid" name="billid" type="text" value="<?php echo $billid; ?>" onchange="billexist();"/>
 	</td>
 </tr>
 </table>	
@@ -486,9 +486,9 @@ $.ajax({
 
 function taxspec(){
 	var txtnsubtotal = $('#txtnsubtotal').val();
-	var servicetax= 0.12 * parseInt(txtnsubtotal);
-	var eductax= 0.02 * parseInt(servicetax);
-	var secedutax= 0.01 * parseInt(servicetax);
+	var servicetax= 0.145 * parseInt(txtnsubtotal);
+	var eductax= 0 * parseInt(servicetax);
+	var secedutax= 0 * parseInt(servicetax);
 	var grandtotal= parseInt(txtnsubtotal)+ servicetax+ eductax+ secedutax;
 	var grandtotals=parseInt(grandtotal)
 	document.getElementById("txtservicetax").value = servicetax;

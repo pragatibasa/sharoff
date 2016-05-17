@@ -60,6 +60,7 @@ class Workin_progress extends Fuel_base_controller {
 			$obj->thickness = $container->thickness;
 			$obj->width = $container->width;
 			$obj->weight = $container->weight;
+			$obj->slipGenerated = ($container->numTimesGenerated>0?true:false);
 			$obj->process = $container->process;
 			$obj->cs = site_url('workin_progress/cutting_slip').'/?partyid='.$container->coilnumber.'&partyname='.$container->partyname;
             $obj->al = site_url('fuel/cutting_instruction').'/?partyid='.$container->coilnumber.'&partyname='.$container->partyname;

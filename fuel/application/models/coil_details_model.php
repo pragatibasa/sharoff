@@ -264,6 +264,7 @@ class Coil_details_model extends Base_module_model {
 		$sql .=" Where aspen_tblpartydetails.nPartyName='".$partyname."' AND aspen_tblinwardentry.fpresent >= 5";
 		}
 		$sql .="  group by aspen_tblinwardentry.vIRnumber order by aspen_tblinwardentry.dReceivedDate desc";
+
 		//echo $sql;die();
 		$query = $this->db->query($sql);
 		$arr='';

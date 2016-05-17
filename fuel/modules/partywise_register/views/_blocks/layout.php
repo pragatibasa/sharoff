@@ -1,4 +1,4 @@
-<?php include_once(PARTYWISE_REGISTER_PATH.'views/_blocks/toolbar.php');?>	
+<?php include_once(PARTYWISE_REGISTER_PATH.'views/_blocks/toolbar.php');?>
 <script language="javascript" type="text/javascript">
   $(window).load(function() {
 	$("tr#childlist").hide();

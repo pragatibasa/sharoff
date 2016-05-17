@@ -52,9 +52,21 @@ class Billing_instruction_model extends Base_module_model {
 	}
 	
 	function billistdetails($partyid = '') {
-	$sqlci = "select Distinct aspen_tblbillingstatus.nSno as bundlenumber,aspen_tblcuttinginstruction.nBundleweight as weight,aspen_tblcuttinginstruction.nLength as length,aspen_tblcuttinginstruction.vIRnumber as coilnumber,aspen_tblcuttinginstruction.nNoOfPieces as totalnumberofsheets,aspen_tblbillingstatus.nActualNo as noofsheetsbilled ,aspen_tblbillingstatus.vBillingStatus as billingstatus,aspen_tblcuttinginstruction.nNoOfPieces - aspen_tblbillingstatus.nActualNo
-  AS balance from aspen_tblcuttinginstruction
-		  LEFT JOIN aspen_tblbillingstatus  ON aspen_tblcuttinginstruction.vIRnumber=aspen_tblbillingstatus.vIRnumber  WHERE  aspen_tblcuttinginstruction.nSno = aspen_tblbillingstatus.nSno and aspen_tblcuttinginstruction.vIRnumber='".$partyid."' Group by  aspen_tblbillingstatus.nSno";
+	$sqlci = "select 
+					Distinct aspen_tblbillingstatus.nSno as bundlenumber,
+					aspen_tblcuttinginstruction.nBundleweight as weight,
+					aspen_tblcuttinginstruction.nLength as length,
+					aspen_tblcuttinginstruction.vIRnumber as coilnumber,
+					aspen_tblcuttinginstruction.nNoOfPieces as totalnumberofsheets,
+					COALESCE(sum( aspen_tblbilldetails.ntotalpcs ),0) as noofsheetsbilled,
+					aspen_tblbillingstatus.vBillingStatus as billingstatus,
+					COALESCE((aspen_tblcuttinginstruction.nNoOfPieces - sum( aspen_tblbilldetails.ntotalpcs )),aspen_tblcuttinginstruction.nNoOfPieces) as balance
+			from aspen_tblcuttinginstruction
+		  		 	LEFT JOIN aspen_tblbillingstatus ON aspen_tblcuttinginstruction.vIRnumber=aspen_tblbillingstatus.vIRnumber  
+		  		 	LEFT JOIN aspen_tblbilldetails on aspen_tblbilldetails.vIRnumber = aspen_tblbillingstatus.vIRnumber  and aspen_tblbillingstatus.nSno = aspen_tblbilldetails.nBundelNumber
+		  	WHERE aspen_tblcuttinginstruction.nSno = aspen_tblbillingstatus.nSno 
+		  		  and aspen_tblcuttinginstruction.vIRnumber='".$partyid."' 
+		  	Group by  aspen_tblbillingstatus.nSno";
 	$query = $this->db->query($sqlci);
 		$arr='';
 		if ($query->num_rows() > 0)

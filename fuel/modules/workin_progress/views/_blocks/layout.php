@@ -43,8 +43,11 @@
   <tbody>
 
     <?php for($i=0; $i<count($workinprogress_lists); $i++) { ?>
-		
-    <tr class="even">
+      <?php if ($workinprogress_lists[$i]->slipGenerated==1) { ?>
+	<tr class="odd">
+      <?php } else { ?>	
+        <tr class="even">
+      <?php } ?>
      <td><?php echo $workinprogress_lists[$i]->coilnumber?></td>
 	  <td><?php echo $workinprogress_lists[$i]->receiveddate?></td>
 	   <td><?php echo $workinprogress_lists[$i]->sizegivendate?></td>
@@ -57,7 +60,7 @@
 	  <td><?php	 echo $al = '<a title="Cutting Instruction" href="' .$workinprogress_lists[$i]->al .'"><span class="badge badge-success" style="color: #FFFFFF;">Cutting</span></a>';
 			 echo $fi = '<a  title="Finish Task" href="' .$workinprogress_lists[$i]->fi .'"><span class="badge badge-info" style="color: #FFFFFF;">Finish</span></a>';
 			 echo $bl = '<a title="Billing Instruction" href="' .$workinprogress_lists[$i]->bl .'"><span class="badge badge-important" style="color: #FFFFFF;">Billing</span></a>'; 
-			 echo $cs = '<a title="Print" href="' .$workinprogress_lists[$i]->cs .'"  target="_blank"><span class="badge" style="color: #FFFFFF;">Cutting Slip</span></a>'; 
+			 echo $cs = '<a title="Print" href="' .$workinprogress_lists[$i]->cs .'"  target="_blank"><span class="badge" style="color: #FFFFFF;" >Cutting Slip</span></a>'; 
 			 	  
 			 ?> </td>
 	   </tr>
@@ -92,6 +95,13 @@
 
 </script>  
   <script type="text/javascript">
+
+$('#myTable tr').bind('click', function(e) {
+    if ($(this).parent("thead").length == 0){
+	    $(e.currentTarget).children('td, th').css('background-color','#7FFFD4');
+    }
+})
+
 function finishtask(id)
 {
 	var coilnumber = $('#vnum'+id).val();

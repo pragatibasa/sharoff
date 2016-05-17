@@ -71,9 +71,10 @@ class workin_progress_model extends Base_module_model {
 	
 	function toolbar_list()
 	{
-		$query = $this->db->query("select DISTINCT aspen_tblinwardentry.vIRnumber as coilnumber , DATE_FORMAT(aspen_tblinwardentry.dReceivedDate, '%d-%m-%Y') as receiveddate, DATE_FORMAT(aspen_tblcuttinginstruction.dDate, '%d-%m-%Y') as sizegivendate ,DATE_FORMAT(aspen_tblrecoiling.dStartDate, '%d-%m-%Y') as recoilingdate ,DATE_FORMAT(aspen_tblslittinginstruction.dDate, '%d-%m-%Y') as slittingdate,aspen_tblpartydetails.nPartyName as partyname,aspen_tblmatdescription.vDescription as materialdescription, aspen_tblinwardentry.fThickness as thickness, aspen_tblinwardentry.fWidth as width, aspen_tblinwardentry.fpresent as weight,aspen_tblinwardentry.vprocess as process From aspen_tblinwardentry LEFT JOIN aspen_tblmatdescription  ON aspen_tblmatdescription.nMatId=aspen_tblinwardentry.nMatId LEFT JOIN aspen_tblcuttinginstruction  ON aspen_tblcuttinginstruction.vIRnumber=aspen_tblinwardentry.vIRnumber LEFT JOIN aspen_tblrecoiling  ON aspen_tblrecoiling .vIRnumber=aspen_tblinwardentry.vIRnumber LEFT JOIN aspen_tblpartydetails ON aspen_tblpartydetails .nPartyId=aspen_tblinwardentry.nPartyId 
+		$query = $this->db->query("select DISTINCT aspen_tblinwardentry.vIRnumber as coilnumber , DATE_FORMAT(aspen_tblinwardentry.dReceivedDate, '%d-%m-%Y') as receiveddate, DATE_FORMAT(aspen_tblcuttinginstruction.dDate, '%d-%m-%Y') as sizegivendate ,DATE_FORMAT(aspen_tblrecoiling.dStartDate, '%d-%m-%Y') as recoilingdate ,DATE_FORMAT(aspen_tblslittinginstruction.dDate, '%d-%m-%Y') as slittingdate,aspen_tblpartydetails.nPartyName as partyname,aspen_tblmatdescription.vDescription as materialdescription, aspen_tblinwardentry.fThickness as thickness, aspen_tblinwardentry.fWidth as width, aspen_tblinwardentry.fpresent as weight,aspen_tblinwardentry.vprocess as process, ifnull(aspen_tbl_cuttingslipgenerated.numTimesGenerated,0) as numTimesGenerated From aspen_tblinwardentry LEFT JOIN aspen_tblmatdescription  ON aspen_tblmatdescription.nMatId=aspen_tblinwardentry.nMatId LEFT JOIN aspen_tblcuttinginstruction  ON aspen_tblcuttinginstruction.vIRnumber=aspen_tblinwardentry.vIRnumber LEFT JOIN aspen_tblrecoiling  ON aspen_tblrecoiling .vIRnumber=aspen_tblinwardentry.vIRnumber LEFT JOIN aspen_tblpartydetails ON aspen_tblpartydetails .nPartyId=aspen_tblinwardentry.nPartyId 
 		LEFT JOIN aspen_tblslittinginstruction ON aspen_tblslittinginstruction .vIRnumber=aspen_tblinwardentry.vIRnumber
 		LEFT JOIN aspen_tblbillingstatus ON aspen_tblbillingstatus.vIRnumber=aspen_tblinwardentry.vIRnumber
+		LEFT JOIN aspen_tbl_cuttingslipgenerated ON aspen_tbl_cuttingslipgenerated.nPartyId=aspen_tblinwardentry.vIRnumber 
 		where aspen_tblinwardentry.vStatus = 'Work In Progress' or aspen_tblslittinginstruction.vStatus='WIP-Slitting' or aspen_tblrecoiling.vStatus='WIP-Recoiling' or aspen_tblcuttinginstruction.vStatus='WIP-Cutting' Group by aspen_tblinwardentry.vIRnumber"); 
 		$arr='';
 		if ($query->num_rows() > 0)
@@ -114,7 +115,21 @@ where aspen_tblinwardentry.vStatus = 'Work In Progress' or aspen_tblslittinginst
 	}
 	
 	
-	
+	function cutting_slipgenerated($partyid=''){
+		if(isset($partyid)){
+			$sqlpcheck= "select numTimesGenerated from aspen_tbl_cuttingslipgenerated where nPartyId='".$partyid."'";
+			$query = $this->db->query($sqlpcheck);
+			if ($query->num_rows() > 0) {
+				//update numTimesGenerated	
+				$sql = ("Update aspen_tbl_cuttingslipgenerated set numTimesGenerated=numTimesGenerated+1 where nPartyId='".$partyid."'");
+				$query1=$this->db->query ($sql);
+			}else{
+				$sql = "Insert into aspen_tbl_cuttingslipgenerated  (nPartyId,numTimesGenerated) VALUES('". $partyid. "',1)";
+				$query = $this->db->query($sql);
+			}
+		}
+	}
+
 	function cutting_slipmodel($partyid='',$partyname = '') 
 	
 	{
@@ -122,6 +137,7 @@ where aspen_tblinwardentry.vStatus = 'Work In Progress' or aspen_tblslittinginst
 			$partyname = $partyname;
 			$partyid = $partyid;
 		}
+	$this->cutting_slipgenerated($partyid);
 	$sqlpcheck= "Select vprocess from aspen_tblinwardentry where vIRnumber='".$partyid."'";
 	$query = $this->db->query($sqlpcheck);
 		$arr='';

@@ -179,14 +179,12 @@
 	
 	<script type="text/javascript">
 //number to words
-
 function numbertowords() {
  var junkVal=document.getElementById('txtgrandtotal').value;
  junkVal=Math.floor(junkVal);
  var obStr=new String(junkVal);
  numReversed=obStr.split("");
  actnumber=numReversed.reverse();
-
  if(Number(junkVal) >=0){
   //do nothing
  }
@@ -202,11 +200,9 @@ function numbertowords() {
   alert('Oops!!!! the Number is too big to covertes');
   return false;
  }
-
  var iWords=["Zero", " One", " Two", " Three", " Four", " Five", " Six", " Seven", " Eight", " Nine"];
  var ePlace=['Ten', ' Eleven', ' Twelve', ' Thirteen', ' Fourteen', ' Fifteen', ' Sixteen', ' Seventeen', ' Eighteen', ' Nineteen'];
  var tensPlace=['dummy', ' Ten', ' Twenty', ' Thirty', ' Forty', ' Fifty', ' Sixty', ' Seventy', ' Eighty', ' Ninety' ];
-
  var iWordsLength=numReversed.length;
  var totalWords="";
  var inWords=new Array();
@@ -283,7 +279,6 @@ function numbertowords() {
   }
   j++;
  }
-
  function tens_complication() {
   if(actnumber[i]==0) {
    inWords[j]='';
@@ -301,9 +296,7 @@ function numbertowords() {
  }
  document.getElementById('container').value=finalWord;
 }
-
 //	
-
 //simple function to convert from numbers to words from 1 to 999
 function triConvert(num){
     var Ones = new Array('', ' One', ' Two', ' Three', ' Four', ' Five', ' Six', ' Seven', ' Eight', ' Nine', ' Ten', ' eleven', ' twelve', ' thirteen', ' fourteen', ' fifteen', ' sixteen', ' seventeen', ' eighteen', ' nineteen');
@@ -311,7 +304,6 @@ function triConvert(num){
     var hundred = ' hundred';
     var output = '';
     var numString = num.toString();
-
     if (num == 0) {
         return 'dontAddBigSufix';
     }
@@ -320,7 +312,6 @@ function triConvert(num){
         output = Ones[num];
         return output;
     }
-
     //100 and more
     if (numString.length == 3) {
         output = Ones[parseInt(numString.charAt(0))] + hundred;
@@ -328,10 +319,8 @@ function triConvert(num){
         output += Ones[parseInt(numString.charAt(2))];
         return output;
     }
-
     output += tens[parseInt(numString.charAt(0))];
     output += Ones[parseInt(numString.charAt(1))];
-
     return output;
 }   
 </script>
@@ -372,7 +361,6 @@ $.ajax({
     return false;
     }
 }
-
  function subtotalvalue(){
 	var partyid = $('#pid').val();
 	var txtamount_mt = $('#txtamount_mt').val();
@@ -381,20 +369,17 @@ $.ajax({
 	document.getElementById("txtnsubtotal").value = resultbundle;
 	taxspec();
 }
-
-
 function taxspec(){
 	var txtnsubtotal = $('#txtnsubtotal').val();
-	var servicetax= 0.12 * parseInt(txtnsubtotal);
-	var eductax= 0.02 * parseInt(servicetax);
-	var secedutax= 0.01 * parseInt(servicetax);
+	var servicetax= 0.145 * parseInt(txtnsubtotal);
+	var eductax= 0 * parseInt(servicetax);
+	var secedutax= 0 * parseInt(servicetax);
 	var grandtotal= parseInt(txtnsubtotal)+ parseInt(servicetax)+ parseInt(eductax)+ parseInt(secedutax);
 	document.getElementById("txtservicetax").value = servicetax;
 	document.getElementById("txteductax").value = eductax;
 	document.getElementById("txtsecedutax").value = secedutax;
 	document.getElementById("txtgrandtotal").value = grandtotal;
 }
-
   function functionpdfprint(){
 	subtotalvalue();
 	numbertowords();
@@ -403,7 +388,6 @@ function taxspec(){
 	{
 	alert("Please enter the Bill Number");
 	}
-
 	var partyid = $('#pid').val();
 	var pname = $('#pname').val();
 	var cust_add = $('#cust_add').val();
@@ -447,7 +431,6 @@ function taxspec(){
 		    window.open(url);
 		   }  
 		});
-
 }
  
  
@@ -474,7 +457,6 @@ function taxspec(){
       window.open(url);
      }  
   }); 
-
 }
  
  
@@ -488,7 +470,6 @@ for(key in json)
     $('input[name='+key+']').val(json[key]);
 	handling();
 }
-
 function functionpdf(){
  var pid = $('#pid').val();
  var pname = $('#pname').val();
@@ -511,9 +492,7 @@ function functionpdf(){
       window.open(url);
      }  
   }); 
-
 }
-
 function handling(){
 	var pid = $('#pid').val();
 	var mat_desc=$('#mat_desc').val();
@@ -531,7 +510,6 @@ $.ajax({
 	   }  
 	}); 
 }
-
 function noofpcs(bundleid){
 	var partyid = $('#pid').val();
 	var dataString = 'bundleid='+bundleid+'&partyid='+partyid;
@@ -548,18 +526,12 @@ $.ajax({
 	   }  
 	}); 
 }
-
-
 function totalweight_check(){
 	var partyid = $('#pid').val();
 	var wei = $('#wei').val();
 	var weight = wei/1000;
 	document.getElementById("totalweight_check").value = weight;
 }
-
-
-
-
 function totalamt(){
 	var partyid = $('#pid').val();
 	var cust_add = $('#cust_add').val();
@@ -581,10 +553,6 @@ $.ajax({
 	   }  
 	}); 
 }
-
-
-
-
 function totalrate(){
 	var partyid = $('#pid').val();
 	var cust_add = $('#cust_add').val();
@@ -605,7 +573,6 @@ $.ajax({
 	   }  
 	}); 
 }
-
 function directbilling(){
  var mat_desc=$('#mat_desc').val();
  var partyid = $('#pid').val();
@@ -629,7 +596,6 @@ $.ajax({
     }  
  }); 
 }
-
 function loadfolderlist(account, accname,bundlenumber) {
 handling();
 	$('#DynamicGrid_2').hide();
@@ -699,7 +665,6 @@ handling();
 			}
     });
 }
-
 function loadprocessingcharge(account, accname) {
 	 var mat_desc=$('#mat_desc').val();
  var partyid = $('#pid').val();
@@ -771,8 +736,6 @@ totalamt();
 			}
     });
 }
-
-
 function billexist(){
         var billid = $('#billid').val();
         var isANumber = isNaN(billid) === false;

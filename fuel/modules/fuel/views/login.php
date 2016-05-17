@@ -2,7 +2,9 @@
         "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
+<script src="https://apis.google.com/js/platform.js" async defer></script>
 	<meta http-equiv="content-type" content="text/html; charset=UTF-8" />
+	<meta name="google-signin-client_id" content="782419503683-mb5j95pou0rr0o5074bthjviubhigjf0.apps.googleusercontent.com">
  	<title><?=$page_title?></title>
 	<?=css('login', FUEL_FOLDER)?>
 	<script type="text/javascript">
@@ -27,6 +29,7 @@
 		<?=$form?>
 	</div>	
 	<div id="login_notification" class="notification">
+		<!-- <div class="g-signin2" data-onsuccess="onSignIn"></div> -->
 			<?=$notifications?>
 	</div>
 	<div id="settingdiv">
@@ -42,7 +45,7 @@
 	</div>
 	</div>
 	<div id="login_footer">
-		<div align="center">Copyright &copy; 2012 <a href="http://www.hooduku.com" target="_blank">Hooduku Inc</a>. All Rights Reserved.</div>
+		<div align="center">Copyright &copy; 2016 <a href="http://www.hooduku.com" target="_blank">Hooduku Inc</a>. All Rights Reserved.</div>
 	</div>
 </div>
 </body>

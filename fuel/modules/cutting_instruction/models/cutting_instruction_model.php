@@ -52,13 +52,13 @@ class Cutting_instruction_model extends Base_module_model {
 		   }
 		}
 		json_encode($arr);
-  foreach ($arr as $row){
-	if($row->nSno > 0){
+  // foreach ($arr as $row){
+//	if($row->nSno > 0){
   $sql = $this->db->query ("UPDATE aspen_tblcuttinginstruction  SET vStatus='WIP-Cutting' WHERE vIRnumber='".$_POST['pid']."' and nSno!=0");
   $sql = $this->db->query ("UPDATE aspen_tblinwardentry  SET vprocess='Cutting' WHERE vIRnumber='".$_POST['pid']."'");
   
-   }
-  }
+  // }
+ // }
   $sql = $this->db->query ("UPDATE aspen_tblinwardentry  SET vStatus='Work In Progress' WHERE vIRnumber='".$_POST['pid']."'");
   
  }

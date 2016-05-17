@@ -50,8 +50,10 @@ class Billing extends Fuel_base_controller {
 	
 	function index(){
 		if(!empty($this->data) && isset($this->data)) {
+			$this->load->module_model(BILLING_FOLDER, 'billing_model');
+			$vars['billid']= $this->billing_model->getNextBillNo();
 			$vars['data']= $this->data;
-			$vars['partyname']= $this->partyname;
+			$vars['partyname']=$this->partyname;
 			$vars['partyid']= $this->partyid;
 			$vars['partyid']= $this->partyid;
 			$vars['nsno']= $this->nsno;
@@ -102,6 +104,7 @@ class Billing extends Fuel_base_controller {
 				$obj->length = $cl->length;
 				$obj->notobebilled = $cl->notobebilled;
 				$obj->billedweight = $cl->billedweight;
+				$obj->balance = $cl->balance;
 				$files[] = $obj;
 			}
 			echo json_encode($files);
@@ -452,7 +455,7 @@ class Billing extends Fuel_base_controller {
 		$cust_rm = $args['cust_rm'];
 		$billid = $args['billid'];
 	$this->load->module_model(BILLING_FOLDER, 'billing_model');
-	$finalbillgenerateb = $this->billing_model->finalbillgeneratemodel($partyid,$actualnumberbundle,$cust_add,$cust_rm,$billid);
+	$finalbillgenerateb = $this->billing_model->finalbillgeneratemodel($partyid,$actualnumberbundle,$cust_add,$cust_rm,$billid,$args);
 	}
 	
 

@@ -8,7 +8,7 @@
 		<span><label>Bill Number:</label></span>
 	</td> 
 	<td>
-		<input id="billid" name="billid" type="text"  />
+		<input id="billid" name="billid" value="<?php echo $billid; ?>" type="text"  />
 	</td>
 </tr>
 </table>	
@@ -112,7 +112,8 @@
 			<input id= "bundleweightactual" type="hidden"   /> 
 		</div>
 		<div class="pad-10">
-			<input id= "actualnumberbundle" type="hidden"  /> 
+			<input id= "actualnumberbundle" type="hidden"  />
+			<input id= "balance" type="hidden"  /> 
 			<input id= "billedweight" type="hidden"  /> 
 			<input id= "changednumber" type="hidden"  />
 		</div>
@@ -489,15 +490,6 @@ function functionpdf(){
 	}
 }
 
-
-
-
-
-
-
-
-
-
 function loadfolderlist(account, accname,bundlenumber) {
 	$('#DynamicGrid_2').hide();
 	var loading = '<div id="DynamicGridLoading_2"> '+
@@ -523,15 +515,16 @@ function loadfolderlist(account, accname,bundlenumber) {
             for (var i = 0; i < msg.length; i++) {
             var item = msg[i];
             var thisdata = {};
-			var selectbundle = '<input class="grand_total_check" name="chk[]" type="checkbox" id="radio_'+item.bundlenumber+'" name="list" value="'+item.bundlenumber+'" onClick=selectbundleid('+item.bundlenumber+','+item.weight+','+item.notobebilled+') />';
+			var selectbundle = '<input class="grand_total_check" name="chk[]" type="checkbox" id="radio_'+item.bundlenumber+'" name="list" value="'+item.bundlenumber+'" onClick=selectbundleid('+item.bundlenumber+','+item.weight+','+item.notobebilled+') /><input type="hidden" id="balance_'+item.bundlenumber+'" value="'+item.balance+'"/><input type="hidden" id="noToBeBilled_'+item.bundlenumber+'" value="'+item.notobebilled+'"/>';
 			thisdata["select"] = selectbundle;
 			thisdata["bundlenumber"] = item.bundlenumber;
             thisdata["weight(inkgs)"] = item.weight;
             thisdata["actualnumber"] = item.actualnumber;
             thisdata["length(in mm)"] = item.length;
             thisdata["number to be billed"] = item.notobebilled;
+            thisdata["balance"] = item.balance;
           //  thisdata["billed weight"] = item.billedweight;
-            var edit = '<a class="ico_coil_edit" title="Edit" href="#" onClick=functionedit('+item.bundlenumber+','+item.notobebilled+','+item.actualnumber+','+item.weight+')><img src="<?php echo img_path('iconset/ico_edit.png'); ?>" /></a>';
+            var edit = '<a class="ico_coil_edit" title="Edit" href="#" onClick=functionedit('+item.bundlenumber+','+item.notobebilled+','+item.actualnumber+','+item.weight+','+item.balance+')><img src="<?php echo img_path('iconset/ico_edit.png'); ?>" /></a>';
             thisdata["action"] =  edit;
 			//thisdata["action"] = '';
             partydata.push(thisdata);
@@ -571,7 +564,7 @@ function selectbundleid(s,r,bw,ac){
 	document.getElementById('txtbundleweight').value = r;	
 	document.getElementById('changednumber').value = bw;	
 	document.getElementById('actualnumberbundle').value = ac;	
-	
+
 	var allVals = [];
          $('#content :checked').each(function() {
            allVals.push($(this).val());
@@ -1038,9 +1031,9 @@ function subtotalvalue(){
 
 function taxspec(){
 	var txtnsubtotal = $('#txtnsubtotal').val();
-	var servicetax=  Math.round(0.12 * parseInt(txtnsubtotal));
-	var eductax=  Math.round(0.02 * parseInt(servicetax));
-	var secedutax=  Math.round(0.01 * parseInt(servicetax));
+	var servicetax=  Math.round(0.145 * parseInt(txtnsubtotal));
+	var eductax=  Math.round(0 * parseInt(servicetax));
+	var secedutax=  Math.round(0 * parseInt(servicetax));
 	var grandtotal= Math.round(parseInt(txtnsubtotal)+ parseInt(servicetax)+ parseInt(eductax)+ parseInt(secedutax));
 	document.getElementById("txtservicetax").value = servicetax;
 	document.getElementById("txteductax").value = eductax;
@@ -1048,7 +1041,7 @@ function taxspec(){
 	document.getElementById("txtgrandtotal").value = grandtotal;
 }
 function functionsave(){
-billexist();
+	billexist();
  var txtbundleids=$('#txtbundleids').val();
  var mat_desc=$('#mat_desc').val();
  var thic=$('#thic').val();
@@ -1057,22 +1050,27 @@ billexist();
 var cust_add=$('#cust_add').val();
 var cust_rm=$('#cust_rm').val();
 var atLeastOneIsChecked = $('input[name="chk[]"]:checked').length > 0;
- weightcount(actualnumberbundle);
- noofpcs(actualnumberbundle);
- totalvalue(actualnumberbundle);
- totalengthvalue();
+var numberToBeBilled = $('#noToBeBilled_'+actualnumberbundle).val();
+var balance = $('#balance_'+actualnumberbundle).val();
  if( atLeastOneIsChecked == false)
  {
   alert('Please select the check box');
   return false;
  }
- else if ( billid == ' ')
-  {
+ else if ( billid == ' ') {
   alert('Please Enter the bill number');
+  return false;
+ }
+ else if( numberToBeBilled > balance ) {
+ 	alert('Number to be billed should not be more than balance available.');
+	return false;
  }
  else
  {
- 
+weightcount(actualnumberbundle);
+ noofpcs(actualnumberbundle);
+ totalvalue(actualnumberbundle);
+ totalengthvalue(); 
  var dataString = 'mat_desc='+mat_desc+'&thic='+thic+'&partyid='+partyid+'&actualnumberbundle='+actualnumberbundle+"&cust_add="+cust_add+"&cust_rm="+cust_rm;
 $.ajax({  
     type: "POST",  
@@ -1094,13 +1092,14 @@ function showTextBox(id) {
 
 }
 
-function functionedit(b,n,ac,bw){
+function functionedit(b,n,ac,bw,balance){
 	document.getElementById('bundlenumber').value = b;
 	document.getElementById('billed').value = n;
 	document.getElementById('bundleweightactual').value = bw;
 	document.getElementById('actualnumberbundle').value = ac;
-
+	document.getElementById('balance').value = balance;
 }
+
 function loadtotal_account(bundleid){
 
 	var partyid = $('#pid').val();
@@ -1121,7 +1120,9 @@ function functioneditcoil(){
 	var bundleweightactual = $('#bundleweightactual').val();
 	var actualnumberbundle = $('#actualnumberbundle').val();
 	var billedweight = $('#billedweight').val();
+	var balance = $('#balance').val();
 	countlenvalue();
+	
 	if(bundlenumber == '' || billed =='')
 	{
 		alert('INVALID');
@@ -1129,6 +1130,9 @@ function functioneditcoil(){
 	}
 	else if(parseInt(billed) > parseInt(actualnumberbundle)){
 		alert('Billed number exceeds actual number');
+		return false;
+	} else if( parseInt(billed) > parseInt(balance)) {
+		alert('Number to be billed should not be more than balance available.');
 		return false;
 	}
 	else{
@@ -1150,7 +1154,7 @@ function functioneditcoil(){
 
 
 function savebill_details(){
-billexist();
+	billexist();
 	subtotalvalue();
 	numbertowords();
 	var billid = $('#billid').val();
@@ -1192,10 +1196,8 @@ billexist();
 			var cust_rm=$('#cust_rm').val();
 			var billid=$('#billid').val();
 			var dataStringone = 'partyid='+partyid+'&actualnumberbundle='+actualnumberbundle+'&cust_add='+cust_add+'&cust_rm='+cust_rm+'&billid='+billid;
-			var url = "<?php echo fuel_url('billing/finalbillgenerate');?>/?"+dataStringone;
+			var url = "<?php echo fuel_url('billing/finalbillgenerate');?>/?"+dataStringone+"&"+dataString;
 		    window.open(url);
-			//window.open('url', 'window name', 'window settings');
-		//	previewbill();/?&partyid=000911177
 		   }  
 		}); 
 }
