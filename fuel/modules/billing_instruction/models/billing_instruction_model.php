@@ -67,6 +67,7 @@ class Billing_instruction_model extends Base_module_model {
 		  	WHERE aspen_tblcuttinginstruction.nSno = aspen_tblbillingstatus.nSno 
 		  		  and aspen_tblcuttinginstruction.vIRnumber='".$partyid."' 
 		  	Group by  aspen_tblbillingstatus.nSno";
+		  	
 	$query = $this->db->query($sqlci);
 		$arr='';
 		if ($query->num_rows() > 0)

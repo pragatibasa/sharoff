@@ -61,7 +61,7 @@
 		<fieldset>
 			<legend>Cutting Details</legend>
 			<table width="100%" cellpadding="0" cellspacing="0" border="0">
-			<div id="contentsholder" class="flexcroll" style="width:100%; overflow-x:hidden; overflow-y:auto;">
+			<div id="contentsholder" class="flexcroll" style="width:100%; overflow-x:hidden; overflow-y:auto;height:350px;height:350px;">
 			<div id="content" style="width:100%; min-height:350px; overflow:hidden;"> 
 			<div id="DynamicGrid_2">
 				No Record!

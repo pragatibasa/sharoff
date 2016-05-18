@@ -1061,7 +1061,7 @@ var balance = $('#balance_'+actualnumberbundle).val();
   alert('Please Enter the bill number');
   return false;
  }
- else if( numberToBeBilled > balance ) {
+ else if( parseInt(numberToBeBilled) > parseInt(balance)) {
  	alert('Number to be billed should not be more than balance available.');
 	return false;
  }
@@ -1196,7 +1196,7 @@ function savebill_details(){
 			var cust_rm=$('#cust_rm').val();
 			var billid=$('#billid').val();
 			var dataStringone = 'partyid='+partyid+'&actualnumberbundle='+actualnumberbundle+'&cust_add='+cust_add+'&cust_rm='+cust_rm+'&billid='+billid;
-			var url = "<?php echo fuel_url('billing/finalbillgenerate');?>/?"+dataStringone+"&"+dataString;
+			var url = "<?php echo fuel_url('billing/finalbillgenerate');?>/?"+dataStringone;
 		    window.open(url);
 		   }  
 		}); 

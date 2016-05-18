@@ -1998,7 +1998,7 @@ $sql66="UPDATE aspen_tblinwardentry
 	}
 	
 	
-		function finalbillgeneratemodel($partyid='',$actualnumberbundle='',$cust_add='',$cust_rm='',$billid='',$args) {
+		function finalbillgeneratemodel($partyid='',$actualnumberbundle='',$cust_add='',$cust_rm='',$billid='') {
 	$sqlbilling= "select aspen_tblbilldetails.nBillNo as billnumber,DATE_FORMAT(aspen_tblbilldetails.dBillDate, '%d/%m/%Y') as billdate,aspen_tblpartydetails.nPartyName as partyname,aspen_tblpartydetails.nTinNumber as tinnmber,aspen_tblpartydetails.vAddress1 as address1,aspen_tblpartydetails.vAddress2 as address2,aspen_tblpartydetails.vCity as city,aspen_tblbilldetails.vOutLorryNo as trucknumber,aspen_tblmatdescription.vDescription as materialdescription, aspen_tblbillingstatus.fWeight as wei, aspen_tblinwardentry.vInvoiceNo as invoiceno,DATE_FORMAT(aspen_tblinwardentry.dInvoiceDate, '%d/%m/%Y') as invoicedate ,aspen_tblinwardentry.fWidth as width,aspen_tblinwardentry.fThickness as thickness,aspen_tblbillingstatus.nSno as Sno,aspen_tblbillingstatus.nActualNo as Length,aspen_tblpricetype1.nAmount as rate,aspen_tblbillingstatus.nActualNo as noofpcs,
 	aspen_tblbillingstatus.fbilledWeight as weight,aspen_tblbilldetails.ntotalpcs as totalpcs,aspen_tblbilldetails.fTotalWeight as totalweight,round(aspen_tblbilldetails.fWeightAmount+ '".$cust_add."'- '".$cust_rm."' ) as weihtamount,aspen_tblbilldetails.ntotalamount as totalamount,aspen_tblbilldetails.nScrapSent as Scrapsent,round(aspen_tblbilldetails.ocwtamount) as wtamount,round(aspen_tblbilldetails.ocwidthamount) as widthamount,aspen_tblbilldetails.oclengthamount as lengthamount,round(aspen_tblbilldetails.fServiceTax) as servicetax,round(aspen_tblbilldetails.fEduTax) as edutax,aspen_tblbilldetails.fSHEduTax as shedutax,aspen_tblbilldetails.fGrantTotal as grandtotal,aspen_tblbilldetails.vAdditionalChargeType as additionalchargetype,round(aspen_tblbilldetails.fAmount) as amount,round(aspen_tblbilldetails.nsubtotal) as subtotal,aspen_tblbilldetails.grandtot_words as container from aspen_tblinwardentry LEFT JOIN aspen_tblmatdescription  ON aspen_tblmatdescription.nMatId=aspen_tblinwardentry.nMatId LEFT JOIN aspen_tblpartydetails ON aspen_tblpartydetails .nPartyId=aspen_tblinwardentry.nPartyId
 	left join aspen_tblpricetype1 on aspen_tblpricetype1.nMatId=aspen_tblmatdescription.nMatId
@@ -2280,41 +2280,12 @@ $sql66="UPDATE aspen_tblinwardentry
 
 		// Form validation functions
 		$js = <<<EOD
-	var billid = {$args['billid']};
-	var partyid = {$args['partyid']};
-	var txtamount = {$args['txtamount']};
-
-	var fuel_url = 'http://localhost/miniERP/index.php/fuel/billing/finalbillgenerate';
-var dataString =  '&billid='+billid+'&partyid='+partyid+'&txtamount='+txtamount;
 function PrintDoc() {
 var nRslt = app.alert('Have you checked the final bill ? Click Ok,to print and save / No to cancel', 3, 2,  "Welcome");
-if(nRslt == 4) {
-ajax = app.trustedFunction(function(fURL) {
-    app.beginPriv();
-    var params =
-    {
-            cVerb: "POST",
-            cURL: fURL,
-            oHandler:
-            {
-                    response: function(msg, uri, e,h){
-                            var stream = msg;
-                            var string = "";
-                            string = SOAP.stringFromStream( stream );
-                            app.alert( string );
-                    }
-            }
-    };
+	if(nRslt == 4) {
+		print();
+	}
 
-    Net.HTTP.request(params);
-    app.endPriv();
-});
-app.addMenuItem({
-     cName: "Go PHP", cParent: "File",
-     cExec: 'ajax("http://localhost/myPage.php");',
-     cEnable: "event.rc = (event.target != null);",
-     nPos: 0});
-}
 }
 EOD;
 

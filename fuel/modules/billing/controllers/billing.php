@@ -455,7 +455,7 @@ class Billing extends Fuel_base_controller {
 		$cust_rm = $args['cust_rm'];
 		$billid = $args['billid'];
 	$this->load->module_model(BILLING_FOLDER, 'billing_model');
-	$finalbillgenerateb = $this->billing_model->finalbillgeneratemodel($partyid,$actualnumberbundle,$cust_add,$cust_rm,$billid,$args);
+	$finalbillgenerateb = $this->billing_model->finalbillgeneratemodel($partyid,$actualnumberbundle,$cust_add,$cust_rm,$billid);
 	}
 	
 
