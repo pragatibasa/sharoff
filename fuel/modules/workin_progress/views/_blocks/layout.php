@@ -1,4 +1,3 @@
-
 <script language="javascript" type="text/javascript">
   $(window).load(function() {
 	$("tr#childlist").hide();
@@ -26,6 +25,9 @@
   <div>
 <div> 
 <table id="myTable" class="tablesorter tablesorter-blue"  >
+	<?php if( $workinprogress_lists->status == 'No Results!') {
+  		?><tr><td><?php echo $workinprogress_lists->status;?></td></tr><?php
+  	} else { ?>
   <thead>
     <tr>
       <th>Coilnumber</th>
@@ -41,8 +43,8 @@
     </tr>
   </thead>
   <tbody>
-
-    <?php for($i=0; $i<count($workinprogress_lists); $i++) { ?>
+  	<?php
+    for($i=0; $i<count($workinprogress_lists); $i++) { ?>
       <?php if ($workinprogress_lists[$i]->slipGenerated==1) { ?>
 	<tr class="odd">
       <?php } else { ?>	
@@ -65,16 +67,14 @@
 			 ?> </td>
 	   </tr>
 	     <tr class="even"></tr>
-	<?php } ?>	
+	<?php }
+	} ?>	
   </tbody>
 </table>
 </div>
 </div>
 </div>
-   
-
 </div>
-
 </div>
 </div>
 <input id= "txtcoilids" type="hidden" hidden/> 

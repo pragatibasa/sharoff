@@ -8,7 +8,7 @@
 		<span><label>Bill Number:</label></span>
 	</td> 
 	<td>
-		<input id="billid" name="billid" type="text" onchange="billexist();"/>
+		<input id="billid" name="billid" type="text" value="<?php echo $billid; ?>" onchange="billexist();"/>
 	</td>
 </tr>
 </table>	
@@ -87,9 +87,6 @@
 </table>
 </fieldset>
 </form>
-
-
-
 <table cellpadding="0" cellspacing="0" border="0" style="width:100%;">
 	<tr><td>
 	<fieldset>
@@ -338,7 +335,7 @@ function triConvert(num){
 </div>	
 
  <script>
- 
+var doubleServiceTax = "<?php echo $servicetaxpercent;?>"; 
  function cancelbill(){
 var billid = $('#billid').val();
 var pid = $('#pid').val();
@@ -371,7 +368,7 @@ $.ajax({
 }
 function taxspec(){
 	var txtnsubtotal = $('#txtnsubtotal').val();
-	var servicetax= 0.145 * parseInt(txtnsubtotal);
+	var servicetax =  Math.ceil(((parseFloat(doubleServiceTax) * parseInt(txtnsubtotal))/100));
 	var eductax= 0 * parseInt(servicetax);
 	var secedutax= 0 * parseInt(servicetax);
 	var grandtotal= parseInt(txtnsubtotal)+ parseInt(servicetax)+ parseInt(eductax)+ parseInt(secedutax);
@@ -411,9 +408,6 @@ function taxspec(){
 	var txtsecedutax=$('#txtsecedutax').val();
 	var txtgrandtotal=$('#txtgrandtotal').val();
 	var container=$('#container').val(); 
-	
-	
-	
 	
 	var dataString =  'billid='+billid+'&partyid='+partyid+'&pname='+pname+'&cust_add='+cust_add+'&cust_rm='+cust_rm+'&mat_desc='+mat_desc+'&thic='+thic+'&wid='+wid+'&len='+len+'&wei='+wei+'&inv_no='+inv_no+'&totalweight_check='+totalweight_check+'&totalrate='+totalrate+'&totalamt='+totalamt+'&txthandling='+txthandling+'&txtadditional_type='+txtadditional_type+'&txtamount_mt='+txtamount_mt+'&txtoutward_num='+txtoutward_num+'&txtscrap='+txtscrap+'&txtservicetax='+txtservicetax+'&txteductax='+txteductax+'&txtsecedutax='+txtsecedutax+'&txtgrandtotal='+txtgrandtotal+'&container='+container;
 	$.ajax({  

@@ -3,8 +3,6 @@
 <script type="text/javascript">
 	
 function pullFolders(selectedItem) {
-
-	
 	$.post('<?php echo fuel_url("rate_details_length/coil"); ?>',
 		{ storage_account : selectedItem },
 		function(response) {  
@@ -12,10 +10,7 @@ function pullFolders(selectedItem) {
 		}  
 	);
 }
-
-
- </script> 
- 
+ </script>  
  <script type="text/javascript">
 function load_party_account() {
     var account_id = $("#coil").val();
@@ -37,27 +32,8 @@ $(document).ready(function() {
     load_party_account();
 });
 </script> 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
-
 <div id="main_top_panel">
 	<h2 class=" ico ico_rate_details_length">Tax Details</h2>
 </div>
-
-
 <?php include_once(TAX_DETAILS_PATH.'views/_blocks/layout.php');?>		
-
- <input type="hidden" id="textstorage" name="textstorage" />   
+ <input type="hidden" id="textstorage" name="textstorage" />

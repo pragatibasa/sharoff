@@ -63,8 +63,6 @@ class Tax_details extends Fuel_base_controller {
 		return $gdata;
 	}
 
-		
-
 	function SelectCoilName() {
 		$this->load->module_model(TAX_DETAILS_FOLDER, 'Tax_details_model');
 		$data = $this->Tax_details_model->select_coilname();

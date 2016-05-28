@@ -60,6 +60,10 @@
 		</table>
 		<fieldset>
 			<legend>Cutting Details</legend>
+			<a href="<?php echo fuel_url('billing_instruction/?partyid='.$partyid.'&partyname='.$partyname.'&status');?>">Bill Residual Weight</a>
+			<br>
+			<br>
+				<div>Or select a bundle to bill </div>
 			<table width="100%" cellpadding="0" cellspacing="0" border="0">
 			<div id="contentsholder" class="flexcroll" style="width:100%; overflow-x:hidden; overflow-y:auto;height:350px;height:350px;">
 			<div id="content" style="width:100%; min-height:350px; overflow:hidden;"> 
@@ -122,7 +126,7 @@ function loadfolderlist(account, accname){
             var item = msg[i];
             var thisdata = {}
 			var disabled = "";
-			if(item.balance == 0)
+			if(item.balance <= 0)
 				disabled = "disabled=true";
 			
 			var selectcoil = '<input type="checkbox" '+disabled+' name="chk[]" class="checkbundle" id="check_'+item.bundlenumber+'" name="list" value="'+item.bundlenumber+'" Onclick=updateTextArea("'+item.bundlenumber+'") />';
@@ -130,10 +134,11 @@ function loadfolderlist(account, accname){
 			thisdata["bundlenumber"] = item.bundlenumber;
             thisdata["length"] = item.length;
             thisdata["weight"] = item.weight;
-            thisdata["totalnumberofsheets"] = item.totalnumberofsheets;
-            thisdata["noofsheetsbilled"] = item.noofsheetsbilled;
+            thisdata["total number of sheets"] = item.totalnumberofsheets;
+            thisdata["no of sheets billed"] = item.noofsheetsbilled;
             thisdata["billingstatus"] = item.billingstatus;
             thisdata["Balance"] = item.balance;
+            thisdata["Balance Weight"] = item.balanceWeight;
         //    var dl = '<a class="ico_coil_delete" title="Delete" href="'+item.dl+'"><img src="<?php echo img_path('iconset/ico_cancel.png'); ?>" /></a>';
         //    thisdata["action"] = dl;
 			//thisdata["action"] = '';
@@ -171,6 +176,7 @@ function loadfolderlist(account, accname){
 	}
 
 var json =<?php echo($sdata); ?>;
+
 for(key in json){
 	if(json.hasOwnProperty(key))
     $('input[name='+key+']').val(json[key]);

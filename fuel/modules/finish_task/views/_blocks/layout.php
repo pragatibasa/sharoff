@@ -176,20 +176,17 @@ function loadfolderlist(account, accname) {
             for (var i = 0; i < msg.length; i++) {
             var item = msg[i];
             var thisdata = {};
-			if(item.status=='WIP-Cutting'){
-			var selectbundle = '<input type="radio" SELECTED id="radio_'+item.bundlenumber+'" name="list" value="'+item.bundlenumber+'" onClick=selectbundleid('+item.bundlenumber+',"'+item.status+'",'+item.bundleweight+') />';
-			thisdata["select"] = selectbundle;
-			thisdata["bundlenumber"] = item.bundlenumber;
-            thisdata["date"] = item.date;
-            thisdata["length(in mm)"] = item.length;
-            thisdata["actualnumber"] = item.actualnumber;
-        //  thisdata["totalweight"] = item.totalweight;
-            thisdata["bundleweight(in Kgs)"] = item.bundleweight;
-            thisdata["status"] = item.status;
-        //  thisdata["weight"] = item.weight;
-            var edit = '<a class="ico_coil_edit" title="Edit" href="#" onClick=radioload('+item.bundlenumber+','+item.actualnumber+','+item.weight+')><img src="<?php echo img_path('iconset/ico_edit.png'); ?>" /></a>';
-            thisdata["action"] =  edit;
-			//thisdata["action"] = '';
+			if(item.status=='WIP-Cutting') {
+				var selectbundle = '<input type="radio" SELECTED id="radio_'+item.bundlenumber+'" name="list" value="'+item.bundlenumber+'" onClick=selectbundleid('+item.bundlenumber+',"'+item.status+'",'+item.bundleweight+') />';
+				thisdata["select"] = selectbundle;
+				thisdata["bundlenumber"] = item.bundlenumber;
+	            thisdata["date"] = item.date;
+	            thisdata["length(in mm)"] = item.length;
+	            thisdata["actualnumber"] = item.actualnumber;
+	            thisdata["bundleweight(in Kgs)"] = item.bundleweight;
+	            thisdata["status"] = item.status;
+	            var edit = '<a class="ico_coil_edit" title="Edit" href="#" onClick=radioload('+item.bundlenumber+','+item.actualnumber+','+item.weight+')><img src="<?php echo img_path('iconset/ico_edit.png'); ?>" /></a>';
+	            thisdata["action"] =  edit;
 			}
 			
 			else if(item.status=='WIP-Recoiling'){

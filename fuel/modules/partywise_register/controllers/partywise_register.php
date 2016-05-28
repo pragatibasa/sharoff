@@ -74,7 +74,7 @@ class Partywise_register extends Fuel_base_controller {
 			$obj->thickness = $container->thickness;
 			$obj->width = $container->width;
 			$obj->weight = $container->weight;
-			$obj->pweight = $container->pweight;
+			$obj->pweight = round( $container->pweight );
 			$obj->status = $container->status;
 			$obj->process = $container->process;
 			$obj->ci = site_url('fuel/cutting_instruction').'/?partyid='.$container->coilnumber.'&partyname='.$partyname;
@@ -87,7 +87,7 @@ class Partywise_register extends Fuel_base_controller {
 			$folders[] = $obj;
 		}
 			echo json_encode($folders);
-		}else{
+		} else {
 			$status = array("status"=>"No Results!");
             echo json_encode($status);
 		}

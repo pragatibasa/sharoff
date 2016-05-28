@@ -78,10 +78,10 @@ class finish_task_model extends Base_module_model {
 		}
 	
 		$query = $this->db->query ("UPDATE aspen_tblinwardentry  SET vStatus='Ready To Bill' WHERE vIRnumber='".$pid."'");
-		$query = $this->db->query ("UPDATE aspen_tblcuttinginstruction  SET vStatus='Ready To Bill' WHERE vIRnumber='".$pid."' and nSno='".$txtbundleids."'");
+		$query = $this->db->query ("UPDATE aspen_tblcuttinginstruction  SET vStatus='Ready To Bill' WHERE vIRnumber='".$pid."' and nSno=$txtbundleids");
 
-		$sql = $this->db->query ("Insert into aspen_tblbillingstatus    (nSno,vBillingStatus,fWeight,dBillDate,nActualNo,vIRnumber,nScrapSent ) VALUES ('". $txtbundleids. "',
-  'Not Billed' ,'". $txtbundleweight. "','0','0','". $pid. "','". $txtboxscrap. "' )");
+		$sql = $this->db->query ("Insert into aspen_tblbillingstatus (nSno,vBillingStatus,fWeight,dBillDate,nActualNo,vIRnumber,nScrapSent,nbalance) VALUES ('".$txtbundleids. "',
+  'Not Billed' ,'". $txtbundleweight. "','0','0','". $pid. "','". $txtboxscrap. "', ( SELECT nNoOfPieces FROM aspen_tblcuttinginstruction WHERE vIRnumber = '".$pid."' AND nSno = ".$txtbundleids." ) )");
 			
 	}
 		
@@ -95,9 +95,8 @@ class finish_task_model extends Base_module_model {
 		$query = $this->db->query ("UPDATE aspen_tblinwardentry  SET vStatus='Ready To Bill' WHERE vIRnumber='".$partyid."'");
 		$query = $this->db->query ("UPDATE aspen_tblrecoiling  SET vStatus='Ready To Bill' WHERE vIRnumber='".$partyid."' and nSno='".$txtbundleids."'");
 
-		$sql = $this->db->query ("Insert into aspen_tblbillingstatus    (nSno,vBillingStatus,fWeight,dBillDate,nActualNo,vIRnumber ) VALUES ('". $txtbundleids. "',
+		$sql = $this->db->query ("Insert into aspen_tblbillingstatus (nSno,vBillingStatus,fWeight,dBillDate,nActualNo,vIRnumber ) VALUES ('". $txtbundleids. "',
 		'Not Billed' ,'". $txtbundleweight. "','0','0','". $pid. "' )");
-			
 	}
 		
 	function finishmodelslit($pid, $pname,$txtbundleids,$txtbundleweight){
@@ -253,7 +252,9 @@ class finish_task_model extends Base_module_model {
 		  THEN aspen_tblcuttinginstruction.nTotalWeight
           END AS weight,aspen_tblcuttinginstruction.vStatus as status from aspen_tblcuttinginstruction  
 		LEFT JOIN aspen_tblinwardentry ON aspen_tblinwardentry.vIRnumber = aspen_tblcuttinginstruction.vIRnumber WHERE aspen_tblcuttinginstruction.vIRnumber='".$partyid."'";
-	$query = $this->db->query($sqlfi);}
+
+	$query = $this->db->query($sqlfi);
+	}
 		  
 		  else if($row->vprocess =='Recoiling'){
 		  $sqlre = "select aspen_tblrecoiling.nSno as recoilnumber,DATE_FORMAT(aspen_tblrecoiling.dStartDate, '%d-%m-%Y') as startdate,DATE_FORMAT(aspen_tblrecoiling.dEndDate, '%d-%m-%Y') as enddate,aspen_tblrecoiling.nNoOfRecoils as norecoil,aspen_tblrecoiling.vStatus as status,aspen_tblinwardentry.vprocess as process from aspen_tblrecoiling  

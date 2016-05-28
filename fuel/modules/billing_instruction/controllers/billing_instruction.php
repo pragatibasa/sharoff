@@ -40,14 +40,13 @@ class Billing_instruction extends Fuel_base_controller {
 			$vars['process']= $this->process;
 			$vars['weight']= $this->weight;
 			$vars['adata']= $this->billingtable_cntrlr();
-			$vars['sdata']= $this->billingviewcntrlr($this->partyid, $this->partyname);
+			$vars['sdata']= $this->billingviewcntrlr($this->partyid, $this->partyname, $this->process);
 			$vars['semidata']= $this->billingsemifinished($this->partyid, $this->partyname);
+			
 			$this->_render('billing_instruction', $vars);
-		}
-		else {
+		} else {
 			redirect(fuel_url('billing_instruction'));
 		}
-	
 	}
 	
 	
@@ -72,6 +71,7 @@ class Billing_instruction extends Fuel_base_controller {
 				$obj->noofsheetsbilled = $cl->noofsheetsbilled;
 				$obj->billingstatus = $cl->billingstatus;
 				$obj->balance = $cl->balance;
+				$obj->balanceWeight = round($cl->balanceWeight);
 				$obj->dl = '/?bundlenumber='.$cl->bundlenumber;
 				$files[] = $obj;
 			}
@@ -165,8 +165,8 @@ class Billing_instruction extends Fuel_base_controller {
 	   return $adata;
 	}
 	
-	function billingviewcntrlr($pid, $pname) {
-		$ddata = $this->billing_instruction_model->billingviewmodel($pid, $pname);
+	function billingviewcntrlr($pid, $pname, $process) {
+		$ddata = $this->billing_instruction_model->billingviewmodel($pid, $pname, $process);
 		return $ddata;
 	}
 	function billingsemifinished($pid, $pname) {

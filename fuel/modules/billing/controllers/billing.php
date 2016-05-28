@@ -59,8 +59,10 @@ class Billing extends Fuel_base_controller {
 			$vars['nsno']= $this->nsno;
 			$vars['slno']= $this->slno;
 			$vars['recno']= $this->recno;
-			$vars['weight']= $this->weight;
+			$vars['weight']= round($this->weight);
 			$vars['processchk']= $this->processchk;
+			$vars['servicetaxpercent'] = $this->billing_model->getServiceTaxPercent();
+
 			if($vars['processchk']=='Slitting'){
 			$vars['sltdata']= $this->billingpreviewviewcntrlr_slit($this->partyid, $this->partyname,$this->slno);
 			}
@@ -77,6 +79,7 @@ class Billing extends Fuel_base_controller {
 			$vars['semidata']= $this->billingpreviewviewcntrlr_semidata($this->partyid, $this->partyname);
 			}
 			$vars['qdata']= $this->billingbundle();
+
 			$this->_render('billing', $vars);
 		}
 		else {

@@ -256,34 +256,44 @@
 	<input type="hidden" id="txtsecedutax" DISABLED/>
 	<input type="hidden" id="txtgrandtotal" DISABLED/>
 	<!--<input id="txtcancelbill" type="button" value="Cancel Bill" />	-->
-	
-
 <script>
+var doubleServiceTax = "<?php echo $servicetaxpercent;?>";
+$('document').ready(function() {
+	$('#txtbillpreview').click(function() {
+		savebill_details();
+	});
+})
+
 function billexist(){
-        var billid = $('#billid').val();
-        var isANumber = isNaN(billid) === false;
-        if (isANumber == false){
-          alert('Please input numeric characters only for Bill Number');
-          $('#billid').val('');
-         }
-          if ( billid != "" )
-          {
-          var dataString = 'billid='+billid;
-         $.ajax({  
-         type: "POST",  
-         url : "<?php echo fuel_url('billing/checkbillno');?>/",  
-         data: dataString,
-         success: function(msg){  
-         if(msg == '1'){
-         
-          alert('Billnumber Already Exists. Please Enter a new number!');
-          $('#billid').val('');
-             }
-             
-               }  
-           });  
-        }
-}      
+	var billid = $('#billid').val();
+    var isANumber = isNaN(billid) === false;
+    if (isANumber == false) {
+      alert('Please input numeric characters only for Bill Number');
+      $('#billid').val('');
+      return false;
+	}
+	if(billid != "" ) {
+		var dataString = 'billid='+billid;
+		var isBillIdDoesntExist = true;
+		$.ajax({  
+			type: "POST",  
+			url : "<?php echo fuel_url('billing/checkbillno');?>/",  
+			data: dataString,
+			async : false,
+			success: function(msg) {
+				if(msg === '1') {
+					isBillIdDoesntExist = false;
+					alert('Billnumber Already Exists. Please Enter a new number!');
+				  	$('#billid').focus().val('');
+				} 
+			}
+		});  
+    } else {
+    	$('#billid').focus().val('');
+    	return false;
+    }
+    return isBillIdDoesntExist;
+}
          
 function numbertowords() {
  var junkVal=document.getElementById('txtgrandtotal').value;
@@ -420,7 +430,7 @@ function numbertowords() {
 </div>
 
 <div align="right">
-	<input class="btn btn-success" style="cursor: pointer;" id="txtbillpreview" type="button" value="Preview and Print Bill" onclick="savebill_details();" />
+	<input class="btn btn-success" style="cursor: pointer;" id="txtbillpreview" type="button" value="Preview and Print Bill"/>
 	<input class="btn btn-inverse" style="cursor: pointer;" id="txtbillloadingslip" type="button" value="Loading Slip" onclick="functionpdf();" />	
 </div>
 </div>	
@@ -1031,7 +1041,7 @@ function subtotalvalue(){
 
 function taxspec(){
 	var txtnsubtotal = $('#txtnsubtotal').val();
-	var servicetax=  Math.round(0.145 * parseInt(txtnsubtotal));
+	var servicetax=  Math.ceil(((parseFloat(doubleServiceTax) * parseInt(txtnsubtotal))/100));
 	var eductax=  Math.round(0 * parseInt(servicetax));
 	var secedutax=  Math.round(0 * parseInt(servicetax));
 	var grandtotal= Math.round(parseInt(txtnsubtotal)+ parseInt(servicetax)+ parseInt(eductax)+ parseInt(secedutax));
@@ -1040,56 +1050,54 @@ function taxspec(){
 	document.getElementById("txtsecedutax").value = secedutax;
 	document.getElementById("txtgrandtotal").value = grandtotal;
 }
+
 function functionsave(){
 	billexist();
- var txtbundleids=$('#txtbundleids').val();
- var mat_desc=$('#mat_desc').val();
- var thic=$('#thic').val();
- var partyid = $('#pid').val();
- var actualnumberbundle = $('#actualnumberbundle').val();
-var cust_add=$('#cust_add').val();
-var cust_rm=$('#cust_rm').val();
-var atLeastOneIsChecked = $('input[name="chk[]"]:checked').length > 0;
-var numberToBeBilled = $('#noToBeBilled_'+actualnumberbundle).val();
-var balance = $('#balance_'+actualnumberbundle).val();
- if( atLeastOneIsChecked == false)
- {
-  alert('Please select the check box');
-  return false;
- }
- else if ( billid == ' ') {
-  alert('Please Enter the bill number');
-  return false;
- }
- else if( parseInt(numberToBeBilled) > parseInt(balance)) {
- 	alert('Number to be billed should not be more than balance available.');
-	return false;
- }
- else
- {
-weightcount(actualnumberbundle);
- noofpcs(actualnumberbundle);
- totalvalue(actualnumberbundle);
- totalengthvalue(); 
- var dataString = 'mat_desc='+mat_desc+'&thic='+thic+'&partyid='+partyid+'&actualnumberbundle='+actualnumberbundle+"&cust_add="+cust_add+"&cust_rm="+cust_rm;
-$.ajax({  
-    type: "POST",  
-    url : "<?php echo fuel_url('billing/finalbillingcntrlr');?>/",  
-  data: dataString,
-  success: function(msg){
-  alert('Updated Sheets');
-  refresh_folderlisttwo();
- totaweightvalue();
- totawidthvalue();
- presentweight();
-    }  
- }); 
- }
+	var txtbundleids=$('#txtbundleids').val();
+	var mat_desc=$('#mat_desc').val();
+	var thic=$('#thic').val();
+	var partyid = $('#pid').val();
+	var actualnumberbundle = $('#actualnumberbundle').val();
+	var cust_add=$('#cust_add').val();
+	var cust_rm=$('#cust_rm').val();
+	var atLeastOneIsChecked = $('input[name="chk[]"]:checked').length > 0;
+	var numberToBeBilled = $('#noToBeBilled_'+actualnumberbundle).val();
+	var balance = $('#balance_'+actualnumberbundle).val();
+	if( atLeastOneIsChecked == false) {
+		alert('Please select the check box');
+		return false;
+	} else if( parseInt(numberToBeBilled) == 0 ) {
+		alert('Number to be billed cannot be 0');
+		return false;
+	} else if ( billid == ' ') {
+		alert('Please Enter the bill number');
+		return false;
+	} else if( parseInt(numberToBeBilled) > parseInt(balance)) {
+		alert('Number to be billed should not be more than balance available.');
+		return false;
+	} else {
+		weightcount(actualnumberbundle);
+		noofpcs(actualnumberbundle);
+		totalvalue(actualnumberbundle);
+		totalengthvalue(); 
+		var dataString = 'mat_desc='+mat_desc+'&thic='+thic+'&partyid='+partyid+'&actualnumberbundle='+actualnumberbundle+"&cust_add="+cust_add+"&cust_rm="+cust_rm;
+		$.ajax({  
+			type: "POST",  
+			url : "<?php echo fuel_url('billing/finalbillingcntrlr');?>/",  
+			data: dataString,
+			success: function(msg){
+				alert('Updated Sheets');
+				refresh_folderlisttwo();
+				totaweightvalue();
+				totawidthvalue();
+				presentweight();
+			}  
+		}); 
+	}
 }
+
 function showTextBox(id) {
-
 	$(".textBox").show();
-
 }
 
 function functionedit(b,n,ac,bw,balance){
@@ -1152,54 +1160,56 @@ function functioneditcoil(){
 	}
 }
 
-
 function savebill_details(){
-	billexist();
-	subtotalvalue();
-	numbertowords();
-	var billid = $('#billid').val();
-	var partyid = $('#pid').val();
-	var txtamount = $('#txtamount').val();
-	var txttotalweight = $('#txttotalweight').val();
-	var txtscrap = $('#txtscrap').val();
-	var txtoutward_num = $('#txtoutward_num').val();
-	var txttotalpcs = $('#txttotalpcs').val();
-	var mat_desc = $('#mat_desc').val();
-	var thic = $('#thic').val();
-	var actualnumberbundle = $('#actualnumberbundle').val();
-	var pname = $('#pname').val();
-	var wid=$('#wid').val();
-	var len=$('#len').val();
-	var wei=$('#wei').val();
-	var txttotallength=$('#txttotallength').val();
-	var txtweighttotal=$('#txtweighttotal').val();
-	var txtwidthtotal=$('#txtwidthtotal').val();
-	var txtadditional_type=$('#txtadditional_type').val();
-	var txtamount_mt=$('#txtamount_mt').val();
-	var txtnsubtotal=$('#txtnsubtotal').val();
-	var txtservicetax=$('#txtservicetax').val();
-	var txteductax=$('#txteductax').val();
-	var txtsecedutax=$('#txtsecedutax').val();
-	var txtgrandtotal=$('#txtgrandtotal').val();  
-	var container=$('#container').val(); 
-	var dataString =  'billid='+billid+'&partyid='+partyid+'&txtamount='+txtamount+'&txttotalweight='+txttotalweight+'&txtscrap='+txtscrap+'&txtoutward_num='+txtoutward_num+'&txttotalpcs='+txttotalpcs+'&mat_desc='+mat_desc+'&thic='+thic+'&actualnumberbundle='+actualnumberbundle+'&pname='+pname+'&wid='+wid+'&len='+len+'&wei='+wei+'&txttotallength='+txttotallength+'&txtweighttotal='+txtweighttotal+'&txtwidthtotal='+txtwidthtotal+'&txtadditional_type='+txtadditional_type+'&txtamount_mt='+txtamount_mt+'&txtnsubtotal='+txtnsubtotal+'&txtservicetax='+txtservicetax+'&txteductax='+txteductax+'&txtsecedutax='+txtsecedutax+'&txtgrandtotal='+txtgrandtotal+'&container='+container;
-	$.ajax({  
+	var billExists = billexist();
+	if( true === billExists ) {
+		$(this).attr('disabled','disabled');
+		subtotalvalue();
+		numbertowords();
+		var billid = $('#billid').val();
+		var partyid = $('#pid').val();
+		var txtamount = $('#txtamount').val();
+		var txttotalweight = $('#txttotalweight').val();
+		var txtscrap = $('#txtscrap').val();
+		var txtoutward_num = $('#txtoutward_num').val();
+		var txttotalpcs = $('#txttotalpcs').val();
+		var mat_desc = $('#mat_desc').val();
+		var thic = $('#thic').val();
+		var actualnumberbundle = $('#actualnumberbundle').val();
+		var pname = $('#pname').val();
+		var wid=$('#wid').val();
+		var len=$('#len').val();
+		var wei=$('#wei').val();
+		var txttotallength=$('#txttotallength').val();
+		var txtweighttotal=$('#txtweighttotal').val();
+		var txtwidthtotal=$('#txtwidthtotal').val();
+		var txtadditional_type=$('#txtadditional_type').val();
+		var txtamount_mt=$('#txtamount_mt').val();
+		var txtnsubtotal=$('#txtnsubtotal').val();
+		var txtservicetax=$('#txtservicetax').val();
+		var txteductax=$('#txteductax').val();
+		var txtsecedutax=$('#txtsecedutax').val();
+		var txtgrandtotal=$('#txtgrandtotal').val();  
+		var container=$('#container').val(); 
+		var dataString =  'billid='+billid+'&partyid='+partyid+'&txtamount='+txtamount+'&txttotalweight='+txttotalweight+'&txtscrap='+txtscrap+'&txtoutward_num='+txtoutward_num+'&txttotalpcs='+txttotalpcs+'&mat_desc='+mat_desc+'&thic='+thic+'&actualnumberbundle='+actualnumberbundle+'&pname='+pname+'&wid='+wid+'&len='+len+'&wei='+wei+'&txttotallength='+txttotallength+'&txtweighttotal='+txtweighttotal+'&txtwidthtotal='+txtwidthtotal+'&txtadditional_type='+txtadditional_type+'&txtamount_mt='+txtamount_mt+'&txtnsubtotal='+txtnsubtotal+'&txtservicetax='+txtservicetax+'&txteductax='+txteductax+'&txtsecedutax='+txtsecedutax+'&txtgrandtotal='+txtgrandtotal+'&container='+container;
+		$.ajax({  
 		   type: "POST",  
 		   url : "<?php echo fuel_url('billing/savebilldetails');?>/",  
 		   data: dataString,
-		   success: function(msg)
-		   { 
-		   alert('Preview Selected');
-			var partyid = $('#pid').val();
-			var actualnumberbundle=$('#actualnumberbundle').val();
-			var cust_add=$('#cust_add').val();
-			var cust_rm=$('#cust_rm').val();
-			var billid=$('#billid').val();
-			var dataStringone = 'partyid='+partyid+'&actualnumberbundle='+actualnumberbundle+'&cust_add='+cust_add+'&cust_rm='+cust_rm+'&billid='+billid;
-			var url = "<?php echo fuel_url('billing/finalbillgenerate');?>/?"+dataStringone;
-		    window.open(url);
-		   }  
+		   success: function(msg) {
+			   	alert('Preview Selected');
+			   	$('#txtbillpreview').removeAttr('disabled');
+				var partyid = $('#pid').val();
+				var actualnumberbundle=$('#actualnumberbundle').val();
+				var cust_add=$('#cust_add').val();
+				var cust_rm=$('#cust_rm').val();
+				var billid=$('#billid').val();
+				var dataStringone = 'partyid='+partyid+'&actualnumberbundle='+actualnumberbundle+'&cust_add='+cust_add+'&cust_rm='+cust_rm+'&billid='+billid;
+				var url = "<?php echo fuel_url('billing/finalbillgenerate');?>/?"+dataStringone;
+			    window.open(url);
+			}  
 		}); 
+	}
 }
 
 function chknumberbilled()

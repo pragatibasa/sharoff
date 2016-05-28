@@ -47,6 +47,7 @@ class Workin_progress extends Fuel_base_controller {
 	
 	function workinprogress_list(){
 		$containers = $this->workin_progress_model->toolbar_list();
+		$folders = [];
 		if(!empty($containers)){
 		foreach($containers as $container) {
 			$obj = new stdClass();
@@ -70,9 +71,9 @@ class Workin_progress extends Fuel_base_controller {
 			$folders[] = $obj;
 		}
 			 
-		}else{
+		} else {
 			$status = array("status"=>"No Results!");
-            echo json_encode($status);
+            return json_encode($status);
 		}
 		return json_encode($folders);
 	}

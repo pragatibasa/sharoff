@@ -17,24 +17,18 @@
 		<table cellpadding="0" cellspacing="10" border="0">
 			<tr>
 				<td id="txttaxid" type="text">Tax ID</td>
-				<td><input id="taxid" type="text" name="taxid"  /><br /></td>
-				
+				<td><input id="taxid" type="text" name="taxid"  /><br /></td>				
+			</tr>
+			<tr>
+				<td id="txttaxtype"> Type of Tax </td>
+				<td><input id= "taxtype" type="text"  name="taxtype" /><br /></td>
 				
 			</tr>
 			<tr>
-							<td id="txttaxtype"> Type of Tax </td>
-							<td><input id= "taxtype" type="text"  name="taxtype" /><br /></td>
-				
-			</tr>
-			<tr>
-				
-				
-							<td><span><label>Percentage</label></span></td>	
-							<td><input id= "percentage" type="text"  name="percentage" /><br /></td>
-				
+				<td><span><label>Percentage</label></span></td>	
+				<td><input id= "percentage" type="text"  name="percentage" /><br /></td>
 			</tr>
 </table>
-
 
 <div class="pad-10">
 		<!--	<input type="button" value="Update/Edit"  id="add_id" onClick="update();"hidden /> &nbsp; &nbsp; &nbsp;

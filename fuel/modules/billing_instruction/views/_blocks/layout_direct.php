@@ -22,7 +22,7 @@
 				<label><?=lang('thickness')?></label>
 				</td> 
 				<td>
-				<input id="thic" name="fThickness" type="text" DISABLED/>(in mm)
+				<input id="thic" name="fThickness" type="text" DISABLED/> (in mm)
 				</td>	  
 			</tr>
 			<tr>
@@ -38,7 +38,7 @@
 				<label><?=lang('weight')?></label>
 				</td> 
 				<td>
-				<input id="wei" name="fQuantity" type="text" DISABLED />(in Kgs)
+				<input id="wei" name="fQuantity" type="text" DISABLED /> (in Kgs)
 				</td>
 			</tr>
 			<tr>
@@ -68,32 +68,34 @@
 <script>
 
 var json =<?php echo($sdata); ?>;
-for(key in json){
+for(key in json) {
 	if(json.hasOwnProperty(key))
     $('input[name='+key+']').val(json[key]);
 }
 
-function closebutton(){
-	$.ajax({  
-		type: "POST",  
-		success: function(){  
-		setTimeout("location.href='<?= site_url('fuel/dashboard'); ?>'", 3000);
-		}
-	});
+function closebutton() {
+	window.location = "<?= site_url('fuel/partywise_register'); ?>";
+	return false;
 }
 
-function billingbuttondirect(){
+function billingbuttondirect() {
 	var processchk = $('#processchk').val();
 	var partyid  =	$('#pid').val();
 	var partyname = $('#pname').val();
 	var dataString = 'partyid='+partyid+'&partyname='+partyname+'&processchk='+processchk;
+	if( $('#wei').val() == 0 ) {
+		alert('Bill can\'t be generated against 0 weight');
+		return false;
+	}
     $.ajax({
         type: 'POST',
-        success: function(){  alert('Preview Selected')
-		setTimeout("location.href='<?= site_url('fuel/billing'); ?>/?"+ dataString+"'", 1000);
+        success: function() {
+        	alert('Preview Selected');
+			setTimeout("location.href='<?= site_url('fuel/billing'); ?>/?"+ dataString+"'", 1000);
 		}
     });
 }
+
 function processchk(){
 	var pid  =	$('#pid').val();
 	var dataString = 'pid='+pid;
