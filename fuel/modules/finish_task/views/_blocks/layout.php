@@ -1,4 +1,3 @@
-
 <style>.btn-inforecoil {
     background-color: #49AFCD;
     background-image: linear-gradient(to bottom, #5BC0DE, #2F96B4);

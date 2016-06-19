@@ -38,7 +38,7 @@
 					<label><?=lang('width_txt')?></label>
 				</td> 
 				<td>
-					<input id="wid" name="fWidth" type="text" DISABLED/> 
+					<input id="wid" name="fWidth" type="text" DISABLED/> (in mm)
 				</td>
 			</tr>	
 			<tr>
@@ -46,38 +46,51 @@
 					<label><?=lang('thickness_txt')?></label>
 				</td>  
 				<td>
-					<input id="thic" name="fThickness" type="text" DISABLED/>
+					<input id="thic" name="fThickness" type="text" DISABLED/> (in mm)
 				</td>
 				<td>
 					<label><?=lang('weight_txt')?></label>
 				</td>
 				<td> 
-					<input id="wei" name="fQuantity" type="text" DISABLED/>
+					<input id="wei" name="fQuantity" type="text" DISABLED/> (in Kgs)
+				</td>
+			</tr>
+			<tr>
+				<td>
+					<label><?=lang('remaining_coil_length')?></label>
+				</td>
+				<td> 
+					<input name="remaining_weight" id="remaining_length" type="text" DISABLED/> (in mm)
 				</td>
 			</tr>
 		</table>
 	</div>
 </fieldset>
-	
-
 <fieldset>
 <legend>Slitting Instruction</legend>	
 <table width="100%" cellpadding="0" cellspacing="0" border="0">
 <tr>
 <td width="40%" align="left" valign="top">	
-<form id="cisave" method="post" action="">
-		<div class="pad-10">
-			<div id="bundle_number_text_label" type="hidden"> Sno </div>
-			<input id="bundlenumber" type="hidden" name="bundle_number"  />
-			<input id="coilname" type="hidden" value="" name="coilname" />
-		</div>
-		<div class="pad-10">
+<form id="cisave" method="post" action="" class="__fuel_edit__" style="font-size:14px;width:500px;">
+		<div class="pad-10 hide">
 			<div id="date_text_label"> Date </div>
 			<input type="text" id="date1" value="<?php echo date("Y-m-d"); ?>" DISABLED/>
 		</div>
 		<div class="pad-10">
+			<div id="bundle_weight_text_label"> Length  </div>
+			<input type="radio" name="balance_length" id="balance_length" onClick="balance();"/>&nbsp;Balance Length</br></br>
+			<input id="length_v" type="text" name="length" onkeyup="doweight();"/>
+			<input id="txtslitingnumber" type="hidden"   />
+		</div>
+		<div class="pad-10">
 			<div id="bundle_weight_text_label"> Width  </div>
-			<input id="width_v" type="text" name="width"  />
+			<input id="width_v" class="width" type="text" name="width"/>
+			<span class="__fuel_edit_marker_new__" title="Click to add new width" style="position: absolute; padding: 8px; margin-left: 5px; margin-top: 7px;cursor: pointer;"></span>
+			<input id="txtslitingnumber" type="hidden"   />
+		</div>
+		<div class="pad-10">
+			<div id="bundle_weight_text_label"> Weight  </div>
+			<input id="weight_v" type="text" name="weight" disabled/>
 			<input id="txtslitingnumber" type="hidden"   />
 		</div>
 		<div class="pad-10">
@@ -107,9 +120,7 @@
 		<input id="txttotalwidth" type="text" DISABLED/>(in mm)  
 		&nbsp; &nbsp; &nbsp;
 		<input class="btn btn-success"  id="saveci" type="button" value="Save" onClick="savechange();"/>  
-		<input id="finishci" type="button" value="Finsh" onClick="finishinstructionbutton();" hidden/>&nbsp; &nbsp; &nbsp;
-		<input class="btn btn-primary"  id="cuttingci" type="button" value="Cutting Instruction" onClick="#"/>
-		
+		<input id="finishci" type="button" value="Finsh" onClick="finishinstructionbutton();" hidden/>&nbsp; &nbsp; &nbsp;		
 </td>
 </tr>
 </table>
@@ -117,12 +128,98 @@
 </div>
 
 <script type="text/javascript" language="javascript">
-
 function functionreset(){
-
- $("#newsize").show();
-$("#edit").hide();
+	$("#newsize").show();
+	$("#edit").hide();
 }
+
+$(document).on( 'click', '.__fuel_edit_marker_new__',function() {
+	$(this).after('<span title="Delete" class="ico_delete" style="margin-top: 7px; height: 8px; margin-left: 22px; padding: 5px; position: absolute; width: 7px;cursor:pointer;"></span><input type="text" class="width" name="width" id="width_v"><span title="Click to add new width" style="position: absolute; padding: 8px; margin-left: 5px; margin-top: 7px;cursor: pointer;" class="__fuel_edit_marker_new__"></span>');
+	$(this).next('.ico_delete').css('margin-left','4px');
+	$(this).remove();
+});
+
+$(document).on( 'click', '.ico_delete', function() {
+	$(this).prev('input').remove();
+	$(this).remove();
+});
+
+$(document).on( 'keyup', '.width',function() {
+	var pid   =	$('#pid').val();
+	var totalWidth = 0;
+
+	$('.width').each(function() {
+		if($(this).val() !== '')
+			totalWidth = totalWidth+parseInt($(this).val());
+	});
+	if(totalWidth > parseInt($('#wid').val())) {
+		alert('Sum of slits width is greated width of coil.');
+		return false;
+	}
+	var thickness = $('#thic').val();
+	var length = $('#length_v').val();
+	var weight = $('#wei').val();
+
+	if(($('.width').length == 1 && $('.width').val() == '') || thickness == ''){
+		$('#rate').val('');
+		alert("All fields are mandatory");
+	} else {
+		var resultbundle= (0.00000785 *totalWidth*thickness*length);
+		var resultbundle = Math.round(resultbundle).toFixed(3);
+		document.getElementById('weight_v').value = resultbundle;
+	}
+});
+
+function balance() {
+	var pid = $('#pid').val();
+	var remaining_length = $('#remaining_length').val();
+	var dataString = 'remaining_length='+remaining_length+'&pid='+pid;
+	
+	$.ajax({
+        type: 'POST',
+        url: "<?php echo fuel_url('slitting_instruction/getBalanceLength');?>",
+		data: dataString,
+		success: function(msg){  
+			$('#length_v').val(msg);
+		}
+    });
+}
+
+function doweight() {
+	var length = parseInt($('#length_v').val());
+	var pid   =	$('#pid').val();
+	var totalWidth = 0;
+
+	if( length > parseInt($('#remaining_length').val())) {
+		alert("Selected length exceeds estimated length");
+		return false;
+	}
+
+	if($('.width').length == 1 && $('.width').val() == '') {
+		return false;
+	}
+
+	$('.width').each(function() {
+		if($(this).val() !== '')
+			totalWidth = totalWidth+parseInt($(this).val());
+	});
+	if(totalWidth > parseInt($('#wid').val())) {
+		alert('Sum of slits width is greated width of coil.');
+		return false;
+	}
+	var thickness = $('#thic').val();
+	var weight = $('#wei').val();
+
+	if(thickness == ''){
+		$('#rate').val('');
+		alert("All fields are mandatory");return false;
+	} else {
+		var resultbundle = (0.00000785 *totalWidth*thickness*length);
+		var resultbundle = Math.round(resultbundle).toFixed(3);
+		document.getElementById('weight_v').value = resultbundle;
+	}
+}
+
 function loadfolderlist(account, accname) {
 	$('#DynamicGrid_2').hide();
 	var loading = '<div id="DynamicGridLoading_2"> '+
@@ -152,6 +249,7 @@ function loadfolderlist(account, accname) {
             thisdata["Slittingdate"] = item.Slittingdate;
             thisdata["width"] = item.width;
             thisdata["weight"] = item.weight;
+            thisdata["length"] = item.length;
 			var edit = '<a class="ico_coil_edit" title="Edit" href="#" onClick=radioload('+item.Sno+','+item.width+')><img src="<?php echo img_path('iconset/ico_edit.png'); ?>" /></a>';
 			var dl = '<a class="ico_coil_delete" title="Delete" href="'+item.dl+'" onClick=deleteItem('+item.Sno+')><img src="<?php echo img_path('iconset/ico_cancel.png'); ?>" /></a>';
             thisdata["action"] = edit+' '+dl;
@@ -227,32 +325,29 @@ function deleteItem(sn){
     }
   }
 
-function savechange(id){
+function savechange(id) {
     var pid   =	$('#pid').val();
-	var bundle_number_text_label = $('#bundle_number_text_label').val();
 	var totalwidth = $('#txttotalwidth').val();
 	var coilwidth = $('#width_v').val();
 	if(parseInt(totalwidth) > parseInt(coilwidth) ){
-		alert('Sorry the Total width of bundle is more then width of coil pleae edit the width or delete to progress!!');
-	}
-	else{
-	var dataString = 'pid='+pid+'&bundle_number_text_label='+bundle_number_text_label;
-     $.ajax({
+		alert('Sorry the Total width of bundle is more then width of coil please edit the width or delete to progress!!');
+	} else{
+		var dataString = 'pid='+pid;
+     	$.ajax({
                 type: 'POST',
                 url: "<?php echo fuel_url('slitting_instruction/save_button');?>",
 				data: dataString,
-                success: function(){  
-				alert("Saved Succesfully");
-				refresh_folderlist();
-				totalwidth_check();	
-			}
+                success: function() {
+					alert("Saved Succesfully");
+					refresh_folderlist();
+					totalwidth_check();	
+				}
         });
-		}
-    }
+	}
+}
 
 function functionedit(){
 	var bundlenumber = $('#bundlenumber').val();
-//	var date1 = $('#date1').val();
 	var width_v = $('#width_v').val();
 	   var dataString = 'bundlenumber='+bundlenumber+'&width_v='+width_v;
 	   $.ajax({  
@@ -272,9 +367,7 @@ function functionedit(){
 	  }); 
 	}
 
-
-function radioload(b,bn)
-{
+function radioload(b,bn) {
 	$("#edit").show();
 	$("#newsize").hide();
 	document.getElementById('bundlenumber').value = b;
@@ -285,36 +378,40 @@ function radioload(b,bn)
 
 <script>
 var json = <?php echo($adata); ?>;
-	for(key in json){
-		if(json.hasOwnProperty(key))
-		$('input[name='+key+']').val(json[key]);
-	}
+for(key in json){
+	if(json.hasOwnProperty(key))
+	$('input[name='+key+']').val(json[key]);
+}
 
-
-function functionsave()
-{
-	var bundlenumber = $('#bundlenumber').val();
+function functionsave() {
 	var date1 = $('#date1').val();
-	var width_v = $('#width_v').val();
+	var length = $('#length_v').val();
 	var pid = $('#pid').val();
- if( width_v =='' )
- {
-  alert('ENTER SOMETHING');
-  return false;
- }
-else{
-			var dataString = 'bundlenumber='+bundlenumber+'&date1='+date1+'&width_v='+width_v+'&pid='+pid;
-			$.ajax({  
+	var thickness = $('#thic').val();
+	var allWidths = [];
+	
+	$('.width').each(function() {
+		if($(this).val() !== '')	
+			allWidths.push($(this).val());
+	});
+
+	 if( length =='' ) {
+	  	alert('ENTER SOMETHING');
+	  	return false;
+	 } else{
+		var dataString = 'date1='+date1+'&widths='+allWidths+'&pid='+pid+'&length='+length+'&thickness='+thickness;
+		$.ajax({  
 			type: "POST",  
 			url : "<?php echo fuel_url('slitting_instruction/savebundleslit');?>/",  
 			data: dataString,
 			success: function(msg){  
-			$('#width_v').val('');
-			refresh_folderlist();
-			totalwidth_check();	
+				$('#width_v').val('');
+				refresh_folderlist();
+				totalwidth_check();	
 			}
-			}); 
-		}
+		}); 
+	}
+
 }
 
 function addDate(){
@@ -326,6 +423,7 @@ function addDate(){
 	document.getElementById('date1').value = day + '-' + '0' +month + '-' + '0'+ year;
 	}
 }
+
 function timedRefresh(timeoutPeriod){
 	setTimeout("location.reload(true);",timeoutPeriod);
 }
@@ -343,21 +441,6 @@ function finishinstructionbutton(id){
 		}
 	});
 }
-	   
-/*function radioload(id){
-	var bundlenumber = $('#nsno'+id).val();
-	var width_v = $('#len'+id).val();
-	if(bundlenumber == '' || width_v == '' ){
-		$('#bundelnumber').val('');
-		$('#width_v').val('');
-	}
-	else{
-		document.getElementById('width_v').value = width_v;
-		document.getElementById('deletevalue').value = bundlenumber;
-		document.getElementById('bundlenumber').value = bundlenumber;
-	}	
-}*/
-
 
 function deleterecord(){
 	var deleteid = $('#deletevalue').val();
@@ -373,5 +456,3 @@ function deleterecord(){
 		}); 
 }
 </script>
-
-

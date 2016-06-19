@@ -255,6 +255,7 @@
 	<input type="hidden" id="txteductax" DISABLED/>
 	<input type="hidden" id="txtsecedutax" DISABLED/>
 	<input type="hidden" id="txtgrandtotal" DISABLED/>
+	<input type="hidden" id="txtRateTotal" DISABLED/>
 	<!--<input id="txtcancelbill" type="button" value="Cancel Bill" />	-->
 <script>
 var doubleServiceTax = "<?php echo $servicetaxpercent;?>";
@@ -649,14 +650,12 @@ function loadprocessingcharge(account, accname) {
             var partydata = [];
             for (var i = 0; i < msg.length; i++) {
             var item = msg[i];
+            $('#txtRateTotal').val(item.rate);
             var thisdata = {};
 			thisdata["No of pcs"] = item.noofpcs;
             thisdata["weight(in M/T)"] = item.weight;
             thisdata["Rate(in M/T)"] = item.rate;
             thisdata["Amount"] = item.amount;
-           /* var edit = '<a class="ico_coil_edit" title="Edit" href="#" onClick=functionedit('+item.bundlenumber+','+item.notobebilled+')><img src="<?php echo img_path('iconset/ico_edit.png'); ?>" /></a>';
-            thisdata["action"] =  edit;*/
-			//thisdata["action"] = '';
             partydata.push(thisdata);
 			}
 			if (partydata.length) {
@@ -1187,11 +1186,12 @@ function savebill_details(){
 		var txtamount_mt=$('#txtamount_mt').val();
 		var txtnsubtotal=$('#txtnsubtotal').val();
 		var txtservicetax=$('#txtservicetax').val();
+		var txtRateTotal=$('#txtRateTotal').val();
 		var txteductax=$('#txteductax').val();
 		var txtsecedutax=$('#txtsecedutax').val();
 		var txtgrandtotal=$('#txtgrandtotal').val();  
 		var container=$('#container').val(); 
-		var dataString =  'billid='+billid+'&partyid='+partyid+'&txtamount='+txtamount+'&txttotalweight='+txttotalweight+'&txtscrap='+txtscrap+'&txtoutward_num='+txtoutward_num+'&txttotalpcs='+txttotalpcs+'&mat_desc='+mat_desc+'&thic='+thic+'&actualnumberbundle='+actualnumberbundle+'&pname='+pname+'&wid='+wid+'&len='+len+'&wei='+wei+'&txttotallength='+txttotallength+'&txtweighttotal='+txtweighttotal+'&txtwidthtotal='+txtwidthtotal+'&txtadditional_type='+txtadditional_type+'&txtamount_mt='+txtamount_mt+'&txtnsubtotal='+txtnsubtotal+'&txtservicetax='+txtservicetax+'&txteductax='+txteductax+'&txtsecedutax='+txtsecedutax+'&txtgrandtotal='+txtgrandtotal+'&container='+container;
+		var dataString =  'billid='+billid+'&partyid='+partyid+'&txtamount='+txtamount+'&txttotalweight='+txttotalweight+'&txtscrap='+txtscrap+'&txtoutward_num='+txtoutward_num+'&txttotalpcs='+txttotalpcs+'&mat_desc='+mat_desc+'&thic='+thic+'&actualnumberbundle='+actualnumberbundle+'&pname='+pname+'&wid='+wid+'&len='+len+'&wei='+wei+'&txttotallength='+txttotallength+'&txtweighttotal='+txtweighttotal+'&txtwidthtotal='+txtwidthtotal+'&txtadditional_type='+txtadditional_type+'&txtamount_mt='+txtamount_mt+'&txtnsubtotal='+txtnsubtotal+'&txtservicetax='+txtservicetax+'&txteductax='+txteductax+'&txtsecedutax='+txtsecedutax+'&txtRateTotal='+txtRateTotal+'&txtgrandtotal='+txtgrandtotal+'&container='+container;
 		$.ajax({  
 		   type: "POST",  
 		   url : "<?php echo fuel_url('billing/savebilldetails');?>/",  

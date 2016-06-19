@@ -58,7 +58,7 @@
 					<label><?=lang('weight_txt')?></label>
 				</td>
 				<td> 
-					<input id="wei" name="fQuantity" type="text" DISABLED/>(in Kgs)
+					<input id="wei" name="fQuantity" type="text" DISABLED/> (in Kgs)
 				</td>
 			</tr>
 		</table>

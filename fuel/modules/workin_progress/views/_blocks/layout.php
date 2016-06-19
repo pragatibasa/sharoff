@@ -25,7 +25,7 @@
   <div>
 <div> 
 <table id="myTable" class="tablesorter tablesorter-blue"  >
-	<?php if( $workinprogress_lists->status == 'No Results!') {
+	<?php if( isset($workinprogress_lists->status) && $workinprogress_lists->status == 'No Results!') {
   		?><tr><td><?php echo $workinprogress_lists->status;?></td></tr><?php
   	} else { ?>
   <thead>

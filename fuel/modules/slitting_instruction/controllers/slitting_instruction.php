@@ -35,6 +35,8 @@ class slitting_instruction extends Fuel_base_controller {
 			$vars['partyid']= $this->partyid;
 			$vars['qdata']= $this->BundleName();
 			$vars['adata']= $this->slitting_instruction_party($this->partyid, $this->partyname);
+			
+			//$vars['adata']= 
 			$this->_render('slitting_instruction', $vars);
 		} else {
 			redirect(fuel_url('#'));
@@ -65,6 +67,7 @@ class slitting_instruction extends Fuel_base_controller {
 				$obj->Slittingdate = $cl->Slittingdate;
 				$obj->width = $cl->width;
 				$obj->weight = $cl->weight;
+				$obj->length = $cl->length;
 			/*	$obj->dl = fuel_url('slitting_instruction/delete_coil').
 				'/?coilnumber='.$cl->Sno.'&partynumber='.$cl->pnumber;*/
 				$files[] = $obj;
@@ -100,7 +103,7 @@ class slitting_instruction extends Fuel_base_controller {
 		$this->load->module_model(SLITTING_INSTRUCTION_FOLDER, 'slitting_instruction_model');
 		$twid = $this->slitting_instruction_model->totalwidthmodel($_POST['partyid']);
 		$twidjson = json_encode($twid);
-		print $twidjson;
+		echo $twidjson;exit;
 	
 	}
 
@@ -121,20 +124,15 @@ class slitting_instruction extends Fuel_base_controller {
 	}
 	
 	
-	function savebundleslit() 
- {
-   if (!empty($_POST)) {
-    $arr = $this->slitting_instruction_model->savebundleslitting($_POST['pid'],$_POST['bundlenumber'],$_POST['date1'], $_POST['width_v']);
-	//$this->BundleName($_POST['pid']);
-	//var_dump($arr);die();
-    if(empty($arr)) echo 'Success'; else echo 'Unable to save';
-	
-   }
-   
-   else{
-    //redirect(fuel_uri('#'));
-   }
-}
+	function savebundleslit() {
+	   if (!empty($_POST)) {
+	    $arr = $this->slitting_instruction_model->savebundleslitting($_POST['pid'],$_POST['date1'], $_POST['widths'],$_POST['length'],$_POST['thickness']);
+	    if(empty($arr)) { echo 'Success'; exit; } else { echo 'Unable to save';exit;};
+		
+	   } else{
+	    //redirect(fuel_uri('#'));
+	   }
+	}
 
 function deleterow() 
  {
@@ -153,8 +151,14 @@ function deleterow()
 	function slitting_instruction_party($pid, $pname) {
 		$adata = $this->slitting_instruction_model->getCuttingInstruction($pid, $pname);
 		return $adata;
-}
-	
+	}
+
+	function getBalanceLength() {
+		$pid = $_POST['pid'];
+		$remaining_weight = $_POST['remaining_length'];
+		$adata = $this->slitting_instruction_model->getBalanceLength($pid, $remaining_weight);
+		echo $adata; exit;
+	}	
 }
 /* End of file */
 /* Location: ./fuel/modules/controllers*/

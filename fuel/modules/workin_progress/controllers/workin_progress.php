@@ -32,13 +32,12 @@ class Workin_progress extends Fuel_base_controller {
 			$vars['cuttingslip'] = $this->generate_cuttingslip();
 		//	$this->load->view('cutting_slip'); view file of cutting slip
 			$vars['workinprogress_lists'] = json_decode($this->workinprogress_list());
-			$this->_render('workin_progress', $vars);
-			
-			
+			$this->_render('workin_progress', $vars);			
 		} else {
 			redirect(fuel_url('#'));
 		}
 	}
+	
 	function workintoolbar()
 	{
 		$adata = $this->workin_progress_model->toolbar_list();
@@ -47,7 +46,6 @@ class Workin_progress extends Fuel_base_controller {
 	
 	function workinprogress_list(){
 		$containers = $this->workin_progress_model->toolbar_list();
-		$folders = [];
 		if(!empty($containers)){
 		foreach($containers as $container) {
 			$obj = new stdClass();
@@ -65,15 +63,15 @@ class Workin_progress extends Fuel_base_controller {
 			$obj->process = $container->process;
 			$obj->cs = site_url('workin_progress/cutting_slip').'/?partyid='.$container->coilnumber.'&partyname='.$container->partyname;
             $obj->al = site_url('fuel/cutting_instruction').'/?partyid='.$container->coilnumber.'&partyname='.$container->partyname;
-            $obj->fi = site_url('fuel/finish_task').'/?partyid='.$container->coilnumber.'&partyname='.$container->partyname.'&task=wip';
+            $obj->fi = site_url('fuel/finish_task').'/?partyid='.$container->coilnumber.'&partyname='.$container->partyname.'&task=wip&process='.$container->process;
             $obj->bl = site_url('fuel/billing_instruction').'/?partyid='.$container->coilnumber.'&partyname='.$container->partyname.'&process=sf'.'&weight='.$container->weight;
 			$obj->deleteparty = '?delete';
 			$folders[] = $obj;
 		}
 			 
-		} else {
+		}else{
 			$status = array("status"=>"No Results!");
-            return json_encode($status);
+            echo json_encode($status);
 		}
 		return json_encode($folders);
 	}

@@ -581,7 +581,7 @@ class Billing extends Fuel_base_controller {
 	function savebilldetails(){
 		if (!empty($_POST)){
 		$this->load->module_model(BILLING_FOLDER, 'billing_model');
-		$savebilldata = $this->billing_model->savebilldetails_model($_POST['billid'],$_POST['partyid'],$_POST['txtamount'],$_POST['txttotalweight'],$_POST['txtscrap'],$_POST['txtoutward_num'],$_POST['txttotalpcs'],$_POST['mat_desc'],$_POST['thic'],$_POST['actualnumberbundle'],$_POST['pname'],$_POST['wid'],$_POST['len'],$_POST['wei'],$_POST['txttotallength'],$_POST['txtweighttotal'],$_POST['txtwidthtotal'],$_POST['txtadditional_type'],$_POST['txtamount_mt'],$_POST['txtnsubtotal'],$_POST['txtservicetax'],$_POST['txteductax'],$_POST['txtsecedutax'],$_POST['txtgrandtotal'],$_POST['container']);  
+		$savebilldata = $this->billing_model->savebilldetails_model($_POST['billid'],$_POST['partyid'],$_POST['txtamount'],$_POST['txttotalweight'],$_POST['txtscrap'],$_POST['txtoutward_num'],$_POST['txttotalpcs'],$_POST['mat_desc'],$_POST['thic'],$_POST['actualnumberbundle'],$_POST['pname'],$_POST['wid'],$_POST['len'],$_POST['wei'],$_POST['txttotallength'],$_POST['txtweighttotal'],$_POST['txtwidthtotal'],$_POST['txtadditional_type'],$_POST['txtamount_mt'],$_POST['txtnsubtotal'],$_POST['txtservicetax'],$_POST['txteductax'],$_POST['txtsecedutax'],$_POST['txtRateTotal'],$_POST['txtgrandtotal'],$_POST['container']);  
 		if(empty($arr)) echo 'Success'; else echo 'Unable to save';
 	
 		}

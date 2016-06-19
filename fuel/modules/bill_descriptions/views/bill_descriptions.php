@@ -13,7 +13,7 @@ $.post('<?php echo fuel_url("bill_descriptions/list_coil"); ?>',
 
  
 <div id="main_top_panel">
-	<h2 class="ico ico_partywise_register">Bill Description</h2>
+	<h2 class="ico ico_bill_summary">Bill Description</h2>
 </div>
 	
 <?php 
