@@ -1,180 +1,119 @@
 <?php  
 if (!defined('BASEPATH')) exit('No direct script access allowed');
- 
-class slitting_instruction_model extends Base_module_model {
-	
- 	public $required = array('vIRnumber','nSno','dDate','nLength','nNoOfPieces','nTotalWeight');
-	protected $key_field = 'vIRnumber';
-	
-    function __construct()
-    {
-        parent::__construct('aspen_tblslittinginstruction');
-    }
-		
-	function getcoildetails() {
-		
-		$this->save($save);
-	}
-	
-	function formdisplay()
-	{
-		$fields['nPartyName']['label'] = 'Party Name';
-		$fields['nMatId']['label'] = 'Material Description';
-		$fields['fWidth']['label'] = 'Width';
-		$fields['fThickness']['label'] = 'Thickness';
-		$fields['fLength']['label'] = 'Length';
-		$fields['fQuantity']['label'] = 'Weight';
-		$fields['dReceivedDate']= datetime_now();
-		$fields['nLength']['label'] = 'Length of a cutting instruction';
-		$fields['numbers'] = array('type' => 'enum', 'label' => 'Customer Rate', 'options' => array('yes' => 'Add Discount','no' => 'Remove Discount'), 'required' => TRUE);
-		return $fields;
-	}
 
-	function totalwidthmodel($partyid){
-	$sqlsw = "select 
-	round(sum(nWidth),0)as width from aspen_tblslittinginstruction
-	left join aspen_tblinwardentry on aspen_tblslittinginstruction.vIRnumber=aspen_tblinwardentry.vIRnumber where aspen_tblinwardentry.vIRnumber='".$partyid."'";
-		$query = $this->db->query($sqlsw);
-		$arr='';
-		if ($query->num_rows() > 0) {
-		 	foreach ($query->result() as $row)
-			{
-				$arr[] =$row;
-			}
-		}	
-		return $arr;
-	}
+require_once(FUEL_PATH.'models/base_module_model.php');
+require_once(MODULES_PATH.'/rate_details_thickness/config/rate_details_thickness_constants.php'); 
+
+class slitting_thickness_model extends Base_module_model {
+
+	function __construct()
+    {
+        parent::__construct('aspen_tblmatdescription');
+    }
 	
-	function delete_slitnumbermodel($Slitingnumber='', $Pid='') {
-		$sql ="DELETE FROM aspen_tblslittinginstruction WHERE vIRnumber ='".$Pid."' and nSno = '".$Slitingnumber."'";
+
+  function select_coilname() {
+   $query = $this->db->query("select * from aspen_tblmatdescription order by vDescription "); 
+   $arr='';
+   if ($query->num_rows() > 0)
+   {
+   foreach ($query->result() as $row)
+   {
+   $arr[] =$row;
+   }
+   } 
+   return $arr;
+  } 
+  
+  function tablethickness() {
+	$sql = $this->db->query ("select * from aspen_tblslit_thicknessrate "); 
+	  /* if(!empty($coilname)) { 
+	   $sql.=" LEFT JOIN aspen_tblmatdescription ON aspen_tblmatdescription.nMatId = aspen_tblslit_thicknessrate.nMatId WHERE aspen_tblmatdescription.vDescription='".$coilname."'";*/
+	var_dump($sql);die();
+  }
+  
+  function form_fields()
+  {
+		$CI =& get_instance();
+		$fields['nMinThickness']['type'] ='Minthickness';
+		$fields['nMaxThickness']['type'] ='MaxThickness';
+		$fields['nAmount']['type'] ='Amount';	
+	    return $fields;
+  
+  }
+ 	   
+	    	function delete_ratedetailthickmodel($priceid ='') {
+		$sql = " DELETE FROM aspen_tblslit_thicknessrate WHERE nPriceId='".$priceid."'";
 		$query = $this->db->query($sql);
 	}
-	
-  
-	function editbundlemodel(){
-	   if(isset( $_POST['bundlenumber']) && isset( $_POST['width_v']))
-	   {
-		$bundlenumber = $_POST['bundlenumber'];
-		$width_v = $_POST['width_v'];
+	 
+	   
+	   
+	function CoilTable() {
+	 if(isset( $_POST['coil'])) {
+	   $coilname = $_POST['coil'];
+	  }
+	   $sql = "select nMinThickness,nMaxThickness,nAmount,nPriceId from aspen_tblslit_thicknessrate "; 
+	   if(!empty($coilname)) { 
+	   $sql.=" LEFT JOIN aspen_tblmatdescription ON aspen_tblmatdescription.nMatId = aspen_tblslit_thicknessrate.nMatId WHERE aspen_tblmatdescription.vDescription='".$coilname."'";
+	  }
+	  $query = $this->db->query($sql);
+	  $arr='';
+	  if ($query->num_rows() > 0)
+	  {
+		 foreach ($query->result() as $row)
+		 {
+			$arr[] =$row;
+		 }
+	  } 
+	  return $arr;
 	 }
-		$sql = ("UPDATE aspen_tblslittinginstruction SET nWidth='". $width_v. "'");
-       		$sql.=" WHERE aspen_tblslittinginstruction.nSno='".$bundlenumber."'";
+	function saverate() 
+	 {
+	   if(isset( $_POST['coildescription']) && isset( $_POST['minthickness']) && isset( $_POST['maxthickness']) && isset( $_POST['rate'])) {
+		$matdescrip = $_POST['coildescription'];
+		$minthickness = $_POST['minthickness'];
+		$maxthickness = $_POST['maxthickness'];
+		$rate = $_POST['rate'];
+	 }
+		$sql = $this->db->query ("Insert into aspen_tblslit_thicknessrate  (nMatId,nMinThickness,nMaxThickness ,nAmount) VALUES( (SELECT aspen_tblmatdescription.nMatId  FROM aspen_tblmatdescription where aspen_tblmatdescription.vDescription = '". $matdescrip. "') ,'". $minthickness. "' , '". $maxthickness. "','". $rate. "')");
+	  
+	 }
+	 function updaterate() 
+	 {
+	   if(isset( $_POST['priceid']) &&  isset( $_POST['minthickness']) && isset( $_POST['maxthickness']) && isset( $_POST['rate'])) {
+		 $priceid = $_POST['priceid'];
+	  // $matdescrip = $_POST['coildescription'];
+		$minthickness = $_POST['minthickness'];
+		$maxthickness = $_POST['maxthickness'];
+		$rate = $_POST['rate'];
+	 }        
+		$sql = ("Update aspen_tblslit_thicknessrate SET nMinThickness='". $minthickness."', nMaxThickness='". $maxthickness."', nAmount=  '". $rate. "' ");
+       		$sql.=" WHERE aspen_tblslit_thicknessrate.nPriceId='".$priceid."'";
     		$query1=$this->db->query ($sql);
 	  
 	 }
-	 
-	 function savechangemodel (){ 
-		$sqlnsno = $this->db->query ("SELECT nSno FROM aspen_tblslittinginstruction");
-
-		if ($sqlnsno->num_rows() >= 0){
-		   foreach ($sqlnsno->result() as $row){
-				$arr[] =$row;
-			}
-		}
-		json_encode($arr);
-		foreach ($arr as $row){
-			if($row->nSno > 0){
-			$sql = $this->db->query ("UPDATE aspen_tblslittinginstruction  SET vStatus='WIP-Slitting' WHERE vIRnumber='".$_POST['pid']."' and nSno!=0");
-			$sql = $this->db->query ("UPDATE aspen_tblinwardentry  SET vprocess='Slitting' WHERE vIRnumber='".$_POST['pid']."'");
-  
-			}
-		}
-		$sql = $this->db->query ("UPDATE aspen_tblinwardentry  SET vStatus='Work In Progress' WHERE vIRnumber='".$_POST['pid']."'");
-		
-  
-	}
+	  
 	
 	
-	
-	
-	function getCuttingInstruction($pid, $pname) {
-		if(isset($pid) && isset($pname)) {
-			$partyid = $pid;
-			$partyname = $pname;
-		}
-
-		$sql = "SELECT aspen_tblinwardentry.vIRnumber,
-		 	aspen_tblinwardentry.dReceivedDate,
-		  	aspen_tblmatdescription.vDescription,
-		   	aspen_tblinwardentry.fThickness,
-		    aspen_tblinwardentry.fWidth,
-		    ( aspen_tblinwardentry.fQuantity-COALESCE(sum(aspen_tblbillingstatus.fWeight),0)) as fQuantity,
-		    aspen_tblinwardentry.vStatus
-		FROM aspen_tblinwardentry 
-		LEFT JOIN aspen_tblmatdescription ON aspen_tblmatdescription.nMatId = aspen_tblinwardentry.nMatId
-		LEFT JOIN aspen_tblbillingstatus ON aspen_tblbillingstatus.vIRnumber = aspen_tblinwardentry.vIRnumber
- 		LEFT JOIN aspen_tblpartydetails ON aspen_tblpartydetails.nPartyId = aspen_tblinwardentry.nPartyId"
-
-		if(!empty($partyname) && !empty($partyid)) {
-			$sql.="WHERE aspen_tblpartydetails.nPartyName='".$partyname."' and aspen_tblinwardentry.vIRnumber='".$partyid."' ";
-		}	
-		
+	 	function delete_ratedetailthicknessmodel($priceid ='') {
+		$sql = " DELETE FROM aspen_tblslit_thicknessrate WHERE nPriceId='".$priceid."'";
 		$query = $this->db->query($sql);
-		$arr='';
-		if ($query->num_rows() > 0)
-		{
-		   foreach ($query->result() as $row)
-		   {
-		      $arr[] =$row;
-		   }
-		}
-		$arr[0]->remaining_weight = round(($arr[0]->fQuantity/($arr[0]->fThickness*$arr[0]->fWidth*0.00785)),2);
-		return json_encode($arr[0]);
-		}	
-		
-		
-		
-function BundleTable($pid) 
- {
- if(isset( $_POST['pid'])) {
-  $pid = $_POST['pid'];
-  }
-  $sql = "select nSno,dDate,nWidth from aspen_tblslittinginstruction  "; 
-  if(isset($pid)) {
-  $sql.="WHERE aspen_tblslittinginstruction.vIRnumber='".$pid."'";
-  }
-    $query = $this->db->query($sql);
-    $arra='';
-    if ($query->num_rows() > 0)
-    {
-    foreach ($query->result() as $row)
-    {
-    $arra[] =$row;
-    }
-    } 
-    return $arra;
-  }
-		
-		
-	function savebundleslitting() 
-  {
-    if(isset( $_POST['pid']) && isset( $_POST['bundlenumber']) && isset( $_POST['date1']) && isset( $_POST['width_v'])) {
-	$pid = $_POST['pid'];
-  $bundlenumber = $_POST['bundlenumber'];
-  $date1 = $_POST['date1'];
-  $width_v = $_POST['width_v'];
-  
-  }
-  $sql = $this->db->query ("Insert into aspen_tblslittinginstruction  (vIRnumber,dDate,nWidth) VALUES(  '". $pid. "','". $date1. "','". $width_v. "')");
-   //echo $sql; die();
-  }
-		
-	function deleteslittingmodel($deleteid)
-	{
-		 $querycheck = $this->db->query("select * from aspen_tblslittinginstruction where nSno = '".$deleteid."'");
-	 $arr = $querycheck->result();
-	 if(!empty($arr)) {
-		$sql = $this->db->query("DELETE FROM aspen_tblslittinginstruction WHERE nSno='".$deleteid."'");
 	}
-	else{
-		return false;
-	  }
-    }
+	 
+	 
+	 
+	 
+	 
+	 
+	 
 	
-	function slitlistdetails($partyid = '') 
- {
-	$sqlci = "select aspen_tblslittinginstruction.nSno as Sno,DATE_FORMAT(aspen_tblslittinginstruction.dDate, '%d-%m-%Y') AS Slittingdate,aspen_tblslittinginstruction.nWidth as width, aspen_tblslittinginstruction.vIRnumber as pnumber, (aspen_tblslittinginstruction.nWidth / aspen_tblinwardentry.fWidth)* aspen_tblinwardentry.fQuantity as weight FROM aspen_tblslittinginstruction  left join aspen_tblinwardentry on aspen_tblinwardentry.vIRnumber = aspen_tblslittinginstruction.vIRnumber WHERE aspen_tblslittinginstruction.vIRnumber='".$partyid."'";
-	$query = $this->db->query($sqlci);
+	 function list_partyname($description = '') {	
+		$sql ="select nMinThickness as minthickness,nMaxThickness as maxthickness,nAmount as rate,nPriceId as priceid from aspen_tblslit_thicknessrate ";
+   		if(!empty($description)) { 
+		$sql .=" LEFT JOIN aspen_tblmatdescription ON aspen_tblmatdescription.nMatId = aspen_tblslit_thicknessrate.nMatId WHERE aspen_tblmatdescription.vDescription='".$description."'";
+		}
+		$query = $this->db->query($sql);
 		$arr='';
 		if ($query->num_rows() > 0)
 		{
@@ -184,18 +123,78 @@ function BundleTable($pid)
 		   }
 		}
 		return $arr;
-  }	
-		
-	function delete_coilnumber($Sno='', $partynumber='') {
-		$sql ="DELETE FROM aspen_tblslittinginstruction WHERE vIRnumber ='".$partynumber."' and nSno = '".$Sno."'";
+	}
+	 
+	 
+	 
+	 
+	 
+	   
+	 function minthicknessexistmodel(){
+		if(isset( $_POST['minthickness'] )&&  isset( $_POST['coil'])   ){
+			$minthickness = $_POST['minthickness'];
+			$coil = $_POST['coil'];
+		}
+		$sql ="SELECT * FROM aspen_tblslit_thicknessrate where nMatId=(SELECT nMatId  FROM aspen_tblmatdescription where vDescription =  '". $coil. "' ) and '".$minthickness."' BETWEEN nMinthickness AND nMaxthickness ";
 		$query = $this->db->query($sql);
-	}	
-		
-		
-		
+		$arr='';
+		if ($query->num_rows() > 0)
+		{
+		   foreach ($query->result() as $row)
+		   {
+		      $arr[] =$row;
+		   }
+		   return $arr;
+		}
+		else
+		{
+		return false;
+		}
+	}
+	
+	function maxthicknessexistmodel(){
+		if(isset( $_POST['maxthickness'] )&&  isset( $_POST['coil'])   ){
+			$maxthickness = $_POST['maxthickness'];
+			$coil = $_POST['coil'];
+		}
+		$sql ="SELECT * FROM aspen_tblslit_thicknessrate where nMatId=(SELECT nMatId  FROM aspen_tblmatdescription where vDescription =  '". $coil. "' ) and '".$maxthickness."' BETWEEN nMinthickness AND nMaxthickness ";
+		$query = $this->db->query($sql);
+		$arr='';
+		if ($query->num_rows() > 0)
+		{
+		   foreach ($query->result() as $row)
+		   {
+		      $arr[] =$row;
+		   }
+		   return $arr;
+		}
+		else
+		{
+		return false;
+		}
+	}
+	
+	
+		function checkthicknessexist(){
+		$sqlchk = "select nMinthickness as minthickness from aspen_tblslit_thicknessrate";
+		$sqlcheck = $this->db->query($sqlchk);
+		if ($sqlcheck->num_rows() > 0){
+			foreach ($sqlcheck->result() as $rowpw){
+				$sqlcheck =$rowpw->minthickness;
+			}
+		}
+	} 
+	 
+	 
+	 
+	 
+	 
+	 
+	 
+	 
+	  
 }
 
-class Splittinginstructions_model extends Base_module_record {
-	
+class slittingthickness_model extends Base_module_model {	
  	
 }

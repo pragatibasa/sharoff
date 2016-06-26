@@ -12,4 +12,4 @@ $lang['date_txt'] = 'Date';
 $lang['span_txt'] = 'Bundle Number';
 $lang['party_name'] = 'Party Name';
 $lang['party_id'] = 'Coil Number';
-$lang['remaining_coil_length'] = 'Remaining length of coil';
+$lang['available_coil_length'] = 'Available length';

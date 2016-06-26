@@ -31,7 +31,7 @@ class slitting_instruction_model extends Base_module_model {
 	}
 
 	function totalwidthmodel($partyid){
-		$sqlsw = "select round(sum(nWidth),2) as width from aspen_tblslittinginstruction
+		$sqlsw = "select round(sum(nWeight),2) as width,round(sum(nWidth),2) as totalWidth, sum(distinct nLength) as totalLength from aspen_tblslittinginstruction
 					where aspen_tblslittinginstruction.vIRnumber='".$partyid."'";
 
 		$query = $this->db->query($sqlsw);
@@ -42,6 +42,7 @@ class slitting_instruction_model extends Base_module_model {
 				$arr[] =$row;
 			}
 		}	
+
 		return $arr;
 	}
 	
@@ -52,18 +53,16 @@ class slitting_instruction_model extends Base_module_model {
 	
   
 	function editbundlemodel(){
-	   if(isset( $_POST['bundlenumber']) && isset( $_POST['width_v']))
-	   {
-		$bundlenumber = $_POST['bundlenumber'];
-		$width_v = $_POST['width_v'];
-	 }
+		if(isset( $_POST['bundlenumber']) && isset( $_POST['width_v'])) {
+			$bundlenumber = $_POST['bundlenumber'];
+			$width_v = $_POST['width_v'];
+	 	}
 		$sql = ("UPDATE aspen_tblslittinginstruction SET nWidth='". $width_v. "'");
-       		$sql.=" WHERE aspen_tblslittinginstruction.nSno='".$bundlenumber."'";
-    		$query1=$this->db->query ($sql);
-	  
-	 }
+       	$sql.=" WHERE aspen_tblslittinginstruction.nSno='".$bundlenumber."'";
+    	$query1=$this->db->query ($sql);
+	}
 	 
-	 function savechangemodel (){ 
+	function savechangemodel (){ 
 		$sqlnsno = $this->db->query ("SELECT nSno FROM aspen_tblslittinginstruction");
 
 		if ($sqlnsno->num_rows() >= 0){
@@ -103,7 +102,7 @@ class slitting_instruction_model extends Base_module_model {
 		if(!empty($partyname) && !empty($partyid)) {
 			$sql.="WHERE aspen_tblpartydetails.nPartyName='".$partyname."' and aspen_tblinwardentry.vIRnumber='".$partyid."' ";
 		}
-		
+		//print_r($sql);exit();
 		$query = $this->db->query($sql);
 		$arr='';
 		if ($query->num_rows() > 0) {
@@ -111,7 +110,7 @@ class slitting_instruction_model extends Base_module_model {
 		      $arr[] =$row;
 		   }
 		}
-		$arr[0]->remaining_weight = round(($arr[0]->fQuantity/($arr[0]->fThickness*$arr[0]->fWidth*0.00785)),2);
+		$arr[0]->remaining_weight = round(($arr[0]->fQuantity/($arr[0]->fThickness*$arr[0]->fWidth*0.00000785)),2);
 		return json_encode($arr[0]);
 	}	
 		
@@ -178,7 +177,7 @@ function BundleTable($pid) {
 	function getBalanceLength( $partynumber, $remaining_weight ) {
 		$sql = "select ($remaining_weight - (sum(distinct nLength))) as balance from aspen_tblslittinginstruction where vIRnumber = '$partynumber'";
 		$query = $this->db->query($sql);
-		return $query->result()[0]->balance;
+		return round($query->result()[0]->balance,2);
 	}
 }
 

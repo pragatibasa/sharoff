@@ -4,45 +4,30 @@
 &nbsp;
 &nbsp;
 <fieldset>
-<legend>Operations</legend>
-<form id="userForm" method="post" action="">
+	<legend>Operations</legend>
+	<form id="userForm" method="post" action="">
 		<table cellpadding="0" cellspacing="10" border="0">
 			<tr>
-<input id="priceid" type="hidden" name="priceid"  /><br />
-				
-						    <td><span><label id="min">Minimum Thickness in (mm)</label></span></td>
-							<td><input id="minthickness" type="text" name="Minimum_Thickness"  onchange="minthickness_exist();"/><br /></td>
-				
+				<input id="priceid" type="hidden" name="priceid"  /><br />
+				<td><span><label id="min">Minimum Thickness in (mm)</label></span></td>
+				<td><input id="minthickness" type="text" name="Minimum_Thickness"  onchange="minthickness_exist();"/><br /></td>
 			</tr>
 			<tr>
-								
-							<td><span><label id="max">Maximum Thickness in (mm)</label></span></td>
-							<td><input id= "maxthickness" type="text"  name="Maximum_Thickness" onchange="maxthickness_exist();"/><br /></td>
-				
+				<td><span><label id="max">Maximum Thickness in (mm)</label></span></td>
+				<td><input id= "maxthickness" type="text"  name="Maximum_Thickness" onchange="maxthickness_exist();"/><br /></td>
 			</tr>
 			<tr>
-				
-				
-							<td><span><label id="rat">Rate</label></span></td>	
-							<td><input id= "rate" type="text"  name="Rate" /><br /></td>
-				
+				<td><span><label id="rat">Rate</label></span></td>	
+				<td><input id= "rate" type="text"  name="Rate" /><br /></td>
 			</tr>
-</table>
-
-
-
-<div class="pad-10">
-
+		</table>
+		<div class="pad-10">
 			<input class="btn btn-success" type="button" value="Save" id="save_id" onClick="functionsave();"/> &nbsp; &nbsp; &nbsp;
 			<input class="btn btn-danger" id="reset" type="reset" value="Reset" onClick="resetForm();" /> &nbsp; &nbsp; &nbsp;
 			<input class=" btn-info"  type="button" value="Update/Edit"  id="add_id" onClick="update();" hidden/> &nbsp; &nbsp; &nbsp; 
 		</div>
-
-</form>
-
-
+	</form>
 </fieldset>
-
 <style>.btn-info {
     background-color: #49AFCD;
     background-image: linear-gradient(to bottom, #5BC0DE, #2F96B4);
@@ -51,9 +36,6 @@
     color: #FFFFFF;
     text-shadow: 0 -1px 0 rgba(0, 0, 0, 0.25);
 }</style>
-
-
-	
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
 <div id="party_list">
 <div id="contentsholder" class="flexcroll" style="width:100%; height:350px; overflow-x:hidden; overflow-y:auto;">
@@ -64,10 +46,7 @@
 		</div>
 	</div>
 	</div>
-
 </div>
-   
-    
 <script type="text/JavaScript">
  function confirmDelete(){
 var agree=confirm("Are you sure you want to delete this value?");
@@ -177,8 +156,7 @@ function loadfolderlist(account, accname) {
     return false;
     }
   }
-  
-  
+
  function resetForm(){
    document.getElementById('userForm').value=reset;
    $("#save_id").show();
@@ -199,11 +177,6 @@ function radioload(b, a, w, p)
 	document.getElementById('priceid').value = p;
 	
 }
-
-
-
-
-
 
 function checkvalue_exist()
 {
@@ -267,8 +240,6 @@ function maxthickness_exist()
 	 });
 }
 
-
-
 function functionsave()
 {
 	var minthickness = $('#minthickness').val();
@@ -286,7 +257,7 @@ function functionsave()
 		return false;
 	}
 	else{
-	var dataString = 'coildescription='+coildescription+'&minthickness='+minthickness+'&maxthickness='+maxthickness+'&rate='+rate;
+		var dataString = 'coildescription='+coildescription+'&minthickness='+minthickness+'&maxthickness='+maxthickness+'&rate='+rate;
 		$.ajax({  
 			type: "POST",  
 			url	: "<?php echo fuel_url('slitting_thickness/saveratedetails');?>/",  

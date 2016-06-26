@@ -133,7 +133,7 @@
 	</div>
 	
 		<div align="right">
-			<div class="pad-10" style="float:left">
+			<div class="pad-10 hide" style="float:left">
 			<label>Sizes</label>
 			<input id="txtsizes"  type="text" DISABLED />
 			</div>

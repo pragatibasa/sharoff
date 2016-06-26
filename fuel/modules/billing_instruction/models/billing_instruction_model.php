@@ -77,20 +77,27 @@ class Billing_instruction_model extends Base_module_model {
 	}
 	
 	function loadfolderlistslit($partyid = '') {
-	$sqlsi = "select Distinct aspen_tblslittinginstruction.nSno as serialnumber,aspen_tblslittinginstruction.vIRnumber as slitnumber,aspen_tblslittinginstruction.nWidth as width,aspen_tblslittinginstruction.dDate as sdate,aspen_tblbillingstatus.nActualNo as noofsheetsbilled ,aspen_tblbillingstatus.vBillingStatus as billingstatus from aspen_tblslittinginstruction
-		  LEFT JOIN aspen_tblbillingstatus  ON aspen_tblslittinginstruction.vIRnumber=aspen_tblbillingstatus.vIRnumber  WHERE  aspen_tblslittinginstruction.nSno = aspen_tblbillingstatus.nSno and aspen_tblslittinginstruction.vIRnumber='".$partyid."' and  aspen_tblslittinginstruction.vStatus =  'Ready To Bill' Group by  aspen_tblbillingstatus.nSno";
+		$sqlsi = "select aspen_tblslittinginstruction.nSno as slitnumber,
+					aspen_tblslittinginstruction.nLength as length,
+					aspen_tblslittinginstruction.nWidth as width,
+					aspen_tblslittinginstruction.nWeight as weight,
+					aspen_tblslittinginstruction.dDate as sdate,
+					aspen_tblbillingstatus.vBillingStatus as billingstatus 
+				from aspen_tblslittinginstruction
+			  	LEFT JOIN aspen_tblbillingstatus ON aspen_tblslittinginstruction.vIRnumber=aspen_tblbillingstatus.vIRnumber 
+			  	WHERE aspen_tblslittinginstruction.nSno = aspen_tblbillingstatus.nSno and aspen_tblslittinginstruction.vIRnumber='".$partyid."' and  aspen_tblslittinginstruction.vStatus =  'Ready To Bill' 
+			  	Group by aspen_tblbillingstatus.nSno";
 		
-	$query = $this->db->query($sqlsi);
-		$arr='';
-		if ($query->num_rows() > 0)
-		{
-		   foreach ($query->result() as $row)
-		   {
+		$query = $this->db->query($sqlsi);
+		$arr = '';
+		if($query->num_rows() > 0) {
+		   foreach($query->result() as $row) {
 		      $arr[] =$row;
 		   }
 		}
 		return $arr;
 	}
+	
 	function loadfolderlistrecoil($partyid = '') {
 	$sqlsi = "select Distinct aspen_tblrecoiling.nSno as recoilnumber,aspen_tblrecoiling.nNoOfRecoils as noofrecoil,aspen_tblrecoiling.dStartDate as sdate,aspen_tblrecoiling.dEndDate as edate,aspen_tblbillingstatus.nActualNo as noofsheetsbilled ,aspen_tblbillingstatus.vBillingStatus as billingstatus from aspen_tblrecoiling
 		  LEFT JOIN aspen_tblbillingstatus  ON aspen_tblrecoiling.vIRnumber=aspen_tblbillingstatus.vIRnumber  WHERE  aspen_tblrecoiling.nSno = aspen_tblbillingstatus.nSno and aspen_tblrecoiling.vIRnumber='".$partyid."' and  aspen_tblrecoiling.vStatus =  'Ready To Bill' Group by  aspen_tblbillingstatus.nSno";

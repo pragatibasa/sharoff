@@ -95,11 +95,11 @@ class Billing_instruction extends Fuel_base_controller {
 			$files = array();
 			foreach($slitdetails as $sl) {
 				$obj = new stdClass();
-				$obj->serialnumber = $sl->serialnumber;
-				$obj->slitnumber = $sl->slitnumber;
+				$obj->serialnumber = $sl->slitnumber;
+				$obj->length = $sl->length;
 				$obj->width = $sl->width;
+				$obj->weight = $sl->weight;
 				$obj->sdate = $sl->sdate;
-				$obj->noofsheetsbilled = $sl->noofsheetsbilled;
 				$obj->billingstatus = $sl->billingstatus;
 				$obj->dl = '/?slitnumber='.$sl->slitnumber;
 				$files[] = $obj;

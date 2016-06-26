@@ -165,43 +165,29 @@ class finish_task_model extends Base_module_model {
 	}		
 				
     function saveweight(){
-	   if(isset( $_POST['bundlenumber']) && isset( $_POST['actual']) && isset( $_POST['weight']) && isset( $_POST['pid'])) {
-		$bno = $_POST['bundlenumber'];
-		$ano = $_POST['actual'];
-		$wno = $_POST['weight'];
-		$pid = $_POST['pid'];
-	 }
+	   	if(isset( $_POST['bundlenumber']) && isset( $_POST['actual']) && isset( $_POST['weight']) && isset( $_POST['pid']) && isset( $_POST['process'])) {
+			$bno = $_POST['bundlenumber'];
+			$ano = $_POST['actual'];
+			$wno = $_POST['weight'];
+			$pid = $_POST['pid'];
+			$process = $_POST['process'];
+	 	}
 	 
-	$sqlfin= "Select vprocess from aspen_tblinwardentry where vIRnumber='".$pid."'";
-	$query = $this->db->query($sqlfin);
-		$arr='';
-		if ($query->num_rows() > 0) {
-		 	foreach ($query->result() as $row)
-			{
-				$arr[] =$row;
-			}
-		}
-		json_encode($arr);
-	foreach ($arr as $row){
-	if($row->vprocess =='Cutting'){
-		$sql = "UPDATE aspen_tblcuttinginstruction SET  nBundleweight='".$_POST['weight']. "' , nNoOfPieces='".$_POST['actual']."' WHERE aspen_tblcuttinginstruction.vIRnumber ='".$_POST['pid']. "' AND aspen_tblcuttinginstruction.nSno='".$_POST['bundlenumber']."'" ;
-    		$query1=$this->db->query ($sql);
-		}
-		 else if($row->vprocess =='Recoiling'){
-		 $sql = ("UPDATE aspen_tblrecoiling SET  nNoOfRecoils='".$_POST['actual']."'");
-       		$sql.=" WHERE aspen_tblrecoiling.nSno='".$_POST['bundlenumber']."' and aspen_tblrecoiling.vIRnumber ='".$_POST['pid']. "'" ;
-    		$query1=$this->db->query ($sql);
+		if($process =='Cutting') {
+			$sql = "UPDATE aspen_tblcuttinginstruction SET  nBundleweight='".$_POST['weight']. "' , nNoOfPieces='".$_POST['actual']."' WHERE aspen_tblcuttinginstruction.vIRnumber ='".$_POST['pid']. "' AND aspen_tblcuttinginstruction.nSno='".$_POST['bundlenumber']."'" ;
+			$query1=$this->db->query ($sql);
+		} else if($process =='Recoiling') {
+		 	$sql = ("UPDATE aspen_tblrecoiling SET  nNoOfRecoils='".$_POST['actual']."'");
+	   		$sql.=" WHERE aspen_tblrecoiling.nSno='".$_POST['bundlenumber']."' and aspen_tblrecoiling.vIRnumber ='".$_POST['pid']. "'" ;
+			$query1=$this->db->query ($sql);
 		 
-		 }
-		 else if($row->vprocess =='Slitting'){
-		 $sql = ("UPDATE aspen_tblslittinginstruction SET  nWidth='".$_POST['actual']."'");
-       		$sql.=" WHERE aspen_tblslittinginstruction.nSno='".$_POST['bundlenumber']."' and aspen_tblslittinginstruction.vIRnumber ='".$_POST['pid']. "'" ;
-    		$query1=$this->db->query ($sql);
-		 
-		 }
+		 } else if($process == 'Slitting' ) {
+		 	$sql = ("UPDATE aspen_tblslittinginstruction SET nWidth='".$_POST['actual']."'");
+	   		$sql.=" WHERE aspen_tblslittinginstruction.nSno='".$_POST['bundlenumber']."' and aspen_tblslittinginstruction.vIRnumber ='".$_POST['pid']. "'" ;
+			$query1=$this->db->query ($sql);
 		}
-	  
 	}
+
 	function FinishTable($pid) //finish table
 	 {
 		 if(isset( $_POST['pid'])) {
@@ -231,50 +217,47 @@ class finish_task_model extends Base_module_model {
 	$sql = $this->db->query ("UPDATE aspen_tblcuttinginstruction  SET vStatus='WIP-Cutting' WHERE vIRnumber='".$_POST['partyid']."' and nSno ='".$_POST['txtbundleids']."'");
   }
   
-  function finishlist_model($partyid = '') 
-{
+  function finishlist_model($partyid = '') {
 
 	$sqlpcheck= "Select vprocess from aspen_tblinwardentry where vIRnumber='".$partyid."'";
 	$query = $this->db->query($sqlpcheck);
-		$arr='';
-		if ($query->num_rows() > 0) {
-		 	foreach ($query->result() as $row)
-			{
-				$arr[] =$row;
-			}
+	$arr='';
+	if ($query->num_rows() > 0) {
+	 	foreach ($query->result() as $row) {
+			$arr[] =$row;
 		}
-		json_encode($arr);
+	}
+	json_encode($arr);
 	foreach ($arr as $row){
-	if($row->vprocess =='Cutting'){
-	$sqlfi = "select aspen_tblcuttinginstruction.nSno as bundlenumber,DATE_FORMAT(aspen_tblcuttinginstruction.dDate, '%d-%m-%Y') as date,aspen_tblcuttinginstruction.nLength as length,aspen_tblcuttinginstruction.nNoOfPieces as actualnumber,aspen_tblcuttinginstruction.nTotalWeight as totalweight,aspen_tblcuttinginstruction.nBundleweight as bundleweight,aspen_tblinwardentry.vprocess as process, CASE WHEN aspen_tblcuttinginstruction.nSno >  '0'
-		  THEN aspen_tblcuttinginstruction.nBundleweight
-          WHEN aspen_tblcuttinginstruction.nSno =  '0'
-		  THEN aspen_tblcuttinginstruction.nTotalWeight
-          END AS weight,aspen_tblcuttinginstruction.vStatus as status from aspen_tblcuttinginstruction  
-		LEFT JOIN aspen_tblinwardentry ON aspen_tblinwardentry.vIRnumber = aspen_tblcuttinginstruction.vIRnumber WHERE aspen_tblcuttinginstruction.vIRnumber='".$partyid."'";
+		if($row->vprocess =='Cutting') {
+			$sqlfi = "select aspen_tblcuttinginstruction.nSno as bundlenumber,DATE_FORMAT(aspen_tblcuttinginstruction.dDate, '%d-%m-%Y') as date,aspen_tblcuttinginstruction.nLength as length,aspen_tblcuttinginstruction.nNoOfPieces as actualnumber,aspen_tblcuttinginstruction.nTotalWeight as totalweight,aspen_tblcuttinginstruction.nBundleweight as bundleweight,aspen_tblinwardentry.vprocess as process, CASE WHEN aspen_tblcuttinginstruction.nSno >  '0'
+				  THEN aspen_tblcuttinginstruction.nBundleweight
+	          		WHEN aspen_tblcuttinginstruction.nSno =  '0'
+			  	THEN aspen_tblcuttinginstruction.nTotalWeight
+	          	END AS weight,aspen_tblcuttinginstruction.vStatus as status from aspen_tblcuttinginstruction  
+				LEFT JOIN aspen_tblinwardentry ON aspen_tblinwardentry.vIRnumber = aspen_tblcuttinginstruction.vIRnumber WHERE aspen_tblcuttinginstruction.vIRnumber='".$partyid."'";
 
-	$query = $this->db->query($sqlfi);
-	}
-		  
-		  else if($row->vprocess =='Recoiling'){
-		  $sqlre = "select aspen_tblrecoiling.nSno as recoilnumber,DATE_FORMAT(aspen_tblrecoiling.dStartDate, '%d-%m-%Y') as startdate,DATE_FORMAT(aspen_tblrecoiling.dEndDate, '%d-%m-%Y') as enddate,aspen_tblrecoiling.nNoOfRecoils as norecoil,aspen_tblrecoiling.vStatus as status,aspen_tblinwardentry.vprocess as process from aspen_tblrecoiling  
-		  LEFT JOIN aspen_tblinwardentry ON aspen_tblinwardentry.vIRnumber = aspen_tblrecoiling.vIRnumber WHERE aspen_tblrecoiling.vIRnumber='".$partyid."'";
-		$query = $this->db->query($sqlre);}
-		
-		    else if($row->vprocess =='Slitting'){
-		    $sqlsl = "select aspen_tblslittinginstruction.nSno as slittnumber,DATE_FORMAT(aspen_tblslittinginstruction.dDate, '%d-%m-%Y') as date,aspen_tblslittinginstruction.nWidth as width, aspen_tblslittinginstruction.vStatus as status,aspen_tblinwardentry.vprocess as process from aspen_tblslittinginstruction  
-			LEFT JOIN aspen_tblinwardentry ON aspen_tblinwardentry.vIRnumber = aspen_tblslittinginstruction.vIRnumber WHERE aspen_tblslittinginstruction.vIRnumber='".$partyid."'";
-	$query = $this->db->query($sqlsl);}
-	}
-		$arr='';
-		if ($query->num_rows() > 0)
-		{
-		   foreach ($query->result() as $row)
-		   {
-		      $arr[] =$row;
-		   }
+			$query = $this->db->query($sqlfi);
+		} else if($row->vprocess =='Recoiling') {
+			$sqlre = "select aspen_tblrecoiling.nSno as recoilnumber,DATE_FORMAT(aspen_tblrecoiling.dStartDate, '%d-%m-%Y') as startdate,DATE_FORMAT(aspen_tblrecoiling.dEndDate, '%d-%m-%Y') as enddate,aspen_tblrecoiling.nNoOfRecoils as norecoil,aspen_tblrecoiling.vStatus as status,aspen_tblinwardentry.vprocess as process from aspen_tblrecoiling  
+			  LEFT JOIN aspen_tblinwardentry ON aspen_tblinwardentry.vIRnumber = aspen_tblrecoiling.vIRnumber WHERE aspen_tblrecoiling.vIRnumber='".$partyid."'";
+			$query = $this->db->query($sqlre);
+		} else if($row->vprocess =='Slitting') {
+			$sqlsl = "select aspen_tblslittinginstruction.nSno as slittnumber,DATE_FORMAT(aspen_tblslittinginstruction.dDate, '%d-%m-%Y') as date,aspen_tblslittinginstruction.nLength as length,
+						aspen_tblslittinginstruction.nWidth as width,
+						aspen_tblslittinginstruction.nWeight as weight, aspen_tblslittinginstruction.vStatus as status,aspen_tblinwardentry.vprocess as process from aspen_tblslittinginstruction  
+					LEFT JOIN aspen_tblinwardentry ON aspen_tblinwardentry.vIRnumber = aspen_tblslittinginstruction.vIRnumber WHERE aspen_tblslittinginstruction.vIRnumber='".$partyid."'";
+
+			$query = $this->db->query($sqlsl);
 		}
-		return $arr;
+	}
+	$arr='';
+	if ($query->num_rows() > 0) {
+	   foreach ($query->result() as $row) {
+	      $arr[] =$row;
+	   }
+	}
+	return $arr;
   }	
   
   function finishweight_model($partyid = '') 

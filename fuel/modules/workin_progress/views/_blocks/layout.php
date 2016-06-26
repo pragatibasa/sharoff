@@ -52,7 +52,7 @@
       <?php } ?>
      <td><?php echo $workinprogress_lists[$i]->coilnumber?></td>
 	  <td><?php echo $workinprogress_lists[$i]->receiveddate?></td>
-	   <td><?php echo $workinprogress_lists[$i]->sizegivendate?></td>
+	   <td><?php if( $workinprogress_lists[$i]->process == 'Cutting' ) echo $workinprogress_lists[$i]->sizegivendate; else if( $workinprogress_lists[$i]->process == 'Slitting' ) echo $workinprogress_lists[$i]->slittingdate; else echo $workinprogress_lists[$i]->recoilingdate;?></td>
 	   <td><?php echo $workinprogress_lists[$i]->partyname?></td>
 	        <td><?php echo $workinprogress_lists[$i]->materialdescription?></td>
 	  <td><?php echo $workinprogress_lists[$i]->thickness?></td>

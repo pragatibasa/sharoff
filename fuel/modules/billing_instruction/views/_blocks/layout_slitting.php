@@ -117,10 +117,10 @@ function loadfolderlist_slit(account, accname) {
 			var selectbundle = '<input class="checkbundle" type="checkbox" id="check_'+item.serialnumber+'" name="list" value="'+item.serialnumber+'" onClick=updateTextAreaslit('+item.slitnumber+') />';
 			thisdata["select"] = selectbundle;
 			thisdata["serialnumber"] = item.serialnumber;
-            thisdata["slitnumber"] = item.slitnumber;
+            thisdata["length"] = item.length;
             thisdata["width"] = item.width;
-            thisdata["sdate"] = item.sdate;
-            thisdata["number to be billed"] = item.noofsheetsbilled;
+            thisdata["weight"] = item.weight;
+            thisdata["slitting date"] = item.sdate;
             thisdata["Billing status"] = item.billingstatus;
 			//thisdata["action"] = '';
             partydata.push(thisdata);

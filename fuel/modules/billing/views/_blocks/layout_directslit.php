@@ -190,7 +190,7 @@
 			</div>
 		
 <div class="pad-10">
-	Total: <input type="text" id="totalweight_checks" DISABLED/> &nbsp;&nbsp;&nbsp;<input type="text" id="totalrates" DISABLED/>&nbsp; <input type="text" id="totalamtsslit"  DISABLED/>&nbsp;&nbsp;
+	Total: <input type="text" style="width:250px;" id="totalweight_checks" DISABLED /> &nbsp;&nbsp;&nbsp;<input type="text" style="width:250px;" id="totalrates" DISABLED/>&nbsp;&nbsp;&nbsp;&nbsp;<input type="text" style="width:250px;" id="totalamtsslit"  DISABLED/>&nbsp;&nbsp;
 </div>
 </fieldset>
 </form>
@@ -207,6 +207,7 @@
 	<input type="hidden" id="txtsecedutax" DISABLED/>
 	<input type="hidden" id="txtgrandtotal" DISABLED/>
 	<script type="text/javascript">
+  var doubleServiceTax = "<?php echo $servicetaxpercent;?>";
 function update(){
     var bigNumArry = new Array('', ' Thousand', ' million', ' billion', ' trillion', ' quadrillion', ' quintillion');
 
@@ -310,10 +311,6 @@ function triConvert(num){
 
             <input type="hidden" size="80" id="container" DISABLED/>
 </div>
-<div align="left">
-	<input class="btn btn-danger"  style="cursor: pointer;" id="txtcancelbill" type="button" value="Cancel Bill" onclick="cancelbill();" />
-</div>
-
 <div align="right">
 	<input class="btn btn-success" style="cursor: pointer;" id="txtbillpreview" type="button" value="Preview and Print Bill" onclick="functionpdfslitprint();" />
 	<input class="btn btn-inverse" style="cursor: pointer;" id="txtbillloadingslip" type="button" value="Loading Slip" onclick="functionpdfslit();" />	
@@ -505,7 +502,7 @@ function subtotalvalue(){
 
 function taxspec(){
 	var txtslitsubtotal = $('#txtslitsubtotal').val();
-	var servicetax= 0.145 * parseInt(txtslitsubtotal);
+	var servicetax=  Math.ceil(((parseFloat(doubleServiceTax) * parseInt(txtslitsubtotal))/100));
 	var eductax= 0 * parseInt(servicetax);
 	var secedutax= 0 * parseInt(servicetax);
 	var grandtotal= parseInt(txtslitsubtotal)+ parseInt(servicetax)+ parseInt(eductax)+ parseInt(secedutax);
@@ -530,9 +527,9 @@ function functionpdfslitprint(){
 	var len=$('#len').val();
 	var wei=$('#wei').val();
 	var inv_no=$('#inv_no').val();
-	var totalweight_check=$('#totalweight_check').val();
-	var totalrate=$('#totalrate').val();
-	var totalamt=$('#totalamt').val();
+	var totalweight_check=$('#totalweight_checks').val();
+	var totalrate=$('#totalrates').val();
+	var totalamt=Math.ceil($('#totalamtsslit').val());
 	var txthandling=$('#txthandling').val();
 	var txtadditional_type=$('#txtadditional_type').val();
 	var txtamount_mt=$('#txtamount_mt').val();
@@ -544,76 +541,60 @@ function functionpdfslitprint(){
 	var txtgrandtotal=$('#txtgrandtotal').val();
 	var container=$('#container').val();
 	var txtslitsubtotal=$('#txtslitsubtotal').val();
+	var bundlenumbers = $('#txtbundleids').val();
+
+	var dataString = 'billid='+billid+'&partyid='+partyid+'&pname='+pname+'&cust_add='+cust_add+'&cust_rm='+cust_rm+'&mat_desc='+mat_desc+'&thic='+thic+'&wid='+wid+'&len='+len+'&wei='+wei+'&inv_no='+inv_no+'&totalweight_check='+totalweight_check+'&totalrate='+totalrate+'&totalamt='+totalamt+'&txthandling='+txthandling+'&txtadditional_type='+txtadditional_type+'&txtamount_mt='+txtamount_mt+'&txtoutward_num='+txtoutward_num+'&txtscrap='+txtscrap+'&txtservicetax='+txtservicetax+'&txteductax='+txteductax+'&txtsecedutax='+txtsecedutax+'&txtgrandtotal='+txtgrandtotal+'&container='+container+'&txtslitsubtotal='+txtslitsubtotal+'&bundleNumbers='+bundlenumbers;
 	
-	var dataString =  'billid='+billid+'&partyid='+partyid+'&pname='+pname+'&cust_add='+cust_add+'&cust_rm='+cust_rm+'&mat_desc='+mat_desc+'&thic='+thic+'&wid='+wid+'&len='+len+'&wei='+wei+'&inv_no='+inv_no+'&totalweight_check='+totalweight_check+'&totalrate='+totalrate+'&totalamt='+totalamt+'&txthandling='+txthandling+'&txtadditional_type='+txtadditional_type+'&txtamount_mt='+txtamount_mt+'&txtoutward_num='+txtoutward_num+'&txtscrap='+txtscrap+'&txtservicetax='+txtservicetax+'&txteductax='+txteductax+'&txtsecedutax='+txtsecedutax+'&txtgrandtotal='+txtgrandtotal+'&container='+container+'&txtslitsubtotal='+txtslitsubtotal;
 	$.ajax({  
-		   type: "POST",  
-		   url : "<?php echo fuel_url('billing/functionpdfslittingprint');?>/",  
-		   data: dataString,
-		   success: function(msg)
-		   { 
-		   alert('Preview Selected');
+	   type: "POST",  
+	   url : "<?php echo fuel_url('billing/functionpdfslittingprint');?>/",  
+	   data: dataString,
+	   success: function(msg) { 
+			alert('Preview Selected');
 			var partyid = $('#pid').val();
-			var dataStringone = 'partyid='+partyid;
+			var dataStringone = 'partyid='+partyid+'&billno='+billid;
 			var url = "<?php echo fuel_url('billing/slittingpdf');?>/?"+dataStringone;
-		    window.open(url);
-		   }  
-		});
-
+			window.open(url);
+		}  
+	});
 }
 
-
-
-
-
-function functionpdfslit(){
- var pid = $('#pid').val();
- var pname = $('#pname').val();
- var mat_desc = $('#mat_desc').val();
- var txtoutward_num = $('#txtoutward_num').val();  
- var totalrates = $('#totalrates').val();
- var totalweight_checks = $('#totalweight_checks').val();
- var totalamtsslit = $('#totalamtsslit').val();
+function functionpdfslit() {
+	var pid 				= $('#pid').val();
+	var pname 				= $('#pname').val();
+	var mat_desc 			= $('#mat_desc').val();
+	var txtoutward_num		= $('#txtoutward_num').val();  
+	var totalrates 			= $('#totalrates').val();
+	var totalweight_checks	= $('#totalweight_checks').val();
+	var totalamtsslit		= $('#totalamtsslit').val();
    
- var dataString = 'coilno='+pid+'&partyname='+pname+'&description='+mat_desc+'&lorryno='+txtoutward_num+'&totalrates='+totalrates+'&totalweight_checks='+totalweight_checks+'&totalamtsslit='+totalamtsslit;
- $.ajax({  
-     type: "POST",  
-    // url : "<?php echo fuel_url('billing_statement/billing_pdf');?>/",  
-     data: dataString,
-     success: function(msg)
-     {  
-   
-   var dataStringone =  'coilno='+pid+'&partyname='+pname+'&description='+mat_desc+'&lorryno='+txtoutward_num+'&totalrates='+totalrates+'&totalweight_checks='+totalweight_checks+'&totalamtsslit='+totalamtsslit;
-   var url = "<?php echo fuel_url('billing/billingslit_pdf');?>/?"+dataStringone;
-      window.open(url);
-     }  
-  }); 
-
+	var dataString = 'coilno='+pid+'&partyname='+pname+'&description='+mat_desc+'&lorryno='+txtoutward_num+'&totalrates='+totalrates+'&totalweight_checks='+totalweight_checks+'&totalamtsslit='+totalamtsslit;
+	$.ajax({  
+		type: "POST",
+		// url : "<?php echo fuel_url('billing_statement/billing_pdf');?>/",  
+		data: dataString,
+		success: function(msg) {  
+			var dataStringone =  'coilno='+pid+'&partyname='+pname+'&description='+mat_desc+'&lorryno='+txtoutward_num+'&totalrates='+totalrates+'&totalweight_checks='+totalweight_checks+'&totalamtsslit='+totalamtsslit;
+			var url = "<?php echo fuel_url('billing/billingslit_pdf');?>/?"+dataStringone;
+			window.open(url);
+		}
+	});
 }
 
-
-
-
-
-function totalweight_checks(){
+function totalweight_checks() {
 	var partyid = $('#pid').val();
-	var dataString = '&partyid='+partyid;
-$.ajax({  
+	var bundlenumbers = $('#txtbundleids').val();
+	var dataString = '&partyid='+partyid+'&bundleIds='+bundlenumbers;
+	$.ajax({  
 	   type: "POST",  
 	   url : "<?php echo fuel_url('billing/totalweight_checks');?>/",  
 		data: dataString,
 		datatype : "json",
-		success: function(msg){
-		var msg3=eval(msg);
-		$.each(msg3, function(i, j){
-			 var weight = j.weight;
-			document.getElementById("totalweight_checks").value = weight;});
-	   }  
+		success: function(response) {
+			$('#totalweight_checks').val(response);
+	   	}  
 	}); 
 }
-
-
-
 
 function totalamts(){
 	var partyid = $('#pid').val();
@@ -637,48 +618,45 @@ $.ajax({
 	}); 
 }
 
-
-
-
 function totalrates(){
 	var partyid = $('#pid').val();
 	var cust_add = $('#cust_add').val();
-    var cust_rm = $('#cust_rm').val();
+	var cust_rm = $('#cust_rm').val();
 	var txthandling = $('#txthandling').val();
-	var mat_desc=$('#mat_desc').val();
-	 var dataString = 'partyid='+partyid+'&cust_add='+cust_add+'&cust_rm='+cust_rm+'&txthandling='+txthandling+'&mat_desc='+mat_desc;
-$.ajax({  
-	   type: "POST",  
-	   url : "<?php echo fuel_url('billing/totalslitrates');?>/",  
+
+	var dataString = 'partyid='+partyid+'&cust_add='+cust_add+'&cust_rm='+cust_rm+'&txthandling='+txthandling;
+	$.ajax({  
+		type: "POST",  
+		url : "<?php echo fuel_url('billing/totalslitrates');?>/",  
 		data: dataString,
 		datatype : "json",
-		success: function(msg){
-		var msg3=eval(msg);
-		$.each(msg3, function(i, j){
-			 var amount = j.amount;
-			document.getElementById("totalrates").value = amount;});
-	   }  
+		success: function(response){
+			$('#totalrates').val(response);
+		}  
 	}); 
 }
 
-function totalamtslit(){
+function totalamtslit() {
 	var partyid = $('#pid').val();
 	var cust_add = $('#cust_add').val();
     var cust_rm = $('#cust_rm').val();
 	var txthandling = $('#txthandling').val();
 	var mat_desc=$('#mat_desc').val();
-	 var dataString = 'partyid='+partyid+'&cust_add='+cust_add+'&cust_rm='+cust_rm+'&txthandling='+txthandling+'&mat_desc='+mat_desc;
-$.ajax({  
+	var txtbundleids=$('#txtbundleids').val();
+
+	var dataString = 'partyid='+partyid+'&cust_add='+cust_add+'&cust_rm='+cust_rm+'&txthandling='+txthandling+'&mat_desc='+mat_desc+'&bundlesIds='+txtbundleids;
+	$.ajax({  
 	   type: "POST",  
 	   url : "<?php echo fuel_url('billing/totalamtslit');?>/",  
 		data: dataString,
 		datatype : "json",
 		success: function(msg){
-		var msg3=eval(msg);
-		$.each(msg3, function(i, j){
-			 var amtslit = j.amtslit;
-			document.getElementById("totalamtsslit").value = amtslit;});
-	   }  
+			var msg3=eval(msg);
+			$.each(msg3, function(i, j){
+				var amtslit = j.amtslit;
+				document.getElementById("totalamtsslit").value = Math.ceil(amtslit);
+			});
+		}  
 	}); 
 }
 
@@ -730,21 +708,18 @@ function loadfolderlistslit(account, accname,slitnumber) {
 			} else{
             var partydata = [];
             for (var i = 0; i < msg.length; i++) {
-            var item = msg[i];
-            var thisdata = {};
-			var selectbundle = '<input class="grand_total_check" type="checkbox" id="radio_'+item.slitnumber+'" name="list" value="'+item.slitnumber+'" onClick=selectslit('+item.slitnumber+','+item.actualweight+','+item.Width+') />';
-			thisdata["select"] = selectbundle;
-			thisdata["slitnumber"] = item.slitnumber;
-            thisdata["Width"] = item.Width;
-            thisdata["Date"] = item.sdate;
-            thisdata["Billedweight"] = item.actualweight;
-          //  thisdata["billed weight"] = item.billedweight;
-          //  var edit = '<a class="ico_coil_edit" title="Edit" href="#" onClick=functionedit('+item.slitnumber+','+item.Width+','+item.billedweight+')><img src="<?php echo img_path('iconset/ico_edit.png'); ?>" /></a>';
-         //   thisdata["action"] =  edit;
-			//thisdata["action"] = '';
-            partydata.push(thisdata);
-			}
-			if (partydata.length) {
+              var item = msg[i];
+              var thisdata = {};
+        			var selectbundle = '<input class="grand_total_check" type="checkbox" id="radio_'+item.slitnumber+'" name="list" value="'+item.slitnumber+'" onClick=selectslit('+item.slitnumber+','+item.actualweight+','+item.Width+') />';
+        			thisdata["select"] = selectbundle;
+        			thisdata["slitnumber"] = item.slitnumber;
+              thisdata["length"] = item.length;
+              thisdata["Width"] = item.Width;
+              thisdata["weight"] = item.Weight;
+              thisdata["Date"] = item.sdate;
+              partydata.push(thisdata);
+            }
+            if (partydata.length) {
             // If there are files
 				$('#DynamicGrid_2').hide();
 				$('#DynamicGridLoading_2').hide();
@@ -1184,6 +1159,7 @@ $.ajax({
   success: function(msg){
   alert('Updated To Bill');
   refresh_folderlisttwoslit();
+  //loadfolderlistslit(partyid,'',txtbundleids);
     }  
  }); 
  }

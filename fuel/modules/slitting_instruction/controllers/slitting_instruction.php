@@ -102,8 +102,8 @@ class slitting_instruction extends Fuel_base_controller {
 	function totalwidth(){
 		$this->load->module_model(SLITTING_INSTRUCTION_FOLDER, 'slitting_instruction_model');
 		$twid = $this->slitting_instruction_model->totalwidthmodel($_POST['partyid']);
-		$twidjson = json_encode($twid);
-		echo $twidjson;exit;
+		echo json_encode($twid);
+		exit;
 	
 	}
 

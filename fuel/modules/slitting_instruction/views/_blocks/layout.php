@@ -55,14 +55,6 @@
 					<input id="wei" name="fQuantity" type="text" DISABLED/> (in Kgs)
 				</td>
 			</tr>
-			<tr>
-				<td>
-					<label><?=lang('remaining_coil_length')?></label>
-				</td>
-				<td> 
-					<input name="remaining_weight" id="remaining_length" type="text" DISABLED/> (in mm)
-				</td>
-			</tr>
 		</table>
 	</div>
 </fieldset>
@@ -77,19 +69,30 @@
 			<input type="text" id="date1" value="<?php echo date("Y-m-d"); ?>" DISABLED/>
 		</div>
 		<div class="pad-10">
-			<div id="bundle_weight_text_label"> Length  </div>
-			<input type="radio" name="balance_length" id="balance_length" onClick="balance();"/>&nbsp;Balance Length</br></br>
-			<input id="length_v" type="text" name="length" onkeyup="doweight();"/>
-			<input id="txtslitingnumber" type="hidden"   />
+			<div id="bundle_weight_text_label"> <?=lang('available_coil_length')?>  </div>
+			<input name="remaining_weight" id="remaining_length" type="text" DISABLED/> (in mm)
 		</div>
 		<div class="pad-10">
-			<div id="bundle_weight_text_label"> Width  </div>
-			<input id="width_v" class="width" type="text" name="width"/>
-			<span class="__fuel_edit_marker_new__" title="Click to add new width" style="position: absolute; padding: 8px; margin-left: 5px; margin-top: 7px;cursor: pointer;"></span>
-			<input id="txtslitingnumber" type="hidden"   />
+			<div id="bundle_weight_text_label"> Required Length  </div>
+			<input type="radio" name="balance_length" id="balance_length"/>&nbsp;Balance</br></br>
+			<input id="length_v" type="text" name="length"/> (in mm)
+			<input id="slitNumber" type="hidden"/>
 		</div>
 		<div class="pad-10">
-			<div id="bundle_weight_text_label"> Weight  </div>
+			<div id="bundle_width_text_label" style="height:20px;"> 
+					<span style="float:left;">Width</span>
+					<span style="float:right;padding-right: 237px;">Weight</span>
+			</div>
+			<div>
+				<input id="width_v" class="width" style="width:181px;" type="text" name="width"/>
+				<input class="weight" type="text" name="weight" disabled style="width:181px;"/>
+				<span class="measure"></span>
+				<span class="__fuel_edit_marker_new__" title="Click to add new width" style="position: absolute; padding: 8px; margin-left: 5px; margin-top: 7px;cursor: pointer;"></span>
+				<input id="txtslitingnumber" type="hidden"   />
+			</div>
+		</div>
+		<div class="pad-10">
+			<div id="bundle_weight_text_label"> Total Width  </div>
 			<input id="weight_v" type="text" name="weight" disabled/>
 			<input id="txtslitingnumber" type="hidden"   />
 		</div>
@@ -116,8 +119,9 @@
 <td>	
 </td>
 <td align="right">
-	<label>Total Width</label>
+	<label>Total Weight</label>
 		<input id="txttotalwidth" type="text" DISABLED/>(in mm)  
+		<input id="txtHiddentotalwidth" type="hidden" /> 
 		&nbsp; &nbsp; &nbsp;
 		<input class="btn btn-success"  id="saveci" type="button" value="Save" onClick="savechange();"/>  
 		<input id="finishci" type="button" value="Finsh" onClick="finishinstructionbutton();" hidden/>&nbsp; &nbsp; &nbsp;		
@@ -134,39 +138,52 @@ function functionreset(){
 }
 
 $(document).on( 'click', '.__fuel_edit_marker_new__',function() {
-	$(this).after('<span title="Delete" class="ico_delete" style="margin-top: 7px; height: 8px; margin-left: 22px; padding: 5px; position: absolute; width: 7px;cursor:pointer;"></span><input type="text" class="width" name="width" id="width_v"><span title="Click to add new width" style="position: absolute; padding: 8px; margin-left: 5px; margin-top: 7px;cursor: pointer;" class="__fuel_edit_marker_new__"></span>');
+	$(this).prev('span').remove();
+	var kgs = '';
+	if($(this).prev('.weight').val() !== '')
+		kgs = 'Kgs';
+	$(this).after('<span class="measure">'+kgs+'</span><span title="Delete" class="ico_delete" style="margin-top: 10px; height: 8px; margin-left: 5px; padding: 5px; position: absolute; width: 7px;cursor:pointer;"></span><input type="text" class="width" style="width:181px; margin-right: 4px;" name="width" id="width_v"><input class="weight" type="text" name="weight" disabled style="width:181px;"/> <span class="measure"></span><span title="Click to add new width" style="position: absolute; padding: 8px; margin-left: 5px; margin-top: 7px;cursor: pointer;" class="__fuel_edit_marker_new__"></span>');
 	$(this).next('.ico_delete').css('margin-left','4px');
 	$(this).remove();
 });
 
 $(document).on( 'click', '.ico_delete', function() {
-	$(this).prev('input').remove();
+	$(this).prev('span').remove();
+	$(this).prev('.weight').remove();
+	if( $('#length_v').val() !== '' )
+		$(this).prev('.width').val(0).trigger('keyup').remove();
+	else 
+		$(this).prev('.width').remove();
 	$(this).remove();
 });
 
-$(document).on( 'keyup', '.width',function() {
-	var pid   =	$('#pid').val();
-	var totalWidth = 0;
+$(document).on( 'keyup', '.width',function(event) {
+	var totalWidth 		= 0;
+	var currentWidth	= $(this).val();
+	var pid   			=	$('#pid').val();
 
+	var thickness 		= $('#thic').val();
+	var length 			= $('#length_v').val();
+	
 	$('.width').each(function() {
 		if($(this).val() !== '')
 			totalWidth = totalWidth+parseInt($(this).val());
 	});
+	
 	if(totalWidth > parseInt($('#wid').val())) {
 		alert('Sum of slits width is greated width of coil.');
 		return false;
 	}
-	var thickness = $('#thic').val();
-	var length = $('#length_v').val();
-	var weight = $('#wei').val();
-
-	if(($('.width').length == 1 && $('.width').val() == '') || thickness == ''){
-		$('#rate').val('');
+	
+	if(($('.width').length == 1 && $('.width').val() == '') || length == ''){
+		$(this).val('');
 		alert("All fields are mandatory");
+		return false;
 	} else {
-		var resultbundle= (0.00000785 *totalWidth*thickness*length);
-		var resultbundle = Math.round(resultbundle).toFixed(3);
-		document.getElementById('weight_v').value = resultbundle;
+		var resultbundle	= (0.00000785 *currentWidth*thickness*length);
+		var resultbundle	= Math.round(resultbundle).toFixed(2);
+		$(this).next('.weight').val(resultbundle).next('.measure').text(' Kgs');
+		document.getElementById('weight_v').value = totalWidth;
 	}
 });
 
@@ -183,41 +200,6 @@ function balance() {
 			$('#length_v').val(msg);
 		}
     });
-}
-
-function doweight() {
-	var length = parseInt($('#length_v').val());
-	var pid   =	$('#pid').val();
-	var totalWidth = 0;
-
-	if( length > parseInt($('#remaining_length').val())) {
-		alert("Selected length exceeds estimated length");
-		return false;
-	}
-
-	if($('.width').length == 1 && $('.width').val() == '') {
-		return false;
-	}
-
-	$('.width').each(function() {
-		if($(this).val() !== '')
-			totalWidth = totalWidth+parseInt($(this).val());
-	});
-	if(totalWidth > parseInt($('#wid').val())) {
-		alert('Sum of slits width is greated width of coil.');
-		return false;
-	}
-	var thickness = $('#thic').val();
-	var weight = $('#wei').val();
-
-	if(thickness == ''){
-		$('#rate').val('');
-		alert("All fields are mandatory");return false;
-	} else {
-		var resultbundle = (0.00000785 *totalWidth*thickness*length);
-		var resultbundle = Math.round(resultbundle).toFixed(3);
-		document.getElementById('weight_v').value = resultbundle;
-	}
 }
 
 function loadfolderlist(account, accname) {
@@ -242,19 +224,25 @@ function loadfolderlist(account, accname) {
 			$('#content').html(loading1);  
 			} else{
             var partydata = [];
+            var totalWeight = '';
+            var totalwidth = '';
             for (var i = 0; i < msg.length; i++) {
             var item = msg[i];
             var thisdata = {};
 			thisdata["Sno"] = item.Sno;
-            thisdata["Slittingdate"] = item.Slittingdate;
+            thisdata["Slitting date"] = item.Slittingdate;
+            thisdata["length"] = item.length;
             thisdata["width"] = item.width;
             thisdata["weight"] = item.weight;
-            thisdata["length"] = item.length;
-			var edit = '<a class="ico_coil_edit" title="Edit" href="#" onClick=radioload('+item.Sno+','+item.width+')><img src="<?php echo img_path('iconset/ico_edit.png'); ?>" /></a>';
+			totalWeight += item.weight;
+			totalwidth += item.width;
+
+			var edit = '<a class="ico_coil_edit" title="Edit" href="#" onClick=radioload('+item.Sno+','+item.length+','+item.width+','+item.weight+')><img src="<?php echo img_path('iconset/ico_edit.png'); ?>" /></a>';
 			var dl = '<a class="ico_coil_delete" title="Delete" href="'+item.dl+'" onClick=deleteItem('+item.Sno+')><img src="<?php echo img_path('iconset/ico_cancel.png'); ?>" /></a>';
             thisdata["action"] = edit+' '+dl;
-			//thisdata["action"] = '';
-            partydata.push(thisdata);
+			partydata.push(thisdata);
+			$('#txttotalwidth').val(totalWeight);
+			$('#txtHiddentotalwidth').val(totalwidth);
 			}
 			if (partydata.length) {
             // If there are files
@@ -287,19 +275,24 @@ function loadfolderlist(account, accname) {
     });
 }
 
-function totalwidth_check(){
+function totalwidth_check() {
 	var partyid = $('#pid').val();
 	var dataString = '&partyid='+partyid;
-$.ajax({  
+	$.ajax({  
 	   type: "POST",  
 	   url : "<?php echo fuel_url('slitting_instruction/totalwidth');?>/",  
 		data: dataString,
 		datatype : "json",
 		success: function(msg){
-		var msg3=eval(msg);
-		$.each(msg3, function(i, j){
-			 var width = j.width;
-			document.getElementById("txttotalwidth").value = width;});
+			var msg3=eval(msg);
+			$.each(msg3, function(i, j){
+				var weight = j.width;
+				var totalLength = j.totalLength;
+				var finalTotalLength = ($('#remaining_length').val() - totalLength);
+				$('#remaining_length').val(finalTotalLength);
+				$('#txtHiddentotalwidth').val(j.totalWidth);
+				document.getElementById("txttotalwidth").value = weight;
+			});
 	   }  
 	}); 
 }
@@ -318,6 +311,7 @@ function deleteItem(sn){
 		datatype: json,
 			success: function(msg){ 
 				refresh_folderlist(); 
+				totalwidth_check();
 			}
 		});
     }else{
@@ -326,9 +320,9 @@ function deleteItem(sn){
   }
 
 function savechange(id) {
-    var pid   =	$('#pid').val();
-	var totalwidth = $('#txttotalwidth').val();
-	var coilwidth = $('#width_v').val();
+    var pid = $('#pid').val();
+	var totalwidth = $('#txtHiddentotalwidth').val();
+	var coilwidth = $('#wid').val();
 	if(parseInt(totalwidth) > parseInt(coilwidth) ){
 		alert('Sorry the Total width of bundle is more then width of coil please edit the width or delete to progress!!');
 	} else{
@@ -347,31 +341,38 @@ function savechange(id) {
 }
 
 function functionedit(){
-	var bundlenumber = $('#bundlenumber').val();
+	var bundlenumber = $('#slitNumber').val();
 	var width_v = $('#width_v').val();
-	   var dataString = 'bundlenumber='+bundlenumber+'&width_v='+width_v;
-	   $.ajax({  
-	   type: "POST",  
-	   url : "<?php echo fuel_url('slitting_instruction/editbundle');?>/",  
-	   data: dataString,
-	   success: function(msg){
-	   alert("Updated Successfully");
-		//$('#bundlenumber').val('');
-		$('#width_v').val('');
-		//$("#newsize").show();
-		$("#newsize").show();
-		$("#edit").hide();
-		refresh_folderlist();
-		totalwidth_check();	
-	   }  
-	  }); 
-	}
+	var dataString = 'bundlenumber='+bundlenumber+'&width_v='+width_v;
+	$.ajax({  
+		type: "POST",  
+		url : "<?php echo fuel_url('slitting_instruction/editbundle');?>/",  
+		data: dataString,
+		success: function(msg){
+			alert("Updated Successfully");
+			$('#length_v,#weight_v').val('');
+			$('#length_v').removeAttr('disabled');
+			$('#balance_length').removeAttr('checked');
+			$('.width').remove();
+			$("#newsize").show();
+			$("#edit").hide();
+			$('#bundle_width_text_label').next('div').empty();
+			$('#bundle_width_text_label').next('div').append('<input type="text" class="width" style="width:181px; margin-right: 4px;" name="width" id="width_v"><input class="weight" type="text" name="weight" disabled style="width:181px;"/> <span class="measure"></span><span title="Click to add new width" style="position: absolute; padding: 8px; margin-left: 5px; margin-top: 7px;cursor: pointer;" class="__fuel_edit_marker_new__"></span>');
+			refresh_folderlist();
+			totalwidth_check();	
+		}  
+	}); 
+}
 
-function radioload(b,bn) {
+function radioload(nSno,length,width,weight) {
 	$("#edit").show();
 	$("#newsize").hide();
-	document.getElementById('bundlenumber').value = b;
-	document.getElementById('width_v').value = bn;
+	$('#length_v').val(length).attr('disabled',true);
+	$('#slitNumber').val(nSno);
+	$('.width,.ico_delete,.__fuel_edit_marker_new__').remove();
+	$('#bundle_width_text_label').next('div').empty();
+	$('#bundle_width_text_label').next('div').append('<input type="text" value="'+width+'" class="width" style="width:181px; margin-right: 4px;" name="width" id="width_v"><input class="weight" type="text" name="weight" value="'+weight+'" disabled style="width:181px;"/> <span class="measure">Kgs</span>');
+	$('#weight_v').val(weight);
 }
 
 </script>
@@ -405,13 +406,15 @@ function functionsave() {
 			url : "<?php echo fuel_url('slitting_instruction/savebundleslit');?>/",  
 			data: dataString,
 			success: function(msg){  
-				$('#width_v').val('');
+				$('#balance_length').removeAttr('checked');
+				$('#length_v,.width,.weight,#weight_v').val('');
+				$('#bundle_width_text_label').next('div').empty();
+				$('#bundle_width_text_label').next('div').append('<input type="text" class="width" style="width:181px; margin-right: 4px;" name="width" id="width_v"><input class="weight" type="text" name="weight" disabled style="width:181px;"/> <span class="measure"></span><span title="Click to add new width" style="position: absolute; padding: 8px; margin-left: 5px; margin-top: 7px;cursor: pointer;" class="__fuel_edit_marker_new__"></span>');
 				refresh_folderlist();
 				totalwidth_check();	
 			}
 		}); 
 	}
-
 }
 
 function addDate(){
