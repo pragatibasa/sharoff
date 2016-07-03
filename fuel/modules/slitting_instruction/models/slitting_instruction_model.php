@@ -175,7 +175,7 @@ function BundleTable($pid) {
 	}	
 		
 	function getBalanceLength( $partynumber, $remaining_weight ) {
-		$sql = "select ($remaining_weight - (sum(distinct nLength))) as balance from aspen_tblslittinginstruction where vIRnumber = '$partynumber'";
+		$sql = "select COALESCE( ($remaining_weight - sum( distinct nLength ) ),$remaining_weight ) as balance from aspen_tblslittinginstruction where vIRnumber = '$partynumber'";
 		$query = $this->db->query($sql);
 		return round($query->result()[0]->balance,2);
 	}

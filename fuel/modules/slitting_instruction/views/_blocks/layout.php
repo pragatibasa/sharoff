@@ -74,7 +74,7 @@
 		</div>
 		<div class="pad-10">
 			<div id="bundle_weight_text_label"> Required Length  </div>
-			<input type="radio" name="balance_length" id="balance_length"/>&nbsp;Balance</br></br>
+			<input type="radio" name="balance_length" id="balance_length" onclick="balance();"/>&nbsp;Balance</br></br>
 			<input id="length_v" type="text" name="length"/> (in mm)
 			<input id="slitNumber" type="hidden"/>
 		</div>
@@ -120,7 +120,7 @@
 </td>
 <td align="right">
 	<label>Total Weight</label>
-		<input id="txttotalwidth" type="text" DISABLED/>(in mm)  
+		<input id="txttotalwidth" type="text" DISABLED/> (in kgs)  
 		<input id="txtHiddentotalwidth" type="hidden" /> 
 		&nbsp; &nbsp; &nbsp;
 		<input class="btn btn-success"  id="saveci" type="button" value="Save" onClick="savechange();"/>  
@@ -157,6 +157,16 @@ $(document).on( 'click', '.ico_delete', function() {
 	$(this).remove();
 });
 
+$('#length_v').on('keydown', function(e) {
+    var key   = e.keyCode ? e.keyCode : e.which;
+    if (!( [8, 9, 13, 27, 46, 110].indexOf(key) !== -1 ||
+         (key == 65 && ( e.ctrlKey || e.metaKey  ) ) || 
+         (key >= 35 && key <= 40) ||
+         (key >= 48 && key <= 57 && !(e.shiftKey || e.altKey)) ||
+         (key >= 96 && key <= 105)
+       )) e.preventDefault();
+});
+
 $(document).on( 'keyup', '.width',function(event) {
 	var totalWidth 		= 0;
 	var currentWidth	= $(this).val();
@@ -181,7 +191,7 @@ $(document).on( 'keyup', '.width',function(event) {
 		return false;
 	} else {
 		var resultbundle	= (0.00000785 *currentWidth*thickness*length);
-		var resultbundle	= Math.round(resultbundle).toFixed(2);
+		var resultbundle	= Math.round(resultbundle);
 		$(this).next('.weight').val(resultbundle).next('.measure').text(' Kgs');
 		document.getElementById('weight_v').value = totalWidth;
 	}
@@ -224,8 +234,8 @@ function loadfolderlist(account, accname) {
 			$('#content').html(loading1);  
 			} else{
             var partydata = [];
-            var totalWeight = '';
-            var totalwidth = '';
+            var totalWeight = 0;
+            var totalwidth = 0;
             for (var i = 0; i < msg.length; i++) {
             var item = msg[i];
             var thisdata = {};
@@ -234,14 +244,15 @@ function loadfolderlist(account, accname) {
             thisdata["length"] = item.length;
             thisdata["width"] = item.width;
             thisdata["weight"] = item.weight;
-			totalWeight += item.weight;
+
+			totalWeight += Number(item.weight);
 			totalwidth += item.width;
 
 			var edit = '<a class="ico_coil_edit" title="Edit" href="#" onClick=radioload('+item.Sno+','+item.length+','+item.width+','+item.weight+')><img src="<?php echo img_path('iconset/ico_edit.png'); ?>" /></a>';
 			var dl = '<a class="ico_coil_delete" title="Delete" href="'+item.dl+'" onClick=deleteItem('+item.Sno+')><img src="<?php echo img_path('iconset/ico_cancel.png'); ?>" /></a>';
             thisdata["action"] = edit+' '+dl;
 			partydata.push(thisdata);
-			$('#txttotalwidth').val(totalWeight);
+			$('#txttotalwidth').val(Math.round(totalWeight));
 			$('#txtHiddentotalwidth').val(totalwidth);
 			}
 			if (partydata.length) {

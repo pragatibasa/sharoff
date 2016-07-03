@@ -134,7 +134,7 @@ class Billing extends Fuel_base_controller {
 				$obj->length = $cl->length;
 				$obj->Width = $cl->Width;
 				$obj->Weight = $cl->Weight;
-				$obj->sdate = $cl->sdate;
+				$obj->sdate = date('d-m-Y',strtotime($cl->sdate));
 				
 				$files[] = $obj;
 			}
@@ -330,16 +330,13 @@ class Billing extends Fuel_base_controller {
 		print $totalamttjson;
 	
 	}
-			
-		
-		function totalrate(){
+				
+	function totalrate(){
 		$this->load->module_model(BILLING_FOLDER, 'billing_model');
 		$trate = $this->billing_model->totalrate_checkmodel($_POST['partyid'],$_POST['cust_add'],$_POST['cust_rm'],$_POST['txthandling'],$_POST['mat_desc']);
 		$tratejson = json_encode($trate);
 		print $tratejson;
-	}	
-	
-	
+	}
 	
 	function totalamt(){
 		$this->load->module_model(BILLING_FOLDER, 'billing_model');
@@ -347,7 +344,6 @@ class Billing extends Fuel_base_controller {
 		$tamtjson = json_encode($tamt);
 		print $tamtjson;
 	}	
-	
 	
 	function totalweight_checks(){
 		$this->load->module_model(BILLING_FOLDER, 'billing_model');
@@ -699,10 +695,10 @@ class Billing extends Fuel_base_controller {
 				$obj->amount = $cl->amount;
 				$files[] = $obj;
 			}
-			echo json_encode($files);
+			echo json_encode($files);exit;
 		}else{
 			$status = array("status"=>"No Results!");
-            echo json_encode($status);
+            echo json_encode($status);exit;
 		}
 	}
 	
@@ -1057,7 +1053,7 @@ class Billing extends Fuel_base_controller {
 	}
 	function functionpdfslittingprint(){	
 		if (!empty($_POST)){
-			$directbill = $this->billing_model->functionpdfslittingprint($_POST['billid'],$_POST['partyid'],$_POST['pname'],$_POST['cust_add'],$_POST['cust_rm'],$_POST['mat_desc'],$_POST['thic'],$_POST['wid'],$_POST['len'],$_POST['wei'],$_POST['inv_no'],$_POST['totalweight_check'],$_POST['totalrate'],$_POST['totalamt'],$_POST['txthandling'],$_POST['txtadditional_type'],$_POST['txtamount_mt'],$_POST['txtoutward_num'],$_POST['txtscrap'],$_POST['txtservicetax'],$_POST['txteductax'],$_POST['txtsecedutax'],$_POST['txtgrandtotal'],$_POST['container'],$_POST['txtslitsubtotal'],$_POST['bundleNumbers']);
+			$directbill = $this->billing_model->functionpdfslittingprint($_POST['billid'],$_POST['partyid'],$_POST['pname'],$_POST['cust_add'],$_POST['cust_rm'],$_POST['mat_desc'],$_POST['thic'],$_POST['wid'],$_POST['len'],$_POST['wei'],$_POST['inv_no'],$_POST['totalweight_check'],$_POST['totalrate'],$_POST['totalamt'],$_POST['txthandling'],$_POST['txtadditional_type'],$_POST['txtamount_mt'],$_POST['txtoutward_num'],$_POST['txtscrap'],$_POST['txtservicetax'],$_POST['txteductax'],$_POST['txtsecedutax'],$_POST['txtgrandtotal'],$_POST['container'],$_POST['txtslitsubtotal'],$_POST['bundleNumbers'],$_POST['txtadditional_type1'],$_POST['txtamount_mt1']);
 		if(empty($arr)) echo 'Success'; else echo 'Unable to save';
 	
 		}

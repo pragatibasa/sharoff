@@ -34,10 +34,19 @@ class finish_task_model extends Base_module_model {
 	  return $arr;
 	}
 	
-	function totalweightcountmodel($pid){
-		$sqlto =  "select 
-		round(sum(nBundleweight),0)as bundleweight from aspen_tblcuttinginstruction
-		left join aspen_tblinwardentry on aspen_tblcuttinginstruction.vIRnumber=aspen_tblinwardentry.vIRnumber where aspen_tblinwardentry.vIRnumber='".$pid."'";
+	function totalweightcountmodel($pid) {
+		$sqlpcheck= "Select vprocess from aspen_tblinwardentry where vIRnumber='".$pid."'";
+		$query = $this->db->query($sqlpcheck);
+		$arr = $query->result();
+
+		if($arr[0]->vprocess =='Cutting') {			
+			$sqlto =  "select round(sum(nBundleweight),0) as bundleweight from aspen_tblcuttinginstruction
+			left join aspen_tblinwardentry on aspen_tblcuttinginstruction.vIRnumber=aspen_tblinwardentry.vIRnumber where aspen_tblinwardentry.vIRnumber='".$pid."'";
+		} else if($arr[0]->vprocess =='Slitting') {
+			$sqlto =  "select round(sum(nWeight),0) as bundleweight from aspen_tblslittinginstruction
+			left join aspen_tblinwardentry on aspen_tblslittinginstruction.vIRnumber=aspen_tblinwardentry.vIRnumber where aspen_tblinwardentry.vIRnumber='".$pid."'";
+		}
+
 		$query = $this->db->query($sqlto);
 		$arr='';
 		if ($query->num_rows() > 0) {
@@ -182,8 +191,9 @@ class finish_task_model extends Base_module_model {
 			$query1=$this->db->query ($sql);
 		 
 		 } else if($process == 'Slitting' ) {
-		 	$sql = ("UPDATE aspen_tblslittinginstruction SET nWidth='".$_POST['actual']."'");
+		 	$sql = ("UPDATE aspen_tblslittinginstruction SET nWidth='".$_POST['actual']."', nWeight='".$_POST['weight']."'");
 	   		$sql.=" WHERE aspen_tblslittinginstruction.nSno='".$_POST['bundlenumber']."' and aspen_tblslittinginstruction.vIRnumber ='".$_POST['pid']. "'" ;
+	   		
 			$query1=$this->db->query ($sql);
 		}
 	}

@@ -99,7 +99,7 @@ class Billing_instruction extends Fuel_base_controller {
 				$obj->length = $sl->length;
 				$obj->width = $sl->width;
 				$obj->weight = $sl->weight;
-				$obj->sdate = $sl->sdate;
+				$obj->sdate = date('d-m-Y',strtotime($sl->sdate));
 				$obj->billingstatus = $sl->billingstatus;
 				$obj->dl = '/?slitnumber='.$sl->slitnumber;
 				$files[] = $obj;

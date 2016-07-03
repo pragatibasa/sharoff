@@ -261,11 +261,11 @@ class Coil_details_model extends Base_module_model {
 		LEFT JOIN aspen_tblslittinginstruction ON aspen_tblslittinginstruction.vIRnumber = aspen_tblinwardentry.vIRnumber 
 		LEFT JOIN aspen_tblrecoiling ON aspen_tblrecoiling.vIRnumber = aspen_tblinwardentry.vIRnumber"; 
    		if(!empty($partyname)) { 
-		$sql .=" Where aspen_tblpartydetails.nPartyName='".$partyname."' AND aspen_tblinwardentry.fpresent >= 5";
+			$sql .=" Where aspen_tblpartydetails.nPartyName='".$partyname."' AND aspen_tblinwardentry.fpresent >= 5";
 		}
 		$sql .="  group by aspen_tblinwardentry.vIRnumber order by aspen_tblinwardentry.dReceivedDate desc";
 
-		//echo $sql;die();
+		
 		$query = $this->db->query($sql);
 		$arr='';
 		if ($query->num_rows() > 0)

@@ -570,6 +570,7 @@ function loadfolderlist(account, accname,bundlenumber) {
 			}
     });
 }
+
 function selectbundleid(s,r,bw,ac){	
 	document.getElementById('txtbundleids').value = s;	
 	document.getElementById('txtbundleweight').value = r;	

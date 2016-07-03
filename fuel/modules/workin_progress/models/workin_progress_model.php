@@ -76,6 +76,7 @@ class workin_progress_model extends Base_module_model {
 		LEFT JOIN aspen_tblbillingstatus ON aspen_tblbillingstatus.vIRnumber=aspen_tblinwardentry.vIRnumber
 		LEFT JOIN aspen_tbl_cuttingslipgenerated ON aspen_tbl_cuttingslipgenerated.nPartyId=aspen_tblinwardentry.vIRnumber 
 		where aspen_tblinwardentry.vStatus = 'Work In Progress' or aspen_tblslittinginstruction.vStatus='WIP-Slitting' or aspen_tblrecoiling.vStatus='WIP-Recoiling' or aspen_tblcuttinginstruction.vStatus='WIP-Cutting' Group by aspen_tblinwardentry.vIRnumber"); 
+
 		$arr='';
 		if ($query->num_rows() > 0)
 		{
@@ -464,7 +465,13 @@ where aspen_tblinwardentry.vStatus = 'Work In Progress' or aspen_tblslittinginst
 		$Width = $querymain->row(0)->Width;
 		$Thickness = $querymain->row(0)->Thickness;
 				
-		$sqlitem ="select aspen_tblslittinginstruction.nSno as slitnumber, DATE_FORMAT(aspen_tblslittinginstruction.dDate, '%d-%m-%Y') AS startdate,  aspen_tblslittinginstruction.nWidth as width from aspen_tblslittinginstruction where aspen_tblslittinginstruction.vIRnumber='".$partyid."'";
+		$sqlitem ="select aspen_tblslittinginstruction.nSno as slitnumber, 
+		DATE_FORMAT(aspen_tblslittinginstruction.dDate, '%d-%m-%Y') AS startdate, 
+		aspen_tblslittinginstruction.nLength as length,
+		 aspen_tblslittinginstruction.nWidth as width,
+		 aspen_tblslittinginstruction.nWeight as weight
+		  from aspen_tblslittinginstruction where aspen_tblslittinginstruction.vIRnumber='".$partyid."'";
+
 		$queryitem = $this->db->query($sqlitem);
 		
 		$pdf = new TCPDF(PDF_PAGE_ORIENTATION, PDF_UNIT, PDF_PAGE_FORMAT, true, 'UTF-8', false);
@@ -550,7 +557,9 @@ where aspen_tblinwardentry.vStatus = 'Work In Progress' or aspen_tblslittinginst
 			<tr>
 				<th align="center"><h1><b>S.No.</b></h1></th>
 				<th align="center"><h1><b>Slitting Date</b></h1></th>
-				<th align="center"><h1><b>Number of Slits</b></h1></th>
+				<th align="center"><h1><b>Length</b></h1></th>
+				<th align="center"><h1><b>Width</b></h1></th>
+				<th align="center"><h1><b>Weight</b></h1></th>
 			</tr>';
 		if ($queryitem->num_rows() > 0)
 		{
@@ -561,6 +570,8 @@ where aspen_tblinwardentry.vStatus = 'Work In Progress' or aspen_tblslittinginst
 			<tr>
 				<td align="center"><h1>'.$rowitem->slitnumber.'</h1></td>
 				<td align="center" ><h1>'.$rowitem->startdate.'</h1></td>
+				<td align="center"><h1>'.$rowitem->width.'</h1></td>
+				<td align="center"><h1>'.$rowitem->width.'</h1></td>
 				<td align="center"><h1>'.$rowitem->width.'</h1></td>
 			</tr>';
 			}

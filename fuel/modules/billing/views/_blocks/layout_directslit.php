@@ -143,11 +143,13 @@
 <fieldset>
 <legend>Aditional Charges:</legend> 
 	<div class="pad-10">
-	<!--	<input type="checkbox" id="additional_chk" name="additional_chk" value="" /> &nbsp; -->
-		<input type="text" id="txtadditional_type" name="txtadditional_type" value="" onfocus="if (this.value=='New Additional Charge Type') {this.value = '';}" onblur="if(this.value=='') {this.value = 'New Additional Charge Type';}" /> 
+		<input type="text" id="txtadditional_type" name="txtadditional_type" value="" placeholder="New Additional Charge Type"/> 
 		&nbsp; 
-		<input type="text" id="txtamount_mt" name="txtamount_mt" value="0"/> 
-
+		<input type="text" id="txtamount_mt" name="txtamount_mt" value="0"/>
+    <br>
+    <input type="text" id="txtadditional_type1" name="txtadditional_type1" value="" placeholder="New Additional Charge Type"/> 
+    &nbsp; 
+    <input type="text" id="txtamount_mt1" name="txtamount_mt1" value="0"/> 
 	</div>
 </fieldset>
 
@@ -493,8 +495,9 @@ $.ajax({
 
 function subtotalvalue(){
 	var txtamount_mt = $('#txtamount_mt').val();
-	var totalamtsslit=$('#totalamtsslit').val();
-	var resultbundle= parseInt(txtamount_mt)+ parseInt(totalamtsslit);
+  var txtamount_mt1 = $('#txtamount_mt1').val();
+	var totalamtsslit = $('#totalamtsslit').val();
+	var resultbundle = parseInt(txtamount_mt)+ parseInt(totalamtsslit) + parseInt(txtamount_mt1);
 	document.getElementById("txtslitsubtotal").value = resultbundle;
 	taxspec();
 }
@@ -533,6 +536,10 @@ function functionpdfslitprint(){
 	var txthandling=$('#txthandling').val();
 	var txtadditional_type=$('#txtadditional_type').val();
 	var txtamount_mt=$('#txtamount_mt').val();
+  
+  var txtadditional_type1 = $('#txtadditional_type1').val();
+  var txtamount_mt1 = $('#txtamount_mt1').val();
+
 	var txtoutward_num=$('#txtoutward_num').val();
 	var txtscrap=$('#txtscrap').val();
 	var txtservicetax=$('#txtservicetax').val();
@@ -543,7 +550,7 @@ function functionpdfslitprint(){
 	var txtslitsubtotal=$('#txtslitsubtotal').val();
 	var bundlenumbers = $('#txtbundleids').val();
 
-	var dataString = 'billid='+billid+'&partyid='+partyid+'&pname='+pname+'&cust_add='+cust_add+'&cust_rm='+cust_rm+'&mat_desc='+mat_desc+'&thic='+thic+'&wid='+wid+'&len='+len+'&wei='+wei+'&inv_no='+inv_no+'&totalweight_check='+totalweight_check+'&totalrate='+totalrate+'&totalamt='+totalamt+'&txthandling='+txthandling+'&txtadditional_type='+txtadditional_type+'&txtamount_mt='+txtamount_mt+'&txtoutward_num='+txtoutward_num+'&txtscrap='+txtscrap+'&txtservicetax='+txtservicetax+'&txteductax='+txteductax+'&txtsecedutax='+txtsecedutax+'&txtgrandtotal='+txtgrandtotal+'&container='+container+'&txtslitsubtotal='+txtslitsubtotal+'&bundleNumbers='+bundlenumbers;
+	var dataString = 'billid='+billid+'&partyid='+partyid+'&pname='+pname+'&cust_add='+cust_add+'&cust_rm='+cust_rm+'&mat_desc='+mat_desc+'&thic='+thic+'&wid='+wid+'&len='+len+'&wei='+wei+'&inv_no='+inv_no+'&totalweight_check='+totalweight_check+'&totalrate='+totalrate+'&totalamt='+totalamt+'&txthandling='+txthandling+'&txtadditional_type='+txtadditional_type+'&txtamount_mt='+txtamount_mt+'&txtoutward_num='+txtoutward_num+'&txtscrap='+txtscrap+'&txtservicetax='+txtservicetax+'&txteductax='+txteductax+'&txtsecedutax='+txtsecedutax+'&txtgrandtotal='+txtgrandtotal+'&container='+container+'&txtslitsubtotal='+txtslitsubtotal+'&bundleNumbers='+bundlenumbers+'&txtadditional_type1='+txtadditional_type1+'&txtamount_mt1='+txtamount_mt1;
 	
 	$.ajax({  
 	   type: "POST",  
@@ -1128,7 +1135,8 @@ $.ajax({
 		var msg5=eval(msg);
 		$.each(msg5, function(i, j){
 			 var total = j.total;
-			document.getElementById("txtamount").value = total;});
+			document.getElementById("txtamount").value = total;
+    });
 	   }  
 	}); 
 }
