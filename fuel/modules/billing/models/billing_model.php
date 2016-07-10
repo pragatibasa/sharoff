@@ -727,7 +727,7 @@ left join aspen_tblbillingstatus on aspen_tblinwardentry.vIRnumber=aspen_tblbill
 	else {
 		$sql = "select 
 					aspen_tblslittinginstruction.nSno,
-					round((aspen_tblslittinginstruction.nWeight/1000),2) as weight,
+					round((aspen_tblslittinginstruction.nWeight/1000),3) as weight,
 					nAmount as rate,
 					round(( nAmount * (aspen_tblslittinginstruction.nWeight/1000) ),2) as amount 
 					from aspen_tblslittinginstruction
@@ -2816,17 +2816,17 @@ EOD;
 		$container = $querymain->row(0)->container;
 		$serviceTaxPercent = $querymain->row(0)->serviceTaxPercent;
 	
-		$strSqlSlittingBundleDetails = "select  aspen_tblBillBundleAssociation.nBundleNumber,
+		$strSqlSlittingBundleDetails = "select aspen_tblBillBundleAssociation.nBundleNumber,
 						aspen_tblinwardentry.fThickness,
 						aspen_tblmatdescription.vDescription as description,
-						round((aspen_tblslittinginstruction.nWeight/1000),2) as weight,
+						round((aspen_tblslittinginstruction.nWeight/1000),3) as weight,
 						$weihtamount as rate,
 						round(( $weihtamount * (aspen_tblslittinginstruction.nWeight/1000) ),2) as amount
-						from aspen_tblBillBundleAssociation 
-						left join aspen_tblslittinginstruction on aspen_tblslittinginstruction.nSno = aspen_tblBillBundleAssociation.nBundleNumber
-						left join aspen_tblinwardentry on aspen_tblinwardentry.vIRnumber = aspen_tblslittinginstruction.vIRnumber
+						from aspen_tblinwardentry
+						left join aspen_tblslittinginstruction on  aspen_tblslittinginstruction.vIRnumber = aspen_tblinwardentry.vIRnumber 
+						left join aspen_tblBillBundleAssociation on aspen_tblslittinginstruction.nSno = aspen_tblBillBundleAssociation.nBundleNumber
 						left join aspen_tblmatdescription on aspen_tblmatdescription.nMatId = aspen_tblinwardentry.nMatId
-						where aspen_tblBillBundleAssociation.nBillNumber = $billnumber and aspen_tblslittinginstruction.vIRnumber = $partyid";
+						where aspen_tblBillBundleAssociation.nBillNumber = $billnumber and aspen_tblinwardentry.vIRnumber=$partyid order by aspen_tblslittinginstruction.nSno";
 
 		$queryBundleDetails = $this->db->query($strSqlSlittingBundleDetails);
 
@@ -2931,14 +2931,14 @@ EOD;
 			</tr>
 			<tr>
 				<td width="300px" align="left"><b>TOTAL: </b></td>
-				<td width="105px" align="center"><b>'.round(($totalweight/1000)).'</b></td>
+				<td width="105px" align="center"><b>'.round(($totalweight/1000),3).'</b></td>
 				<td width="110px" align="center"><b>'.$weihtamount.'</b></td>
 				<td width="95px" align="center"><b>'.$totalamount.'</b></td>	
 			</tr>
 			<tr><td>&nbsp;&nbsp;</td><td>&nbsp;&nbsp;</td></tr>
 			<tr>
 				<td width="420px" align="left"><b>Scrap pieces</b></td>
-				<td width="150px" align="right"><b>'.$Scrapsent.'</b></td>
+				<td width="160px" align="right"><b>'.$Scrapsent.'</b></td>
 			</tr>
 			<tr>
 				<td width="420px" align="left"><b>Additional Charges : '.$additionalchargetype.'</b></td>
@@ -2957,7 +2957,7 @@ EOD;
 				<td><b>'.$subtotal.'</b>&nbsp;&nbsp;</td>				
 			</tr>
 			<tr>
-				<td width="550px" border="0" align="left"><b>Service Tax @ '.$serviceTaxPercent.'%</b></td>
+				<td width="555px" border="0" align="left"><b>Service Tax @ '.$serviceTaxPercent.'%</b></td>
 				<td><b>'.$servicetax.'</b>&nbsp;&nbsp;</td>				
 			</tr>
 			<tr>

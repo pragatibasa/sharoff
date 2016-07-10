@@ -159,7 +159,7 @@ $(document).on( 'click', '.ico_delete', function() {
 
 $('#length_v').on('keydown', function(e) {
     var key   = e.keyCode ? e.keyCode : e.which;
-    if (!( [8, 9, 13, 27, 46, 110].indexOf(key) !== -1 ||
+    if (!( [8, 9, 13, 27, 46].indexOf(key) !== -1 ||
          (key == 65 && ( e.ctrlKey || e.metaKey  ) ) || 
          (key >= 35 && key <= 40) ||
          (key >= 48 && key <= 57 && !(e.shiftKey || e.altKey)) ||
@@ -170,7 +170,7 @@ $('#length_v').on('keydown', function(e) {
 $(document).on( 'keyup', '.width',function(event) {
 	var totalWidth 		= 0;
 	var currentWidth	= $(this).val();
-	var pid   			=	$('#pid').val();
+	var pid   			= $('#pid').val();
 
 	var thickness 		= $('#thic').val();
 	var length 			= $('#length_v').val();
@@ -246,7 +246,7 @@ function loadfolderlist(account, accname) {
             thisdata["weight"] = item.weight;
 
 			totalWeight += Number(item.weight);
-			totalwidth += item.width;
+			totalwidth += Number(item.width);
 
 			var edit = '<a class="ico_coil_edit" title="Edit" href="#" onClick=radioload('+item.Sno+','+item.length+','+item.width+','+item.weight+')><img src="<?php echo img_path('iconset/ico_edit.png'); ?>" /></a>';
 			var dl = '<a class="ico_coil_delete" title="Delete" href="'+item.dl+'" onClick=deleteItem('+item.Sno+')><img src="<?php echo img_path('iconset/ico_cancel.png'); ?>" /></a>';
@@ -322,33 +322,38 @@ function deleteItem(sn){
 		datatype: json,
 			success: function(msg){ 
 				refresh_folderlist(); 
-				totalwidth_check();
+				//totalwidth_check();
 			}
 		});
-    }else{
-    return false;
+    } else {
+	    return false;
     }
   }
 
 function savechange(id) {
     var pid = $('#pid').val();
-	var totalwidth = $('#txtHiddentotalwidth').val();
-	var coilwidth = $('#wid').val();
-	if(parseInt(totalwidth) > parseInt(coilwidth) ){
-		alert('Sorry the Total width of bundle is more then width of coil please edit the width or delete to progress!!');
-	} else{
-		var dataString = 'pid='+pid;
-     	$.ajax({
-                type: 'POST',
-                url: "<?php echo fuel_url('slitting_instruction/save_button');?>",
-				data: dataString,
-                success: function() {
-					alert("Saved Succesfully");
-					refresh_folderlist();
-					totalwidth_check();	
-				}
-        });
-	}
+	var dataString = 'pid='+pid;
+ 	$.ajax({
+        type: 'POST',
+        url: "<?php echo fuel_url('slitting_instruction/getLengthWithWidthGreater');?>",
+		data: dataString,
+        success: function(response) {
+        	if( response != false ) {
+        		alert('Sorry the Total width of bundle is more then width of coil please edit the width or delete to progress!!');
+        	} else {
+		     	$.ajax({
+	                type: 'POST',
+	                url: "<?php echo fuel_url('slitting_instruction/save_button');?>",
+					data: dataString,
+	                success: function() {
+						alert("Saved Succesfully");
+						refresh_folderlist();
+						totalwidth_check();	
+					}
+		        });
+        	}
+		}
+    });
 }
 
 function functionedit(){

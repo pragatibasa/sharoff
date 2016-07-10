@@ -211,10 +211,12 @@ function showchild(parentid) {
 							thisdata["Status"] = item.status;
 							}
 							else if(item.process=='Slitting'){
-							thisdata["SlittNumber"] = item.slittnumber;
-							thisdata["Date"] = item.date;
-							thisdata["Width in(mm)"] = item.width;
-							thisdata["Status"] = item.status;
+								thisdata["SlittNumber"] = item.slittnumber;
+								thisdata["Date"] = item.date;
+								thisdata["Width in(mm)"] = item.width;
+								thisdata["Length in(mm)"] = item.length;
+								thisdata["Weight in(kgs)"] = item.weight;
+								thisdata["Status"] = item.status;
 							}
 							else if(item.process=='NULL'){
 							'<div id="error_msg"> '+

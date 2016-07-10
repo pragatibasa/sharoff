@@ -31,7 +31,7 @@ class slitting_instruction_model extends Base_module_model {
 	}
 
 	function totalwidthmodel($partyid){
-		$sqlsw = "select round(sum(nWeight),2) as width,round(sum(nWidth),2) as totalWidth, sum(distinct nLength) as totalLength from aspen_tblslittinginstruction
+		$sqlsw = "select round(sum(nWeight)) as width,round(sum(nWidth),2) as totalWidth, sum(distinct nLength) as totalLength from aspen_tblslittinginstruction
 					where aspen_tblslittinginstruction.vIRnumber='".$partyid."'";
 
 		$query = $this->db->query($sqlsw);
@@ -110,7 +110,7 @@ class slitting_instruction_model extends Base_module_model {
 		      $arr[] =$row;
 		   }
 		}
-		$arr[0]->remaining_weight = round(($arr[0]->fQuantity/($arr[0]->fThickness*$arr[0]->fWidth*0.00000785)),2);
+		$arr[0]->remaining_weight = round(($arr[0]->fQuantity/($arr[0]->fThickness*$arr[0]->fWidth*0.00000785)));
 		return json_encode($arr[0]);
 	}	
 		
@@ -137,7 +137,7 @@ function BundleTable($pid) {
 	function savebundleslitting( $pid, $date, $widths, $length, $thickness ) {
 		$arrWidths = explode(',', $widths);
 		foreach ($arrWidths as $key => $width) {
-			$weight = round((0.00000785*$width*$thickness*$length),2);
+			$weight = round((0.00000785*$width*$thickness*$length));
 			$sql = $this->db->query ("Insert into aspen_tblslittinginstruction(vIRnumber,dDate,nWidth,nWeight,nLength) VALUES(  '". $pid. "','". $date. "','". $width. "','".$weight."','".$length."')");
 		}
   	}
@@ -178,6 +178,21 @@ function BundleTable($pid) {
 		$sql = "select COALESCE( ($remaining_weight - sum( distinct nLength ) ),$remaining_weight ) as balance from aspen_tblslittinginstruction where vIRnumber = '$partynumber'";
 		$query = $this->db->query($sql);
 		return round($query->result()[0]->balance,2);
+	}
+
+	function getLengthWithWidthGreater($pid) {
+		$sql = "select lengths.nLength,lengths.width,inward.fWidth from 
+				(select nLength,sum(nWidth) as width from aspen_tblslittinginstruction where vIRnumber=$pid group by nLength) as lengths, 
+				 aspen_tblinwardentry inward where vIRnumber =$pid and
+				lengths.width > inward.fWidth";
+		$query = $this->db->query($sql);
+		$arr = [];
+		if ($query->num_rows() > 0) {
+			foreach ($query->result() as $row) {
+				$arr[] =$row->nLength;
+		   	}
+		}
+		return $arr;
 	}
 }
 

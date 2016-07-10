@@ -18,7 +18,7 @@ html, body{
 a{
 	color:#ffffff;
 	text-decoration:underline;
-	font:normal 12px Calibri, Arial, sans-serif;
+	font:normal Calibri, Arial, sans-serif;
 }
 
 #header_login{
@@ -31,7 +31,7 @@ a{
 div#login { 
 	margin:20px auto 0px;
 	background:url(../images/imgs/login_panel_bg.png) no-repeat;
-	width:333px;
+	width:331px;
 	height:343px;
 	position: relative;
 	color:#ffffff;
@@ -110,7 +110,7 @@ div#login h3 {
 }
 
 div#login_inner { 
-	width: 310px; 
+	width: 329px; 
 	padding-top: 50px; 
 	margin: 10px auto 0 auto; 
 	position: relative; 
@@ -149,7 +149,7 @@ a#login_btn {
 
 div#login_footer { 
 	position: absolute; 
-	width: 333px; 
+	width: 337px; 
 	bottom: -1px; 
 	color: #ffffff;
 }

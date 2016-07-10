@@ -163,28 +163,28 @@ class Partywise_register extends Fuel_base_controller {
 			foreach($childs as $child) {
 				$obj = new stdClass();
 				if($child->process=='Cutting'){
-				$obj->processdate = $child->processdate;
-				$obj->length = $child->length;
-				$obj->bundlenumber = $child->bundlenumber;
-				$obj->bundles = $child->bundles;
-				$obj->weight = $child->weight;
-				$obj->status = $child->status;
-				$obj->process = $child->process;
-				}
-				else if($child->process=='Recoiling'){
-				$obj->recoilnumber = $child->recoilnumber;
-				$obj->startdate = $child->startdate;
-				$obj->enddate = $child->enddate;
-				$obj->norecoil = $child->norecoil;
-				$obj->status = $child->status;
-				$obj->process = $child->process;
-				}
-				else if($child->process=='Slitting'){
-				$obj->slittnumber = $child->slittnumber;
-				$obj->date = $child->date;
-				$obj->width = $child->width;
-				$obj->status = $child->status;
-				$obj->process = $child->process;
+					$obj->processdate = $child->processdate;
+					$obj->length = $child->length;
+					$obj->bundlenumber = $child->bundlenumber;
+					$obj->bundles = $child->bundles;
+					$obj->weight = $child->weight;
+					$obj->status = $child->status;
+					$obj->process = $child->process;
+				} else if($child->process=='Recoiling'){
+					$obj->recoilnumber = $child->recoilnumber;
+					$obj->startdate = $child->startdate;
+					$obj->enddate = $child->enddate;
+					$obj->norecoil = $child->norecoil;
+					$obj->status = $child->status;
+					$obj->process = $child->process;
+				} else if($child->process=='Slitting'){
+					$obj->slittnumber = $child->slittnumber;
+					$obj->date = $child->date;
+					$obj->width = $child->width;
+					$obj->length = $child->length;
+					$obj->weight = $child->weight;
+					$obj->status = $child->status;
+					$obj->process = $child->process;
 				}
 				else if($child->process=='NULL'){
 				$status = array("status"=>"No Results!");

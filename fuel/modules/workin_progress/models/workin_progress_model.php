@@ -131,16 +131,14 @@ where aspen_tblinwardentry.vStatus = 'Work In Progress' or aspen_tblslittinginst
 		}
 	}
 
-	function cutting_slipmodel($partyid='',$partyname = '') 
-	
-	{
-	if(isset($partyid) && isset($partyname)) {
+	function cutting_slipmodel($partyid='',$partyname = '') {
+		if(isset($partyid) && isset($partyname)) {
 			$partyname = $partyname;
 			$partyid = $partyid;
 		}
-	$this->cutting_slipgenerated($partyid);
-	$sqlpcheck= "Select vprocess from aspen_tblinwardentry where vIRnumber='".$partyid."'";
-	$query = $this->db->query($sqlpcheck);
+		$this->cutting_slipgenerated($partyid);
+		$sqlpcheck= "Select vprocess from aspen_tblinwardentry where vIRnumber='".$partyid."'";
+		$query = $this->db->query($sqlpcheck);
 		$arr='';
 		if ($query->num_rows() > 0) {
 		 	foreach ($query->result() as $row)
@@ -308,8 +306,6 @@ where aspen_tblinwardentry.vStatus = 'Work In Progress' or aspen_tblslittinginst
 		$pdf->Output($pdfname, 'I');
 	
 	}
-	
-	
 	else if( $row->vprocess =='Recoiling')
 	{
 	$sqlrecoiling = "select aspen_tblpartydetails.nPartyName as partyname,aspen_tblmatdescription.vDescription as materialdescription,fWidth as Width,fThickness as Thickness,dStartDate as Startdate,dEndDate as Enddate
@@ -452,8 +448,6 @@ where aspen_tblinwardentry.vStatus = 'Work In Progress' or aspen_tblslittinginst
 		$pdf->Output($pdfname, 'I');
 	
 	}
-	
-	
 	else if( $row->vprocess =='Slitting')
 	{
 	$sqlSlitting = "select aspen_tblpartydetails.nPartyName as partyname,aspen_tblmatdescription.vDescription as materialdescription,fWidth as Width, fThickness as Thickness,dDate as Startdate from aspen_tblinwardentry LEFT JOIN aspen_tblmatdescription  ON aspen_tblmatdescription.nMatId=aspen_tblinwardentry.nMatId LEFT JOIN aspen_tblslittinginstruction  ON aspen_tblslittinginstruction.vIRnumber=aspen_tblinwardentry.vIRnumber
@@ -570,9 +564,9 @@ where aspen_tblinwardentry.vStatus = 'Work In Progress' or aspen_tblslittinginst
 			<tr>
 				<td align="center"><h1>'.$rowitem->slitnumber.'</h1></td>
 				<td align="center" ><h1>'.$rowitem->startdate.'</h1></td>
+				<td align="center"><h1>'.$rowitem->length.'</h1></td>
 				<td align="center"><h1>'.$rowitem->width.'</h1></td>
-				<td align="center"><h1>'.$rowitem->width.'</h1></td>
-				<td align="center"><h1>'.$rowitem->width.'</h1></td>
+				<td align="center"><h1>'.round($rowitem->weight).'</h1></td>
 			</tr>';
 			}
 		}else{

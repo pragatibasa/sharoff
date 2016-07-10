@@ -21,19 +21,19 @@ class Coil_details_model extends Base_module_model {
 	}
 
 
-	function totalweight_check($partyname = ''){
-	$sql=  "SELECT SUM( fpresent ) as weight FROM aspen_tblinwardentry LEFT JOIN aspen_tblpartydetails ON aspen_tblpartydetails.nPartyId = aspen_tblinwardentry.nPartyId where aspen_tblpartydetails.nPartyName = '".$partyname."'";
+	function totalweight_check($partyname = '') {
+		$sql=  "SELECT round(SUM( fpresent )) as weight FROM aspen_tblinwardentry LEFT JOIN aspen_tblpartydetails ON aspen_tblpartydetails.nPartyId = aspen_tblinwardentry.nPartyId where aspen_tblpartydetails.nPartyName = '".$partyname."' AND aspen_tblinwardentry.fpresent >= 5";
+	
 		$query = $this->db->query($sql);
 		$arr='';
-		if ($query->num_rows() > 0)
-		{
-		   foreach ($query->result() as $row)
-		   {
+		if ($query->num_rows() > 0) {
+		   foreach ($query->result() as $row) {
 		      $arr[] =$row;
 		   }
 		}
 		return $arr;
 	}
+
 	function print_partywisemodel($partyid='',$partyname = '') {
 		$sqlcutting = "select  nPartyName as partyname,vAddress1 as address1,vAddress2 as address2,vCity as city from aspen_tblpartydetails  where nPartyName ='".$partyname."' ";
 		$querymain = $this->db->query($sqlcutting);
@@ -193,7 +193,7 @@ class Coil_details_model extends Base_module_model {
 		$query = $this->db->query($sqlci);
 		}
 		else if($row->vprocess =='Slitting'){
-			$sqlci="select aspen_tblslittinginstruction.nSno as slittnumber,DATE_FORMAT(aspen_tblslittinginstruction.dDate, '%d-%m-%Y') as date,aspen_tblslittinginstruction.nWidth as width, aspen_tblslittinginstruction.vStatus as status, aspen_tblinwardentry.vprocess as process from aspen_tblslittinginstruction  
+			$sqlci="select aspen_tblslittinginstruction.nSno as slittnumber,DATE_FORMAT(aspen_tblslittinginstruction.dDate, '%d-%m-%Y') as date,aspen_tblslittinginstruction.nWidth as width,aspen_tblslittinginstruction.nLength as length,aspen_tblslittinginstruction.nWeight as weight,aspen_tblslittinginstruction.vStatus as status, aspen_tblinwardentry.vprocess as process from aspen_tblslittinginstruction  
 			LEFT JOIN aspen_tblinwardentry ON aspen_tblinwardentry.vIRnumber = aspen_tblslittinginstruction.vIRnumber WHERE aspen_tblslittinginstruction.vIRnumber='".$parentid."'";
 		$query = $this->db->query($sqlci);
 		}

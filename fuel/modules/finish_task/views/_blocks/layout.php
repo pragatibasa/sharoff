@@ -129,7 +129,7 @@
 	</div>
 	<div class="pad-10">
 		<div id="weight"> Weight (in Kgs)</div>
-		<input id= "txtWeight" type="text" />
+		<input id= "txtSlittingWeight" type="text" />
 	</div>
 	<div class="pad-10">
 		<input class="btn btn-success" type="button" value="Save" id="save_id" onClick="functionSlittingSave();"/> &nbsp; &nbsp; &nbsp;
@@ -190,6 +190,16 @@ $('document').ready(function() {
 		$('#finishsi').show();
 	}
 	totalweightcount();
+
+	$('#txtSlittingWeight').on('keydown', function(e) {
+    var key   = e.keyCode ? e.keyCode : e.which;
+    if (!( [8, 9, 13, 27, 46].indexOf(key) !== -1 ||
+         (key == 65 && ( e.ctrlKey || e.metaKey  ) ) || 
+         (key >= 35 && key <= 40) ||
+         (key >= 48 && key <= 57 && !(e.shiftKey || e.altKey)) ||
+         (key >= 96 && key <= 105)
+       )) e.preventDefault();
+	});
 });
 
 function loadfolderlist(account, accname) {
@@ -448,7 +458,7 @@ function functionSlittingSave() {
 	var pid  			= $('#pid').val();
 	var bundlenumber 	= $('.slitting').find('#txtbundlenumber').val();
 	var width 			= $('#txtWidth').val();
-	var weight 			= $('#txtWeight').val();
+	var weight 			= $('#txtSlittingWeight').val();
 
 	if( bundlenumber == '' || width == '' || weight == '' ) {
 		alert('INVALID');
@@ -466,7 +476,7 @@ function functionSlittingSave() {
 	   		success: function(msg){
 				totalweightcount();
 	   			$('.slitting').find('#txtbundlenumber').val('');
-				$('#txtLength,#txtWidth,#txtWeight').val('');
+				$('#txtLength,#txtWidth,#txtSlittingWeight').val('');
 				refresh_folderlist();
 	   		}  
 	  	}); 
@@ -490,7 +500,7 @@ function editslit(b, l, a, w){
 	$('#txtLength').val(l);
 	$('#txtWidth').val(a);
 	$('#txtLength').val(l);
-	$("#txtWeight").val(w);
+	$("#txtSlittingWeight").val(w);
 }
 
 

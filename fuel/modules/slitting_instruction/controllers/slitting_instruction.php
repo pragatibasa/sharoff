@@ -147,7 +147,6 @@ function deleterow()
    }
 }
 	
-	
 	function slitting_instruction_party($pid, $pname) {
 		$adata = $this->slitting_instruction_model->getCuttingInstruction($pid, $pname);
 		return $adata;
@@ -159,6 +158,15 @@ function deleterow()
 		$adata = $this->slitting_instruction_model->getBalanceLength($pid, $remaining_weight);
 		echo $adata; exit;
 	}	
+
+	function getLengthWithWidthGreater() {
+		$pid = $_POST['pid'];
+		$adata = $this->slitting_instruction_model->getLengthWithWidthGreater($pid);
+		if( count($adata) > 0 ) {
+			echo implode(',', $adata);exit;			
+		} else 
+			echo false;exit;
+	}
 }
 /* End of file */
 /* Location: ./fuel/modules/controllers*/
