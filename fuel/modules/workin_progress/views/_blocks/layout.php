@@ -85,9 +85,6 @@
 
 <input id="coilid" type="hidden" value="" name="coilid">
 <input id="partyid" type="hidden" value="" name="partyid">
-
-
-
   <script type="text/javascript">
   $(function(){
   $("#myTable").tablesorter();

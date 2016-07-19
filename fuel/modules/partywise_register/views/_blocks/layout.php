@@ -73,12 +73,6 @@
 		<input id="totalweight_calcualation" type="text" DISABLED/>(in Kgs)  
 		&nbsp; &nbsp; &nbsp;
 </div>
-
-
-
-
-
-
 <script language="javascript" type="text/javascript">
 function totalweight_check(){
 	var party_account_name = $('#party_account_name').val();
@@ -100,8 +94,6 @@ $.ajax({
 </script>
 
 <script type="text/javascript">
-
-
 	$("#party_account_name").change(function(data) {
 		 var account_id = $("#party_account_name").val();
 		var loading = '<div id="DynamicGridLoadingp_2"> '+
@@ -164,9 +156,6 @@ $.ajax({
 
 	
 });
-
-
-
 
 function showchild(parentid) {
 	$('#pr_container_name').html(parentid);
@@ -250,4 +239,4 @@ function cuttinginstruction(id)
 	var coilnumber = $('#vno'+id).val();
 	document.getElementById('partnamecheck').value = coilnumber;
 }
-</script>   
+</script>

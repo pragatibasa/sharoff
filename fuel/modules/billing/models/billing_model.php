@@ -208,6 +208,7 @@ class Billing_model extends Base_module_model {
 			LEFT JOIN aspen_tblpartydetails ON aspen_tblpartydetails.nPartyId = aspen_tblinwardentry.nPartyId ";
 			if(!empty($partyname) && !empty($partyid)) 
 				$sqldir.="WHERE aspen_tblpartydetails.nPartyName='".$partyname."' and aspen_tblinwardentry.vIRnumber='".$partyid."'";
+			
 		} else {
 			$sqldir	= "SELECT
 					aspen_tblinwardentry.vIRnumber,
@@ -1009,7 +1010,7 @@ function listbundledetailsslit($partyid = '',$slno = '') {
  }
  
 		
-	function billgeneratemodelslit($coilno='',$partyname='',$description='',$lorryno='',$totalrates='',$totalweight_checks='',$totalamtsslit='') {
+	function billgeneratemodelslit($coilno='',$partyname='',$description='',$lorryno='',$totalrates='',$totalweight_checks='',$totalamtsslit='',$actualnumberbundle) {
 	 $sqlrpt = "select aspen_tblbilldetails.vOutLorryNo as lorryno, 
 	 aspen_tblbilldetails.fTotalWeight as totalweight_checks, 
 	 aspen_tblbilldetails.ntotalpcs as totalrates, 
@@ -1024,11 +1025,17 @@ function listbundledetailsslit($partyid = '',$slno = '') {
 	  where
 		aspen_tblpartydetails.nPartyName='".$partyname."' and aspen_tblinwardentry.vIRnumber='".$coilno."'";
   
-  
-  
   $querymain = $this->db->query($sqlrpt);
 
-      
+	$sqlbundle ="select Distinct aspen_tblbillingstatus.nSno as bundlenumber,
+	aspen_tblslittinginstruction.nLength as length,
+	aspen_tblslittinginstruction.nWidth,
+	aspen_tblslittinginstruction.nWeight
+	 from aspen_tblslittinginstruction
+	LEFT JOIN aspen_tblbillingstatus  ON aspen_tblslittinginstruction.vIRnumber=aspen_tblbillingstatus.vIRnumber  	
+	WHERE aspen_tblslittinginstruction.nSno = aspen_tblbillingstatus.nSno and  aspen_tblbillingstatus.vIRnumber='".$coilno."'  and aspen_tblbillingstatus.nSno IN( ".$actualnumberbundle.") order by aspen_tblbillingstatus.nSno asc";
+	$queryitem = $this->db->query($sqlbundle);	
+
   $pdf = new TCPDF(PDF_PAGE_ORIENTATION, PDF_UNIT, PDF_PAGE_FORMAT, true, 'UTF-8', false);
   $pdfname= 'loadingslip_'.$partyname.'.pdf';
   $resolution= array(72, 150);
@@ -1073,17 +1080,57 @@ function listbundledetailsslit($partyid = '',$slno = '') {
 			</tr>
 			<tr>
 				<td align="left">
-					<h1><b>Total Pieces :</b></h1></td><td align="left"><h1>'.$totalrates.'</h1></td>
-			</tr>	
-			<tr>
-				<td align="left">
-					<h1><b>Total Amount:</b> </h1></td><td align="left"><h1>'.$totalamtsslit.'</h1></td>
-			</tr>	
-			<tr>
-				<td align="left">
-					<h1><b>Total Weight : </b></h1></td><td align="left"><h1>'.$totalweight_checks.' Tonnes</h1></td>
+					<h1><b>Total Weight : </b></h1></td><td align="left"><h1>'.round(($totalweight_checks/1000),3).' Tonnes</h1></td>
 			</tr>	
 		</table>';
+
+					$html .= '
+		<table cellspacing="0" cellpadding="5" border="0">
+			<tr>
+				<td align="left">&nbsp;</td>
+				<td align="right">&nbsp;</td>
+			</tr>
+			
+		</table>';
+
+		$html .= '
+			<table align="center" cellspacing="0" cellpadding="5" border="1px" width="100%">
+			<tr>
+				<th style="font-weight:bold" width="10%"><h1>Sl. No.</h1></th>
+				<th style="font-weight:bold" width="30%"><h1>DESCRIPTION</h1></th>
+				<th style="font-weight:bold" width="20%"><h1>Length</h1></th>
+				<th style="font-weight:bold" width="20%"><h1>Width</h1></th> 
+				<th style="font-weight:bold" width="20%"><h1>Weight in M/T</h1></th>
+			</tr>';
+		
+		if ($queryitem->num_rows() > 0)
+		{
+			foreach($queryitem->result() as $rowitem)
+			{
+		$html .= '
+			<tr>
+				<td><h1>'.$rowitem->bundlenumber.'</h1></td>
+				<td><h1>LENGTH &nbsp;&nbsp;&nbsp;'.$rowitem->length.'</h1></td>
+				<td><h1>'.$rowitem->length.'</h1></td>
+				<td><h1>'.$rowitem->nWidth.'</h1></td>
+				<td><h1>'.round(($rowitem->nWeight/1000),3).'</h1></td>
+			</tr>';
+			}
+		}else{
+		$html .= '
+			<tr>
+				<td align="center">&nbsp;</td>
+				<td align="center">&nbsp;</td>
+				<td align="center" >&nbsp;</td>
+				<td align="center">&nbsp;</td>
+				<td align="right">&nbsp;</td>
+			</tr>';
+		}
+		$html .= '
+			
+		</table>';
+
+
   	$html .= '
 		<table cellspacing="0" cellpadding="5" border="0">
 			<tr>

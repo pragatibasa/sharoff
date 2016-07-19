@@ -152,28 +152,16 @@
     <input type="text" id="txtamount_mt1" name="txtamount_mt1" value="0"/> 
 	</div>
 </fieldset>
-
-
-
 <table cellpadding="0" cellspacing="0" border="0" width="100%">
 <tr>
 <td> 
-
-
-
-
 <td width="10px">&nbsp;</td>
 <td>
 <div>
 	<div id="bundle_number_text_label"> </div>
 	<input id="bundle_value" type="hidden" name="bundle_number"  />
-	
 </div>		
-
 <form>
-
-
-
 <fieldset>
 <legend>Processing Charges:</legend>
 <div class="pad-10">
@@ -574,14 +562,15 @@ function functionpdfslit() {
 	var totalrates 			= $('#totalrates').val();
 	var totalweight_checks	= $('#totalweight_checks').val();
 	var totalamtsslit		= $('#totalamtsslit').val();
-   
-	var dataString = 'coilno='+pid+'&partyname='+pname+'&description='+mat_desc+'&lorryno='+txtoutward_num+'&totalrates='+totalrates+'&totalweight_checks='+totalweight_checks+'&totalamtsslit='+totalamtsslit;
+  var actualnumberbundle = $('#txtbundleids').val();
+
+	var dataString = 'coilno='+pid+'&partyname='+pname+'&description='+mat_desc+'&lorryno='+txtoutward_num+'&totalrates='+totalrates+'&totalweight_checks='+totalweight_checks+'&totalamtsslit='+totalamtsslit+'&actualnumberbundle='+actualnumberbundle;
 	$.ajax({  
 		type: "POST",
 		// url : "<?php echo fuel_url('billing_statement/billing_pdf');?>/",  
 		data: dataString,
 		success: function(msg) {  
-			var dataStringone =  'coilno='+pid+'&partyname='+pname+'&description='+mat_desc+'&lorryno='+txtoutward_num+'&totalrates='+totalrates+'&totalweight_checks='+totalweight_checks+'&totalamtsslit='+totalamtsslit;
+			var dataStringone =  'coilno='+pid+'&partyname='+pname+'&description='+mat_desc+'&lorryno='+txtoutward_num+'&totalrates='+totalrates+'&totalweight_checks='+totalweight_checks+'&totalamtsslit='+totalamtsslit+'&actualnumberbundle='+actualnumberbundle;
 			var url = "<?php echo fuel_url('billing/billingslit_pdf');?>/?"+dataStringone;
 			window.open(url);
 		}

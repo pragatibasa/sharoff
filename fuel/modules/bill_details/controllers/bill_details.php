@@ -15,7 +15,10 @@ class bill_details extends Fuel_base_controller {
 	}
 	
 	function index() {
+		$this->_render('bill_details');
+	}
 
+	function list_bill_details() {
 		$containers			= $this->bill_details_model->list_items();
 		$latestBillNumber 	= $this->bill_details_model->getLatestBillNumber();
 
@@ -26,21 +29,18 @@ class bill_details extends Fuel_base_controller {
 				$obj->nBillNo = $container['nBillNo'];
 				$obj->dBillDate = $container['dBillDate'];
 				$obj->nPartyName = $container['nPartyName'];
+				$obj->BillStatus = $container['BillStatus'];
 
 				$obj->duplicate_bill = site_url('bill_details/duplicate_bill').'/?billno='.$container['nBillNo'];
-				$obj->cancel_bill = site_url('bill_details/cancel_bill').'/?billno='.$container['nBillNo'];
+				if( $container['BillStatus'] != 'Cancelled') 
+					$obj->cancel_bill = site_url('bill_details/cancel_bill').'/?billno='.$container['nBillNo'];
 				if( $latestBillNumber == $container['nBillNo'] )
 					$obj->delete_bill = site_url('bill_details/delete_bill').'/?billno='.$container['nBillNo'];
 	
 				$folders[] = $obj;
 			}
-			$vars['billdetails_lists'] = $folders; 
-		} else {
-			$status = array("status"=>"No Results!");
-            $vars['billdetails_lists'] = $status;
-		}
-
-		$this->_render('bill_details',$vars);
+		} 
+		echo json_encode($folders);exit;
 	}
 
 	function duplicate_bill() {

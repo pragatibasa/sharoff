@@ -113,8 +113,11 @@ function loadfolderlist_slit(account, accname) {
             for (var i = 0; i < msg.length; i++) {
             var item = msg[i];
             var thisdata = {};
+			var disabled = '';
+            if(item.billingstatus == 'Billed')
+				disabled = "disabled=true";
 			
-			var selectbundle = '<input class="checkbundle" type="checkbox" id="check_'+item.serialnumber+'" name="list" value="'+item.serialnumber+'" onClick=updateTextAreaslit('+item.slitnumber+') />';
+			var selectbundle = '<input class="checkbundle" '+disabled+' type="checkbox" id="check_'+item.serialnumber+'" name="list" value="'+item.serialnumber+'" onClick=updateTextAreaslit('+item.slitnumber+') />';
 			thisdata["select"] = selectbundle;
 			thisdata["serialnumber"] = item.serialnumber;
             thisdata["length"] = item.length;

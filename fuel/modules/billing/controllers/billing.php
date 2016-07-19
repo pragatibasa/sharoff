@@ -73,7 +73,7 @@ class Billing extends Fuel_base_controller {
 			$vars['recdata']= $this->billingpreviewviewcntrlr_recoil($this->partyid, $this->partyname,$this->recno);
 			}
 			else if($vars['processchk']==''){
-			$vars['dirdata']= $this->billingpreviewviewcntrlr_dirdata($this->partyid, $this->partyname);
+				$vars['dirdata']= $this->billingpreviewviewcntrlr_dirdata($this->partyid, $this->partyname);
 			}
 			else if($vars['processchk']=='sf'){
 			$vars['semidata']= $this->billingpreviewviewcntrlr_semidata($this->partyid, $this->partyname);
@@ -947,14 +947,13 @@ class Billing extends Fuel_base_controller {
 	    $totalrates = $args["totalrates"];
 		$totalweight_checks = $args["totalweight_checks"];
 	    $totalamtsslit = $args["totalamtsslit"];
+	    $actualnumberbundle = $args["actualnumberbundle"];
+
 	    $this->load->module_model(BILLING_FOLDER, 'billing_model');
-	    $billgenerateb = $this->billing_model->billgeneratemodelslit($coilno,$partyname,$description,$lorryno,$totalrates,$totalweight_checks,$totalamtsslit);
-  
+	    $billgenerateb = $this->billing_model->billgeneratemodelslit($coilno,$partyname,$description,$lorryno,$totalrates,$totalweight_checks,$totalamtsslit,$actualnumberbundle);
 	}
 	
-	
-	
-		function billingslitprint_pdf() {
+	function billingslitprint_pdf() {
 		$queryStr = $_SERVER['QUERY_STRING'];
 		parse_str($queryStr, $args);
 	    $coilno = $args["coilno"];

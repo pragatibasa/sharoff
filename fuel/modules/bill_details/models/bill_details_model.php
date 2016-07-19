@@ -16,7 +16,7 @@ class bill_details_model extends Base_module_model {
 	}
 
 	function list_items($limit = NULL, $offset = NULL, $col = 'dBillDate', $order = 'desc') {
-		$this->db->select('aspen_tblbilldetails.nBillNo,aspen_tblbilldetails.dBillDate,aspen_tblpartydetails.nPartyName');
+		$this->db->select('aspen_tblbilldetails.nBillNo,aspen_tblbilldetails.dBillDate,aspen_tblpartydetails.nPartyName,aspen_tblbilldetails.BillStatus');
 		$this->db->join('aspen_tblpartydetails', 'aspen_tblbilldetails.nPartyId = aspen_tblpartydetails.nPartyId', 'left');
 
 	    $data = parent::list_items($limit, $offset, $col, $order);
@@ -753,7 +753,99 @@ $html = '<table width="100%"  cellspacing="0" cellpadding="5" border="0">
 	}
 
 	function processCancelBill( $billNo ) {
-		
+		$strBillRecord = 'select * from aspen_tblbilldetails where nBillNo='.$billNo;
+		$objBillRecord = $this->db->query($strBillRecord);
+		$arrBillRecord = $objBillRecord->result()[0];
+		$intCoilNumber = $arrBillRecord->vIRnumber;
+		if( $arrBillRecord->vBillType == 'Slitting' ) {
+
+			$sqlBundleNos = 'select nBundleNumber from aspen_tblBillBundleAssociation where nBillNumber = '.$billNo;
+			$objBundleNos = $this->db->query($sqlBundleNos);
+			if ($objBundleNos->num_rows() > 0) {
+				foreach ($objBundleNos->result_array() as $row) {
+					$arrBundleNos[] = $row['nBundleNumber'];
+				}
+				$strBundleNos = implode(',', $arrBundleNos);
+			}
+			//Updating the data back
+
+			//Updating inward entry back
+			$strSqlUpdateCoilWeights = "UPDATE aspen_tblinwardentry p,
+				( select
+					(aspen_tblinwardentry.fpresent + sum(aspen_tblbillingstatus.fWeight)) as present,
+					(aspen_tblinwardentry.billedweight - sum(aspen_tblbillingstatus.fWeight)) as billed
+					from aspen_tblinwardentry
+					left join aspen_tblbillingstatus on aspen_tblinwardentry.vIRnumber = aspen_tblbillingstatus.vIRnumber
+					where 
+					aspen_tblbillingstatus.vIRnumber= $intCoilNumber and 
+					aspen_tblbillingstatus.nSno IN ($strBundleNos) 
+				) p1	
+			SET p.fpresent = p1.present and p.billedweight = p1.billed,p.vStatus = 'Ready To Bill'
+			where p.vIRnumber=$intCoilNumber";
+			
+			//Updating bill record status
+			$strSqlUpdateBillStatus = "UPDATE aspen_tblbilldetails set BillStatus = 'Cancelled' where nBillNo = $billNo";
+
+			//Updating back billing status records
+			$strSqlUpdateBillingStatus = "UPDATE aspen_tblbillingstatus SET vBillingStatus='Ready To Bill' WHERE vIRnumber='".$intCoilNumber."' AND nSno IN (".$strBundleNos.")";
+
+			$objUpdateCoilWeights	= $this->db->query($strSqlUpdateCoilWeights);
+			$objUpdateBillStatus 	= $this->db->query($strSqlUpdateBillStatus);
+			$objUpdateBillingStatus = $this->db->query($strSqlUpdateBillingStatus);
+			echo true;exit;
+
+		} else if( $arrBillRecord->vBillType == 'Cutting' ) {
+			$sqlBundleNos = 'select nBundleNumber from aspen_tblBillBundleAssociation where nBillNumber = '.$billNo;
+			$objBundleNos = $this->db->query($sqlBundleNos);
+			if ($objBundleNos->num_rows() > 0) {
+				foreach ($objBundleNos->result_array() as $row) {
+					$arrBundleNos[] = $row['nBundleNumber'];
+				}
+				$strBundleNos = implode(',', $arrBundleNos);
+			}
+			//Updating the data back
+
+			//Updating inward entry back
+			$strSqlUpdateCoilWeights = "UPDATE aspen_tblinwardentry p,
+				( select
+					sum(ROUND((aspen_tblBillBundleAssociation.fbilledWeight*1000),3)) as weight
+					from aspen_tblBillBundleAssociation where
+					aspen_tblBillBundleAssociation.nBillNumber = $billNo and
+					aspen_tblBillBundleAssociation.nBundleNumber IN ($strBundleNos) 
+				) p1
+			SET p.fpresent = p.fpresent+p1.weight, p.billedweight = p.billedweight-p1.weight,p.vStatus = 'Ready To Bill'
+			where p.vIRnumber=$intCoilNumber";
+
+			//Updating bill record status
+			$strSqlUpdateBillStatus = "UPDATE aspen_tblbilldetails set BillStatus = 'Cancelled' where nBillNo = $billNo";
+
+			//Updating back billing status records
+			$strSqlUpdateBillingStatus = "UPDATE aspen_tblbillingstatus as p
+				left join ( select aspen_tblbillingstatus.nSno, aspen_tblbillingstatus.nbalance+aspen_tblBillBundleAssociation.nNoOfPcs as balance,
+				aspen_tblbillingstatus.nBilledNumber-aspen_tblBillBundleAssociation.nNoOfPcs as billed,
+				aspen_tblbillingstatus.fbilledWeight-aspen_tblBillBundleAssociation.fbilledWeight as billedWeight from aspen_tblbillingstatus 
+				left join aspen_tblBillBundleAssociation on aspen_tblBillBundleAssociation.nBundleNumber = aspen_tblbillingstatus.nSno and aspen_tblBillBundleAssociation.nBillNumber = 1010
+				where vIRnumber=$intCoilNumber and nSno in ($strBundleNos)) as p1 on p.nSno = p1.nSno
+				SET p.nbalance = p1.balance, p.nBilledNumber = p1.billed,p.fbilledWeight=p1.billedWeight where p.vIRnumber=$intCoilNumber and p.nSno in ($strBundleNos)";
+
+			$objUpdateCoilWeights	= $this->db->query($strSqlUpdateCoilWeights);
+			$objUpdateBillStatus 	= $this->db->query($strSqlUpdateBillStatus);
+			$objUpdateBillingStatus = $this->db->query($strSqlUpdateBillingStatus);
+			echo true;exit;
+		} else if( $arrBillRecord->vBillType == 'Directbilling' ) {
+
+			//Updating the data back
+			//Updating inward entry back
+			$strSqlUpdateCoilWeights = "UPDATE aspen_tblinwardentry 				
+			SET fpresent = fpresent+($arrBillRecord->fTotalWeight*1000), billedweight = fpresent+($arrBillRecord->fTotalWeight*1000) where vIRnumber=$intCoilNumber";
+
+			//Updating bill record status
+			$strSqlUpdateBillStatus = "UPDATE aspen_tblbilldetails set BillStatus = 'Cancelled' where nBillNo = $billNo";
+
+			$objUpdateCoilWeights	= $this->db->query($strSqlUpdateCoilWeights);
+			$objUpdateBillStatus 	= $this->db->query($strSqlUpdateBillStatus);
+			echo true;exit;		
+		}
 	}
 
 	function processDeleteBill( $billNo ) {
