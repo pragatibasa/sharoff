@@ -256,7 +256,7 @@ class Coil_details_model extends Base_module_model {
 		return $arr;
 	}
 	
-	function list_partyname($partyname = '') {	
+	function list_partyname($partyname = '') {
 		$sql ="SELECT DATE_FORMAT(aspen_tblinwardentry.dReceivedDate, '%d-%m-%Y') as receiveddate, aspen_tblmatdescription.vDescription as description, aspen_tblinwardentry.fThickness as thickness, aspen_tblinwardentry.fWidth as width, aspen_tblinwardentry.fQuantity as weight,aspen_tblinwardentry.fpresent as pweight, aspen_tblinwardentry.vStatus as status , aspen_tblinwardentry.vIRnumber as coilnumber,aspen_tblinwardentry.vprocess as process FROM aspen_tblinwardentry LEFT JOIN aspen_tblmatdescription ON aspen_tblmatdescription.nMatId = aspen_tblinwardentry.nMatId LEFT JOIN aspen_tblpartydetails ON aspen_tblpartydetails.nPartyId = aspen_tblinwardentry.nPartyId LEFT JOIN aspen_tblcuttinginstruction ON aspen_tblcuttinginstruction.vIRnumber = aspen_tblinwardentry.vIRnumber 
 		LEFT JOIN aspen_tblslittinginstruction ON aspen_tblslittinginstruction.vIRnumber = aspen_tblinwardentry.vIRnumber 
 		LEFT JOIN aspen_tblrecoiling ON aspen_tblrecoiling.vIRnumber = aspen_tblinwardentry.vIRnumber"; 
@@ -265,7 +265,6 @@ class Coil_details_model extends Base_module_model {
 		}
 		$sql .="  group by aspen_tblinwardentry.vIRnumber order by aspen_tblinwardentry.dReceivedDate desc";
 
-		
 		$query = $this->db->query($sql);
 		$arr='';
 		if ($query->num_rows() > 0)

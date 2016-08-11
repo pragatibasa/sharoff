@@ -60,6 +60,10 @@
 		</table>
 		<fieldset>
 			<legend>Slitting Details</legend>
+			<a href="<?php echo fuel_url('billing_instruction/?partyid='.$partyid.'&partyname='.$partyname.'&status');?>">Bill Residual Weight</a>
+			<br>
+			<br>
+				<div>Or select a bundle to bill </div>
 			<table width="100%" cellpadding="0" cellspacing="0" border="0">
 			<div id="contentsholder" class="flexcroll" style="width:100%; height:350px; overflow-x:hidden; overflow-y:auto;">
 			<div id="content" style="width:100%; min-height:350px; overflow:hidden;"> 

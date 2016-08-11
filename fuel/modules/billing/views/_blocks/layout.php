@@ -980,7 +980,7 @@ $.ajax({
 		success: function(msg){
 		var msgwt=eval(msg);
 		$.each(msgwt, function(i, j){
-			 var wtrate = j.wtrate;
+			var wtrate = j.wtrate;
 			document.getElementById("txtweighttotal").value = wtrate;});
 	   }  
 	}); 

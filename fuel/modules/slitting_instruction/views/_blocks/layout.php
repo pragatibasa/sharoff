@@ -177,7 +177,7 @@ $(document).on( 'keyup', '.width',function(event) {
 	
 	$('.width').each(function() {
 		if($(this).val() !== '')
-			totalWidth = totalWidth+parseInt($(this).val());
+			totalWidth = totalWidth+parseFloat($(this).val());
 	});
 	
 	if(totalWidth > parseInt($('#wid').val())) {
@@ -249,7 +249,7 @@ function loadfolderlist(account, accname) {
 			totalwidth += Number(item.width);
 
 			var edit = '<a class="ico_coil_edit" title="Edit" href="#" onClick=radioload('+item.Sno+','+item.length+','+item.width+','+item.weight+')><img src="<?php echo img_path('iconset/ico_edit.png'); ?>" /></a>';
-			var dl = '<a class="ico_coil_delete" title="Delete" href="'+item.dl+'" onClick=deleteItem('+item.Sno+')><img src="<?php echo img_path('iconset/ico_cancel.png'); ?>" /></a>';
+			var dl = '<a class="ico_coil_delete" title="Delete" href="#" onClick=deleteItem('+item.Sno+')><img src="<?php echo img_path('iconset/ico_cancel.png'); ?>" /></a>';
             thisdata["action"] = edit+' '+dl;
 			partydata.push(thisdata);
 			$('#txttotalwidth').val(Math.round(totalWeight));
@@ -335,25 +335,14 @@ function savechange(id) {
 	var dataString = 'pid='+pid;
  	$.ajax({
         type: 'POST',
-        url: "<?php echo fuel_url('slitting_instruction/getLengthWithWidthGreater');?>",
+        url: "<?php echo fuel_url('slitting_instruction/save_button');?>",
 		data: dataString,
-        success: function(response) {
-        	if( response != false ) {
-        		alert('Sorry the Total width of bundle is more then width of coil please edit the width or delete to progress!!');
-        	} else {
-		     	$.ajax({
-	                type: 'POST',
-	                url: "<?php echo fuel_url('slitting_instruction/save_button');?>",
-					data: dataString,
-	                success: function() {
-						alert("Saved Succesfully");
-						refresh_folderlist();
-						totalwidth_check();	
-					}
-		        });
-        	}
+        success: function() {
+			alert("Saved Succesfully");
+			refresh_folderlist();
+			totalwidth_check();	
 		}
-    });
+	});
 }
 
 function functionedit(){
@@ -406,15 +395,20 @@ function functionsave() {
 	var pid = $('#pid').val();
 	var thickness = $('#thic').val();
 	var allWidths = [];
-	
+	var widthsSum = 0;
 	$('.width').each(function() {
-		if($(this).val() !== '')	
-			allWidths.push($(this).val());
+		if($(this).val() !== '') {
+			widthsSum += parseFloat($(this).val());
+			allWidths.push(parseFloat($(this).val()));
+		}
 	});
 
 	 if( length =='' ) {
 	  	alert('ENTER SOMETHING');
 	  	return false;
+	 } else if( widthsSum > parseFloat($('#wid').val()) ) {
+	 	alert('Sorry the Total width of bundle is more then width of coil please edit the width or delete to progress!!');
+	 	return false;
 	 } else{
 		var dataString = 'date1='+date1+'&widths='+allWidths+'&pid='+pid+'&length='+length+'&thickness='+thickness;
 		$.ajax({  

@@ -63,6 +63,7 @@ class Workin_progress extends Fuel_base_controller {
 			$obj->process = $container->process;
 			$obj->cs = site_url('workin_progress/cutting_slip').'/?partyid='.$container->coilnumber.'&partyname='.$container->partyname;
             $obj->al = site_url('fuel/cutting_instruction').'/?partyid='.$container->coilnumber.'&partyname='.$container->partyname;
+            $obj->slit = site_url('fuel/slitting_instruction').'/?partyid='.$container->coilnumber.'&partyname='.$container->partyname;
             $obj->fi = site_url('fuel/finish_task').'/?partyid='.$container->coilnumber.'&partyname='.$container->partyname.'&task=wip&process='.$container->process;
             $obj->bl = site_url('fuel/billing_instruction').'/?partyid='.$container->coilnumber.'&partyname='.$container->partyname.'&process=sf'.'&weight='.$container->weight;
 			$obj->deleteparty = '?delete';

@@ -36,6 +36,7 @@
 $(function(){
 	loadBillDetails();
 });
+
 function cancel_bill(billNo) {
 	var href = '<?php echo site_url("bill_details/cancel_bill")."/?billno="; ?>';
     if (confirm("Are you sure you want to cancel the bill with bill number "+billNo) == true) {
@@ -45,6 +46,23 @@ function cancel_bill(billNo) {
 			success: function(msg) {
 				if(msg == 1) {
 					alert('Bill number '+billNo+' has been cancelled.');
+					loadBillDetails();
+				}
+			}
+		});
+    } else 
+		return false;
+}
+
+function delete_bill(billNo) {
+	var href = '<?php echo site_url("bill_details/delete_bill")."/?billno="; ?>';
+    if (confirm("Are you sure you want to delete the bill with bill number "+billNo) == true) {
+        $.ajax({  
+			type: "POST",  
+			url : href+billNo,
+			success: function(msg) {
+				if(msg == 1) {
+					alert('Bill number '+billNo+' has been deleted.');
 					loadBillDetails();
 				}
 			}
@@ -82,16 +100,16 @@ function loadBillDetails() {
 					mediaClass += '<a title="Duplicate Bill" target="_blank" href="'+item.duplicate_bill+'"><span class="badge badge-success" style="color: #FFFFFF;">Duplicate bill</span></a>&nbsp;';
 					if( 'undefined' != typeof item.cancel_bill ) 
 						mediaClass += '<a class="cancel_bill" title="Cancel Bill" onClick="cancel_bill('+item.nBillNo+');" href="javascript:void(0);"><span class="badge badge-warning" style="color: #FFFFFF;">Cancel bill</span></a>&nbsp;';
-					if( 'undefined' != typeof item.delete_bill ) 
-						mediaClass += '<a class="delete_bill" title="Delete Bill" data-billno = "'+item.nBillNo+'" href="'+item.delete_bill+'"><span class="badge badge-error" style="color: #FFFFFF;">Delete bill</span></a>';
+					if( 'undefined' != typeof item.cancel_bill && 'undefined' != typeof item.delete_bill ) 
+						mediaClass += '<a class="delete_bill" title="Delete Bill" onClick="delete_bill('+item.nBillNo+');" href="javascript:void(0)"><span class="badge badge-error" style="color: #FFFFFF;">Delete bill</span></a>';
 					mediaClass += '</td>';
-					mediaClass += '</tr>';					
+					mediaClass += '</tr>';
 				}
 			}
 			mediaClass += '</table>';
 				
 			$('#DynamicGridp_2').html(mediaClass);
-			$("#myTabels").tablesorter();
+			$("#myTable").tablesorter();
 	});
 }
 </script>

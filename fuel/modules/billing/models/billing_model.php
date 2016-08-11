@@ -203,12 +203,11 @@ class Billing_model extends Base_module_model {
 		$checkInwardsStatusRow =  $checkInwardsStatusQuery->result();
 
 		if( $checkInwardsStatusRow[0]->vStatus == 'RECEIVED' ) {
-			$sqldir="SELECT aspen_tblinwardentry.vIRnumber,  aspen_tblmatdescription.vDescription, aspen_tblinwardentry.fThickness, aspen_tblinwardentry.fWidth, aspen_tblinwardentry.fQuantity,aspen_tblinwardentry.vInvoiceNo, aspen_tblinwardentry.fLength,aspen_tblpartydetails.vCusrateadd,aspen_tblpartydetails.vCusraterm
+			$sqldir="SELECT aspen_tblinwardentry.vIRnumber,  aspen_tblmatdescription.vDescription, aspen_tblinwardentry.fThickness, aspen_tblinwardentry.fWidth, aspen_tblinwardentry.fpresent as fQuantity,aspen_tblinwardentry.vInvoiceNo, aspen_tblinwardentry.fLength,aspen_tblpartydetails.vCusrateadd,aspen_tblpartydetails.vCusraterm
 			FROM aspen_tblinwardentry LEFT JOIN aspen_tblmatdescription ON aspen_tblmatdescription.nMatId = aspen_tblinwardentry.nMatId 
 			LEFT JOIN aspen_tblpartydetails ON aspen_tblpartydetails.nPartyId = aspen_tblinwardentry.nPartyId ";
 			if(!empty($partyname) && !empty($partyid)) 
 				$sqldir.="WHERE aspen_tblpartydetails.nPartyName='".$partyname."' and aspen_tblinwardentry.vIRnumber='".$partyid."'";
-			
 		} else {
 			$sqldir	= "SELECT
 					aspen_tblinwardentry.vIRnumber,
@@ -414,9 +413,9 @@ LEFT JOIN aspen_tblcuttinginstruction ON aspen_tblbillingstatus.vIRnumber = aspe
 	
 	function totaweightvalue($txttotalweight,$partyid,$mat_desc,$wei){
 	$sqlwt = "select round(nAmount * '".$txttotalweight."') as wtrate from aspen_tblweight
-left join aspen_tblmatdescription on aspen_tblmatdescription.nMatId=aspen_tblweight.nMatId
-left join aspen_tblinwardentry on aspen_tblinwardentry.nMatId=aspen_tblmatdescription.nMatId
-left join aspen_tblbillingstatus on aspen_tblinwardentry.vIRnumber=aspen_tblbillingstatus.vIRnumber where '".$wei."' between nMinWeight and nMaxWeight and aspen_tblmatdescription.vDescription= '".$mat_desc."' and aspen_tblinwardentry.vIRnumber='".$partyid."' order by aspen_tblbillingstatus.nActualNo asc Limit 1";
+		left join aspen_tblmatdescription on aspen_tblmatdescription.nMatId=aspen_tblweight.nMatId
+		left join aspen_tblinwardentry on aspen_tblinwardentry.nMatId=aspen_tblmatdescription.nMatId
+		left join aspen_tblbillingstatus on aspen_tblinwardentry.vIRnumber=aspen_tblbillingstatus.vIRnumber where '".$wei."' between nMinWeight and nMaxWeight and aspen_tblmatdescription.vDescription= '".$mat_desc."' and aspen_tblinwardentry.vIRnumber='".$partyid."' order by aspen_tblbillingstatus.nActualNo asc Limit 1";
 
 		$query = $this->db->query($sqlwt);
 		$arr='';
@@ -2052,7 +2051,8 @@ function listbundledetailsslit($partyid = '',$slno = '') {
 		   nBillNo,dBillDate, vIRnumber, fTotalWeight, fWeightAmount, fServiceTax, fEduTax, fSHEduTax, fGrantTotal, nScrapSent, vOutLorryNo, nPartyId, vBillType, BillStatus, ntotalpcs, ntotalamount, ocwtamount, ocwidthamount, oclengthamount,vAdditionalChargeType,fAmount,nsubtotal,grandtot_words,dFinalRate, nServiceTaxPercent,tBillingAddress,vAdditionalChargeType1,fAmount1) 
 		  VALUES('". $billid. "',now(),'". $partyid. "','". $totalweight_check. "','". $totalrate. "','". $txtservicetax. "','". $txteductax. "','". $txtsecedutax. "','". $txtgrandtotal. "','". $txtscrap. "','". $txtoutward_num. "',(SELECT aspen_tblpartydetails.nPartyId  FROM aspen_tblpartydetails where aspen_tblpartydetails.nPartyName = '". $pname. "'),'Slitting','Billing',0,$totalamt,'0','0','0','". $txtadditional_type. "','". $txtamount_mt. "','". $txtslitsubtotal. "','". $container. "','".$totalrate."',$serviceTaxPercent,'".$strBillingAddress."','".$txtadditional_type1."','".$txtamount_mt1."')";
 
-		$sql12="UPDATE aspen_tblbillingstatus SET vBillingStatus='Billed' WHERE vIRnumber='".$partyid."'";  
+		$sql12="UPDATE aspen_tblbillingstatus SET vBillingStatus='Billed' WHERE vIRnumber='".$partyid."' and nSno IN ( $bundleIds )";  
+		
 		$sql22="UPDATE aspen_tblinwardentry SET vStatus='Billed' WHERE vIRnumber='".$partyid."'";  
 		
 		$sql14="UPDATE aspen_tblinwardentry SET aspen_tblinwardentry.fpresent = aspen_tblinwardentry.fpresent - $totalweight_check where aspen_tblinwardentry.vIRnumber=$partyid";

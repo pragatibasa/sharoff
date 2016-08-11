@@ -44,7 +44,7 @@
 					<label><?=lang('length_txt')?></label>
 				</td>
 				<td> 
-					<input id="len" type="text" DISABLED />(in mm)
+					<input id="len" name="fLength" type="text" DISABLED />(in mm)
 				</td>
 			</tr>	
 			<tr>

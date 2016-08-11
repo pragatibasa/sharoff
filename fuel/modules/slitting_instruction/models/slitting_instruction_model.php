@@ -99,18 +99,18 @@ class slitting_instruction_model extends Base_module_model {
 		LEFT JOIN aspen_tblmatdescription ON aspen_tblmatdescription.nMatId = aspen_tblinwardentry.nMatId
 		LEFT JOIN aspen_tblbillingstatus ON aspen_tblbillingstatus.vIRnumber = aspen_tblinwardentry.vIRnumber
 		LEFT JOIN aspen_tblpartydetails ON aspen_tblpartydetails.nPartyId = aspen_tblinwardentry.nPartyId ";
-		if(!empty($partyname) && !empty($partyid)) {
-			$sql.="WHERE aspen_tblpartydetails.nPartyName='".$partyname."' and aspen_tblinwardentry.vIRnumber='".$partyid."' ";
+		if(!empty($partyid)) {
+			$sql.="WHERE aspen_tblinwardentry.vIRnumber='".$partyid."' ";
 		}
-		//print_r($sql);exit();
+		
 		$query = $this->db->query($sql);
 		$arr='';
 		if ($query->num_rows() > 0) {
-		   foreach ($query->result() as $row) {
-		      $arr[] =$row;
-		   }
+		   	foreach ($query->result() as $row) {
+				$arr[] =$row;
+		   	}
 		}
-		$arr[0]->remaining_weight = round(($arr[0]->fQuantity/($arr[0]->fThickness*$arr[0]->fWidth*0.00000785)));
+		$arr[0]->remaining_weight = round((($arr[0]->fQuantity/($arr[0]->fThickness*$arr[0]->fWidth*785)))*100000000);
 		return json_encode($arr[0]);
 	}	
 		

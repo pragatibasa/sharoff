@@ -150,11 +150,7 @@ $.ajax({
 			$('#DynamicGridp_2').html(mediaClass);
 			 $("#myTabels").tablesorter();
 			totalweight_check();
-				
-		
 		});
-
-	
 });
 
 function showchild(parentid) {

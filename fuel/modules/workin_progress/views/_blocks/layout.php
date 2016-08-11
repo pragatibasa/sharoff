@@ -60,6 +60,7 @@
 	        <td><?php echo $workinprogress_lists[$i]->weight?></td>
 	  <td><?php echo $workinprogress_lists[$i]->process?></td>  
 	  <td><?php	 echo $al = '<a title="Cutting Instruction" href="' .$workinprogress_lists[$i]->al .'"><span class="badge badge-success" style="color: #FFFFFF;">Cutting</span></a>';
+	  		 echo $as = '<a title="Slitting Instruction" href="' .$workinprogress_lists[$i]->slit .'"><span class="badge badge-success" style="color: #FFFFFF;">Slitting</span></a>';
 			 echo $fi = '<a  title="Finish Task" href="' .$workinprogress_lists[$i]->fi .'"><span class="badge badge-info" style="color: #FFFFFF;">Finish</span></a>';
 			 echo $bl = '<a title="Billing Instruction" href="' .$workinprogress_lists[$i]->bl .'"><span class="badge badge-important" style="color: #FFFFFF;">Billing</span></a>'; 
 			 echo $cs = '<a title="Print" href="' .$workinprogress_lists[$i]->cs .'"  target="_blank"><span class="badge" style="color: #FFFFFF;" >Processing Slip</span></a>'; 
