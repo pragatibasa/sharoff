@@ -167,6 +167,13 @@ function deleterow()
 		} else 
 			echo false;exit;
 	}
+
+	function cancelcoils() {
+		if (!empty($_POST)) {
+			$cancel = $this->slitting_instruction_model->cancelcoilmodel($_POST['pid']);
+			return $cancel;
+		}
+	}
 }
 /* End of file */
 /* Location: ./fuel/modules/controllers*/

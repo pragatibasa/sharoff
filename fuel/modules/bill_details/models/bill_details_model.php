@@ -11,11 +11,30 @@ class bill_details_model extends Base_module_model {
     }
 
 	function list_items($limit = NULL, $offset = NULL, $col = 'nBillNo', $order = 'desc') {
+
+		$CI =& get_instance();
+		$userdata = $CI->fuel_auth->user_data();
+	    
 		$this->db->select('aspen_tblbilldetails.nBillNo,aspen_tblbilldetails.dBillDate,aspen_tblpartydetails.nPartyName,aspen_tblbilldetails.BillStatus');
 		$this->db->join('aspen_tblpartydetails', 'aspen_tblbilldetails.nPartyId = aspen_tblpartydetails.nPartyId', 'left');
+		if(!($userdata['super_admin']== 'yes')) {
+			$this->db->where('nPartyName', $userdata['user_name']);
+		}
 
 	    $data = parent::list_items($limit, $offset, $col, $order);
         return $data;    	
+	}
+
+	function chk_user(){
+		$CI =& get_instance();
+		$userdata = $CI->fuel_auth->user_data();
+		$query = $this->db->select ('nPartyName')
+						  -> from  ('aspen_tblpartydetails')
+				 	      -> where ('nPartyName', $userdata['user_name'])
+						  ->join('fuel_users ', 'aspen_tblpartydetails.nPartyName = fuel_users.user_name', 'left')
+						  ->get();
+		
+		return $query->result();
 	}
 
 	function getLatestBillNumber() {
@@ -814,7 +833,7 @@ class bill_details_model extends Base_module_model {
 					aspen_tblslittinginstruction.vIRnumber= $intCoilNumber and 
 					aspen_tblslittinginstruction.nSno IN ($strBundleNos) 
 				) p1	
-			SET p.fpresent = p1.present,p.billedweight = p1.billed,p.vStatus = case when (p.fpresent = p.fQuantity or p.billedweight = 0) then 'Ready to Bill' else 'Billed' end
+			SET p.fpresent = p1.present,p.billedweight = p1.billed
 			where p.vIRnumber=$intCoilNumber";
 
 			//updating inward entry status 
@@ -847,7 +866,7 @@ class bill_details_model extends Base_module_model {
 			//Updating inward entry back
 			$strSqlUpdateCoilWeights = "UPDATE aspen_tblinwardentry p,
 				( select
-					sum(ROUND((aspen_tblBillBundleAssociation.fbilledWeight*1000),3)) as weight
+					TRIM( trailing 0 from sum(aspen_tblBillBundleAssociation.fbilledWeight)*1000) as weight
 					from aspen_tblBillBundleAssociation where
 					aspen_tblBillBundleAssociation.nBillNumber = $billNo and
 					aspen_tblBillBundleAssociation.nBundleNumber IN ($strBundleNos) 
@@ -855,9 +874,7 @@ class bill_details_model extends Base_module_model {
 			SET p.fpresent = p.fpresent+p1.weight, p.billedweight = p.billedweight-p1.weight
 			where p.vIRnumber=$intCoilNumber";
 
-			print_r($strSqlUpdateCoilWeights);exit;
-
-			$strSqlUpdateInwardEntryStatus = "UPDATE aspen_tblinwardentry set vStatus = case when (fpresent=fQuantity or billedweight = 0) then 'Ready to Bill' else 'Billed' end
+			$strSqlUpdateInwardEntryStatus = "UPDATE aspen_tblinwardentry set vStatus = case when (fpresent=fQuantity or billedweight <= 0) then 'Ready to Bill' else 'Billed' end
 						where vIRnumber=$intCoilNumber";
 
 			//Updating bill record status
@@ -872,10 +889,14 @@ class bill_details_model extends Base_module_model {
 				where vIRnumber=$intCoilNumber and nSno in ($strBundleNos)) as p1 on p.nSno = p1.nSno
 				SET p.nbalance = p1.balance, p.nBilledNumber = p1.billed,p.fbilledWeight=p1.billedWeight where p.vIRnumber=$intCoilNumber and p.nSno in ($strBundleNos)";
 
+			$strSqlUpdateBundleBillingStatus = "UPDATE aspen_tblbillingstatus set vBillingStatus = case when (fbilledWeight=0 or nBilledNumber = 0) then 'Not Billed' else 'Billed' end where vIRnumber=$intCoilNumber and nSno in ($strBundleNos)";
+
 			$objUpdateCoilWeights			= $this->db->query($strSqlUpdateCoilWeights);
 			$objSqlUpdateInwardEntryStatus	= $this->db->query($strSqlUpdateInwardEntryStatus); 
 			$objUpdateBillStatus 			= $this->db->query($strSqlUpdateBillStatus);
 			$objUpdateBillingStatus 		= $this->db->query($strSqlUpdateBillingStatus);
+			$objUpdateBundleBillingStatus 	= $this->db->query($strSqlUpdateBundleBillingStatus);
+
 			echo true;exit;
 		} else if( $arrBillRecord->vBillType == 'Directbilling' ) {
 
@@ -963,13 +984,16 @@ class bill_details_model extends Base_module_model {
 			//Updating inward entry back
 			$strSqlUpdateCoilWeights = "UPDATE aspen_tblinwardentry p,
 				( select
-					sum(ROUND((aspen_tblBillBundleAssociation.fbilledWeight*1000),3)) as weight
+					TRIM( trailing 0 from sum(aspen_tblBillBundleAssociation.fbilledWeight)*1000) as weight
 					from aspen_tblBillBundleAssociation where
 					aspen_tblBillBundleAssociation.nBillNumber = $billNo and
 					aspen_tblBillBundleAssociation.nBundleNumber IN ($strBundleNos) 
 				) p1
-			SET p.fpresent = p.fpresent+p1.weight, p.billedweight = p.billedweight-p1.weight,p.vStatus = 'Ready To Bill'
+			SET p.fpresent = p.fpresent+p1.weight, p.billedweight = p.billedweight-p1.weight
 			where p.vIRnumber=$intCoilNumber";
+
+			$strSqlUpdateInwardEntryStatus = "UPDATE aspen_tblinwardentry set vStatus = case when (fpresent=fQuantity or billedweight <= 0) then 'Ready to Bill' else 'Billed' end
+						where vIRnumber=$intCoilNumber";
 
 			//Updating back billing status records
 			$strSqlUpdateBillingStatus = "UPDATE aspen_tblbillingstatus as p
@@ -980,12 +1004,17 @@ class bill_details_model extends Base_module_model {
 				where vIRnumber=$intCoilNumber and nSno in ($strBundleNos)) as p1 on p.nSno = p1.nSno
 				SET p.nbalance = p1.balance, p.nBilledNumber = p1.billed,p.fbilledWeight=p1.billedWeight where p.vIRnumber=$intCoilNumber and p.nSno in ($strBundleNos)";
 
+			$strSqlUpdateBundleBillingStatus = "UPDATE aspen_tblbillingstatus set vBillingStatus = case when (fbilledWeight=0 or nBilledNumber = 0) then 'Not Billed' else 'Billed' end where vIRnumber=$intCoilNumber and nSno in ($strBundleNos)";
+
 			//Updating bill record status
 			$strSqlUpdateBillStatus = "DELETE from aspen_tblbilldetails where nBillNo = $billNo";
 
-			$objUpdateCoilWeights	= $this->db->query($strSqlUpdateCoilWeights);
-			$objUpdateBillingStatus = $this->db->query($strSqlUpdateBillingStatus);
-			$objUpdateBillStatus 	= $this->db->query($strSqlUpdateBillStatus);
+			$objUpdateCoilWeights			= $this->db->query($strSqlUpdateCoilWeights);
+			$objSqlUpdateInwardEntryStatus	= $this->db->query($strSqlUpdateInwardEntryStatus); 
+			$objUpdateBillingStatus 		= $this->db->query($strSqlUpdateBillingStatus);
+			$objUpdateBundleBillingStatus 	= $this->db->query($strSqlUpdateBundleBillingStatus);
+			$objUpdateBillStatus 			= $this->db->query($strSqlUpdateBillStatus);
+
 			echo true;exit;
 		} else if( $arrBillRecord->vBillType == 'Directbilling' ) {
 

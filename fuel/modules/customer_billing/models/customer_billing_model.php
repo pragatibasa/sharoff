@@ -32,11 +32,8 @@ class customer_billing_model extends Base_module_model {
 		
 		return $query->result();
 	}
-
 	
-	
-	
-		function export_partyname($partyname='',$frmdate='',$todate='') {	
+	function export_partyname($partyname='',$frmdate='',$todate='') {	
 		$sql ="SELECT aspen_tblmatdescription.vDescription as description,aspen_tblinwardentry.fQuantity as weight, aspen_tblbilldetails.fTotalWeight as oweight,aspen_tblinwardentry.vIRnumber as coilnumber, aspen_tblbilldetails.nBillNo as billno, aspen_tblbilldetails.dBillDate  as billdate, aspen_tblbilldetails.fServiceTax as Sertax, 
 aspen_tblbilldetails.fSHEduTax as SHEdutax, aspen_tblbilldetails.fEduTax as educationtax, aspen_tblbilldetails.ntotalamount as totalamt, aspen_tblbilldetails.fGrantTotal as totalbillamount 
 		FROM aspen_tblbilldetails

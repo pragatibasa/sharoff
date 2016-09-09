@@ -21,15 +21,24 @@ class customer_inward_model extends Base_module_model {
 	    return $fields;
 	}
 
-	
-	
+	function chk_user(){
+	$CI =& get_instance();
+	$userdata = $CI->fuel_auth->user_data();
+	$query = $this->db->select ('nPartyName')
+						  -> from  ('aspen_tblpartydetails')
+				 	      -> where ('nPartyName', $userdata['user_name'])
+						  ->join('fuel_users ', 'aspen_tblpartydetails.nPartyName = fuel_users.user_name', 'left')
+						  ->get();
+		
+		return $query->result();
+	}
 	
 	function export_partyname($partyname='',$frmdate='',$todate='') {	
-		$sql ="select aspen_tblpartydetails.nPartyName as partyname, aspen_tblmatdescription.vDescription as description, vIRnumber as coilnumber, 	DATE_FORMAT(dReceivedDate, '%d-%m-%Y')  as receiveddate,  fWidth as width,  fThickness as thickness,  fQuantity as weight, vStatus as status from aspen_hist_tblinwardentry
-  LEFT JOIN aspen_tblmatdescription  ON aspen_tblmatdescription.nMatId=aspen_hist_tblinwardentry.nMatId 
-		LEFT JOIN aspen_tblpartydetails ON aspen_tblpartydetails .nPartyId=aspen_hist_tblinwardentry.nPartyId 
+		$sql ="select aspen_tblpartydetails.nPartyName as partyname, aspen_tblmatdescription.vDescription as description, vIRnumber as coilnumber, 	DATE_FORMAT(dReceivedDate, '%d-%m-%Y')  as receiveddate,  fWidth as width,  fThickness as thickness,  fQuantity as weight, vStatus as status from aspen_tblinwardentry
+  LEFT JOIN aspen_tblmatdescription  ON aspen_tblmatdescription.nMatId=aspen_tblinwardentry.nMatId 
+		LEFT JOIN aspen_tblpartydetails ON aspen_tblpartydetails .nPartyId=aspen_tblinwardentry.nPartyId 
 		where
-    aspen_tblpartydetails.nPartyName='".$partyname."' and aspen_hist_tblinwardentry.dReceivedDate BETWEEN '".$frmdate."' AND '".$todate."' order by aspen_hist_tblinwardentry.vIRnumber asc";
+    aspen_tblpartydetails.nPartyName='".$partyname."' and aspen_tblinwardentry.dReceivedDate BETWEEN '".$frmdate."' AND '".$todate."' order by aspen_tblinwardentry.vIRnumber asc";
 		
 		$query = $this->db->query($sql);
 		
@@ -50,11 +59,11 @@ class customer_inward_model extends Base_module_model {
 	
 	
 	function billgeneratemodel($partyname='',$frmdate='',$todate='') {
-	$sqlrpt = "select aspen_tblpartydetails.nPartyName as partyname, aspen_tblmatdescription.vDescription as materialdescription, vIRnumber as Coilnumber, 	DATE_FORMAT(dReceivedDate, '%d-%m-%Y')  as receiveddate,  fWidth as Width,  fThickness as Thickness,  fQuantity as Weight, vStatus as Status from aspen_hist_tblinwardentry
-  LEFT JOIN aspen_tblmatdescription  ON aspen_tblmatdescription.nMatId=aspen_hist_tblinwardentry.nMatId 
-		LEFT JOIN aspen_tblpartydetails ON aspen_tblpartydetails .nPartyId=aspen_hist_tblinwardentry.nPartyId 
+	$sqlrpt = "select aspen_tblpartydetails.nPartyName as partyname, aspen_tblmatdescription.vDescription as materialdescription, vIRnumber as Coilnumber, 	DATE_FORMAT(dReceivedDate, '%d-%m-%Y')  as receiveddate,  fWidth as Width,  fThickness as Thickness,  fQuantity as Weight, vStatus as Status from aspen_tblinwardentry
+  LEFT JOIN aspen_tblmatdescription  ON aspen_tblmatdescription.nMatId=aspen_tblinwardentry.nMatId 
+		LEFT JOIN aspen_tblpartydetails ON aspen_tblpartydetails .nPartyId=aspen_tblinwardentry.nPartyId 
 		where
-    aspen_tblpartydetails.nPartyName='".$partyname."' and aspen_hist_tblinwardentry.dReceivedDate BETWEEN '".$frmdate."' AND '".$todate."' order by aspen_hist_tblinwardentry.vIRnumber asc";
+    aspen_tblpartydetails.nPartyName='".$partyname."' and aspen_tblinwardentry	.dReceivedDate BETWEEN '".$frmdate."' AND '".$todate."' order by aspen_tblinwardentry.vIRnumber asc";
 		
 //	echo $sqlrpt; die();
 		

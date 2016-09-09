@@ -1,3 +1,5 @@
+<link rel="stylesheet" type="text/css" href="<?=$this->asset->css_path('jquery.fancybox', 'billing')?>">
+<script src="<?=$this->asset->js_path('jquery.fancybox', 'billing')?>"></script>
 <script type="text/javascript">
 /* Get the currently selected azure account and ajax load the folder list. */
 function load_party_account() {

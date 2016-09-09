@@ -11,6 +11,7 @@
 	echo " <div class='navbar-inner' style='display: inline-block;'>";
 	echo "<ul class='nav' role='navigation' id='topMenu'>";
 	
+	
 	foreach($nav as $section => $nav_items)
 	{
 		if(!is_array($nav_items)) {

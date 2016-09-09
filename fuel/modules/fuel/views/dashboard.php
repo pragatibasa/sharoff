@@ -98,17 +98,8 @@
 				<td><?php echo $rinwardt->dInvoiceDate; ?></td>
 				<td><?php echo $rinwardt->vStatus; ?></td>
 			</tr>
-			<?php } ?>
-			<? }else { ?>
-			<tr>
-				<td colspan="4">
-					<b>No Record Present!</b>					
-					<div>
-						<a class="ico ico_inward" href="<?=fuel_url('inward')?>">Click here to Check Inward Registry.</a>
-					</div>
-				</td>
-			</tr>
-			<?php } ?>
+			<?php } 
+			 } ?>
 			</tbody>
 			</table>
 			</div>
@@ -217,8 +208,8 @@
 				<td><?php echo $rtax->type; ?></td>
 				<td><?php echo $rtax->percentage; ?></td>
 			</tr>
-			<?php } ?>
-			<? }else { ?>
+			<?php } 
+			}else { ?>
 			<tr>
 				<td colspan="4">
 					<b>No Record Present!</b>					

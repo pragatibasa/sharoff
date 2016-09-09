@@ -22,6 +22,9 @@ class bill_details extends Fuel_base_controller {
 		$containers			= $this->bill_details_model->list_items();
 		$latestBillNumber 	= $this->bill_details_model->getLatestBillNumber();
 
+		$CI =& get_instance();
+		$userdata = $CI->fuel_auth->user_data();
+			
 		$folders = [];
 		if(!empty($containers)){
 			foreach($containers as $container) {
@@ -32,11 +35,12 @@ class bill_details extends Fuel_base_controller {
 				$obj->BillStatus = $container['BillStatus'];
 
 				$obj->duplicate_bill = site_url('bill_details/duplicate_bill').'/?billno='.$container['nBillNo'];
-				if( $container['BillStatus'] != 'Cancelled') 
-					$obj->cancel_bill = site_url('bill_details/cancel_bill').'/?billno='.$container['nBillNo'];
-				if( $latestBillNumber == $container['nBillNo'] )
-					$obj->delete_bill = site_url('bill_details/delete_bill').'/?billno='.$container['nBillNo'];
-	
+				if(($userdata['super_admin']== 'yes')) {
+					if( $container['BillStatus'] != 'Cancelled') 
+						$obj->cancel_bill = site_url('bill_details/cancel_bill').'/?billno='.$container['nBillNo'];
+					if( $latestBillNumber == $container['nBillNo'] )
+						$obj->delete_bill = site_url('bill_details/delete_bill').'/?billno='.$container['nBillNo'];
+				}
 				$folders[] = $obj;
 			}
 		} 

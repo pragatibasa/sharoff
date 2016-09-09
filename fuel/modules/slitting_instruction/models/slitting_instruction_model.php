@@ -194,6 +194,19 @@ function BundleTable($pid) {
 		}
 		return $arr;
 	}
+
+	function cancelcoilmodel(){
+		$sql = ("UPDATE aspen_tblslittinginstruction SET vStatus='RECEIVED' ");
+		$sql.="WHERE aspen_tblslittinginstruction.vIRnumber='".$_POST['pid']."'";
+		$query1=$this->db->query ($sql);
+	  
+		$sql1 =("UPDATE aspen_tblinwardentry SET vStatus='RECEIVED'");
+		$sql1.="WHERE vIRnumber='".$_POST['pid']."'";
+		$query1=$this->db->query ($sql1);
+	  
+		$sql2 ="DELETE FROM aspen_tblslittinginstruction WHERE vIRnumber='".$_POST['pid']."'";
+		$query = $this->db->query($sql2);
+	}
 }
 
 class Splittinginstructions_model extends Base_module_record {

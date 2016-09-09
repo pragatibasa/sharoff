@@ -102,7 +102,7 @@ $config['nav']['Master'] = array('rate_details_width' => 'Rate Details Width',
 
 
 
-$config['nav']['Reports'] = array('stock_report' => ' Stock Report ',
+$config['nav']['Reports'] = array('stock_report' => 'Customer Stock Report ',
 										'customer_inward' => 'Customer Inward Report',
 										'customer_billing' => 'Customer Billing Report',
 										'customer_outward' => 'Customer Outward Report',

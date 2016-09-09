@@ -123,6 +123,7 @@
 		<input id="txttotalwidth" type="text" DISABLED/> (in kgs)  
 		<input id="txtHiddentotalwidth" type="hidden" /> 
 		&nbsp; &nbsp; &nbsp;
+		<input type="button" onclick="cancelcoil();" value="Cancel" id="cancelcoil" class="btn btn-danger">
 		<input class="btn btn-success"  id="saveci" type="button" value="Save" onClick="savechange();"/>  
 		<input id="finishci" type="button" value="Finsh" onClick="finishinstructionbutton();" hidden/>&nbsp; &nbsp; &nbsp;		
 </td>
@@ -135,6 +136,21 @@
 function functionreset(){
 	$("#newsize").show();
 	$("#edit").hide();
+}
+
+function cancelcoil(){
+
+	var pid   =	$('#pid').val();
+	var dataString = 'pid='+pid;
+    $.ajax({
+                 type: 'POST',
+                url: "<?php echo fuel_url('slitting_instruction/cancelcoils');?>",
+				data: dataString,
+                success: function(){  
+				alert("Changed Succesfully");
+				refresh_folderlist();
+			}
+    });
 }
 
 $(document).on( 'click', '.__fuel_edit_marker_new__',function() {

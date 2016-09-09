@@ -302,7 +302,8 @@ function triConvert(num){
             <input type="hidden" size="80" id="container" DISABLED/>
 </div>
 <div align="right">
-	<input class="btn btn-success" style="cursor: pointer;" id="txtbillpreview" type="button" value="Preview and Print Bill" onclick="functionpdfslitprint();" />
+  <input class="btn btn-success" style="cursor: pointer;" id="previewBill" type="button" value="Preview Bill"/>
+	<input class="btn btn-success" style="cursor: pointer;" id="txtbillpreview" type="button" value="Save and Print Bill" onclick="functionpdfslitprint();" />
 	<input class="btn btn-inverse" style="cursor: pointer;" id="txtbillloadingslip" type="button" value="Loading Slip" onclick="functionpdfslit();" />	
 </div>
 </div>	
@@ -310,7 +311,11 @@ function triConvert(num){
 <script language="javascript" type="text/javascript">
 
 //number to words
+$(document).ready(function() {
+  $('#previewBill').on("click",function () {
 
+  });
+});
 function numbertowords() {
  var junkVal=document.getElementById('txtgrandtotal').value;
  junkVal=Math.floor(junkVal);
@@ -505,6 +510,12 @@ function taxspec(){
 
 
 function functionpdfslitprint(){
+
+  var bundlenumbers = $('#txtbundleids').val();
+  if( bundlenumbers == '' || bundlenumbers.length == 0 ) {
+    alert("Please select atleast one bundle for the bill");
+    return false;
+  }
 	subtotalvalue();
 	numbertowords();
 	var billid = $('#billid').val();
