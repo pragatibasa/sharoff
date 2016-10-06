@@ -416,6 +416,7 @@ function numbertowords() {
   finalWord+=inWords[i];
  }
  document.getElementById('container').value=finalWord;
+ return true;
 }
 
 </script>
@@ -958,11 +959,15 @@ $.ajax({
 		data: dataString,
 		datatype : "json",
 		success: function(msg){
-		var msg3=eval(msg);
-		$.each(msg3, function(i, j){
-			 var rate = j.rate;
-			document.getElementById("txttotallength").value = rate;});
-	   }  
+			var msg3=eval(msg);
+			if(msg3 == "") {
+				document.getElementById("txttotallength").value = 0;
+			} else {
+				$.each(msg3, function(i, j) {
+					document.getElementById("txttotallength").value = (j.rate == "") ? 0 : j.rate;
+				});
+			}
+	   	}  
 	}); 
 }
 function totaweightvalue(){
@@ -978,11 +983,15 @@ $.ajax({
 		data: dataString,
 		datatype : "json",
 		success: function(msg){
-		var msgwt=eval(msg);
-		$.each(msgwt, function(i, j){
-			var wtrate = j.wtrate;
-			document.getElementById("txtweighttotal").value = wtrate;});
-	   }  
+			var msgwt=eval(msg);
+			if(msgwt == "") {
+				document.getElementById("txtweighttotal").value = 0;
+			} else {
+				$.each(msgwt, function(i, j){
+					document.getElementById("txtweighttotal").value = (j.wtrate == "") ? 0 : j.wtrate;
+				});
+			}
+	   	}  
 	}); 
 }
 function totawidthvalue(){
@@ -998,9 +1007,13 @@ $.ajax({
 		datatype : "json",
 		success: function(msg){
 		var msgwd=eval(msg);
-		$.each(msgwd, function(i, j){
-			 var widrate = j.widrate;
-			document.getElementById("txtwidthtotal").value = widrate;});
+		if(msgwd == "") {
+			document.getElementById("txtwidthtotal").value = 0;
+		} else {
+			$.each(msgwd, function(i, j){
+				document.getElementById("txtwidthtotal").value = (j.widrate == "") ? 0 : j.widrate;
+			});
+		}
 	   }  
 	}); 
 }
@@ -1014,19 +1027,24 @@ function totalvalue(bundleid){
 	var cust_add=$('#cust_add').val();
 	var cust_rm=$('#cust_rm').val();
 	var dataString = 'bundleid='+bundleid+'&partyid='+partyid+'&txttotalweight='+txttotalweight+'&thic='+thic+'&mat_desc='+mat_desc+'&actualnumberbundle='+actualnumberbundle+'&cust_add='+cust_add+'&cust_rm='+cust_rm;
-$.ajax({  
+	$.ajax({
 	   type: "POST",  
 	   url : "<?php echo fuel_url('billing/totalamount_calculate');?>/",  
 		data: dataString,
 		datatype : "json",
 		success: function(msg){
-		var msg5=eval(msg);
-		$.each(msg5, function(i, j){
-			 var total = j.total;
-			document.getElementById("txtamount").value = total;});
-	   }  
+			var msg5=eval(msg);
+			if(msg5 == "") {
+				document.getElementById("txtamount").value = 0;
+			} else {
+				$.each(msg5, function(i, j){
+					document.getElementById("txtamount").value = (j.total == "") ? 0 : j.total;
+				});
+			}
+		}  
 	}); 
 }
+
 function subtotalvalue(){
 	var partyid = $('#pid').val();
 	var txtamount_mt = $('#txtamount_mt').val();
@@ -1165,7 +1183,10 @@ function savebill_details(){
 	if( true === billExists ) {
 		$(this).attr('disabled','disabled');
 		subtotalvalue();
-		numbertowords();
+		
+		if( false == numbertowords())
+			return false;
+
 		var billid = $('#billid').val();
 		var partyid = $('#pid').val();
 		var txtamount = $('#txtamount').val();

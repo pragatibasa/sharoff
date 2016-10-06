@@ -39,7 +39,7 @@ class customer_inward_model extends Base_module_model {
 		LEFT JOIN aspen_tblpartydetails ON aspen_tblpartydetails .nPartyId=aspen_tblinwardentry.nPartyId 
 		where
     aspen_tblpartydetails.nPartyName='".$partyname."' and aspen_tblinwardentry.dReceivedDate BETWEEN '".$frmdate."' AND '".$todate."' order by aspen_tblinwardentry.vIRnumber asc";
-		
+		print_r($sql);exit;
 		$query = $this->db->query($sql);
 		
 		//echo $sql;
@@ -59,16 +59,16 @@ class customer_inward_model extends Base_module_model {
 	
 	
 	function billgeneratemodel($partyname='',$frmdate='',$todate='') {
-	$sqlrpt = "select aspen_tblpartydetails.nPartyName as partyname, aspen_tblmatdescription.vDescription as materialdescription, vIRnumber as Coilnumber, 	DATE_FORMAT(dReceivedDate, '%d-%m-%Y')  as receiveddate,  fWidth as Width,  fThickness as Thickness,  fQuantity as Weight, vStatus as Status from aspen_tblinwardentry
+		$sqlrpt = "select aspen_tblpartydetails.nPartyName as partyname, aspen_tblmatdescription.vDescription as materialdescription, vIRnumber as Coilnumber, 	DATE_FORMAT(dReceivedDate, '%d-%m-%Y')  as receiveddate,  fWidth as Width,  fThickness as Thickness,  fQuantity as Weight, vStatus as Status from aspen_tblinwardentry
   LEFT JOIN aspen_tblmatdescription  ON aspen_tblmatdescription.nMatId=aspen_tblinwardentry.nMatId 
 		LEFT JOIN aspen_tblpartydetails ON aspen_tblpartydetails .nPartyId=aspen_tblinwardentry.nPartyId 
 		where
     aspen_tblpartydetails.nPartyName='".$partyname."' and aspen_tblinwardentry	.dReceivedDate BETWEEN '".$frmdate."' AND '".$todate."' order by aspen_tblinwardentry.vIRnumber asc";
 		
-//	echo $sqlrpt; die();
+    	$sqlTotalWeight =  "SELECT SUM( fQuantity ) as weight FROM aspen_tblinwardentry LEFT JOIN aspen_tblpartydetails ON aspen_tblpartydetails.nPartyId = aspen_tblinwardentry.nPartyId where aspen_tblpartydetails.nPartyName = '".$partyname."' and aspen_tblinwardentry.dReceivedDate BETWEEN '".$frmdate."' AND '".$todate."'";
 		
 		$querymain = $this->db->query($sqlrpt);
-
+		$queryTotalWeight = $this->db->query($sqlTotalWeight);
 						
 		$pdf = new TCPDF(PDF_PAGE_ORIENTATION, PDF_UNIT, PDF_PAGE_FORMAT, true, 'UTF-8', false);
 		$pdfname= 'inwardslip_'.$partyname.'.pdf';
@@ -89,22 +89,30 @@ class customer_inward_model extends Base_module_model {
 		$pdf->AddPage();
 		
 		$html = '
-					<div align="center"><h2>CUSTOMERS MATERIAL INWARD REPORT
-BETWEEN DATES
-</h2></div>
+				<table width="100%"  cellspacing="0" cellpadding="5" border="0">
+					<tr>
+						<td width="100%"align="center" style="font-size:60px; font-style:italic; font-family: fantasy;"><h1>ASPEN STEEL PVT LTD</h1></td>
+					</tr>
+					<tr>
+						<td align="center" width="100%"><h4>Branch At: Plot no 16E, Bidadi Industrial Area, Phase 2 Sector 1, Bidadi, Ramnagara-562105, <b>Email: aspensteel_unit2@yahoo.com </b></h4></td>
+					</tr>
+					<tr>
+						<td align="center" width="100%"><h4>Head Office At: 54/1, Medahalli, Old Madras Road, Bangalore-560049</h4></td>
+					</tr>
+				</table>
+				<div align="center"><h2>CUSTOMERS MATERIAL INWARD REPORT BETWEEN DATES </h2></div>
 				<table width="100%" cellspacing="0" cellpadding="5" border="0">
-			<tr>
-				<td><b>Party Name: </b> '.$partyname.'</td>
-				<td><b>From Date: </b> '.$frmdate.'</td>
-				<td><b>To Date: </b> '.$todate.'</td>
-			</tr>
-			<tr>
-				<td align="center">&nbsp;</td>
-				<td align="center">&nbsp;</td>
-				<td align="center" >&nbsp;</td>
-		
-			</tr>
-		</table>';
+					<tr>
+						<td><b>Party Name: </b> '.$partyname.'</td>
+						<td><b>From Date: </b> '.$frmdate.'</td>
+						<td><b>To Date: </b> '.$todate.'</td>
+					</tr>
+					<tr>
+						<td align="center">&nbsp;</td>
+						<td align="center">&nbsp;</td>
+						<td align="center" >&nbsp;</td>		
+					</tr>
+				</table>';
 		
 		$html .= '
 		<table cellspacing="0" cellpadding="5" border="0.5px">
@@ -135,21 +143,26 @@ BETWEEN DATES
 				<td align="right">'.$rowitem->Status.'</td>
 			</tr>';
 			}
-		}else{
-		$html .= '
-			<tr>
-				<td align="center">&nbsp;</td>
-				<td align="center">&nbsp;</td>
-				<td align="center" >&nbsp;</td>
-				<td align="center">&nbsp;</td>
-				<td align="center">&nbsp;</td>
-				<td align="center">&nbsp;</td>
-			</tr>';
+		} else {
+			$html .= '
+				<tr>
+					<td align="center">&nbsp;</td>
+					<td align="center">&nbsp;</td>
+					<td align="center" >&nbsp;</td>
+					<td align="center">&nbsp;</td>
+					<td align="center">&nbsp;</td>
+					<td align="center">&nbsp;</td>
+				</tr>';
 		}
-		$html .= '
-			
-		</table>';	
-		
+
+		$html .= '</table><table cellspacing="0" cellpadding="5" border="0"><tr><td></td></tr></table>';
+
+		$html .= '<table cellspacing="0" cellpadding="5" border="0.5">
+					<tr>
+						<td><h3>Total Weight</h3></td>
+						<td><h3>'.$queryTotalWeight->result()[0]->weight.' (in Kgs)</h3></td>
+					</tr>
+				</table>';
 		
 		$pdf->writeHTML($html, true, 0, true, true);
 		$pdf->Ln();
@@ -157,13 +170,9 @@ BETWEEN DATES
 		$pdf->Output($pdfname, 'I');
 	}
 	
-	
-	
-	
-	
-	
-	function totalweight_check($partyname='',$frmdate='',$todate=''){
-	$sql=  "SELECT SUM( fQuantity ) as weight FROM aspen_hist_tblinwardentry LEFT JOIN aspen_tblpartydetails ON aspen_tblpartydetails.nPartyId = aspen_hist_tblinwardentry.nPartyId where aspen_tblpartydetails.nPartyName = '".$partyname."' and aspen_hist_tblinwardentry.dReceivedDate BETWEEN '".$frmdate."' AND '".$todate."'";
+	function totalweight_check($partyname='',$frmdate='',$todate='') {
+		$sql=  "SELECT SUM( fQuantity ) as weight FROM aspen_tblinwardentry LEFT JOIN aspen_tblpartydetails ON aspen_tblpartydetails.nPartyId = aspen_tblinwardentry.nPartyId where aspen_tblpartydetails.nPartyName = '".$partyname."' and aspen_tblinwardentry.dReceivedDate BETWEEN '".$frmdate."' AND '".$todate."'";
+
 		$query = $this->db->query($sql);
 		$arr='';
 		if ($query->num_rows() > 0)

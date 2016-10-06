@@ -98,7 +98,6 @@ $.fn.bgIframe = $.fn.bgiframe = function(s) {
 };
 
 // Add browser.version if it doesn't exist
-if (!$.browser.version)
-	$.browser.version = navigator.userAgent.toLowerCase().match(/.+(?:rv|it|ra|ie)[\/: ]([\d.]+)/)[1];
+
 
 })(jQuery);

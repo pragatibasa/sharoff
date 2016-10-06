@@ -29,7 +29,9 @@ class Dashboard extends Fuel_base_controller {
 		else
 		{
 			$user = $this->fuel_auth->user_data();
+
 			$vars['change_pwd'] = ($user['password'] == md5($this->config->item('default_pwd', 'fuel')));
+			$vars['super_admin'] = $user['super_admin'];
 
 			$dashboards = array();
 			$dashboards_config = $this->config->item('dashboards', 'fuel');
@@ -69,6 +71,7 @@ class Dashboard extends Fuel_base_controller {
 			$vars['recentbill'] = $this->users_model->recentbill();
 			$vars['recentinv'] = $this->users_model->recentinv();
 			$vars['dashboards'] = $dashboards;
+
 			$this->_render('dashboard', $vars);
 		}
 

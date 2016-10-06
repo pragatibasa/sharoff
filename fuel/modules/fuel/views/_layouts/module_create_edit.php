@@ -18,13 +18,9 @@ else {
 }
 ?>
 </div>
-
 <div id="action">
-
 	<?=$actions?>
-
 </div>
-
 <div id="notification" class="notification">
 	<?=$notifications?>
 </div>

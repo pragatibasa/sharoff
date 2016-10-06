@@ -37,6 +37,7 @@ class slitting_instruction extends Fuel_base_controller {
 			$vars['adata']= $this->slitting_instruction_party($this->partyid, $this->partyname);
 			
 			//$vars['adata']= 
+//			print_r($vars);exit;
 			$this->_render('slitting_instruction', $vars);
 		} else {
 			redirect(fuel_url('#'));
@@ -148,14 +149,13 @@ function deleterow()
 }
 	
 	function slitting_instruction_party($pid, $pname) {
-		$adata = $this->slitting_instruction_model->getCuttingInstruction($pid, $pname);
+		$adata = $this->slitting_instruction_model->getCuttingInstruction($pid);
 		return $adata;
 	}
 
 	function getBalanceLength() {
 		$pid = $_POST['pid'];
-		$remaining_weight = $_POST['remaining_length'];
-		$adata = $this->slitting_instruction_model->getBalanceLength($pid, $remaining_weight);
+		$adata = $this->slitting_instruction_model->getCuttingInstruction($pid);
 		echo $adata; exit;
 	}	
 

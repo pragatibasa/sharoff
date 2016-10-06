@@ -151,9 +151,8 @@ where aspen_tblinwardentry.vStatus = 'Work In Progress' or aspen_tblslittinginst
 	foreach ($arr as $row){
 	if( $row->vprocess =='Cutting')
 	{
-	$sqlcutting = "select aspen_tblpartydetails.nPartyName as partyname,aspen_tblmatdescription.vDescription as materialdescription,vInvoiceNo as Invoicenumber,fWidth as Width,fThickness as Thickness,fQuantity as Weight from aspen_tblinwardentry LEFT JOIN aspen_tblmatdescription  ON aspen_tblmatdescription.nMatId=aspen_tblinwardentry.nMatId 
-		LEFT JOIN aspen_tblcuttinginstruction  ON aspen_tblcuttinginstruction.vIRnumber=aspen_tblinwardentry.vIRnumber
-		LEFT JOIN aspen_tblpartydetails ON aspen_tblpartydetails .nPartyId=aspen_tblinwardentry.nPartyId where aspen_tblinwardentry.vIRnumber ='".$partyid."' and aspen_tblpartydetails.nPartyName ='".$partyname."' ";
+	$sqlcutting = "select aspen_tblpartydetails.nPartyName as partyname,aspen_tblmatdescription.vDescription as materialdescription,vInvoiceNo as Invoicenumber,fWidth as Width,fThickness as Thickness,fQuantity as Weight from aspen_tblinwardentry LEFT JOIN aspen_tblmatdescription  ON aspen_tblmatdescription.nMatId=aspen_tblinwardentry.nMatId LEFT JOIN aspen_tblpartydetails ON aspen_tblpartydetails .nPartyId=aspen_tblinwardentry.nPartyId where aspen_tblinwardentry.vIRnumber ='".$partyid."'";
+		
 		$querymain = $this->db->query($sqlcutting);
 		
 		$invoice = $partyid;
@@ -164,7 +163,8 @@ where aspen_tblinwardentry.vStatus = 'Work In Progress' or aspen_tblslittinginst
 		$Thickness = $querymain->row(0)->Thickness;
 		$Weight = $querymain->row(0)->Weight;
 				
-		$sqlitem ="select aspen_tblcuttinginstruction.nSno as bundlenumber, DATE_FORMAT(aspen_tblcuttinginstruction.dDate, '%d-%m-%Y') AS processdate, aspen_tblcuttinginstruction.nLength as length, aspen_tblcuttinginstruction.nNoOfPieces as noofsheets, aspen_tblcuttinginstruction.nBundleweight as bundleweight from aspen_tblcuttinginstruction where aspen_tblcuttinginstruction.vIRnumber='".$partyid."'";
+		$sqlitem ="select aspen_tblcuttinginstruction.nSno as bundlenumber, DATE_FORMAT(aspen_tblcuttinginstruction.dDate, '%d-%m-%Y') AS processdate, aspen_tblcuttinginstruction.nLength as length, aspen_tblcuttinginstruction.nNoOfPieces as noofsheets, aspen_tblcuttinginstruction.nBundleweight as bundleweight from aspen_tblcuttinginstruction where aspen_tblcuttinginstruction.vIRnumber='".$partyid."' and aspen_tblcuttinginstruction.vStatus='WIP-Cutting'";
+		
 		$queryitem = $this->db->query($sqlitem);
 		
 		$pdf = new TCPDF(PDF_PAGE_ORIENTATION, PDF_UNIT, PDF_PAGE_FORMAT, true, 'UTF-8', false);
@@ -450,7 +450,7 @@ where aspen_tblinwardentry.vStatus = 'Work In Progress' or aspen_tblslittinginst
 	}
 	else if( $row->vprocess =='Slitting')
 	{
-	$sqlSlitting = "select aspen_tblpartydetails.nPartyName as partyname,aspen_tblmatdescription.vDescription as materialdescription,fWidth as Width, fThickness as Thickness,dDate as Startdate from aspen_tblinwardentry LEFT JOIN aspen_tblmatdescription  ON aspen_tblmatdescription.nMatId=aspen_tblinwardentry.nMatId LEFT JOIN aspen_tblslittinginstruction  ON aspen_tblslittinginstruction.vIRnumber=aspen_tblinwardentry.vIRnumber
+	$sqlSlitting = "select aspen_tblpartydetails.nPartyName as partyname,aspen_tblmatdescription.vDescription as materialdescription,fWidth as Width, fThickness as Thickness,dDate as Startdate,fQuantity as Weight from aspen_tblinwardentry LEFT JOIN aspen_tblmatdescription  ON aspen_tblmatdescription.nMatId=aspen_tblinwardentry.nMatId LEFT JOIN aspen_tblslittinginstruction  ON aspen_tblslittinginstruction.vIRnumber=aspen_tblinwardentry.vIRnumber
 	LEFT JOIN aspen_tblpartydetails ON aspen_tblpartydetails .nPartyId=aspen_tblinwardentry.nPartyId where aspen_tblinwardentry.vIRnumber ='".$partyid."' and aspen_tblpartydetails.nPartyName ='".$partyname."' ";
 		$querymain = $this->db->query($sqlSlitting);
 		$invoice = $partyid;
@@ -458,6 +458,7 @@ where aspen_tblinwardentry.vStatus = 'Work In Progress' or aspen_tblslittinginst
 		$material_description = $querymain->row(0)->materialdescription;
 		$Width = $querymain->row(0)->Width;
 		$Thickness = $querymain->row(0)->Thickness;
+		$Weight = $querymain->row(0)->Weight;
 				
 		$sqlitem ="select aspen_tblslittinginstruction.nSno as slitnumber, 
 		DATE_FORMAT(aspen_tblslittinginstruction.dDate, '%d-%m-%Y') AS startdate, 
@@ -525,16 +526,19 @@ where aspen_tblinwardentry.vStatus = 'Work In Progress' or aspen_tblslittinginst
 				
 		</tr>
 		<tr>
-				<td align="left"><h1>	<b>Width (mm): </b> '.$Width.'</h1></td> </tr>	<tr>
-				<td align="center" width="100%"></td>
-				
+			<td align="left"><h1><b>Width (mm): </b>'.$Width.'</h1></td> </tr>	<tr>
+			<td align="center" width="100%"></td>	
 		</tr>
-			<tr>
-			
-				<td align="left"><h1><b>Thickness (mm): </b> '.$Thickness.'</h1></td> 
-		</tr><tr>
-				<td align="center" width="100%"></td>
-				
+		<tr>
+			<td align="left"><h1><b>Thickness (mm): </b> '.$Thickness.'</h1></td> 
+		</tr>
+		<tr><td align="center" width="100%"></td></tr>
+		<tr>
+			<td align="left"><h1><b>Weight (kgs): </b> '.$Weight.'</h1></td>
+		</tr>
+		<tr><td align="center" width="100%"></td></tr>
+		<tr>
+			<td align="center" width="100%"></td>	
 		</tr>
 		</table>';
 		

@@ -34,23 +34,23 @@ class customer_outward_model extends Base_module_model {
 		return $query->result();
 	}
 	
-		function export_partyname($partyname='',$frmdate='',$todate='') {	
+	function export_partyname($partyname='',$frmdate='',$todate='') {	
 		$sql ="SELECT aspen_tblmatdescription.vDescription as description,
-	sum(aspen_tblbilldetails.fTotalWeight) as bweight, 
-	aspen_tblinwardentry.vIRnumber as coilnumber,
-	aspen_tblinwardentry.fThickness as thickness, 
-	aspen_tblinwardentry.fWidth as width, 
-	aspen_tblbilldetails.vOutLorryNo as vehicleno,
-	aspen_tblbilldetails.dBillDate  as billdate,
-		aspen_tblbilldetails.vBillType  as billtype,
-	aspen_tblbilldetails.nBillNo  as billno
+			aspen_tblbilldetails.fTotalWeight as bweight, 
+			aspen_tblinwardentry.vIRnumber as coilnumber,
+			aspen_tblinwardentry.fThickness as thickness, 
+			aspen_tblinwardentry.fWidth as width, 
+			aspen_tblbilldetails.vOutLorryNo as vehicleno,
+			aspen_tblbilldetails.dBillDate  as billdate,
+			aspen_tblbilldetails.vBillType  as billtype,
+			aspen_tblbilldetails.nBillNo  as billno
 		FROM aspen_tblbilldetails
-		LEFT JOIN aspen_tblinwardentry ON aspen_tblinwardentry.vIRnumber = aspen_tblbilldetails.vIRnumber 
-		LEFT JOIN aspen_tblmatdescription ON aspen_tblmatdescription.nMatId = aspen_tblinwardentry.nMatId 
-		LEFT JOIN aspen_tblpartydetails ON aspen_tblpartydetails.nPartyId = aspen_tblinwardentry.nPartyId
-		LEFT JOIN aspen_tblbillingstatus ON aspen_tblbillingstatus.vIRnumber = aspen_tblinwardentry.vIRnumber
+			LEFT JOIN aspen_tblinwardentry ON aspen_tblinwardentry.vIRnumber = aspen_tblbilldetails.vIRnumber 
+			LEFT JOIN aspen_tblmatdescription ON aspen_tblmatdescription.nMatId = aspen_tblinwardentry.nMatId 
+			LEFT JOIN aspen_tblpartydetails ON aspen_tblpartydetails.nPartyId = aspen_tblinwardentry.nPartyId
+			LEFT JOIN aspen_tblbillingstatus ON aspen_tblbillingstatus.vIRnumber = aspen_tblinwardentry.vIRnumber
    		where
-    aspen_tblpartydetails.nPartyName='".$partyname."' and aspen_tblbilldetails.dBillDate BETWEEN '".$frmdate."' AND '".$todate."' group by aspen_tblbilldetails.nBillNo order by aspen_tblinwardentry.vIRnumber asc";
+    		aspen_tblpartydetails.nPartyName='".$partyname."' and aspen_tblbilldetails.dBillDate BETWEEN '".$frmdate."' AND '".$todate."' group by aspen_tblbilldetails.nBillNo order by aspen_tblinwardentry.vIRnumber asc";
 
 		$query = $this->db->query($sql);
 		
@@ -69,7 +69,7 @@ class customer_outward_model extends Base_module_model {
 	
 	function billgeneratemodel($partyname='',$frmdate='',$todate='') {
 	$sqlrpt = "SELECT aspen_tblmatdescription.vDescription as description,
-	sum(aspen_tblbilldetails.fTotalWeight) as weight, 
+	aspen_tblbilldetails.fTotalWeight as weight, 
 	aspen_tblinwardentry.vIRnumber as coilnumber,
 	aspen_tblinwardentry.fThickness as thickness, 
 	aspen_tblinwardentry.fWidth as width, 
@@ -84,22 +84,7 @@ class customer_outward_model extends Base_module_model {
    		where
     aspen_tblpartydetails.nPartyName='".$partyname."' and aspen_tblbilldetails.dBillDate BETWEEN '".$frmdate."' AND '".$todate."'  group by aspen_tblbilldetails.nBillNo  order by aspen_tblbilldetails.nBillNo asc";
 	
-	$sqlrpt112 = "SELECT aspen_tblmatdescription.vDescription as description,
-	sum(aspen_tblbilldetails.fTotalWeight) as bweight, 
-	aspen_tblinwardentry.vIRnumber as coilnumber,
-	aspen_tblinwardentry.fThickness as thickness, 
-	aspen_tblinwardentry.fWidth as width, 
-	aspen_tblbilldetails.vOutLorryNo as vehicleno,
-	aspen_tblbilldetails.dBillDate  as billdate,
-	aspen_tblbilldetails.vBillType  as billtype,
-	aspen_tblbilldetails.nBillNo  as billno
-		FROM aspen_tblbilldetails
-		LEFT JOIN aspen_tblinwardentry ON aspen_tblinwardentry.vIRnumber = aspen_tblbilldetails.vIRnumber 
-		LEFT JOIN aspen_tblmatdescription ON aspen_tblmatdescription.nMatId = aspen_tblinwardentry.nMatId 
-		LEFT JOIN aspen_tblpartydetails ON aspen_tblpartydetails.nPartyId = aspen_tblinwardentry.nPartyId
-		LEFT JOIN aspen_tblbillingstatus ON aspen_tblbillingstatus.vIRnumber = aspen_tblinwardentry.vIRnumber
-   		where
-    aspen_tblpartydetails.nPartyName='".$partyname."' and aspen_tblbilldetails.dBillDate BETWEEN '".$frmdate."' AND '".$todate."'  order by aspen_tblinwardentry.vIRnumber asc";
+	$sqlrpt112 = "select round(sum(aspen_tblbilldetails.fTotalWeight),3) as bweight from aspen_tblinwardentry left join aspen_tblbilldetails on aspen_tblbilldetails.vIRnumber = aspen_tblinwardentry.vIRnumber LEFT JOIN aspen_tblpartydetails ON aspen_tblpartydetails.nPartyId = aspen_tblinwardentry.nPartyId where aspen_tblpartydetails.nPartyName='".$partyname."' and aspen_tblbilldetails.dBillDate  BETWEEN '".$frmdate."' AND '".$todate."'";
 	
 		$querymain = $this->db->query($sqlrpt);	
 		$querymain112 = $this->db->query($sqlrpt112);
@@ -124,7 +109,18 @@ class customer_outward_model extends Base_module_model {
 		$pdf->AddPage();
 		
 		$html = '
-					<div align="center"><h2>CUSTOMERS OUTWARD REPORT BETWEEN DATES</h2></div>
+				<table width="100%"  cellspacing="0" cellpadding="5" border="0">
+					<tr>
+						<td width="100%"align="center" style="font-size:60px; font-style:italic; font-family: fantasy;"><h1>ASPEN STEEL PVT LTD</h1></td>
+					</tr>
+					<tr>
+						<td align="center" width="100%"><h4>Branch At: Plot no 16E, Bidadi Industrial Area, Phase 2 Sector 1, Bidadi, Ramnagara-562105, <b>Email: aspensteel_unit2@yahoo.com </b></h4></td>
+					</tr>
+					<tr>
+						<td align="center" width="100%"><h4>Head Office At: 54/1, Medahalli, Old Madras Road, Bangalore-560049</h4></td>
+					</tr>
+				</table>
+				<div align="center"><h2>CUSTOMERS OUTWARD REPORT BETWEEN DATES</h2></div>
 				<table width="100%" cellspacing="0" cellpadding="5" border="0">
 			<tr>
 				<td width="33.33%"><b>Party Name: </b> '.$partyname.'</td>
@@ -222,27 +218,9 @@ class customer_outward_model extends Base_module_model {
 		$pdf->Output($pdfname, 'I');
 	}
 	
+	function totalweight_check($partyname = '', $frmdate= '', $todate= '') {
+		$sql = "select round(sum(aspen_tblbilldetails.fTotalWeight),3) as bweight from aspen_tblinwardentry left join aspen_tblbilldetails on aspen_tblbilldetails.vIRnumber = aspen_tblinwardentry.vIRnumber LEFT JOIN aspen_tblpartydetails ON aspen_tblpartydetails.nPartyId = aspen_tblinwardentry.nPartyId where aspen_tblpartydetails.nPartyName='".$partyname."' and aspen_tblbilldetails.dBillDate  BETWEEN '".$frmdate."' AND '".$todate."'";
 
-	
-	
-	
-	
-	function totalweight_check($partyname = '', $frmdate= '', $todate= ''){
-	$sql=  "SELECT aspen_tblmatdescription.vDescription as description,
-	sum(aspen_tblbillingstatus.fbilledWeight) as bweight, 
-	aspen_hist_tblinwardentry.vIRnumber as coilnumber,
-	aspen_hist_tblinwardentry.fThickness as thickness, 
-	aspen_hist_tblinwardentry.fWidth as width, 
-	aspen_tblbilldetails.vOutLorryNo as vehicleno,
-	aspen_tblbilldetails.dBillDate  as billdate,
-	aspen_tblbilldetails.nBillNo  as billno
-		FROM aspen_tblbilldetails
-		LEFT JOIN aspen_hist_tblinwardentry ON aspen_hist_tblinwardentry.vIRnumber = aspen_tblbilldetails.vIRnumber 
-		LEFT JOIN aspen_tblmatdescription ON aspen_tblmatdescription.nMatId = aspen_hist_tblinwardentry.nMatId 
-		LEFT JOIN aspen_tblpartydetails ON aspen_tblpartydetails.nPartyId = aspen_hist_tblinwardentry.nPartyId
-		LEFT JOIN aspen_tblbillingstatus ON aspen_tblbillingstatus.vIRnumber = aspen_hist_tblinwardentry.vIRnumber
-   		where
-    aspen_tblpartydetails.nPartyName='".$partyname."' and aspen_tblbilldetails.dBillDate BETWEEN '".$frmdate."' AND '".$todate."'  order by aspen_hist_tblinwardentry.vIRnumber asc";
 		$query = $this->db->query($sql);
 		$arr='';
 		if ($query->num_rows() > 0)

@@ -42,6 +42,7 @@ class partyname_details_model extends Base_module_model {
 			$fields = parent::form_fields($values);
 			$CI =& get_instance();
 			$CI->load->model('partyname_details_model');
+			$CI->load->library('validator');
 			$fields['nPartyId']['type'] = 'hidden';
 			$fields['nPartyName']['label'] = 'Party Name';
 			$fields['vAddress1']['label'] = 'Address1';

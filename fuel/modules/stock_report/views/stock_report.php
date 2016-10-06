@@ -10,6 +10,6 @@ function pullFolders(selectedItem) {
 <div id="main_top_panel">
 	<h2 class=" ico ico_stock_report">Customer Stock Report </h2>
 </div>
-<?php include_once(STOCK_REPORT_PATH.'views/_blocks/toolbar.php');?>		
+<?php include_once(STOCK_REPORT_PATH.'views/_blocks/toolbar.php');?>
 <?php include_once(STOCK_REPORT_PATH.'views/_blocks/layout.php');?>		
 

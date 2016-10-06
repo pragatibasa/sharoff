@@ -638,8 +638,8 @@ aspen_tblbillingstatus.fbilledWeight as weight,round(nAmount * fbilledWeight) as
 left join aspen_tblmatdescription on aspen_tblmatdescription.nMatId=aspen_tblpricetype1.nMatId
 left join aspen_tblinwardentry on aspen_tblinwardentry.nMatId=aspen_tblmatdescription.nMatId
 left join aspen_tblbillingstatus on aspen_tblinwardentry.vIRnumber=aspen_tblbillingstatus.vIRnumber where '".$thic."' between nMinThickness and nMaxThickness and aspen_tblmatdescription.vDescription= '".$mat_desc."' and aspen_tblinwardentry.vIRnumber='".$partyid."' and aspen_tblbillingstatus.nSno IN( ".$actualnumberbundle.") order by aspen_tblbillingstatus.nActualNo asc";
-
 }
+
 		$query = $this->db->query($sql);
 		$arr='';
 		if ($query->num_rows() > 0) {
@@ -715,7 +715,7 @@ left join aspen_tblbillingstatus on aspen_tblinwardentry.vIRnumber=aspen_tblbill
 					aspen_tblslittinginstruction.nSno,
 					round((aspen_tblslittinginstruction.nWeight/1000),3) as weight,
 					nAmount as rate,
-					round(( nAmount * (aspen_tblslittinginstruction.nWeight/1000) ),2) as amount 
+					ceil(round(( nAmount * (aspen_tblslittinginstruction.nWeight/1000) ),2)) as amount 
 					from aspen_tblslittinginstruction
 					left join aspen_tblinwardentry on aspen_tblslittinginstruction.vIRnumber=aspen_tblinwardentry.vIRnumber
 					left join aspen_tblmatdescription on aspen_tblmatdescription.nMatId=aspen_tblinwardentry.nMatId
@@ -2948,7 +2948,7 @@ EOD;
 										<td width="40%"><b>'.$rowitem->description.'</b></td>
 										<td width="16.6%"><b>'.$rowitem->weight.'</b></td> 
 										<td width="16.6%"><b>'.$rowitem->rate.'</b></td> 
-										<td width="33%"><b>'.$rowitem->amount.'</b></td>
+										<td width="33%"><b>'.ceil($rowitem->amount).'</b></td>
 										<td width="15.6%"></td>	
 									</tr>';
 						}

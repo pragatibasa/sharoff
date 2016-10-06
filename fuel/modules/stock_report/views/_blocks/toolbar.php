@@ -20,7 +20,7 @@
     </div>
    </li> 
    <li class="end"  style="padding-left:20px;">
- <input class="btn btn-success"  type="button" value="Export to Excel" id="export" onclick="tableToExcel('myTabels', 'Stock Report')"/> &nbsp; &nbsp; &nbsp; </li>   
+    <a style="border:none;padding:0px;" href="#" id="export" onclick="javascript:tableToExcel('myTabels', 'Stock Report');"><input class="btn btn-success" type="button" value="Export to Excel"/> </a>&nbsp; &nbsp; &nbsp; </li>
   </ul>
  </div>
 </div>

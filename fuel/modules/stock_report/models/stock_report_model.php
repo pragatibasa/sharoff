@@ -46,7 +46,7 @@ class stock_report_model extends Base_module_model {
 	}
 	
 	function totalweight_check($partyname = ''){
-	$sql=  "SELECT SUM( fpresent ) as weight FROM aspen_tblinwardentry LEFT JOIN aspen_tblpartydetails ON aspen_tblpartydetails.nPartyId = aspen_tblinwardentry.nPartyId  Where aspen_tblpartydetails.nPartyName='".$partyname."' AND aspen_tblinwardentry.fpresent >= 1";
+	$sql=  "SELECT SUM( fpresent) as weight FROM aspen_tblinwardentry LEFT JOIN aspen_tblpartydetails ON aspen_tblpartydetails.nPartyId = aspen_tblinwardentry.nPartyId  Where aspen_tblpartydetails.nPartyName='".$partyname."' AND aspen_tblinwardentry.fpresent >= 1";
 		$query = $this->db->query($sql);
 		$arr='';
 		if ($query->num_rows() > 0)

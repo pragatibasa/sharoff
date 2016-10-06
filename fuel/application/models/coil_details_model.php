@@ -192,10 +192,10 @@ class Coil_details_model extends Base_module_model {
 		  LEFT JOIN aspen_tblinwardentry ON aspen_tblinwardentry.vIRnumber = aspen_tblrecoiling.vIRnumber WHERE aspen_tblrecoiling.vIRnumber='".$parentid."'";
 		$query = $this->db->query($sqlci);
 		}
-		else if($row->vprocess =='Slitting'){
-			$sqlci="select aspen_tblslittinginstruction.nSno as slittnumber,DATE_FORMAT(aspen_tblslittinginstruction.dDate, '%d-%m-%Y') as date,aspen_tblslittinginstruction.nWidth as width,aspen_tblslittinginstruction.nLength as length,aspen_tblslittinginstruction.nWeight as weight,aspen_tblslittinginstruction.vStatus as status, aspen_tblinwardentry.vprocess as process from aspen_tblslittinginstruction  
-			LEFT JOIN aspen_tblinwardentry ON aspen_tblinwardentry.vIRnumber = aspen_tblslittinginstruction.vIRnumber WHERE aspen_tblslittinginstruction.vIRnumber='".$parentid."'";
-		$query = $this->db->query($sqlci);
+		else if($row->vprocess =='Slitting') {
+			$sqlci="select aspen_tblslittinginstruction.nSno as slittnumber,DATE_FORMAT(aspen_tblslittinginstruction.dDate, '%d-%m-%Y') as date,aspen_tblslittinginstruction.nWidth as width,aspen_tblslittinginstruction.nLength as length,aspen_tblslittinginstruction.nWeight as weight,aspen_tblbillingstatus.vBillingStatus as status, 'Slitting' as process from aspen_tblslittinginstruction LEFT JOIN aspen_tblbillingstatus ON aspen_tblslittinginstruction.vIRnumber=aspen_tblbillingstatus.vIRnumber WHERE aspen_tblslittinginstruction.nSno = aspen_tblbillingstatus.nSno and aspen_tblslittinginstruction.vIRnumber='".$parentid."' Group by aspen_tblbillingstatus.nSno";
+
+			$query = $this->db->query($sqlci);
 		}
 		else if($row->vprocess ==''){
 		$sqlci=" SELECT case when vprocess  = '' then 'NULL' else vprocess  end as process from aspen_tblinwardentry WHERE aspen_tblinwardentry.vIRnumber='".$parentid."'";

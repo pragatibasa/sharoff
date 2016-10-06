@@ -731,7 +731,7 @@ class bill_details_model extends Base_module_model {
 										<td width="40%"><b>'.$rowitem->description.'</b></td>
 										<td width="16.6%"><b>'.$rowitem->weight.'</b></td> 
 										<td width="16.6%"><b>'.$rowitem->rate.'</b></td> 
-										<td width="33%"><b>'.$rowitem->amount.'</b></td>
+										<td width="33%"><b>'.ceil($rowitem->amount).'</b></td>
 										<td width="15.6%"></td>	
 									</tr>';
 						}

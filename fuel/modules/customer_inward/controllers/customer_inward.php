@@ -51,8 +51,7 @@ class customer_inward extends Fuel_base_controller {
 		$frmdate = $args["frmdate"];
         $todate = $args["todate"];
 		$this->load->module_model(CUSTOMER_INWARD_FOLDER, 'customer_inward_model');
-	$billgenerateb = $this->customer_inward_model->billgeneratemodel($partyname,$frmdate,$todate);
-	
+		$billgenerateb = $this->customer_inward_model->billgeneratemodel($partyname,$frmdate,$todate);
 	}
 		
 		

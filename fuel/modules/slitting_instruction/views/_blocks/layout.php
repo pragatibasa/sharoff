@@ -81,11 +81,13 @@
 		<div class="pad-10">
 			<div id="bundle_width_text_label" style="height:20px;"> 
 					<span style="float:left;">Width</span>
-					<span style="float:right;padding-right: 237px;">Weight</span>
+					<span style="float:left;margin-left:115px;">No.</span>
+					<span style="float:right;padding-right:208px;">Weight</span>
 			</div>
 			<div>
-				<input id="width_v" class="width" style="width:181px;" type="text" name="width"/>
-				<input class="weight" type="text" name="weight" disabled style="width:181px;"/>
+				<input id="width_v" class="width" style="width:130px;" type="text" name="width"/>
+				<input class="count" style="width:60px;" type="text" name="count" value="1"/>
+				<input class="weight" type="text" name="weight" disabled style="width:130px;"/>
 				<span class="measure"></span>
 				<span class="__fuel_edit_marker_new__" title="Click to add new width" style="position: absolute; padding: 8px; margin-left: 5px; margin-top: 7px;cursor: pointer;"></span>
 				<input id="txtslitingnumber" type="hidden"   />
@@ -158,7 +160,7 @@ $(document).on( 'click', '.__fuel_edit_marker_new__',function() {
 	var kgs = '';
 	if($(this).prev('.weight').val() !== '')
 		kgs = 'Kgs';
-	$(this).after('<span class="measure">'+kgs+'</span><span title="Delete" class="ico_delete" style="margin-top: 10px; height: 8px; margin-left: 5px; padding: 5px; position: absolute; width: 7px;cursor:pointer;"></span><input type="text" class="width" style="width:181px; margin-right: 4px;" name="width" id="width_v"><input class="weight" type="text" name="weight" disabled style="width:181px;"/> <span class="measure"></span><span title="Click to add new width" style="position: absolute; padding: 8px; margin-left: 5px; margin-top: 7px;cursor: pointer;" class="__fuel_edit_marker_new__"></span>');
+	$(this).after('<span class="measure">'+kgs+'</span><span title="Delete" class="ico_delete" style="margin-top: 10px; height: 8px; margin-left: 5px; padding: 5px; position: absolute; width: 7px;cursor:pointer;"></span><input type="text" class="width" style="width:130px; margin-right: 4px;" name="width" id="width_v"><input class="count" style="width:60px;" type="text" name="count" value="1"/><input class="weight" type="text" name="weight" disabled style="width:130px;margin-left:4px;"/> <span class="measure"></span><span title="Click to add new width" style="position: absolute; padding: 8px; margin-left: 5px; margin-top: 7px;cursor: pointer;" class="__fuel_edit_marker_new__"></span>');
 	$(this).next('.ico_delete').css('margin-left','4px');
 	$(this).remove();
 });
@@ -166,11 +168,14 @@ $(document).on( 'click', '.__fuel_edit_marker_new__',function() {
 $(document).on( 'click', '.ico_delete', function() {
 	$(this).prev('span').remove();
 	$(this).prev('.weight').remove();
+	$(this).prev('.count').remove();
+
 	if( $('#length_v').val() !== '' )
 		$(this).prev('.width').val(0).trigger('keyup').remove();
 	else 
 		$(this).prev('.width').remove();
 	$(this).remove();
+	calculateTotalWidth();
 });
 
 $('#length_v').on('keydown', function(e) {
@@ -183,47 +188,91 @@ $('#length_v').on('keydown', function(e) {
        )) e.preventDefault();
 });
 
-$(document).on( 'keyup', '.width',function(event) {
-	var totalWidth 		= 0;
-	var currentWidth	= $(this).val();
-	var pid   			= $('#pid').val();
-
-	var thickness 		= $('#thic').val();
-	var length 			= $('#length_v').val();
-	
-	$('.width').each(function() {
-		if($(this).val() !== '')
-			totalWidth = totalWidth+parseFloat($(this).val());
-	});
-	
-	if(totalWidth > parseInt($('#wid').val())) {
-		alert('Sum of slits width is greated width of coil.');
+$(document).on( 'blur', '#length_v',function(event) {
+	if( $(this).val() == '' ) {
 		return false;
-	}
-	
-	if(($('.width').length == 1 && $('.width').val() == '') || length == ''){
-		$(this).val('');
-		alert("All fields are mandatory");
+	} else if( parseFloat($(this).val()) > $('#remaining_length').val() ) {
+		alert('Required length cannot be greater than available length');
+		$(this).val('').focus();
 		return false;
-	} else {
-		var resultbundle	= (0.00000785 *currentWidth*thickness*length);
-		var resultbundle	= Math.round(resultbundle);
-		$(this).next('.weight').val(resultbundle).next('.measure').text(' Kgs');
-		document.getElementById('weight_v').value = totalWidth;
 	}
 });
+
+$(document).on( 'blur', '.width',function(event) {
+	var currentWidth	= parseFloat($(this).val());
+	var currentCount	= parseFloat($(this).next('.count').val());
+	var weight = calculateWeights(currentWidth,currentCount);
+	calculateTotalWidth();
+	if( weight == false ) {
+		if( isNaN(currentWidth) )
+			$(this).val('');
+		$(this).next().next('.weight').val('0');
+		return false;
+	} else {
+		$(this).next().next('.weight').val(weight).next('.measure').text(' Kgs');
+	}
+});
+
+$(document).on( 'blur', '.count',function(event) {
+	var currentCount	= parseFloat($(this).val());
+	var currentWidth	= parseFloat($(this).prev('.width').val());
+	var weight = calculateWeights(currentWidth,currentCount);
+	calculateTotalWidth();
+	if( weight == false ) {
+		if( $(this).val('') !== 1 )
+			$(this).val('');
+		$(this).next('.weight').val('0');
+		return false;
+	} else {
+		$(this).next('.weight').val(weight).next('.measure').text(' Kgs');
+	}
+});
+
+function calculateWeights( currentWidth, currentCount ) {
+	var pid   			= $('#pid').val();
+	var totalWidth 		= 0;
+	var thickness 		= $('#thic').val();
+	var length 			= $('#length_v').val();
+
+	if( isNaN(currentWidth) || isNaN(currentCount) || length == '' ) {
+		alert("All fields are mandatory");
+		return false;
+	}
+	totalWidth = calculateTotalWidth();
+	if(totalWidth > parseFloat($('#wid').val())) {
+		alert('Sum of slits width is greater than width of coil.');
+		return false;
+	}
+
+	var totalWeight	= Math.round(0.00000785*(currentWidth*currentCount)*thickness*parseFloat(length));
+	return totalWeight;
+}
+
+function calculateTotalWidth() {
+	var totalWidth = 0;
+	$('.width').each(function() {
+		var width = $(this).val();
+		var count = $(this).next('.count').val();
+		if( width !== '' && count !== '' ) {
+			totalWidth = totalWidth+(width*count);
+		}
+	});
+	$('#weight_v').val(totalWidth);
+	return totalWidth;
+}
 
 function balance() {
 	var pid = $('#pid').val();
 	var remaining_length = $('#remaining_length').val();
 	var dataString = 'remaining_length='+remaining_length+'&pid='+pid;
-	
+	$('#length_v').val(remaining_length);	
+	return false;
 	$.ajax({
         type: 'POST',
         url: "<?php echo fuel_url('slitting_instruction/getBalanceLength');?>",
 		data: dataString,
 		success: function(msg){  
-			$('#length_v').val(msg);
+			$('#length_v').val(remaining_length);
 		}
     });
 }
@@ -307,7 +356,7 @@ function totalwidth_check() {
 	var dataString = '&partyid='+partyid;
 	$.ajax({  
 	   type: "POST",  
-	   url : "<?php echo fuel_url('slitting_instruction/totalwidth');?>/",  
+	   url : "<?php echo fuel_url('slitting_instruction/totalwidth');?>/",
 		data: dataString,
 		datatype : "json",
 		success: function(msg){
@@ -329,16 +378,29 @@ function deleteItem(sn){
 	var slitingnumber = $('#txtslitingnumber').val();
 	var pid = $('#pid').val();
     var checkstr =  confirm('Are you sure you want to delete this?');
-	var dataString = {Slitingnumber : slitingnumber,Pid:pid};
-    if(checkstr == true){
-      $.ajax({
+
+	if(checkstr == true){
+		var dataString = {Slitingnumber : slitingnumber,Pid:pid};
+      	$.ajax({
 	    type: "POST",
 		url	: "<?php echo fuel_url('slitting_instruction/delete_slit');?>",
 		data : dataString,
 		datatype: json,
 			success: function(msg){ 
-				refresh_folderlist(); 
-				//totalwidth_check();
+				refresh_folderlist();
+				
+				var pid = $('#pid').val();
+				var dataString = '&pid='+pid;
+				totalwidth_check();
+				$.ajax({
+				    type: 'POST',
+        			url: "<?php echo fuel_url('slitting_instruction/getBalanceLength');?>",
+					data: dataString,
+					success: function(msg){
+						var msg3=JSON.parse(msg);
+						$('#remaining_length').val(msg3.remaining_weight);
+					}
+    			}); 
 			}
 		});
     } else {
@@ -356,7 +418,16 @@ function savechange(id) {
         success: function() {
 			alert("Saved Succesfully");
 			refresh_folderlist();
-			totalwidth_check();	
+			totalwidth_check();
+			$.ajax({
+			    type: 'POST',
+    			url: "<?php echo fuel_url('slitting_instruction/getBalanceLength');?>",
+				data: dataString,
+				success: function(msg){
+					var msg3=JSON.parse(msg);
+					$('#remaining_length').val(msg3.remaining_weight);
+				}
+    		});
 		}
 	});
 }
@@ -364,7 +435,8 @@ function savechange(id) {
 function functionedit(){
 	var bundlenumber = $('#slitNumber').val();
 	var width_v = $('#width_v').val();
-	var dataString = 'bundlenumber='+bundlenumber+'&width_v='+width_v;
+	var pid = $('#pid').val();
+	var dataString = 'bundlenumber='+bundlenumber+'&width_v='+width_v+'&pid='+pid;
 	$.ajax({  
 		type: "POST",  
 		url : "<?php echo fuel_url('slitting_instruction/editbundle');?>/",  
@@ -378,9 +450,18 @@ function functionedit(){
 			$("#newsize").show();
 			$("#edit").hide();
 			$('#bundle_width_text_label').next('div').empty();
-			$('#bundle_width_text_label').next('div').append('<input type="text" class="width" style="width:181px; margin-right: 4px;" name="width" id="width_v"><input class="weight" type="text" name="weight" disabled style="width:181px;"/> <span class="measure"></span><span title="Click to add new width" style="position: absolute; padding: 8px; margin-left: 5px; margin-top: 7px;cursor: pointer;" class="__fuel_edit_marker_new__"></span>');
+			$('#bundle_width_text_label').next('div').append('<input type="text" class="width" style="width:130px; margin-right: 4px;" name="width" id="width_v"><input class="count" style="width:60px;" type="text" name="count" value="1"/><input class="weight" type="text" name="weight" disabled style="width:130px;margin-left: 4px;"/> <span class="measure"></span><span title="Click to add new width" style="position: absolute; padding: 8px; margin-left: 5px; margin-top: 7px;cursor: pointer;" class="__fuel_edit_marker_new__"></span>');
 			refresh_folderlist();
-			totalwidth_check();	
+			totalwidth_check();
+			$.ajax({
+			    type: 'POST',
+    			url: "<?php echo fuel_url('slitting_instruction/getBalanceLength');?>",
+				data: dataString,
+				success: function(msg){
+					var msg3=JSON.parse(msg);
+					$('#remaining_length').val(msg3.remaining_weight);
+				}
+    		});	
 		}  
 	}); 
 }
@@ -392,12 +473,11 @@ function radioload(nSno,length,width,weight) {
 	$('#slitNumber').val(nSno);
 	$('.width,.ico_delete,.__fuel_edit_marker_new__').remove();
 	$('#bundle_width_text_label').next('div').empty();
-	$('#bundle_width_text_label').next('div').append('<input type="text" value="'+width+'" class="width" style="width:181px; margin-right: 4px;" name="width" id="width_v"><input class="weight" type="text" name="weight" value="'+weight+'" disabled style="width:181px;"/> <span class="measure">Kgs</span>');
+	$('#bundle_width_text_label').next('div').append('<input type="text" value="'+width+'" class="width" style="width:130px; margin-right: 4px;" name="width" id="width_v"><input class="count" style="width:60px;" type="text" name="count" value="1" disabled/><input class="weight" type="text" name="weight" value="'+weight+'" disabled style="width:130px;margin-left:4px"/> <span class="measure">Kgs</span>');
 	$('#weight_v').val(weight);
+	
 }
-
 </script>
-
 <script>
 var json = <?php echo($adata); ?>;
 for(key in json){
@@ -414,13 +494,16 @@ function functionsave() {
 	var widthsSum = 0;
 	$('.width').each(function() {
 		if($(this).val() !== '') {
-			widthsSum += parseFloat($(this).val());
-			allWidths.push(parseFloat($(this).val()));
+			var count = parseInt($(this).next('.count').val());
+			for(i = 1; i <= count; i++) {
+				widthsSum += parseFloat($(this).val());
+				allWidths.push(parseFloat($(this).val()));
+			}
 		}
 	});
 
 	 if( length =='' ) {
-	  	alert('ENTER SOMETHING');
+	  	alert('Please enter all the details.');
 	  	return false;
 	 } else if( widthsSum > parseFloat($('#wid').val()) ) {
 	 	alert('Sorry the Total width of bundle is more then width of coil please edit the width or delete to progress!!');
@@ -435,9 +518,20 @@ function functionsave() {
 				$('#balance_length').removeAttr('checked');
 				$('#length_v,.width,.weight,#weight_v').val('');
 				$('#bundle_width_text_label').next('div').empty();
-				$('#bundle_width_text_label').next('div').append('<input type="text" class="width" style="width:181px; margin-right: 4px;" name="width" id="width_v"><input class="weight" type="text" name="weight" disabled style="width:181px;"/> <span class="measure"></span><span title="Click to add new width" style="position: absolute; padding: 8px; margin-left: 5px; margin-top: 7px;cursor: pointer;" class="__fuel_edit_marker_new__"></span>');
+				$('#bundle_width_text_label').next('div').append('<input type="text" class="width" style="width:130px; margin-right: 4px;" name="width" id="width_v"><input class="count" style="width:60px;" type="text" name="count" value="1"/><input class="weight" type="text" name="weight" disabled style="width:130px;margin-left:4px;"/> <span class="measure"></span><span title="Click to add new width" style="position: absolute; padding: 8px; margin-left: 5px; margin-top: 7px;cursor: pointer;" class="__fuel_edit_marker_new__"></span>');
 				refresh_folderlist();
-				totalwidth_check();	
+				var pid = $('#pid').val();
+				var dataString = '&pid='+pid;
+				
+				$.ajax({
+				    type: 'POST',
+        			url: "<?php echo fuel_url('slitting_instruction/getBalanceLength');?>",
+					data: dataString,
+					success: function(msg){  
+						var msg3=JSON.parse(msg);
+						$('#remaining_length').val(msg3.remaining_weight);
+					}
+    			}); 	
 			}
 		}); 
 	}

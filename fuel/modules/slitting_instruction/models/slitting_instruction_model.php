@@ -56,9 +56,11 @@ class slitting_instruction_model extends Base_module_model {
 		if(isset( $_POST['bundlenumber']) && isset( $_POST['width_v'])) {
 			$bundlenumber = $_POST['bundlenumber'];
 			$width_v = $_POST['width_v'];
+			$vIRnumber = $_POST['pid'];
 	 	}
 		$sql = ("UPDATE aspen_tblslittinginstruction SET nWidth='". $width_v. "'");
-       	$sql.=" WHERE aspen_tblslittinginstruction.nSno='".$bundlenumber."'";
+       	$sql.=" WHERE aspen_tblslittinginstruction.nSno='".$bundlenumber."' and vIRnumber=".$vIRnumber."";
+
     	$query1=$this->db->query ($sql);
 	}
 	 
@@ -83,10 +85,9 @@ class slitting_instruction_model extends Base_module_model {
   
 	}
 	
-	function getCuttingInstruction($pid, $pname) {
-		if(isset($pid) && isset($pname)) {
+	function getCuttingInstruction($pid) {
+		if(isset($pid)) {
 			$partyid = $pid;
-			$partyname = $pname;
 		}
 		$sql = "SELECT aspen_tblinwardentry.vIRnumber,
 		 	aspen_tblinwardentry.dReceivedDate,
@@ -102,7 +103,6 @@ class slitting_instruction_model extends Base_module_model {
 		if(!empty($partyid)) {
 			$sql.="WHERE aspen_tblinwardentry.vIRnumber='".$partyid."' ";
 		}
-		
 		$query = $this->db->query($sql);
 		$arr='';
 		if ($query->num_rows() > 0) {
@@ -110,7 +110,18 @@ class slitting_instruction_model extends Base_module_model {
 				$arr[] =$row;
 		   	}
 		}
-		$arr[0]->remaining_weight = round((($arr[0]->fQuantity/($arr[0]->fThickness*$arr[0]->fWidth*785)))*100000000);
+		$strExhaustedLength = 'select COALESCE(sum(distinct nLength),0) as usedLength from aspen_tblslittinginstruction where vIRnumber ='.$partyid;
+
+		$queryExhaustedLength = $this->db->query($strExhaustedLength);
+
+		$floatUsedLength = 0;
+		
+		if($queryExhaustedLength->num_rows() > 0) {
+		   	$floatUsedLength = $queryExhaustedLength->result()[0]->usedLength;
+		}
+
+		$arr[0]->remaining_weight = round((($arr[0]->fQuantity/($arr[0]->fThickness*$arr[0]->fWidth*785)))*100000000)- $floatUsedLength;
+
 		return json_encode($arr[0]);
 	}	
 		
