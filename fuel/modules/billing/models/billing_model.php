@@ -49,7 +49,7 @@ class Billing_model extends Base_module_model {
                 $nextBillNo= $row->nextBillNo;
              }
           } 
-	  return $nextBillNo;
+	  return NULL;
 
 	}
 
@@ -458,6 +458,7 @@ left join aspen_tblbillingstatus on aspen_tblinwardentry.vIRnumber=aspen_tblbill
 	left join aspen_tblinwardentry on aspen_tblinwardentry.nMatId=aspen_tblmatdescription.nMatId
 	left join aspen_tblbillingstatus on aspen_tblinwardentry.vIRnumber=aspen_tblbillingstatus.vIRnumber
 	where aspen_tblmatdescription.vDescription= '".$mat_desc."' and aspen_tblinwardentry.vIRnumber='".$partyid."'";
+
 		$query = $this->db->query($sqlfb);
 		
 		$arr='';
@@ -2070,9 +2071,16 @@ function listbundledetailsslit($partyid = '',$slno = '') {
 	
 	
 		function finalbillgeneratemodel($partyid='',$actualnumberbundle='',$cust_add='',$cust_rm='',$billid='') {
-	$sqlbilling= "select aspen_tblbilldetails.nBillNo as billnumber,DATE_FORMAT(aspen_tblbilldetails.dBillDate, '%d/%m/%Y') as billdate,aspen_tblpartydetails.nPartyName as partyname,aspen_tblpartydetails.nTinNumber as tinnmber,aspen_tblpartydetails.vAddress1 as address1,aspen_tblpartydetails.vAddress2 as address2,aspen_tblpartydetails.vCity as city,
-		aspen_tblpartydetails.nPinId as pincode,
-		aspen_tblbilldetails.vOutLorryNo as trucknumber,
+	$sqlbilling= "select aspen_tblbilldetails.nBillNo as billnumber,
+	DATE_FORMAT(aspen_tblbilldetails.dBillDate, '%d/%m/%Y') as billdate,
+	aspen_tblpartydetails.nPartyName as partyname,
+	aspen_tblpartydetails.nTinNumber as tinnmber,
+	aspen_tblpartydetails.nCgstNumber as cgstNumber,
+	aspen_tblpartydetails.vAddress1 as address1,
+	aspen_tblpartydetails.vAddress2 as address2,
+	aspen_tblpartydetails.vCity as city,
+	aspen_tblpartydetails.nPinId as pincode,
+	aspen_tblbilldetails.vOutLorryNo as trucknumber,
 	aspen_tblmatdescription.vDescription as materialdescription, aspen_tblbillingstatus.fWeight as wei, aspen_tblinwardentry.vInvoiceNo as invoiceno,DATE_FORMAT(aspen_tblinwardentry.dInvoiceDate, '%d/%m/%Y') as invoicedate ,aspen_tblinwardentry.fWidth as width,aspen_tblinwardentry.fThickness as thickness,aspen_tblbillingstatus.nSno as Sno,aspen_tblbillingstatus.nActualNo as Length,aspen_tblpricetype1.nAmount as rate,aspen_tblbillingstatus.nActualNo as noofpcs,
 	aspen_tblbillingstatus.fbilledWeight as weight,aspen_tblbilldetails.ntotalpcs as totalpcs,aspen_tblbilldetails.fTotalWeight as totalweight,round(aspen_tblbilldetails.fWeightAmount+ '".$cust_add."'- '".$cust_rm."' ) as weihtamount,aspen_tblbilldetails.ntotalamount as totalamount,aspen_tblbilldetails.nScrapSent as Scrapsent,round(aspen_tblbilldetails.ocwtamount) as wtamount,round(aspen_tblbilldetails.ocwidthamount) as widthamount,aspen_tblbilldetails.oclengthamount as lengthamount,round(aspen_tblbilldetails.fServiceTax) as servicetax,round(aspen_tblbilldetails.fEduTax) as edutax,aspen_tblbilldetails.fSHEduTax as shedutax,aspen_tblbilldetails.fGrantTotal as grandtotal,aspen_tblbilldetails.vAdditionalChargeType as additionalchargetype,round(aspen_tblbilldetails.fAmount) as amount,round(aspen_tblbilldetails.nsubtotal) as subtotal,aspen_tblbilldetails.grandtot_words as container from aspen_tblinwardentry LEFT JOIN aspen_tblmatdescription  ON aspen_tblmatdescription.nMatId=aspen_tblinwardentry.nMatId LEFT JOIN aspen_tblpartydetails ON aspen_tblpartydetails .nPartyId=aspen_tblinwardentry.nPartyId
 	left join aspen_tblpricetype1 on aspen_tblpricetype1.nMatId=aspen_tblmatdescription.nMatId
@@ -2121,6 +2129,7 @@ function listbundledetailsslit($partyid = '',$slno = '') {
 		$tin_number = $querymain->row(0)->tinnmber;
 		$container = $querymain->row(0)->container;
 		$wei = $querymain->row(0)->wei;
+		$cgstNumber = $querymain->row(0)->cgstNumber;
 		
 		$sqlitem ="select Distinct aspen_tblbillingstatus.nSno as bundlenumber,aspen_tblcuttinginstruction.nLength as length,aspen_tblbillingstatus.nActualNo as noofpcs,aspen_tblbillingstatus.fWeight as wei,aspen_tblbillingstatus.fbilledWeight as weight  from aspen_tblcuttinginstruction
 	LEFT JOIN aspen_tblbillingstatus  ON aspen_tblcuttinginstruction.vIRnumber=aspen_tblbillingstatus.vIRnumber  	
@@ -2153,7 +2162,7 @@ function listbundledetailsslit($partyid = '',$slno = '') {
 			<tr>
 				<td width="16%" align:"left"><h4>TIN:29730066589</h4></td>
 				<td width="70%"align="center" style="font-size:60px; font-style:italic; font-family: fantasy;"><h1>ASPEN STEEL PVT LTD</h1></td>
-				<td width="25%" align:"right"><h4>Service Tax Regn. No: (BAS)/AABCA4807HST001</h4></td>
+				<td width="25%" align:"right"><h4>GST Regn. No: 29AABCA4807H1ZS</h4></td>
 			</tr>
 			<tr>
 				<td align="center" width="100%"><h4>Branch At: Plot no 16E, Bidadi Industrial Area, Phase 2 Sector 1, Bidadi, Ramnagara-562105, <b>Email: aspensteel_unit2@yahoo.com </b></h4></td>
@@ -2174,7 +2183,9 @@ function listbundledetailsslit($partyid = '',$slno = '') {
 			<tr><td></td></tr>
 			<tr>
 				<td width="30%" align:"left">
-					<h3>To M/s., &nbsp;'.$party_name.', '.$address_one.' &nbsp;'.$address_two.',&nbsp;'.$city.'-'.$pincode.'</h3>
+					<h3>To M/s., &nbsp;'.$party_name.', '.$address_one.' &nbsp;'.$address_two.',&nbsp;'.$city.'-'.$pincode.'<br>
+					Tin Number : '.$tin_number.'
+					</h3>
 				</td>
 				<td width="40%" align="center"><h3> Desp. By Lorry No. : '.$trucknumber.'</h3> </td>	
 				<td width="33.33%" align:"right"><h3>Delivery: Full &nbsp; Part-1&nbsp; Part-2</h3></td>
@@ -2182,7 +2193,7 @@ function listbundledetailsslit($partyid = '',$slno = '') {
 			<tr><td></td></tr>
 			<tr>
 				<td width="30%" align:"left">
-					<h3>Tin Number : '.$tin_number.'</h3>
+					<h3>CGST Number : '.$cgstNumber.'</h3>	
 				</td>
 				<td width="39%" align="center"><h3> Inward Date : 	<b> '.$invoicedate.'</b></h3> </td>
 				<td width="33.33%" align:"right"><h3>Inward Challan No.:'.$invoiceno.'</h3></td>
@@ -2269,7 +2280,7 @@ function listbundledetailsslit($partyid = '',$slno = '') {
 		</tr>
 		<tr>
 		<td width="89%">
-			<h3><b>Service Tax @ '.$serviceTaxPercent.'%</b></h3>
+			<h3><b>CGST @ '.$serviceTaxPercent.'%</b></h3>
 			</td> <td><h3>'.ceil($servicetax).'</h3></td>
 		</tr>
 		<tr>
@@ -2796,7 +2807,25 @@ EOD;
 	
 	function slittingpdf($partyid='',$billnumber='') {
 	
-		$sqlbilling= "select aspen_tblbilldetails.nBillNo as billnumber,DATE_FORMAT(aspen_tblbilldetails.dBillDate, '%d-%m-%Y') as billdate,aspen_tblpartydetails.nPartyName as partyname,aspen_tblpartydetails.nTinNumber as tinnmber,aspen_tblpartydetails.vAddress1 as address1,aspen_tblpartydetails.vAddress2 as address2,aspen_tblpartydetails.vCity as city,aspen_tblbilldetails.vOutLorryNo as trucknumber,aspen_tblmatdescription.vDescription as materialdescription,aspen_tblinwardentry.vInvoiceNo as invoiceno,DATE_FORMAT(aspen_tblinwardentry.dInvoiceDate, '%d-%m-%Y') as invoicedate ,aspen_tblinwardentry.fWidth as width,aspen_tblinwardentry.fThickness as thickness,aspen_tblbillingstatus.nSno as Sno,aspen_tblbillingstatus.nActualNo as Length,aspen_tblpricetype1.nAmount as rate,aspen_tblbillingstatus.nActualNo as noofpcs,DATE_FORMAT(aspen_tblinwardentry.dReceivedDate, '%d-%m-%Y') as inwardDate,
+		$sqlbilling= "select aspen_tblbilldetails.nBillNo as billnumber,
+		DATE_FORMAT(aspen_tblbilldetails.dBillDate, '%d-%m-%Y') as billdate,
+		aspen_tblpartydetails.nPartyName as partyname,
+		aspen_tblpartydetails.nTinNumber as tinnmber,
+		aspen_tblpartydetails.nCgstNumber as cgstNumber,
+		aspen_tblpartydetails.vAddress1 as address1,
+		aspen_tblpartydetails.vAddress2 as address2,
+		aspen_tblpartydetails.vCity as city,
+		aspen_tblbilldetails.vOutLorryNo as trucknumber,
+		aspen_tblmatdescription.vDescription as materialdescription,
+		aspen_tblinwardentry.vInvoiceNo as invoiceno,
+		DATE_FORMAT(aspen_tblinwardentry.dInvoiceDate, '%d-%m-%Y') as invoicedate,
+		aspen_tblinwardentry.fWidth as width,
+		aspen_tblinwardentry.fThickness as thickness,
+		aspen_tblbillingstatus.nSno as Sno,
+		aspen_tblbillingstatus.nActualNo as Length,
+		aspen_tblpricetype1.nAmount as rate,
+		aspen_tblbillingstatus.nActualNo as noofpcs,
+		DATE_FORMAT(aspen_tblinwardentry.dReceivedDate, '%d-%m-%Y') as inwardDate,
 		aspen_tblbillingstatus.fbilledWeight as weight,aspen_tblbilldetails.ntotalpcs as totalpcs,aspen_tblbilldetails.fTotalWeight as totalweight,round(aspen_tblbilldetails.fWeightAmount) as weihtamount,aspen_tblbilldetails.ntotalamount as totalamount,aspen_tblbilldetails.nScrapSent as Scrapsent,round(aspen_tblbilldetails.ocwtamount) as wtamount,round(aspen_tblbilldetails.ocwidthamount) as widthamount,aspen_tblbilldetails.oclengthamount as lengthamount,round(aspen_tblbilldetails.fServiceTax) as servicetax,round(aspen_tblbilldetails.fEduTax) as edutax,aspen_tblbilldetails.fSHEduTax as shedutax,aspen_tblbilldetails.fGrantTotal as grandtotal,aspen_tblbilldetails.vAdditionalChargeType as additionalchargetype,round(aspen_tblbilldetails.fAmount) as amount,aspen_tblbilldetails.vAdditionalChargeType1 as additionalchargetype1,round(aspen_tblbilldetails.fAmount1) as amount1,round(aspen_tblbilldetails.nsubtotal) as subtotal,aspen_tblbilldetails.grandtot_words as container,aspen_tblbilldetails.nServiceTaxPercent as serviceTaxPercent 
 		from aspen_tblinwardentry 
 		LEFT JOIN aspen_tblmatdescription  ON aspen_tblmatdescription.nMatId=aspen_tblinwardentry.nMatId 
@@ -2820,6 +2849,7 @@ EOD;
 		$invoiceno = $querymain->row(0)->invoiceno;
 		$city = $querymain->row(0)->city;
 		$tinnmber = $querymain->row(0)->tinnmber;
+		$cgstNumber = $querymain->row(0)->cgstNumber;
 		$inwardDate = $querymain->row(0)->inwardDate;
 		$trucknumber = $querymain->row(0)->trucknumber;
 		$material_description = $querymain->row(0)->materialdescription;
@@ -2845,7 +2875,6 @@ EOD;
 		$shedutax = $querymain->row(0)->shedutax;
 		$grandtotal = $querymain->row(0)->grandtotal;
 		$subtotal = $querymain->row(0)->subtotal;
-		$tin_number = $querymain->row(0)->tinnmber;
 		$container = $querymain->row(0)->container;
 		$serviceTaxPercent = $querymain->row(0)->serviceTaxPercent;
 	
@@ -2853,6 +2882,7 @@ EOD;
 						aspen_tblinwardentry.fThickness,
 						aspen_tblmatdescription.vDescription as description,
 						round((aspen_tblslittinginstruction.nWeight/1000),3) as weight,
+						aspen_tblslittinginstruction.nWidth as width,
 						$weihtamount as rate,
 						round(( $weihtamount * (aspen_tblslittinginstruction.nWeight/1000) ),2) as amount
 						from aspen_tblinwardentry
@@ -2884,7 +2914,7 @@ EOD;
 					<tr>
 						<td width="16%" align:"left"><h4>TIN:29730066589</h4></td>
 						<td width="70%"align="center" style="font-size:60px; font-style:italic; font-family: fantasy;"><h1>ASPEN STEEL PVT LTD</h1></td>
-						<td width="25%" align:"right"><h4>Service Tax Regn. No: (BAS)/AABCA4807HST001</h4></td>
+						<td width="25%" align:"right"><h4>GST Regn. No: 29AABCA4807H1ZS</h4></td>
 					</tr>
 					<tr>	
 						<td align="center" width="100%"><h4>Aspen Steel Pvt Ltd, Plot no 16E, Bidadi Industrial Area, Phase 2 Sector 1, Bidadi, Ramnagara-562105, <b>Email: aspensteel_unit2@yahoo.com </b></h4></td>
@@ -2906,7 +2936,9 @@ EOD;
 					</tr>
 					<tr>
 						<td width="30%" align:"left">
-							<h3>To M/s., &nbsp; '.$party_name.' , '.$address_one.' &nbsp;'.$address_two.',&nbsp;'.$city.'</h3>
+							<h3>To M/s., &nbsp; '.$party_name.' , '.$address_one.' &nbsp;'.$address_two.',&nbsp;'.$city.'
+								<br>Tin Number : '.$tinnmber.'
+							</h3>
 						</td>
 						<td width="40%" align="center"><h3> Desp. By Lorry No. : '.$trucknumber.'</h3></td>
 						<td width="33.33%" align:"right"><h3>Delivery: Full &nbsp; Part-1&nbsp; Part-2</h3></td>
@@ -2917,7 +2949,7 @@ EOD;
 						<td></td>				
 					</tr>';
 		$html .= '<tr>
-					<td width="30%" align:"left"><h3>Tin Number : '.$tinnmber.'</h3></td>
+					<td width="30%" align:"left"><h3>CGST Number : '.$cgstNumber.'</h3></td>
 					<td width="40%" align="center"><h3> Inward Date : '.$inwardDate.'<b> </b></h3> </td>
 					<td width="33.33%" align:"right"><h3>Inward Challan No.:'.$invoiceno.'</h3></td>
 				</tr>';
@@ -2933,19 +2965,25 @@ EOD;
 						<td align="center" width="100%"><hr color=#00CC33 size=5 width=100></td>
 					</tr>
 					<tr>
-						<th style="font-weight:bold;" width="13%"><h4>Sl. No.</h4></th>
-						<th style="font-weight:bold"  width="40%"><h4>Description</h4></th>
+						<th style="font-weight:bold;" width="10%"><h4>Sl. No.</h4></th>
+						<th style="font-weight:bold"  width="30%"><h4>Description</h4></th>
+						<th style="font-weight:bold"  width="13%"><h4>Width (in mm)</h4></th>
 						<th style="font-weight:bold" width="16.6%"><h4>Qty. In M/T</h4></th> 
 						<th style="font-weight:bold"  width="16.6%"><h4>Rate per M/T</h4></th>
 						<th style="font-weight:bold"  width="16.6%"><h4>Amount</h4></th>
 					</tr>
-					<tr><td align="center" width="100%"><hr color=#00CC33 size=5 width=100></td></tr>';
+					<tr><td align="center" width="100%"><hr color=#00CC33 size=5 width=100></td></tr>
+					<tr>
+						<td width="20%" style="font-weight:bold">Coil Width : '.$width.'</td>
+						<td style="font-weight:bold">Coil Thickness : '.$thickness.'</td>
+					</tr>';
 
 					if($queryBundleDetails->num_rows() > 0) {
 						foreach($queryBundleDetails->result() as $rowitem) {
 							$html .= '<tr>
-										<td width="13%"><b>'.$rowitem->nBundleNumber.'</b></td>
-										<td width="40%"><b>'.$rowitem->description.'</b></td>
+										<td width="10%"><b>'.$rowitem->nBundleNumber.'</b></td>
+										<td width="30%"><b>'.$rowitem->description.'</b></td>
+										<td width="13%"><b>'.$rowitem->width.'</b></td>
 										<td width="16.6%"><b>'.$rowitem->weight.'</b></td> 
 										<td width="16.6%"><b>'.$rowitem->rate.'</b></td> 
 										<td width="33%"><b>'.ceil($rowitem->amount).'</b></td>
@@ -2990,7 +3028,7 @@ EOD;
 				<td><b>'.$subtotal.'</b>&nbsp;&nbsp;</td>				
 			</tr>
 			<tr>
-				<td width="555px" border="0" align="left"><b>Service Tax @ '.$serviceTaxPercent.'%</b></td>
+				<td width="555px" border="0" align="left"><b>CGST @ '.$serviceTaxPercent.'%</b></td>
 				<td><b>'.$servicetax.'</b>&nbsp;&nbsp;</td>				
 			</tr>
 			<tr>
@@ -3290,7 +3328,14 @@ EOD;
 
 		$querymain = $this->db->query($sqlrpt);
 		
-		$sql1="Select now() as billdate, dReceivedDate as inwarddate, vAddress1 as add1, vAddress1 as add2, vCity as city, nPinId as pincode,nTinNumber as tin_number from aspen_tblinwardentry LEFT JOIN aspen_tblpartydetails ON aspen_tblpartydetails.nPartyId=aspen_tblinwardentry.nPartyId where 
+		$sql1="Select now() as billdate, 
+		dReceivedDate as inwarddate,
+		vAddress1 as add1, 
+		vAddress1 as add2,
+		vCity as city, nPinId as pincode,
+		nTinNumber as tin_number,
+		nCgstNumber as cgstNumber
+		from aspen_tblinwardentry LEFT JOIN aspen_tblpartydetails ON aspen_tblpartydetails.nPartyId=aspen_tblinwardentry.nPartyId where 
     aspen_tblpartydetails.nPartyName='".$pname."' and aspen_tblinwardentry.vIRnumber='".$partyid."'";
 
     	$querymain1 = $this->db->query($sql1);
@@ -3299,6 +3344,7 @@ EOD;
 
 		$inwarddate = date('d-m-Y',strtotime($querymain1->row(0)->inwarddate));
 		$tin_number = $querymain1->row(0)->tin_number;
+		$cgstNumber = $querymain1->row(0)->cgstNumber;
 		$billdate = date( 'd-m-Y',strtotime($querymain1->row(0)->billdate));
 		$add1= $querymain1->row(0)->add1;
 		$add2= $querymain1->row(0)->add2;
@@ -3331,7 +3377,7 @@ $html = '<table width="100%"  cellspacing="0" cellpadding="5" border="0">
 			<tr>
 				<td width="16%" align:"left"><h4>TIN:29730066589</h4></td>
 				<td width="70%"align="center" style="font-size:60px; font-style:italic; font-family: fantasy;"><h1>ASPEN STEEL PVT LTD</h1></td>
-				<td width="25%" align:"right"><h4>Service Tax Regn. No: (BAS)/AABCA4807HST001</h4></td>
+				<td width="25%" align:"right"><h4>GST Regn. No: 29AABCA4807H1ZS</h4></td>
 		</tr>
 		<tr>
 			<td align="center" width="100%"><h4>Branch At: Plot no 16E, Bidadi Industrial Area, Phase 2 Sector 1, Bidadi, Ramnagara-562105, <b>Email: aspensteel_unit2@yahoo.com </b></h4></td>
@@ -3352,7 +3398,9 @@ $html = '<table width="100%"  cellspacing="0" cellpadding="5" border="0">
 			<tr><td></td></tr>
 			<tr>
 				<td width="30%" align:"left">
-					<h3>To M/s., &nbsp; '.$pname.' , '.$add1.' &nbsp;'.$add2.',&nbsp;'.$city.'-'.$pinCode.'</h3>
+					<h3>To M/s., &nbsp; '.$pname.' , '.$add1.' &nbsp;'.$add2.',&nbsp;'.$city.'-'.$pinCode.'
+						<br>Tin Number : '.$tin_number.'
+					</h3>
 				</td>
 				<td width="40%" align="center"><h3> Desp. By Lorry No. : '.$txtoutward_num.'</h3> </td>
 				<td width="33.33%" align:"right"><h3>Delivery: Full &nbsp; Part-1&nbsp; Part-2</h3></td>
@@ -3360,7 +3408,7 @@ $html = '<table width="100%"  cellspacing="0" cellpadding="5" border="0">
 			<tr><td></td></tr>
 			<tr>	
 				<td width="30%" align:"left">
-					<h3>Tin Number : '.$tin_number.'</h3>
+					<h3>CGST Number : '.$cgstNumber.'</h3>	
 				</td>
 				<td width="40%" align="center"><h3> Inward Date : 	'.$inwarddate.'<b> </b></h3> </td>
 				<td width="33.33%" align:"right"><h3>Inward Challan No. : '.$inv_no.'</h3></td>
@@ -3433,7 +3481,7 @@ $html = '<table width="100%"  cellspacing="0" cellpadding="5" border="0">
 		</tr>
 		<tr>
 		<td width="89%">
-			<h3><b>Service Tax @ '.$serviceTaxPercent.'%</b></h3>
+			<h3><b>CGST @ '.$serviceTaxPercent.'%</b></h3>
 			</td> <td><h3>'.ceil($txtservicetax).'</h3></td>
 		</tr>
 		<tr>
@@ -3758,13 +3806,21 @@ $html = '<table width="100%"  cellspacing="0" cellpadding="5" border="0">
 		
 		$querymain = $this->db->query($sqlrpt);
 		
-			$sql1="Select now() as billdate, dReceivedDate	 as inwarddate, vAddress1 as add1, vAddress1 as add2, vCity as city, nTinNumber as tin_number from aspen_tblinwardentry LEFT JOIN aspen_tblpartydetails ON aspen_tblpartydetails .nPartyId=aspen_tblinwardentry.nPartyId  where 
+			$sql1="Select now() as billdate, 
+			dReceivedDate as inwarddate,
+			vAddress1 as add1,
+			vAddress1 as add2,
+			vCity as city,
+			nTinNumber as tin_number,
+			nCgstNumber as cgstNumber
+			from aspen_tblinwardentry LEFT JOIN aspen_tblpartydetails ON aspen_tblpartydetails .nPartyId=aspen_tblinwardentry.nPartyId  where 
     aspen_tblpartydetails.nPartyName='".$pname."' ";
 
 		$querymain1 = $this->db->query($sql1);
 		
 		$inwarddate = date('d-m-Y',strtotime($querymain1->row(0)->inwarddate));
 		$tin_number = $querymain1->row(0)->tin_number;
+		$cgstNumber = $querymain->row(0)->cgstNumber;
 		$billdate = date('d-m-Y',strtotime($querymain1->row(0)->billdate));
 		$add1= $querymain1->row(0)->add1;
 		$add2= $querymain1->row(0)->add2;
@@ -3795,7 +3851,7 @@ $html = '
 			<tr>
 				<td width="16%" align:"left"><h4>TIN:29730066589</h4></td>
 				<td width="70%"align="center" style="font-size:60px; font-style:italic; font-family: fantasy;"><h1>ASPEN STEEL PVT LTD</h1></td>
-				<td width="25%" align:"right"><h4>Service Tax Regn. No: (BAS)/AABCA4807HST001</h4></td>
+				<td width="25%" align:"right"><h4>GST Regn. No: 29AABCA4807H1ZS</h4></td>
 		</tr>
 		<tr>
 				<td align="center" width="100%"><h4>Aspen Steel Pvt Ltd, Plot no 16E, Bidadi Industrial Area, Phase 2 Sector 1, Bidadi, Ramnagara-562105, <b>Email: aspensteel_unit2@yahoo.com </b></h4></td>
@@ -3826,7 +3882,9 @@ $html = '
 			</tr>
 			<tr>
 				<td width="30%" align:"left">
-					<h3>To M/s., &nbsp; '.$pname.' , '.$add1.' &nbsp;'.$add1.',&nbsp;'.$city.'</h3>
+					<h3>To M/s., &nbsp; '.$pname.' , '.$add1.' &nbsp;'.$add1.',&nbsp;'.$city.'
+						<br>Tin Number : '.$tin_number.'
+					</h3>
 				</td>
 				<td width="40%" align="center"><h3> Desp. By Lorry No. : '.$txtoutward_num.'</h3> </td>
 				
@@ -3839,21 +3897,15 @@ $html = '
 				<td></td>				
 			</tr>';
 			
-		
-
-			
 		$html .= '
 			<tr>
-				
 				<td width="30%" align:"left">
-					<h3>Tin Number : '.$tin_number.'</h3>
+					<h3>CGST Number : '.$cgstNumber.'</h3>
 				</td>
 				<td width="40%" align="center"><h3> Inward Date : 	'.$inwarddate.'<b> </b></h3> </td>
 				<td width="33.33%" align:"right"><h3>Inward Challan No.:'.$inv_no.'</h3></td>
-				
 			</tr>';
 			
-
 		$html .= '
 			<tr>
 				<td align="center">&nbsp;</td>

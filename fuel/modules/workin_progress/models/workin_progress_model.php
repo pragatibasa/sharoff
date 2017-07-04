@@ -166,6 +166,8 @@ where aspen_tblinwardentry.vStatus = 'Work In Progress' or aspen_tblslittinginst
 		$sqlitem ="select aspen_tblcuttinginstruction.nSno as bundlenumber, DATE_FORMAT(aspen_tblcuttinginstruction.dDate, '%d-%m-%Y') AS processdate, aspen_tblcuttinginstruction.nLength as length, aspen_tblcuttinginstruction.nNoOfPieces as noofsheets, aspen_tblcuttinginstruction.nBundleweight as bundleweight from aspen_tblcuttinginstruction where aspen_tblcuttinginstruction.vIRnumber='".$partyid."' and aspen_tblcuttinginstruction.vStatus='WIP-Cutting'";
 		
 		$queryitem = $this->db->query($sqlitem);
+
+		date_default_timezone_set('Asia/Kolkata');
 		
 		$pdf = new TCPDF(PDF_PAGE_ORIENTATION, PDF_UNIT, PDF_PAGE_FORMAT, true, 'UTF-8', false);
 		$pdfname= 'cuttingslip_'.$partyid.'.pdf';
@@ -202,6 +204,12 @@ where aspen_tblinwardentry.vStatus = 'Work In Progress' or aspen_tblslittinginst
 				<td align="center" width="100%"></td>
 				
 		</tr>
+			<tr>
+				<td align="left"><h1><b>Slip Date:</b> '.date("d-m-Y").'</h1></td>
+			</tr>
+			<tr>
+				<td align="center" width="100%"></td>	
+			</tr>
 			<tr>
 				<td align="left"><h1><b>Coil Number:</b> '.$invoice.'</h1></td>
 			</tr><tr>
@@ -468,6 +476,8 @@ where aspen_tblinwardentry.vStatus = 'Work In Progress' or aspen_tblslittinginst
 		  from aspen_tblslittinginstruction where aspen_tblslittinginstruction.vIRnumber='".$partyid."'";
 
 		$queryitem = $this->db->query($sqlitem);
+
+		date_default_timezone_set('Asia/Kolkata');
 		
 		$pdf = new TCPDF(PDF_PAGE_ORIENTATION, PDF_UNIT, PDF_PAGE_FORMAT, true, 'UTF-8', false);
 		$pdfname= 'slittingslip_'.$partyid.'.pdf';
@@ -502,6 +512,13 @@ where aspen_tblinwardentry.vStatus = 'Work In Progress' or aspen_tblslittinginst
 				
 		</tr>
 		<tr>
+				<td align="center" width="100%"></td>
+				
+		</tr>
+		<tr>
+				<td align="left"><h1><b>Slip Date:</b> '.date("d-m-Y").'</h1></td>
+			</tr>
+			<tr>
 				<td align="center" width="100%"></td>
 				
 		</tr>

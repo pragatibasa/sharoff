@@ -64,7 +64,8 @@ $config['modules_allowed'] = array(
 	'company_details',
 	'inventory_tax_details',
 	'rate_direct_billing',
-	'bill_details'
+	'bill_details',
+	'search'
 	);
 //Configuration ASPEN PANEL
 $config['nav']['Aspen Steel']=array( 

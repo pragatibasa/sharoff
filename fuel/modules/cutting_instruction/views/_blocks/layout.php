@@ -233,10 +233,6 @@ for(key in json)
     $('input[name='+key+']').val(json[key]);
 }
 
-
-
-
-
 function deleteItem(pd){
 	document.getElementById('bundlenumber').value = pd;
 	var bundlenumber = $('#bundlenumber').val();
@@ -257,13 +253,6 @@ function deleteItem(pd){
     return false;
     }
   }
-
-
-
-
-
-
-
 
 function radioload(b, p, l,bn)
 {

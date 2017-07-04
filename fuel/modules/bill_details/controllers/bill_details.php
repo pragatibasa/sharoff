@@ -61,4 +61,10 @@ class bill_details extends Fuel_base_controller {
 		$billNo = $_REQUEST['billno'];
 		$this->bill_details_model->processDeleteBill( $billNo );
 	}
+
+	function display_search_results() {
+		$searchType = $_REQUEST['searchType'];
+		$searchValue = $_REQUEST['searchValue'];
+		
+	}
 }	

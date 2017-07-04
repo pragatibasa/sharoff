@@ -23,7 +23,7 @@
 <div id="main_content" style="overflow:hidden;"> 
 <div class="tab-boxpr"> 
 	<div style="width:640px;">
-    <a href="javascript:;"><div class="tabLinkpr activeLinkpr" id="contpr-1" style="float:left;"><h1>Main CoilDetails</h1></div></a> 
+    <a href="javascript:;"><div class="tabLinkpr activeL inkpr" id="contpr-1" style="float:left;"><h1>Main CoilDetails</h1></div></a> 
     <a href="javascript:;"><div class="tabLinkpr " id="contpr-2" style="float:left;"><h1>ProcessedDetail</h1></div></a>
 	</div>
 </div>
@@ -186,6 +186,8 @@ function showchild(parentid) {
                             thisdata["BundleNumber"] = item.bundlenumber;
                             thisdata["No of sheets"] = item.bundles;
                             thisdata["Weight in (Kgs)"] = item.weight;
+                            thisdata["Balance"] = item.balance;
+                            thisdata["Balance Weight"] = item.balanceWeight;
                             thisdata["Status"] = item.status;
 							}
 							else if(item.process=='Recoiling'){

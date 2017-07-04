@@ -72,7 +72,7 @@ class Workin_progress extends Fuel_base_controller {
 			 
 		}else{
 			$status = array("status"=>"No Results!");
-            echo json_encode($status);
+            return json_encode($status);
 		}
 		return json_encode($folders);
 	}

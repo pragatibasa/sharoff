@@ -3,7 +3,7 @@ if (!defined('BASEPATH')) exit('No direct script access allowed');
  
 class partyname_details_model extends Base_module_model {
  
- public $required = array('nPartyName' ,'vAddress1','vAddress2','vCity','nTinNumber','nPinId');
+ public $required = array('nPartyName' ,'vAddress1','vAddress2','vCity','nTinNumber','nPinId','nCgstNumber');
  protected $key_field = 'nPartyId';
  
     function __construct()
@@ -49,6 +49,7 @@ class partyname_details_model extends Base_module_model {
 			$fields['vAddress2']['label'] = 'Address2';
 			$fields['vCity']['label'] = 'City';
 			$fields['nTinNumber']['label'] = 'Tin number';
+			$fields['nCgstNumber']['label'] = 'CGST No.';
 			$fields['nPinId']['label'] = 'Pincode';
 			$options = $this->partyname_details_model->my_custom_options_country();
 			$fields['vCountry'] = array('type' => 'select','label' => 'Country', 'options' => $options
@@ -62,7 +63,8 @@ class partyname_details_model extends Base_module_model {
 			$fields['vCusraterm']= array('label' => 'Special Price : Reduce ');
 			$fields['vemailaddress']['label'] = 'Email Address';
 			$fields['ncstno']['label'] = 'CST No';
-			$partyname_details_model_options = $CI->partyname_details_model->options_list('nPartyId', 'nPartyName');$this->form_builder->set_fields($fields);
+			$partyname_details_model_options = $CI->partyname_details_model->options_list('nPartyId', 'nPartyName');
+			$this->form_builder->set_fields($fields);
 		    return $fields;
 	}
  

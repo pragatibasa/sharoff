@@ -8,9 +8,19 @@
 </script>
 
 <div class="tab-boxpr"> 
-	<div style="width:640px;">
-    <a href="javascript:;"><div class="tabLinkpr activeLinkpr" id="contpr-1" style="float:left;"><h1>Bil details</h1></div></a> 
+	<div style="width:600px;float:left;">
+    	<a href="javascript:;"><div class="tabLinkpr activeLinkpr" id="contpr-1" style="float:left;"><h1>Bil details</h1></div></a> 
     </div>
+    <span style="float:right;display:block;"> Search By : 
+    	<form style="display:inline;" method="GET" action="<?php echo fuel_url('search');?>">
+	    	<select name="searchType"> 
+	    		<option value="bill">Bill no.</option>
+	    		<option value="coil">Coil no.</option>
+	    	</select>
+	    	<input type="text" name="searchValue" style="width:250px;">
+	    	<input style="margin-top:-10px;" type="submit" value="Search"> 
+    	</form>
+    </span>
 </div>
 
 <!-- MAIN Workinprogress @START -->
@@ -24,7 +34,6 @@
 						<script src="<?=$this->asset->js_path('jquery.tablesorter', 'bill_details')?>	"></script>
 						<script src="<?=$this->asset->js_path('jquery.tablesorter.widgets', 'bill_details')?>	"></script>
 					  	<div id="DynamicGridp_2" >
-
 						</div>
 					</div>
 				</div>

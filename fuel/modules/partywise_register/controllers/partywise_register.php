@@ -60,6 +60,8 @@ class Partywise_register extends Fuel_base_controller {
 	}
 	
 	function list_party($partyname = '') {	
+		
+		
 		if(empty($partyname)) { 
 			$partyname = $_POST['party_account_name'];
 		}
@@ -169,6 +171,8 @@ class Partywise_register extends Fuel_base_controller {
 					$obj->bundles = $child->bundles;
 					$obj->weight = $child->weight;
 					$obj->status = $child->status;
+					$obj->balance = $child->balance;
+					$obj->balanceWeight = $child->balanceWeight;
 					$obj->process = $child->process;
 				} else if($child->process=='Recoiling'){
 					$obj->recoilnumber = $child->recoilnumber;
