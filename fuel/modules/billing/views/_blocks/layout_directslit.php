@@ -301,8 +301,14 @@ function triConvert(num){
 
             <input type="hidden" size="80" id="container" DISABLED/>
 </div>
+<div align="left">
+  <!--<input class="btn btn-danger"  style="cursor: pointer;" id="txtcancelbill" type="button" value="Cancel Bill" onclick="cancelbill();" />-->
+  Select type of GST tax to be applied  <br>
+  <input style="margin: 10px;" type="radio" class="gstType" name="gstType" value="Within">&nbsp; Within State</br>
+  <input style="margin: 10px;" type="radio" class="gstType" name="gstType" value="Inter">&nbsp; Inter State
+</div>
+
 <div align="right">
-  <input class="btn btn-success" style="cursor: pointer;" id="previewBill" type="button" value="Preview Bill"/>
 	<input class="btn btn-success" style="cursor: pointer;" id="txtbillpreview" type="button" value="Save and Print Bill" onclick="functionpdfslitprint();" />
 	<input class="btn btn-inverse" style="cursor: pointer;" id="txtbillloadingslip" type="button" value="Loading Slip" onclick="functionpdfslit();" />	
 </div>
@@ -548,6 +554,7 @@ function functionpdfslitprint(){
 	var container=$('#container').val();
 	var txtslitsubtotal=$('#txtslitsubtotal').val();
 	var bundlenumbers = $('#txtbundleids').val();
+  var gstType = $('input[name=gstType]:checked').val();
 
 	var dataString = 'billid='+billid+'&partyid='+partyid+'&pname='+pname+'&cust_add='+cust_add+'&cust_rm='+cust_rm+'&mat_desc='+mat_desc+'&thic='+thic+'&wid='+wid+'&len='+len+'&wei='+wei+'&inv_no='+inv_no+'&totalweight_check='+totalweight_check+'&totalrate='+totalrate+'&totalamt='+totalamt+'&txthandling='+txthandling+'&txtadditional_type='+txtadditional_type+'&txtamount_mt='+txtamount_mt+'&txtoutward_num='+txtoutward_num+'&txtscrap='+txtscrap+'&txtservicetax='+txtservicetax+'&txteductax='+txteductax+'&txtsecedutax='+txtsecedutax+'&txtgrandtotal='+txtgrandtotal+'&container='+container+'&txtslitsubtotal='+txtslitsubtotal+'&bundleNumbers='+bundlenumbers+'&txtadditional_type1='+txtadditional_type1+'&txtamount_mt1='+txtamount_mt1;
 	
@@ -558,7 +565,7 @@ function functionpdfslitprint(){
 	   success: function(msg) { 
 			alert('Preview Selected');
 			var partyid = $('#pid').val();
-			var dataStringone = 'partyid='+partyid+'&billno='+billid;
+			var dataStringone = 'partyid='+partyid+'&billno='+billid+'&gstType='+gstType;
 			var url = "<?php echo fuel_url('billing/slittingpdf');?>/?"+dataStringone;
 			window.open(url);
 		}  

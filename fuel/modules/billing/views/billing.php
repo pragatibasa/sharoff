@@ -1,6 +1,7 @@
 <link rel="stylesheet" type="text/css" href="<?=$this->asset->css_path('jquery.fancybox', 'billing')?>">
 <script src="<?=$this->asset->js_path('jquery.fancybox', 'billing')?>"></script>
 <script type="text/javascript">
+var taxDetails = JSON.parse('<?php echo $servicetaxpercent;?>');
 /* Get the currently selected azure account and ajax load the folder list. */
 function load_party_account() {
     var account_id = "<?php echo $partyid; ?>";
@@ -178,27 +179,44 @@ $(document).ready(function() {
         load_party_account();
     });*/
     load_party_account();
+    load_tax_details();
 	function getUrlVars() {
-    var vars = {};
-    var parts = window.location.href.replace(/[?&]+([^=&]+)=([^&]*)/gi, function(m,key,value) {
-        vars[key] = value;
-    });
-    return vars;
-}
-var pchk = getUrlVars()["processchk"];
-if(pchk=="Cutting"){
-	load_folder_account();
-	load_processing_account();
-	}
-	else if(pchk=="Slitting"){
-	load_folder_accountslit();
-	load_processing_accountslit();
-	}
-	else if(pchk=="Recoiling"){
-	load_recoil_account();
-	load_processing_accountrecoil();
+        var vars = {};
+        var parts = window.location.href.replace(/[?&]+([^=&]+)=([^&]*)/gi, function(m,key,value) {
+            vars[key] = value;
+        });
+        return vars;
+    }
+    var pchk = getUrlVars()["processchk"];
+    if(pchk=="Cutting"){
+    	load_folder_account();
+    	load_processing_account();
+    }
+    else if(pchk=="Slitting"){
+    	load_folder_accountslit();
+    	load_processing_accountslit();
+    }
+    	else if(pchk=="Recoiling"){
+    	load_recoil_account();
+    	load_processing_accountrecoil();
 	}
 });
+
+function load_tax_details() {
+    var partydata = [];
+    for(var key in taxDetails) {
+        var item = taxDetails[key];
+        var thisdata = {};
+        var selectbundle = '<input class="selectTax" onClick="addTaxes('+item.nTaxTypeId+')" type="checkbox" value="'+item.nTaxTypeId+'"/>';
+        thisdata["select"] = selectbundle;
+        thisdata["tax name"] = item.vTypeOfTax;
+        thisdata["tax percent"] = item.nPercentage;
+        partydata.push(thisdata);
+    }
+    $('#taxContent').html(CreateTableViewX(partydata, "lightPro", true)); 
+    let lcScrollbar = $('#taxContentHolder');
+    fleXenv.updateScrollBars(lcScrollbar);
+}
 </script>
 
 <div id="main_top_panel">
