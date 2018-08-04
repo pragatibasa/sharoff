@@ -64,6 +64,8 @@ $config['modules_allowed'] = array(
 	'company_details',
 	'inventory_tax_details',
 	'rate_direct_billing',
+	'bill_details',
+	'search'
 	);
 //Configuration ASPEN PANEL
 $config['nav']['Aspen Steel']=array( 
@@ -101,7 +103,7 @@ $config['nav']['Master'] = array('rate_details_width' => 'Rate Details Width',
 
 
 
-$config['nav']['Reports'] = array('stock_report' => ' Stock Report ',
+$config['nav']['Reports'] = array('stock_report' => 'Customer Stock Report ',
 										'customer_inward' => 'Customer Inward Report',
 										'customer_billing' => 'Customer Billing Report',
 										'customer_outward' => 'Customer Outward Report',
@@ -110,6 +112,7 @@ $config['nav']['Reports'] = array('stock_report' => ' Stock Report ',
 										//'partywise_report_holding' => 'Partywise Average ',
 										'total_average' => 'Total party holding',
 										'average_party' => 'Partywise Average Holding',
+										'bill_details' => 'Bill Details',
 );
 
 //'support'

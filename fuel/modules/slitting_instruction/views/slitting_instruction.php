@@ -1,3 +1,4 @@
+<link rel="stylesheet" type="text/css" href="<?=$this->asset->css_path('fuel_inline', 'fuel')?>">
 <script type="text/javascript">
 /* Get the currently selected azure account and ajax load the folder list. */
 function load_party_account() {

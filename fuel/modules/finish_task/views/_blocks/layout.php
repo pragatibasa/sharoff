@@ -1,4 +1,3 @@
-
 <style>.btn-inforecoil {
     background-color: #49AFCD;
     background-image: linear-gradient(to bottom, #5BC0DE, #2F96B4);
@@ -86,33 +85,62 @@
 <table width="100%" cellpadding="0" cellspacing="0" border="0">
 <tr>
 <td width="40%" align="left" valign="top">	
-<form id="cisave" method="post" action="">
-<div class="pad-10">
+<form id="cisave" method="post" action="" class="cutting hide">
+	<div class="pad-10">
 			<div id="bundlenumber"> Bundlenumber </div>
 			<input id= "txtbundlenumber" type="text"  name="bundlenumber" />
 		
-		</div>
-		<div class="pad-10">
-			<div id="actual"> Actual Numbers </div>
-			<input id= "txtactual" type="text"/> 
-			<input id="coilname" type="hidden" value="" name="coilname" />
-		</div>
-		<div class="pad-10">
-			<div id="weight"> Weight  (in Kgs)</div>
-			<input id= "txtweight" type="text" />
-		</div>
-		<div class="pad-10">
-			<!--<input id="save" type="button" value="EDIT/SAVE" onClick="functionsave();"/> &nbsp; &nbsp; &nbsp;
-			<input id="reset" type="reset" value="Reset" />-->
-			<input class="btn btn-success" type="button" value="Save" id="save_id" onClick="functionsave();"/> &nbsp; &nbsp; &nbsp;
-			<input class="btn btn-danger" id="reset" type="reset" value="Reset" />
-		</div>
-		<div class="pad-10">
-			<div id="bundleids"> </div>
-			<input id= "txtbundleids" type="hidden" /> 
-			<input id= "txtbundlestatus" type="hidden" /> 
-			<input id= "txtbundleweight" type="hidden" /> 
-		</div>
+	</div>
+	<div class="pad-10">
+		<div id="actual"> Actual Numbers </div>
+		<input id= "txtactual" type="text"/> 
+		<input id="coilname" type="hidden" value="" name="coilname" />
+	</div>
+	<div class="pad-10">
+		<div id="weight"> Weight  (in Kgs)</div>
+		<input id= "txtweight" type="text" />
+	</div>
+	<div class="pad-10">
+		<!--<input id="save" type="button" value="EDIT/SAVE" onClick="functionsave();"/> &nbsp; &nbsp; &nbsp;
+		<input id="reset" type="reset" value="Reset" />-->
+		<input class="btn btn-success" type="button" value="Save" id="save_id" onClick="functionsave();"/> &nbsp; &nbsp; &nbsp;
+		<input class="btn btn-danger" id="reset" type="reset" value="Reset" />
+	</div>
+	<div class="pad-10">
+		<div id="bundleids"> </div>
+		<input id= "txtbundleids" type="hidden" /> 
+		<input id= "txtbundlestatus" type="hidden" /> 
+		<input id= "txtbundleweight" type="hidden" /> 
+	</div>
+</form>
+<form class="slitting hide">
+	<div class="pad-10">
+		<div id="bundlenumber"> Slit Number </div>
+		<input id= "txtbundlenumber" disabled type="text"  name="bundlenumber" />
+		
+	</div>
+	<div class="pad-10">
+		<div id="length"> Length </div>
+		<input id= "txtLength" type="text" DISABLED/> 
+	</div>
+	<div class="pad-10">
+		<div id="Width"> Width </div>
+		<input id= "txtWidth" type="text"/> 
+	</div>
+	<div class="pad-10">
+		<div id="weight"> Weight (in Kgs)</div>
+		<input id= "txtSlittingWeight" type="text" />
+	</div>
+	<div class="pad-10">
+		<input class="btn btn-success" type="button" value="Save" id="save_id" onClick="functionSlittingSave();"/> &nbsp; &nbsp; &nbsp;
+		<input class="btn btn-danger" id="reset" type="reset" value="Reset" />
+	</div>
+	<div class="pad-10">
+		<div id="bundleids"> </div>
+		<input id= "txtbundleids" type="hidden" /> 
+		<input id= "txtbundlestatus" type="hidden" /> 
+		<input id= "txtbundleweight" type="hidden" /> 
+	</div>
 </form>
 </td>
 <td width="60%" align="left" valign="top">							
@@ -137,9 +165,9 @@
 		<input id="gobutton" type="button" value="Go" /> -->
 		<table align="right">
 		<tr>
-		<td><div align="right"><input class=" btn-info" id="finishci" type="button" value="Finsh Cutting" onClick="functionfinish();"/></div></td>
-		<td><div align="right"><input class=" btn-inforecoil" id="finishre" type="button" value="Finsh Recoil" onClick="functionrecoil();" hidden/></div></td>
-		<td><div align="right"><input class=" btn-infoslitting" id="finishsi" type="button" value="Finsh Slitting" onClick="functionslit();" hidden/></div></td>
+		<td><div align="right"><input class=" btn-info hide" id="finishci" type="button" value="Finsh Cutting" onClick="functionfinish();"/></div></td>
+		<td><div align="right"><input class=" btn-inforecoil hide" id="finishre" type="button" value="Finsh Recoil" onClick="functionrecoil();"/></div></td>
+		<td><div align="right"><input class=" btn-infoslitting hide" id="finishsi" type="button" value="Finsh Slitting" onClick="functionslit();"/></div></td>
 		</tr>
 		</table>
 	</div>
@@ -149,8 +177,31 @@
 </fieldset>
 </div>
 
-
 <script language="javascript" type="text/javascript">
+var task = '<?php echo $task;?>';
+var process = '<?php echo $process;?>';
+
+$('document').ready(function() {
+	if( task === 'wip' && process == 'Cutting') {
+		$('form.cutting').show();
+		$('#finishci').show();
+	} else if( task === 'wip' && process == 'Slitting' ) {
+		$('form.slitting').show();
+		$('#finishsi').show();
+	}
+	totalweightcount();
+
+	$('#txtSlittingWeight').on('keydown', function(e) {
+    var key   = e.keyCode ? e.keyCode : e.which;
+    if (!( [8, 9, 13, 27, 46].indexOf(key) !== -1 ||
+         (key == 65 && ( e.ctrlKey || e.metaKey  ) ) || 
+         (key >= 35 && key <= 40) ||
+         (key >= 48 && key <= 57 && !(e.shiftKey || e.altKey)) ||
+         (key >= 96 && key <= 105)
+       )) e.preventDefault();
+	});
+});
+
 function loadfolderlist(account, accname) {
 	$('#DynamicGrid_2').hide();
 	var loading = '<div id="DynamicGridLoading_2"> '+
@@ -176,20 +227,17 @@ function loadfolderlist(account, accname) {
             for (var i = 0; i < msg.length; i++) {
             var item = msg[i];
             var thisdata = {};
-			if(item.status=='WIP-Cutting'){
-			var selectbundle = '<input type="radio" SELECTED id="radio_'+item.bundlenumber+'" name="list" value="'+item.bundlenumber+'" onClick=selectbundleid('+item.bundlenumber+',"'+item.status+'",'+item.bundleweight+') />';
-			thisdata["select"] = selectbundle;
-			thisdata["bundlenumber"] = item.bundlenumber;
-            thisdata["date"] = item.date;
-            thisdata["length(in mm)"] = item.length;
-            thisdata["actualnumber"] = item.actualnumber;
-        //  thisdata["totalweight"] = item.totalweight;
-            thisdata["bundleweight(in Kgs)"] = item.bundleweight;
-            thisdata["status"] = item.status;
-        //  thisdata["weight"] = item.weight;
-            var edit = '<a class="ico_coil_edit" title="Edit" href="#" onClick=radioload('+item.bundlenumber+','+item.actualnumber+','+item.weight+')><img src="<?php echo img_path('iconset/ico_edit.png'); ?>" /></a>';
-            thisdata["action"] =  edit;
-			//thisdata["action"] = '';
+			if(item.status=='WIP-Cutting') {
+				var selectbundle = '<input type="radio" SELECTED id="radio_'+item.bundlenumber+'" name="list" value="'+item.bundlenumber+'" onClick=selectbundleid('+item.bundlenumber+',"'+item.status+'",'+item.bundleweight+') />';
+				thisdata["select"] = selectbundle;
+				thisdata["bundlenumber"] = item.bundlenumber;
+	            thisdata["date"] = item.date;
+	            thisdata["length(in mm)"] = item.length;
+	            thisdata["actualnumber"] = item.actualnumber;
+	            thisdata["bundleweight(in Kgs)"] = item.bundleweight;
+	            thisdata["status"] = item.status;
+	            var edit = '<a class="ico_coil_edit" title="Edit" href="#" onClick=radioload('+item.bundlenumber+','+item.actualnumber+','+item.weight+')><img src="<?php echo img_path('iconset/ico_edit.png'); ?>" /></a>';
+	            thisdata["action"] =  edit;
 			}
 			
 			else if(item.status=='WIP-Recoiling'){
@@ -208,9 +256,11 @@ function loadfolderlist(account, accname) {
 			thisdata["select"] = selectslit;
 			thisdata["slittnumber"] = item.slittnumber;
             thisdata["date"] = item.date;
+            thisdata["length"] = item.length;
             thisdata["width"] = item.width;
+            thisdata["weight"] = item.weight;
             thisdata["status"] = item.status;
-            var edit = '<a class="ico_coil_edit" title="Edit" href="#" onClick=editslit('+item.slittnumber+','+item.width+')><img src="<?php echo img_path('iconset/ico_edit.png'); ?>" /></a>';
+            var edit = '<a class="ico_coil_edit" title="Edit" href="#" onClick=editslit('+item.slittnumber+','+item.length+','+item.width+','+item.weight+')><img src="<?php echo img_path('iconset/ico_edit.png'); ?>" /></a>';
             thisdata["action"] =  edit;
 			}
 			else if(item.status=='Ready To Bill' && item.process=='Cutting'){
@@ -239,9 +289,11 @@ function loadfolderlist(account, accname) {
 			else if(item.status=='Ready To Bill' && item.process=='Slitting'){
 			
 			thisdata["select"] = '';
-			thisdata["slittnumber"] = item.slittnumber;
+			thisdata["slit number"] = item.slittnumber;
             thisdata["date"] = item.date;
+            thisdata["length"] = item.length;
             thisdata["width"] = item.width;
+            thisdata["weight"] = item.weight;
             thisdata["status"] = item.status;
         //    thisdata["process"] = item.process;
 			}
@@ -351,9 +403,7 @@ function radioslitt(s,r,w){
 	$("#finishci").hide();
 	$("#finishsi").show();
 	$("#finishre").hide();}
-	
 }
-
 
 var json =<?php echo($adata); ?>;
 for(key in json){
@@ -388,7 +438,7 @@ function functionsave(){
 		return false;
 	}
 else{
-	   var dataString = 'bundlenumber='+bundlenumber+'&actual='+actual+'&weight='+weight+'&pid='+pid;
+	   var dataString = 'bundlenumber='+bundlenumber+'&actual='+actual+'&weight='+weight+'&pid='+pid+'&process=Cutting';
 	   $.ajax({  
 	   type: "POST",  
 	   url : "<?php echo fuel_url('finish_task/saveweightdetails');?>/",  
@@ -404,7 +454,34 @@ else{
 	}
 }
 
+function functionSlittingSave() {
+	var pid  			= $('#pid').val();
+	var bundlenumber 	= $('.slitting').find('#txtbundlenumber').val();
+	var width 			= $('#txtWidth').val();
+	var weight 			= $('#txtSlittingWeight').val();
 
+	if( bundlenumber == '' || width == '' || weight == '' ) {
+		alert('INVALID');
+		return false;
+	} else {
+		if( process == 'Slitting') {
+			bundlenumber = $('.slitting').find('#txtbundlenumber').val();
+		}
+		
+	   	var dataString = 'bundlenumber='+bundlenumber+'&actual='+width+'&weight='+weight+'&pid='+pid+'&process='+process;
+	   	$.ajax({  
+	   		type: "POST",  
+	   		url : "<?php echo fuel_url('finish_task/saveweightdetails');?>/",  
+	   		data: dataString,
+	   		success: function(msg){
+				totalweightcount();
+	   			$('.slitting').find('#txtbundlenumber').val('');
+				$('#txtLength,#txtWidth,#txtSlittingWeight').val('');
+				refresh_folderlist();
+	   		}  
+	  	}); 
+	}	
+}
 
 function editrecoil(b, a, w){
 
@@ -418,15 +495,12 @@ document.getElementById('actual').innerHTML="Number of Recoil";
 }
 
 
-function editslit(b, a, w){
-
-document.getElementById('bundlenumber').innerHTML="Slit Number";
-document.getElementById('actual').innerHTML="Number of Slits";
-	//document.getElementById('txtweight').value = w;
-	document.getElementById('txtbundlenumber').value = b;
-	document.getElementById('txtactual').value = a;
-	$("#txtweight").hide();
-	$("#weight").hide();
+function editslit(b, l, a, w){
+	$('.slitting').find('#txtbundlenumber').val(b);
+	$('#txtLength').val(l);
+	$('#txtWidth').val(a);
+	$('#txtLength').val(l);
+	$("#txtSlittingWeight").val(w);
 }
 
 

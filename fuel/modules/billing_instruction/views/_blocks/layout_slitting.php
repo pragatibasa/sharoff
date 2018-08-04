@@ -60,6 +60,10 @@
 		</table>
 		<fieldset>
 			<legend>Slitting Details</legend>
+			<a href="<?php echo fuel_url('billing_instruction/?partyid='.$partyid.'&partyname='.$partyname.'&status');?>">Bill Residual Weight</a>
+			<br>
+			<br>
+				<div>Or select a bundle to bill </div>
 			<table width="100%" cellpadding="0" cellspacing="0" border="0">
 			<div id="contentsholder" class="flexcroll" style="width:100%; height:350px; overflow-x:hidden; overflow-y:auto;">
 			<div id="content" style="width:100%; min-height:350px; overflow:hidden;"> 
@@ -113,14 +117,17 @@ function loadfolderlist_slit(account, accname) {
             for (var i = 0; i < msg.length; i++) {
             var item = msg[i];
             var thisdata = {};
+			var disabled = '';
+            if(item.billingstatus == 'Billed')
+				disabled = "disabled=true";
 			
-			var selectbundle = '<input class="checkbundle" type="checkbox" id="check_'+item.serialnumber+'" name="list" value="'+item.serialnumber+'" onClick=updateTextAreaslit('+item.slitnumber+') />';
+			var selectbundle = '<input class="checkbundle" '+disabled+' type="checkbox" id="check_'+item.serialnumber+'" name="list" value="'+item.serialnumber+'" onClick=updateTextAreaslit('+item.slitnumber+') />';
 			thisdata["select"] = selectbundle;
 			thisdata["serialnumber"] = item.serialnumber;
-            thisdata["slitnumber"] = item.slitnumber;
+            thisdata["length"] = item.length;
             thisdata["width"] = item.width;
-            thisdata["sdate"] = item.sdate;
-            thisdata["number to be billed"] = item.noofsheetsbilled;
+            thisdata["weight"] = item.weight;
+            thisdata["slitting date"] = item.sdate;
             thisdata["Billing status"] = item.billingstatus;
 			//thisdata["action"] = '';
             partydata.push(thisdata);

@@ -31,11 +31,18 @@ class stock_report extends Fuel_base_controller {
 	{
 		if(!empty($this->data) && isset($this->data)) {
 			$vars['data']= $this->data;
+			$vars['chkuser']= $this->chk_user();
 			$this->_render('stock_report', $vars);
 		} else {
 			redirect(fuel_url('#'));
 		}
 	}
+
+	function chk_user(){
+		$chkuser = $this->stock_report_model->chk_user();
+		return $chkuser;
+	}	
+
 	function editCoil(){
 		echo $_GET['partyid'];
 	}

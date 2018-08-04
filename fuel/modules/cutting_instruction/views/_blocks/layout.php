@@ -44,7 +44,7 @@
 					<label><?=lang('length_txt')?></label>
 				</td>
 				<td> 
-					<input id="len" type="text" DISABLED />(in mm)
+					<input id="len" name="fLength" type="text" DISABLED />(in mm)
 				</td>
 			</tr>	
 			<tr>
@@ -58,7 +58,7 @@
 					<label><?=lang('weight_txt')?></label>
 				</td>
 				<td> 
-					<input id="wei" name="fQuantity" type="text" DISABLED/>(in Kgs)
+					<input id="wei" name="fQuantity" type="text" DISABLED/> (in Kgs)
 				</td>
 			</tr>
 		</table>
@@ -184,15 +184,15 @@ function loadfolderlist(account, accname) {
             thisdata["bundlenumber"] = item.bundlenumber;
 			thisdata["processdate"] = item.processdate;
             thisdata["length(in mm)"] = item.length;
-            thisdata["noofsheets"] = item.noofsheets;
+            thisdata["No of sheets"] = item.noofsheets;
             thisdata["weight(in Kgs)"] = item.weight;
-            //var dl = '<a class="ico_coil_delete" title="Delete" href="'+item.dl+'"><img src="<?php echo img_path('iconset/ico_cancel.png'); ?>" /></a>';
-			var dl = '<a class="ico_coil_delete" title="Delete" href="'+item.dl+'" onClick=deleteItem('+item.bundlenumber+')><img src="<?php echo img_path('iconset/ico_cancel.png'); ?>" /></a>';
-			
-            var edit = '<a class="ico_coil_edit" title="Edit" href="#" onClick=radioload('+item.bundlenumber+','+item.processdate+','+item.length+','+item.noofsheets+')><img src="<?php echo img_path('iconset/ico_edit.png'); ?>" /></a>';
-            thisdata["action"] =  edit+' '+dl;
-			//thisdata["action"] = '';
-            partydata.push(thisdata);
+            
+            if( item.status !== 'Billed' && item.status !== 'Ready To Bill') {
+				var dl = '<a class="ico_coil_delete" title="Delete" href="'+item.dl+'" onClick=deleteItem('+item.bundlenumber+')><img src="<?php echo img_path('iconset/ico_cancel.png'); ?>" /></a>';
+				var edit = '<a class="ico_coil_edit" title="Edit" href="#" onClick=radioload('+item.bundlenumber+','+item.processdate+','+item.length+','+item.noofsheets+')><img src="<?php echo img_path('iconset/ico_edit.png'); ?>" /></a>';
+	            thisdata["action"] =  edit+' '+dl;
+        	}
+			partydata.push(thisdata);
 			}
 			if (partydata.length) {
             // If there are files
@@ -233,10 +233,6 @@ for(key in json)
     $('input[name='+key+']').val(json[key]);
 }
 
-
-
-
-
 function deleteItem(pd){
 	document.getElementById('bundlenumber').value = pd;
 	var bundlenumber = $('#bundlenumber').val();
@@ -257,13 +253,6 @@ function deleteItem(pd){
     return false;
     }
   }
-
-
-
-
-
-
-
 
 function radioload(b, p, l,bn)
 {
@@ -328,7 +317,6 @@ function savechange(id){
 	if(parseInt(bundleweight) > parseInt(wei) ){
 		alert('Sorry the Total weight of bundle is more then weight of coil pleae edit the weight to progress!!');
 	}
-		
 	else{
 	$("#check_bar").html('<span style="font-size:20px; color:red">Please wait.. Saving might take some time..</span>');
 	'<i class="icon-refresh icon-spin"></i>';

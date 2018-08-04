@@ -60,6 +60,8 @@ class Partywise_register extends Fuel_base_controller {
 	}
 	
 	function list_party($partyname = '') {	
+		
+		
 		if(empty($partyname)) { 
 			$partyname = $_POST['party_account_name'];
 		}
@@ -74,7 +76,7 @@ class Partywise_register extends Fuel_base_controller {
 			$obj->thickness = $container->thickness;
 			$obj->width = $container->width;
 			$obj->weight = $container->weight;
-			$obj->pweight = $container->pweight;
+			$obj->pweight = round( $container->pweight );
 			$obj->status = $container->status;
 			$obj->process = $container->process;
 			$obj->ci = site_url('fuel/cutting_instruction').'/?partyid='.$container->coilnumber.'&partyname='.$partyname;
@@ -87,7 +89,7 @@ class Partywise_register extends Fuel_base_controller {
 			$folders[] = $obj;
 		}
 			echo json_encode($folders);
-		}else{
+		} else {
 			$status = array("status"=>"No Results!");
             echo json_encode($status);
 		}
@@ -163,28 +165,30 @@ class Partywise_register extends Fuel_base_controller {
 			foreach($childs as $child) {
 				$obj = new stdClass();
 				if($child->process=='Cutting'){
-				$obj->processdate = $child->processdate;
-				$obj->length = $child->length;
-				$obj->bundlenumber = $child->bundlenumber;
-				$obj->bundles = $child->bundles;
-				$obj->weight = $child->weight;
-				$obj->status = $child->status;
-				$obj->process = $child->process;
-				}
-				else if($child->process=='Recoiling'){
-				$obj->recoilnumber = $child->recoilnumber;
-				$obj->startdate = $child->startdate;
-				$obj->enddate = $child->enddate;
-				$obj->norecoil = $child->norecoil;
-				$obj->status = $child->status;
-				$obj->process = $child->process;
-				}
-				else if($child->process=='Slitting'){
-				$obj->slittnumber = $child->slittnumber;
-				$obj->date = $child->date;
-				$obj->width = $child->width;
-				$obj->status = $child->status;
-				$obj->process = $child->process;
+					$obj->processdate = $child->processdate;
+					$obj->length = $child->length;
+					$obj->bundlenumber = $child->bundlenumber;
+					$obj->bundles = $child->bundles;
+					$obj->weight = $child->weight;
+					$obj->status = $child->status;
+					$obj->balance = $child->balance;
+					$obj->balanceWeight = $child->balanceWeight;
+					$obj->process = $child->process;
+				} else if($child->process=='Recoiling'){
+					$obj->recoilnumber = $child->recoilnumber;
+					$obj->startdate = $child->startdate;
+					$obj->enddate = $child->enddate;
+					$obj->norecoil = $child->norecoil;
+					$obj->status = $child->status;
+					$obj->process = $child->process;
+				} else if($child->process=='Slitting'){
+					$obj->slittnumber = $child->slittnumber;
+					$obj->date = $child->date;
+					$obj->width = $child->width;
+					$obj->length = $child->length;
+					$obj->weight = $child->weight;
+					$obj->status = $child->status;
+					$obj->process = $child->process;
 				}
 				else if($child->process=='NULL'){
 				$status = array("status"=>"No Results!");

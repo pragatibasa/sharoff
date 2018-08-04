@@ -27,26 +27,31 @@ class customer_inward extends Fuel_base_controller {
 	{
 		if(!empty($this->data) && isset($this->data)) {
 			$vars['data']= $this->data;
+			$vars['chkuser']= $this->chk_user();
 			$this->_render('customer_inward', $vars);
 		} else {
 			redirect(fuel_url('#'));
 		}
 	}
+
+	function chk_user(){
+		$chkuser = $this->customer_inward_model->chk_user();
+		return $chkuser;
+	}
+
 	function editCoil(){
 		echo $_GET['partyid'];
 	}
 		
-		
-		 
-		function billing_pdf(){
+	
+	function billing_pdf(){
 		$queryStr = $_SERVER['QUERY_STRING'];
         parse_str($queryStr, $args);
 		$partyname = $args["partyname"];
 		$frmdate = $args["frmdate"];
         $todate = $args["todate"];
 		$this->load->module_model(CUSTOMER_INWARD_FOLDER, 'customer_inward_model');
-	$billgenerateb = $this->customer_inward_model->billgeneratemodel($partyname,$frmdate,$todate);
-	
+		$billgenerateb = $this->customer_inward_model->billgeneratemodel($partyname,$frmdate,$todate);
 	}
 		
 		

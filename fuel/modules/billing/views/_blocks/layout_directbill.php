@@ -6,12 +6,12 @@
 <tr>
 	<td>
 		<span><label>Bill Number:</label></span>
-	</td> 
+	</td>
 	<td>
-		<input id="billid" name="billid" type="text" onchange="billexist();"/>
+		<input id="billid" name="billid" type="text" value="<?php echo $billid; ?>" onchange="billexist();"/>
 	</td>
 </tr>
-</table>	
+</table>
 </fieldset>
 <fieldset>
 <legend>Coil Details:</legend>
@@ -19,11 +19,11 @@
 <tr>
 	<td>
 		<span><label><?=lang('party_id')?></label></span>
-	</td>  
+	</td>
 	<td>
 		<input id="pid" name="pid" type="text" value="<?php echo $partyid; ?>" DISABLED/>
 	</td>
-	<td> 
+	<td>
 		<span><label><?=lang('party_name')?></label></span>
 	</td>
 	<td>
@@ -36,69 +36,66 @@
 		<input id="cust_rm" name="vCusraterm" type="hidden" />
 	</td>
 </tr>
-			
-<tr>	
+
+<tr>
 	<td>
 		<span><label><?=lang('Material_description')?></label></span>
-	</td> 
+	</td>
 	<td>
 		<input id="mat_desc" name="vDescription" type="text" DISABLED/>
 	</td>
 	<td>
 		<span><label><?=lang('thickness_txt')?></label></span>
-	</td>  
+	</td>
 	<td width="100px;">
 		<input id="thic" name="fThickness" type="text" DISABLED/>
 	</td>
 </tr>
-				
+
 <tr>
 	<td>
 		<span><label><?=lang('width_txt')?></label></span>
-	</td> 
+	</td>
 	<td>
-		<input id="wid" name="fWidth" type="text" DISABLED/> 
+		<input id="wid" name="fWidth" type="text" DISABLED/>
 	</td>
 	<td>
 		<span><label><?=lang('length_txt')?></label></span>
 	</td>
-	<td> 
+	<td>
 		<input id="len" name="fLength" type="text" DISABLED/>
 	</td>
-</tr>	
+</tr>
 
 <tr>
 	<td>
 		<span><label><?=lang('weight_txt')?></label></span>
 	</td>
-	<td> 
+	<td>
 		<input id="wei" name="fQuantity" type="text" DISABLED />
 	</td>
 	<td>
 		<span><label>Invoice/Challan No</label></span>
 	</td>
-	<td> 
+	<td>
 		<input id="inv_no" name="vInvoiceNo"  type="text" DISABLED/>
 	</td>
-	<td> 
+	<td>
 		<input id="editbundlenumber" name="nSno"  type="hidden" />
 	</td>
 </tr>
 </table>
 </fieldset>
 </form>
-
-
-
 <table cellpadding="0" cellspacing="0" border="0" style="width:100%;">
 	<tr><td>
 	<fieldset>
-<legend>Aditional Charges:</legend> 
+<legend>Aditional Charges:</legend>
 	<div class="pad-10">
 	<!--	<input type="checkbox" id="additional_chk" name="additional_chk" value="" /> &nbsp; -->
-		<input type="text" id="txtadditional_type" name="txtadditional_type" value="" onfocus="if (this.value=='New Additional Charge Type') {this.value = '';}" onblur="if(this.value=='') {this.value = 'New Additional Charge Type';}" /> 
-		&nbsp; 
-		<input type="text" id="txtamount_mt" name="txtamount_mt" value="0"/> 
+		<input type="text" id="txtadditional_type" name="txtadditional_type" value="" onfocus="if (this.value=='New Additional Charge Type') {this.value = '';}" onblur="if(this.value=='') {this.value = 'New Additional Charge Type';}" />
+		&nbsp;
+		<input type="text" id="txtamount_mt" name="txtamount_mt" value="0"/>
 
 	</div>
 	</fieldset>
@@ -106,11 +103,11 @@
 	<td>&nbsp;</td>
 	<td>
 	<fieldset>
-<legend>Handling Charges:</legend> 
+<legend>Handling Charges:</legend>
 	<div class="pad-10">
 	<!--	<input type="checkbox" id="additional_chk" name="additional_chk" value="" /> &nbsp; -->
-		<input type="text" id="txthandling" name="txthandling"  /> 
-		&nbsp; 
+		<input type="text" id="txthandling" name="txthandling"  />
+		&nbsp;
 		*
 		&nbsp;
 		<!--<input type="text" id="txtamount_mt" name="txtamount_mt" value="0"/> -->
@@ -119,51 +116,41 @@
 	</div>
 	</fieldset>
 	</td>
-	
-	
-	
 	</tr>
-	
-	
 </table>
- 
 <form>
-
 <div>
 	<div id="bundle_number_text_label"> </div>
 	<input id="bundle_value" type="hidden" name="bundle_number"  />
-	
-</div>		
+</div>
 
 <form>
-
-
 <table cellpadding="0" cellspacing="0" border="0" width="100%">
 <tr>
 <td>
 <fieldset>
 <legend>Processing Charges:</legend>
 <div class="pad-10">
-	<input type="text" id="txtoutward_num" name="txtoutward_num" value="Outward Lorry Number" onfocus="if (this.value=='Outward Lorry Number') {this.value = '';}" onblur="if(this.value=='') {this.value = 'Outward Lorry Number';}" /> 
-	&nbsp; 
-	<input type="text" id="txtscrap" name="txtscrap" value="Scrap Sent" onfocus="if (this.value=='Scrap Sent') {this.value = '';}" onblur="if(this.value=='') {this.value = 'Scrap Sent';}" /> 
+	<input type="text" id="txtoutward_num" name="txtoutward_num" value="Outward Lorry Number" onfocus="if (this.value=='Outward Lorry Number') {this.value = '';}" onblur="if(this.value=='') {this.value = 'Outward Lorry Number';}" />
+	&nbsp;
+	<input type="text" id="txtscrap" name="txtscrap" value="Scrap Sent" onfocus="if (this.value=='Scrap Sent') {this.value = '';}" onblur="if(this.value=='') {this.value = 'Scrap Sent';}" />
 	<!--<input id="textsavelorry" type="button" value="Enter" onClick="savelorrydetails" />-->
 </div>
-								
+
 			<div id="contentsholderprocess" class="flexcroll" style="width:100%; height:200px; overflow-x:hidden; overflow-y:auto;">
-			<div id="contentprocess" style="width:100%; overflow:hidden;"> 
+			<div id="contentprocess" style="width:100%; overflow:hidden;">
 			<div id="DynamicGrid_2">
 				No Record!
 			</div>
 			</div>
 			</div>
-		
+
 <div class="pad-10">
 	Total: <input type="text" id="totalweight_check" DISABLED/> &nbsp;&nbsp;&nbsp;<input type="text" id="totalrate" DISABLED/>&nbsp; <input type="text" id="totalamt"  DISABLED/>&nbsp;&nbsp;
 </div>
 </fieldset>
 </form>
-							
+
 </div>
 </td>
 </tr>
@@ -176,17 +163,15 @@
 	<input type="hidden" id="txtsecedutax" DISABLED/>
 	<input type="hidden" id="txtgrandtotal" DISABLED/>
 	<!--<input id="txtcancelbill" type="button" value="Cancel Bill" />	-->
-	
+
 	<script type="text/javascript">
 //number to words
-
 function numbertowords() {
  var junkVal=document.getElementById('txtgrandtotal').value;
  junkVal=Math.floor(junkVal);
  var obStr=new String(junkVal);
  numReversed=obStr.split("");
  actnumber=numReversed.reverse();
-
  if(Number(junkVal) >=0){
   //do nothing
  }
@@ -202,11 +187,9 @@ function numbertowords() {
   alert('Oops!!!! the Number is too big to covertes');
   return false;
  }
-
  var iWords=["Zero", " One", " Two", " Three", " Four", " Five", " Six", " Seven", " Eight", " Nine"];
  var ePlace=['Ten', ' Eleven', ' Twelve', ' Thirteen', ' Fourteen', ' Fifteen', ' Sixteen', ' Seventeen', ' Eighteen', ' Nineteen'];
  var tensPlace=['dummy', ' Ten', ' Twenty', ' Thirty', ' Forty', ' Fifty', ' Sixty', ' Seventy', ' Eighty', ' Ninety' ];
-
  var iWordsLength=numReversed.length;
  var totalWords="";
  var inWords=new Array();
@@ -283,7 +266,6 @@ function numbertowords() {
   }
   j++;
  }
-
  function tens_complication() {
   if(actnumber[i]==0) {
    inWords[j]='';
@@ -301,9 +283,7 @@ function numbertowords() {
  }
  document.getElementById('container').value=finalWord;
 }
-
-//	
-
+//
 //simple function to convert from numbers to words from 1 to 999
 function triConvert(num){
     var Ones = new Array('', ' One', ' Two', ' Three', ' Four', ' Five', ' Six', ' Seven', ' Eight', ' Nine', ' Ten', ' eleven', ' twelve', ' thirteen', ' fourteen', ' fifteen', ' sixteen', ' seventeen', ' eighteen', ' nineteen');
@@ -311,16 +291,14 @@ function triConvert(num){
     var hundred = ' hundred';
     var output = '';
     var numString = num.toString();
-
     if (num == 0) {
         return 'dontAddBigSufix';
     }
-    //the case of 10, 11, 12 ,13, .... 19 
+    //the case of 10, 11, 12 ,13, .... 19
     if (num < 20) {
         output = Ones[num];
         return output;
     }
-
     //100 and more
     if (numString.length == 3) {
         output = Ones[parseInt(numString.charAt(0))] + hundred;
@@ -328,12 +306,10 @@ function triConvert(num){
         output += Ones[parseInt(numString.charAt(2))];
         return output;
     }
-
     output += tens[parseInt(numString.charAt(0))];
     output += Ones[parseInt(numString.charAt(1))];
-
     return output;
-}   
+}
 </script>
 
             <input type="hidden" size="80" id="container" DISABLED/>
@@ -344,12 +320,12 @@ function triConvert(num){
 
 <div align="right">
 	<input class="btn btn-success" style="cursor: pointer;" id="txtbillpreview" type="button" value="Preview and Print Bill" onclick="functionpdfprint();" />
-	<input class="btn btn-inverse" style="cursor: pointer;" id="txtbillloadingslip" type="button" value="Loading Slip" onclick="functionpdf();" />	
+	<input class="btn btn-inverse" style="cursor: pointer;" id="txtbillloadingslip" type="button" value="Loading Slip" onclick="functionpdf();" />
 </div>
-</div>	
+</div>
 
  <script>
- 
+var doubleServiceTax = "<?php echo $servicetaxpercent;?>";
  function cancelbill(){
 var billid = $('#billid').val();
 var pid = $('#pid').val();
@@ -357,22 +333,21 @@ var wei = $('#wei').val();
 	var checkstr =  confirm('Are you sure you want to Cancel this Bill?');
 	var dataString = {billid : billid,pid:pid,wei:wei};
 	if(checkstr == true){
-$.ajax({  
-	   type: "POST",  
-	   url : "<?php echo fuel_url('billing/directbillcancel');?>/",  
+$.ajax({
+	   type: "POST",
+	   url : "<?php echo fuel_url('billing/directbillcancel');?>/",
 		data: dataString,
 		datatype : "json",
 		success: function(){
 			alert("Cancelled Successfully");
 			$('#billid').val('');
 			window.location="<?php echo fuel_url('partywise_register');?>";
-	   }  
+	   }
 	});
 	}else{
     return false;
     }
 }
-
  function subtotalvalue(){
 	var partyid = $('#pid').val();
 	var txtamount_mt = $('#txtamount_mt').val();
@@ -381,20 +356,17 @@ $.ajax({
 	document.getElementById("txtnsubtotal").value = resultbundle;
 	taxspec();
 }
-
-
 function taxspec(){
 	var txtnsubtotal = $('#txtnsubtotal').val();
-	var servicetax= 0.12 * parseInt(txtnsubtotal);
-	var eductax= 0.02 * parseInt(servicetax);
-	var secedutax= 0.01 * parseInt(servicetax);
+	var servicetax =  Math.ceil(((parseFloat(doubleServiceTax) * parseInt(txtnsubtotal))/100));
+	var eductax= 0 * parseInt(servicetax);
+	var secedutax= 0 * parseInt(servicetax);
 	var grandtotal= parseInt(txtnsubtotal)+ parseInt(servicetax)+ parseInt(eductax)+ parseInt(secedutax);
 	document.getElementById("txtservicetax").value = servicetax;
 	document.getElementById("txteductax").value = eductax;
 	document.getElementById("txtsecedutax").value = secedutax;
 	document.getElementById("txtgrandtotal").value = grandtotal;
 }
-
   function functionpdfprint(){
 	subtotalvalue();
 	numbertowords();
@@ -403,7 +375,6 @@ function taxspec(){
 	{
 	alert("Please enter the Bill Number");
 	}
-
 	var partyid = $('#pid').val();
 	var pname = $('#pname').val();
 	var cust_add = $('#cust_add').val();
@@ -426,61 +397,57 @@ function taxspec(){
 	var txteductax=$('#txteductax').val();
 	var txtsecedutax=$('#txtsecedutax').val();
 	var txtgrandtotal=$('#txtgrandtotal').val();
-	var container=$('#container').val(); 
-	
-	
-	
-	
+	var container=$('#container').val();
+	var gstType = $('input[name=gstType]:checked').val();
+
 	var dataString =  'billid='+billid+'&partyid='+partyid+'&pname='+pname+'&cust_add='+cust_add+'&cust_rm='+cust_rm+'&mat_desc='+mat_desc+'&thic='+thic+'&wid='+wid+'&len='+len+'&wei='+wei+'&inv_no='+inv_no+'&totalweight_check='+totalweight_check+'&totalrate='+totalrate+'&totalamt='+totalamt+'&txthandling='+txthandling+'&txtadditional_type='+txtadditional_type+'&txtamount_mt='+txtamount_mt+'&txtoutward_num='+txtoutward_num+'&txtscrap='+txtscrap+'&txtservicetax='+txtservicetax+'&txteductax='+txteductax+'&txtsecedutax='+txtsecedutax+'&txtgrandtotal='+txtgrandtotal+'&container='+container;
-	$.ajax({  
-		   type: "POST",  
-		   url : "<?php echo fuel_url('billing/directbillingbill');?>/",  
+	$.ajax({
+		   type: "POST",
+		   url : "<?php echo fuel_url('billing/directbillingbill');?>/",
 		   data: dataString,
 		   success: function(msg)
-		   { 
+		   {
 		   alert('Preview Selected');
 		   //	$('#billid').val('');
-			//var partyid = $('#pid').val(); 
-			var dataStringone = 'billid='+billid+'&partyid='+partyid+'&pname='+pname+'&cust_add='+cust_add+'&cust_rm='+cust_rm+'&mat_desc='+mat_desc+'&thic='+thic+'&wid='+wid+'&len='+len+'&wei='+wei+'&inv_no='+inv_no+'&totalweight_check='+totalweight_check+'&totalrate='+totalrate+'&totalamt='+totalamt+'&txthandling='+txthandling+'&txtadditional_type='+txtadditional_type+'&txtamount_mt='+txtamount_mt+'&txtoutward_num='+txtoutward_num+'&txtscrap='+txtscrap+'&txtservicetax='+txtservicetax+'&txteductax='+txteductax+'&txtsecedutax='+txtsecedutax+'&txtgrandtotal='+txtgrandtotal+'&container='+container;
+			//var partyid = $('#pid').val();
+			var dataStringone = 'billid='+billid+'&partyid='+partyid+'&pname='+pname+'&cust_add='+cust_add+'&cust_rm='+cust_rm+'&mat_desc='+mat_desc+'&thic='+thic+'&wid='+wid+'&len='+len+'&wei='+wei+'&inv_no='+inv_no+'&totalweight_check='+totalweight_check+'&totalrate='+totalrate+'&totalamt='+totalamt+'&txthandling='+txthandling+'&txtadditional_type='+txtadditional_type+'&txtamount_mt='+txtamount_mt+'&txtoutward_num='+txtoutward_num+'&txtscrap='+txtscrap+'&txtservicetax='+txtservicetax+'&txteductax='+txteductax+'&txtsecedutax='+txtsecedutax+'&txtgrandtotal='+txtgrandtotal+'&container='+container+'&gstType='+gstType;
 			//alert(container);
 			var url = "<?php echo fuel_url('billing/billing_direct');?>/?"+dataStringone;
 		    window.open(url);
-		   }  
+		   }
 		});
-
 }
- 
- 
- 
+
+
+
  function functionpdf(){
  var pid = $('#pid').val();
  var pname = $('#pname').val();
  var mat_desc = $('#mat_desc').val();
- var txtoutward_num = $('#txtoutward_num').val();  
+ var txtoutward_num = $('#txtoutward_num').val();
  var totalrate = $('#totalrate').val();
  var totalweight_check = $('#totalweight_check').val();
  var totalamt = $('#totalamt').val();
-   
+
  var dataString = 'coilno='+pid+'&partyname='+pname+'&description='+mat_desc+'&lorryno='+txtoutward_num+'&totalrate='+totalrate+'&totalweight_check='+totalweight_check+'&totalamt='+totalamt;
- $.ajax({  
-     type: "POST",  
-    // url : "<?php echo fuel_url('billing_statement/billing_pdf');?>/",  
+ $.ajax({
+     type: "POST",
+    // url : "<?php echo fuel_url('billing_statement/billing_pdf');?>/",
      data: dataString,
      success: function(msg)
-     {  
-   
+     {
+
    var dataStringone =  'coilno='+pid+'&partyname='+pname+'&description='+mat_desc+'&lorryno='+txtoutward_num+'&totalrate='+totalrate+'&totalweight_check='+totalweight_check+'&totalamt='+totalamt;
    var url = "<?php echo fuel_url('billing/billingdirect_pdf');?>/?"+dataStringone;
       window.open(url);
-     }  
-  }); 
-
+     }
+  });
 }
- 
- 
- 
- 
- 
+
+
+
+
+
  var json = <?php echo($dirdata); ?>;
 for(key in json)
 {
@@ -488,39 +455,36 @@ for(key in json)
     $('input[name='+key+']').val(json[key]);
 	handling();
 }
-
 function functionpdf(){
  var pid = $('#pid').val();
  var pname = $('#pname').val();
  var mat_desc = $('#mat_desc').val();
- var txtoutward_num = $('#txtoutward_num').val();  
+ var txtoutward_num = $('#txtoutward_num').val();
  var totalrate = $('#totalrate').val();
  var totalweight_check = $('#totalweight_check').val();
  var totalamt = $('#totalamt').val();
-   
+
  var dataString = 'coilno='+pid+'&partyname='+pname+'&description='+mat_desc+'&lorryno='+txtoutward_num+'&totalrate='+totalrate+'&totalweight_check='+totalweight_check+'&totalamt='+totalamt;
- $.ajax({  
-     type: "POST",  
-    // url : "<?php echo fuel_url('billing_statement/billing_pdf');?>/",  
+ $.ajax({
+     type: "POST",
+    // url : "<?php echo fuel_url('billing_statement/billing_pdf');?>/",
      data: dataString,
      success: function(msg)
-     {  
-   
+     {
+
    var dataStringone =  'coilno='+pid+'&partyname='+pname+'&description='+mat_desc+'&lorryno='+txtoutward_num+'&totalrate='+totalrate+'&totalweight_check='+totalweight_check+'&totalamt='+totalamt;
    var url = "<?php echo fuel_url('billing/billingdirect_pdf');?>/?"+dataStringone;
       window.open(url);
-     }  
-  }); 
-
+     }
+  });
 }
-
 function handling(){
 	var pid = $('#pid').val();
 	var mat_desc=$('#mat_desc').val();
 	var dataString ='pid='+pid+'&mat_desc='+mat_desc;
-$.ajax({  
-	   type: "POST",  
-	   url : "<?php echo fuel_url('billing/handling');?>/",  
+$.ajax({
+	   type: "POST",
+	   url : "<?php echo fuel_url('billing/handling');?>/",
 		data: dataString,
 		datatype : "json",
 		success: function(msg){
@@ -528,16 +492,15 @@ $.ajax({
 		$.each(msg3, function(i, j){
 			 var value = j.value;
 			document.getElementById("txthandling").value = value;});
-	   }  
-	}); 
+	   }
+	});
 }
-
 function noofpcs(bundleid){
 	var partyid = $('#pid').val();
 	var dataString = 'bundleid='+bundleid+'&partyid='+partyid;
-$.ajax({  
-	   type: "POST",  
-	   url : "<?php echo fuel_url('billing/finalbillingcalculatenoofpcs');?>/",  
+$.ajax({
+	   type: "POST",
+	   url : "<?php echo fuel_url('billing/finalbillingcalculatenoofpcs');?>/",
 		data: dataString,
 		datatype : "json",
 		success: function(msg){
@@ -545,21 +508,15 @@ $.ajax({
 		$.each(msg3, function(i, j){
 			 var pcs = j.pcs;
 			document.getElementById("txttotalpcs").value = pcs;});
-	   }  
-	}); 
+	   }
+	});
 }
-
-
 function totalweight_check(){
 	var partyid = $('#pid').val();
 	var wei = $('#wei').val();
 	var weight = wei/1000;
 	document.getElementById("totalweight_check").value = weight;
 }
-
-
-
-
 function totalamt(){
 	var partyid = $('#pid').val();
 	var cust_add = $('#cust_add').val();
@@ -568,9 +525,9 @@ function totalamt(){
 	var mat_desc=$('#mat_desc').val();
 	var wei = $('#wei').val();
 	 var dataString = 'partyid='+partyid+'&cust_add='+cust_add+'&cust_rm='+cust_rm+'&txthandling='+txthandling+'&mat_desc='+mat_desc+'&wei='+wei;
-$.ajax({  
-	   type: "POST",  
-	   url : "<?php echo fuel_url('billing/totalamt');?>/",  
+$.ajax({
+	   type: "POST",
+	   url : "<?php echo fuel_url('billing/totalamt');?>/",
 		data: dataString,
 		datatype : "json",
 		success: function(msg){
@@ -578,13 +535,9 @@ $.ajax({
 		$.each(msg3, function(i, j){
 			 var amt = j.amt;
 			document.getElementById("totalamt").value = amt;});
-	   }  
-	}); 
+	   }
+	});
 }
-
-
-
-
 function totalrate(){
 	var partyid = $('#pid').val();
 	var cust_add = $('#cust_add').val();
@@ -592,9 +545,9 @@ function totalrate(){
 	var txthandling = $('#txthandling').val();
 	var mat_desc=$('#mat_desc').val();
 	 var dataString = 'partyid='+partyid+'&cust_add='+cust_add+'&cust_rm='+cust_rm+'&txthandling='+txthandling+'&mat_desc='+mat_desc;
-$.ajax({  
-	   type: "POST",  
-	   url : "<?php echo fuel_url('billing/totalrate');?>/",  
+$.ajax({
+	   type: "POST",
+	   url : "<?php echo fuel_url('billing/totalrate');?>/",
 		data: dataString,
 		datatype : "json",
 		success: function(msg){
@@ -602,39 +555,37 @@ $.ajax({
 		$.each(msg3, function(i, j){
 			 var rate = j.rate;
 			document.getElementById("totalrate").value = rate;});
-	   }  
-	}); 
+	   }
+	});
 }
-
 function directbilling(){
  var mat_desc=$('#mat_desc').val();
  var partyid = $('#pid').val();
 var cust_add=$('#cust_add').val();
 var cust_rm=$('#cust_rm').val();
  var txthandling=$('#txthandling').val();
-var wei=$('#wei').val(); 
+var wei=$('#wei').val();
 //noofpcs(actualnumberbundle);
  //totalvalue(actualnumberbundle);
  //totalengthvalue();
  //totaweightvalue();
  //totawidthvalue();
  var dataString = 'partyid='+partyid+'&mat_desc='+mat_desc+'&cust_add='+cust_add+'&cust_rm='+cust_rm+'&txthandling='+txthandling+'&wei='+wei;
-$.ajax({  
-    type: "POST",  
-    url : "<?php echo fuel_url('billing/directbilling');?>/",  
+$.ajax({
+    type: "POST",
+    url : "<?php echo fuel_url('billing/directbilling');?>/",
   data: dataString,
   success: function(msg){
   alert('Updated To Bill');
  refresh_folderlistthree();
-    }  
- }); 
+    }
+ });
 }
-
 function loadfolderlist(account, accname,bundlenumber) {
 handling();
 	$('#DynamicGrid_2').hide();
 	var loading = '<div id="DynamicGridLoading_2"> '+
-            	   ' <img src="<?=img_path() ?>loading.gif" /><span> Loading Bundle List... </span> '+ 
+            	   ' <img src="<?=img_path() ?>loading.gif" /><span> Loading Bundle List... </span> '+
     	    	   ' </div>';
     $("#content").empty();
 	$('#content').html(loading);
@@ -648,9 +599,9 @@ handling();
 			$('#DynamicGrid_2').hide();
 			$('#DynamicGridLoading_2').hide();
 			var loading1 = '<div id="error_msg"> '+
-                           'No Result!'+ 
+                           'No Result!'+
 						   '</div>';
-			$('#content').html(loading1);  
+			$('#content').html(loading1);
 			} else{
             var partydata = [];
             for (var i = 0; i < msg.length; i++) {
@@ -673,9 +624,9 @@ handling();
             // If there are files
 				$('#DynamicGrid_2').hide();
 				$('#DynamicGridLoading_2').hide();
-				$('#content').html(CreateTableViewX(partydata, "lightPro", true)); 
-				var lcScrollbar = $('#contentsholder');	 
-				fleXenv.updateScrollBars(lcScrollbar); 
+				$('#content').html(CreateTableViewX(partydata, "lightPro", true));
+				var lcScrollbar = $('#contentsholder');
+				fleXenv.updateScrollBars(lcScrollbar);
 				$(".ico_coil_delete").click(function (e) {
                 // When a delete icon is clicked, stop the href action
                 //  and do an ajax call to delete it instead
@@ -690,16 +641,15 @@ handling();
 				$('#DynamicGrid_2').hide();
 				$('#DynamicGridLoading_2').hide();
 				var loading1 = '<div id="error_msg"> '+
-							   'No Result!'+ 
+							   'No Result!'+
 							   '</div>';
-				$('#content').html(loading1); 
-				var lfScrollbar = $('#contentsholder');	 
-				fleXenv.updateScrollBars(lfScrollbar);  
+				$('#content').html(loading1);
+				var lfScrollbar = $('#contentsholder');
+				fleXenv.updateScrollBars(lfScrollbar);
                 }
 			}
     });
 }
-
 function loadprocessingcharge(account, accname) {
 	 var mat_desc=$('#mat_desc').val();
  var partyid = $('#pid').val();
@@ -711,12 +661,12 @@ totalweight_check();
 totalrate();
 totalamt();
 	var loading = '<div id="DynamicGridLoading_2"> '+
-            	   ' <img src="<?=img_path() ?>loading.gif" /><span> Loading Processing Details... </span> '+ 
+            	   ' <img src="<?=img_path() ?>loading.gif" /><span> Loading Processing Details... </span> '+
     	    	   ' </div>';
     $("#contentprocess").empty();
 	$('#contentprocess').html(loading);
     $.ajax({
-        type: "POST", 
+        type: "POST",
         url: "<?php echo fuel_url('billing/directbilling');?>",
         data: "partyid=" + account+ "&mat_desc="+mat_desc+"&txthandling="+txthandling+"&wei="+wei+"&cust_add="+cust_add+"&cust_rm="+cust_rm,
         dataType: "json"
@@ -725,9 +675,9 @@ totalamt();
 			$('#DynamicGrid_2').hide();
 			$('#DynamicGridLoading_2').hide();
 			var loading1 = '<div id="error_msg"> '+
-                           'No Result!'+ 
+                           'No Result!'+
 						   '</div>';
-			$('#contentprocess').html(loading1);  
+			$('#contentprocess').html(loading1);
 			} else{
             var partydata = [];
             for (var i = 0; i < msg.length; i++) {
@@ -745,9 +695,9 @@ totalamt();
             // If there are files
 				$('#DynamicGrid_2').hide();
 				$('#DynamicGridLoading_2').hide();
-				$('#contentprocess').html(CreateTableViewX(partydata, "lightPro", true)); 
-				var lcScrollbar = $('#contentsholderprocess');	 
-				fleXenv.updateScrollBars(lcScrollbar); 
+				$('#contentprocess').html(CreateTableViewX(partydata, "lightPro", true));
+				var lcScrollbar = $('#contentsholderprocess');
+				fleXenv.updateScrollBars(lcScrollbar);
 				$(".ico_coil_delete").click(function (e) {
                 // When a delete icon is clicked, stop the href action
                 //  and do an ajax call to delete it instead
@@ -762,17 +712,15 @@ totalamt();
 				$('#DynamicGrid_2').hide();
 				$('#DynamicGridLoading_2').hide();
 				var loading1 = '<div id="error_msg"> '+
-							   'No Result!'+ 
+							   'No Result!'+
 							   '</div>';
-				$('#content').html(loading1); 
-				var lfScrollbar = $('#contentsholderprocess');	 
-				fleXenv.updateScrollBars(lfScrollbar);  
+				$('#content').html(loading1);
+				var lfScrollbar = $('#contentsholderprocess');
+				fleXenv.updateScrollBars(lfScrollbar);
                 }
 			}
     });
 }
-
-
 function billexist(){
         var billid = $('#billid').val();
         var isANumber = isNaN(billid) === false;
@@ -783,19 +731,19 @@ function billexist(){
           if ( billid != "" )
           {
           var dataString = 'billid='+billid;
-         $.ajax({  
-         type: "POST",  
-         url : "<?php echo fuel_url('billing/checkbillno');?>/",  
+         $.ajax({
+         type: "POST",
+         url : "<?php echo fuel_url('billing/checkbillno');?>/",
          data: dataString,
-         success: function(msg){  
+         success: function(msg){
          if(msg == '1'){
-         
+
           alert('Billnumber Already Exists. Please Enter a new number!');
           $('#billid').val('');
              }
-             
-               }  
-           });  
+
+               }
+           });
         }
-}      
+}
  </script>

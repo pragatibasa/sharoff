@@ -27,50 +27,13 @@
 <table width="100%" cellpadding="0" cellspacing="0" border="0">
 <tr>
 <td rowspan="2">&nbsp;</td>
-<td align="center">
-<!--<table width="100%" cellpadding="0" cellspacing="0" border="0">
-<tr>
-<td width="15px">&nbsp;</td>
-<td align="left" id="action-newsannouncement" style="width:901px !important;">
-	<div style="width:40px; float:left">
-		&nbsp;
-	</div>
-	<div style="width:150px; float:left">
-		<a class="ico ico_inward_entry" href="<?=fuel_url('inward')?>">
-			<strong>Inward Entry</strong>
-		</a>
-	</div>
-	<div style="width:150px; float:left">
-		<a class="ico ico_partyname_details" href="<?=fuel_url('partyname_details/create')?>">
-			<strong>Create Partydetails</strong>
-		</a>
-	</div>
-	<div style="width:150px; float:left">
-		<a class="ico ico_material_description" href="<?=fuel_url('material_description/create')?>">
-			<strong>Material Description</strong>
-		</a>
-	</div>
-	<div style="width:100px; float:left">
-		<a class="ico ico_tax_details" href="<?=fuel_url('tax_details')?>">
-			<strong>Tax Details</strong>
-		</a>
-	</div>
-	<div style="width:180px; float:left">
-		<a class="ico ico_bill_description" href="<?=fuel_url('bill_description')?>">
-			<strong>Bill Description</strong>
-		</a>
-	</div>
-	<div style="width:140px; float:left">
-		<a class="ico ico_users" href="<?=fuel_url('users/create')?>">
-			<strong>Create User</strong>
-		</a>
-	</div>
+<td>
+	<?php if($super_admin == 'yes') { ?>
+		<p style="margin-left:16px;">Quick Links : <a href="<?=fuel_url('inward')?>">Inward Entry</a> &nbsp; | &nbsp; <a href="<?=fuel_url('partywise_register')?>">Partywise register</a> &nbsp; | &nbsp; <a href="<?=fuel_url('workin_progress')?>">Workin progress</a> &nbsp; | &nbsp; <a href="<?=fuel_url('bill_details')?>">Bill details</a></p>
+	<?php } else { ?>
+		<p style="margin-left:16px;">Quick Links : <a href="<?=fuel_url('partywise_register')?>">Partywise register</a> &nbsp; | &nbsp; <a href="<?=fuel_url('bill_details')?>">Bill details</a></p>
+	<?php } ?> 
 </td>
-<td width="15px">&nbsp;</td>
-</tr>
-</table>-->
-</td>
-
 <td rowspan="2">&nbsp;</td>
 </tr>
 <tr>
@@ -98,17 +61,8 @@
 				<td><?php echo $rinwardt->dInvoiceDate; ?></td>
 				<td><?php echo $rinwardt->vStatus; ?></td>
 			</tr>
-			<?php } ?>
-			<? }else { ?>
-			<tr>
-				<td colspan="4">
-					<b>No Record Present!</b>					
-					<div>
-						<a class="ico ico_inward" href="<?=fuel_url('inward')?>">Click here to Check Inward Registry.</a>
-					</div>
-				</td>
-			</tr>
-			<?php } ?>
+			<?php } 
+			 } ?>
 			</tbody>
 			</table>
 			</div>
@@ -217,8 +171,8 @@
 				<td><?php echo $rtax->type; ?></td>
 				<td><?php echo $rtax->percentage; ?></td>
 			</tr>
-			<?php } ?>
-			<? }else { ?>
+			<?php } 
+			}else { ?>
 			<tr>
 				<td colspan="4">
 					<b>No Record Present!</b>					

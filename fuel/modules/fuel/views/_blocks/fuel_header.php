@@ -128,14 +128,11 @@ $("#quantity_on_hand").change(function() {
 </script>
 <div id="fuel_header">
 	<div id="login_logout">
-		<div style="padding:0px;">
-			<div style="float:left; width:140px;">
-				<center>&nbsp; <?=lang('logged_in_as')?>
-			<a style="color:#3383AA !important;"><?=$user['user_name']?></a></center>
-			</div>
-			<div style="float:right; width:106px; padding-top:6px;">
-				<a href="<?=fuel_url('logout')?>"><div align="center" class="logoutbtn"><?=lang('logout')?></div></a>
-			</div>
+		<div style="float:left; width:140px;padding-top:8px;text-align:center;">
+			<?=lang('logged_in_as')?> <a style="color:#3383AA !important;"><?=$user['user_name']?></a>
+		</div>
+		<div style="float:right; width:106px; padding-top:6px;">
+			<a href="<?=fuel_url('logout')?>"><div align="center" class="logoutbtn"><?=lang('logout')?></div></a>
 		</div>
 	</div>
 </div>

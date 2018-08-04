@@ -1,0 +1,20 @@
+<?php
+$lang['module_workin_progress'] = 'Workin Progress';
+$lang['search_result'] = 'Search Results';
+$lang['bill_details'] = 'Bill details';
+$lang['coil_details'] = 'Coil details';
+$lang['bill_number'] = 'Bill Number';
+$lang['bill_date'] = 'Bill Date';
+$lang['coil_number'] = 'Coil Number';
+$lang['total_weight'] = 'Total Weight';
+$lang['lorry_number'] = 'Lorry Number';
+$lang['weight_rate'] = 'Weight Rate';
+$lang['bill_type'] = 'Bill Type';
+$lang['coil_details'] = 'Coil Details';
+$lang['billed_weight'] = 'Billed Weight';
+$lang['bundle_details'] = 'Bundle Details';
+$lang['billed_bundle_details'] = 'Billed Bundle Details';
+$lang['coil_thickness'] = 'Coil Thickness';
+$lang['coil_width'] = 'Coil Width';
+$lang['coil_weight'] = 'Coil Weight';
+$lang['material_type'] = 'Material Type';

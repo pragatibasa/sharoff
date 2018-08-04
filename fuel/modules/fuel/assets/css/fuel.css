@@ -255,6 +255,7 @@ div#fuel_left_panel_inner li.active ul li.active a { text-decoration: underline;
 .ico_company_details {  background-image: url(../images/iconset/ico_company.jpg); }
 .ico_material_description {  background-image: url(../images/iconset/ico_material_description.png); }
 .ico_bill_description {  background-image: url(../images/iconset/ico_bill_description.png); }
+.ico_bill_summary {  background-image: url(../images/iconset/ico_billing_summary.png); }
 .ico_partyname_details {  background-image: url(../images/iconset/ico_partyname_details.png); }
 .ico_rate_details_width {  background-image: url(../images/iconset/ico_rate_details_width.png); }
 .ico_rate_details_length {  background-image: url(../images/iconset/ico_rate_details_length.png); }

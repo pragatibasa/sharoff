@@ -3,13 +3,11 @@ require_once(FUEL_PATH.'/libraries/Fuel_base_controller.php');
 
 class Dashboard extends Fuel_base_controller {
 	
-	function __construct()
-	{
+	function __construct() {
 		parent::__construct();
 	}
 	
-	function index()
-	{
+	function index() {
 		$this->load->config('slitting_instruction');
 		$this->load->helper('array');
 		$this->load->helper('file');

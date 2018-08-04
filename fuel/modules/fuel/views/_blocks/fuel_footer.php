@@ -17,7 +17,6 @@
 	<table width="100%" cellpadding="0" cellspacing="0">
 	<tr>
 		<td width="100%" align="center"><span style="font-size:11px !important; color:#ffffff !important;"><?=lang('fuel_copyright', date('Y'))?></span>
-		<?=lang('fuel_developed_by', FUEL_VERSION)?>
 		</td>
 	</tr>
 	</table>

@@ -36,8 +36,5 @@ $(document).ready(function() {
 <div id="main_top_panel">
 	<h2 class="ico ico_azure_storage"><?=lang('module_cutting_instruction')?></h2>
 </div>
-
-<?php include_once(CUTTING_INSTRUCTION_PATH.'views/_blocks/toolbar.php');?>		
-<?php include_once(CUTTING_INSTRUCTION_PATH.'views/_blocks/layout.php');?>		
-
- <input type="hidden" id="textstorage" name="textstorage" />   
+<?php include_once(CUTTING_INSTRUCTION_PATH.'views/_blocks/layout.php');?>
+<input type="hidden" id="textstorage" name="textstorage" />

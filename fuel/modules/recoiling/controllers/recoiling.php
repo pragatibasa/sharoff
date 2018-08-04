@@ -22,14 +22,15 @@ class recoiling extends Fuel_base_controller {
 		$this->data = $this->recoiling_model->example();
 		if(isset($this->data)) {
 			if(isset($this->data[0]))  {
-		}
+			}
 		
-		$this->uri->init_get_params();
-		$this->partyid = (string) $this->input->get('partyid', TRUE);
-		$this->partyname = (string) $this->input->get('partyname', TRUE);
+			$this->uri->init_get_params();
+			$this->partyid = (string) $this->input->get('partyid', TRUE);
+			$this->partyname = (string) $this->input->get('partyname', TRUE);
 		
-	}		
-}	
+		}		
+	}
+	
 	function index()
 	{
 		if(!empty($this->data) && isset($this->data)) {

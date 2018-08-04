@@ -49,8 +49,6 @@ function formdisplay()
 		return parent::options_list($key, $val,$where,$order);
 	}
 	 
-	 
-	 
 	function savetax() 
 	 {
 	 	   if( isset( $_POST['taxtype']) && isset( $_POST['percentage'])){
@@ -77,7 +75,6 @@ function formdisplay()
 
 		function deletetax($taxid='') {
 		$sql = " DELETE FROM aspen_tbltaxdetails WHERE nTaxTypeId ='".$taxid." '";
-		//echo $sql; die();
 		$query = $this->db->query($sql);
 	}
 	 

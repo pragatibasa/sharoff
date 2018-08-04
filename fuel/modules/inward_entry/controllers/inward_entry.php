@@ -54,6 +54,4 @@ class Inward_entry extends Fuel_base_controller {
 		}
 		
 	}
-	
-
 }

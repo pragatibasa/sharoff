@@ -1,4 +1,4 @@
-<?php include_once(PARTYWISE_REGISTER_PATH.'views/_blocks/toolbar.php');?>	
+<?php include_once(PARTYWISE_REGISTER_PATH.'views/_blocks/toolbar.php');?>
 <script language="javascript" type="text/javascript">
   $(window).load(function() {
 	$("tr#childlist").hide();
@@ -23,7 +23,7 @@
 <div id="main_content" style="overflow:hidden;"> 
 <div class="tab-boxpr"> 
 	<div style="width:640px;">
-    <a href="javascript:;"><div class="tabLinkpr activeLinkpr" id="contpr-1" style="float:left;"><h1>Main CoilDetails</h1></div></a> 
+    <a href="javascript:;"><div class="tabLinkpr activeL inkpr" id="contpr-1" style="float:left;"><h1>Main CoilDetails</h1></div></a> 
     <a href="javascript:;"><div class="tabLinkpr " id="contpr-2" style="float:left;"><h1>ProcessedDetail</h1></div></a>
 	</div>
 </div>
@@ -73,12 +73,6 @@
 		<input id="totalweight_calcualation" type="text" DISABLED/>(in Kgs)  
 		&nbsp; &nbsp; &nbsp;
 </div>
-
-
-
-
-
-
 <script language="javascript" type="text/javascript">
 function totalweight_check(){
 	var party_account_name = $('#party_account_name').val();
@@ -100,8 +94,6 @@ $.ajax({
 </script>
 
 <script type="text/javascript">
-
-
 	$("#party_account_name").change(function(data) {
 		 var account_id = $("#party_account_name").val();
 		var loading = '<div id="DynamicGridLoadingp_2"> '+
@@ -158,15 +150,8 @@ $.ajax({
 			$('#DynamicGridp_2').html(mediaClass);
 			 $("#myTabels").tablesorter();
 			totalweight_check();
-				
-		
 		});
-
-	
 });
-
-
-
 
 function showchild(parentid) {
 	$('#pr_container_name').html(parentid);
@@ -201,6 +186,8 @@ function showchild(parentid) {
                             thisdata["BundleNumber"] = item.bundlenumber;
                             thisdata["No of sheets"] = item.bundles;
                             thisdata["Weight in (Kgs)"] = item.weight;
+                            thisdata["Balance"] = item.balance;
+                            thisdata["Balance Weight"] = item.balanceWeight;
                             thisdata["Status"] = item.status;
 							}
 							else if(item.process=='Recoiling'){
@@ -211,10 +198,12 @@ function showchild(parentid) {
 							thisdata["Status"] = item.status;
 							}
 							else if(item.process=='Slitting'){
-							thisdata["SlittNumber"] = item.slittnumber;
-							thisdata["Date"] = item.date;
-							thisdata["Width in(mm)"] = item.width;
-							thisdata["Status"] = item.status;
+								thisdata["SlittNumber"] = item.slittnumber;
+								thisdata["Date"] = item.date;
+								thisdata["Width in(mm)"] = item.width;
+								thisdata["Length in(mm)"] = item.length;
+								thisdata["Weight in(kgs)"] = item.weight;
+								thisdata["Status"] = item.status;
 							}
 							else if(item.process=='NULL'){
 							'<div id="error_msg"> '+
@@ -248,4 +237,4 @@ function cuttinginstruction(id)
 	var coilnumber = $('#vno'+id).val();
 	document.getElementById('partnamecheck').value = coilnumber;
 }
-</script>   
+</script>

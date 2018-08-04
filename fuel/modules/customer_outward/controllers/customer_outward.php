@@ -27,18 +27,23 @@ class customer_outward extends Fuel_base_controller {
 	{
 		if(!empty($this->data) && isset($this->data)) {
 			$vars['data']= $this->data;
+			$vars['chkuser']= $this->chk_user();
 			$this->_render('customer_outward', $vars);
 		} else {
 			redirect(fuel_url('#'));
 		}
 	}
+
+	function chk_user(){
+		$chkuser = $this->customer_outward_model->chk_user();
+		return $chkuser;
+	}	
+
 	function editCoil(){
 		echo $_GET['partyid'];
 	}
 		
-		
-		 
-		function billing_pdf(){
+	function billing_pdf(){
 		$queryStr = $_SERVER['QUERY_STRING'];
         parse_str($queryStr, $args);
 		$partyname = $args["partyname"];

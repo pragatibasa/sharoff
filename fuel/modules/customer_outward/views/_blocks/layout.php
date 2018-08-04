@@ -51,21 +51,15 @@
 		
 			
 </table>
-
-
-
 <div class="pad-10">
 
 			<input class="btn btn-success"  type="button" value="Click Here" id="save_id" onClick="functionpdf();"/> &nbsp; &nbsp; &nbsp; 
-			<input class="btn btn-success"  type="button" value="Export to Excel" id="export" onclick="tableToExcel('DynamicGridp_2', 'Customer Outward Report')" hidden/> &nbsp; &nbsp; &nbsp; 
+			<a style="border:none;padding:0px;" href="#" id="export" onclick="tableToExcel('DynamicGridp_2', 'Customer Inward Report')"><input class="btn btn-success"  type="button" value="Export to Excel" hidden/></a> &nbsp; &nbsp; &nbsp; 
 			<div id="check_bar" style="padding-top:10px;">&nbsp;</div>
 
 </div>
 
 </form>
-
-
-
 <div class="tab-boxpr"> 
 	<div style="width:640px;">
     <a href="javascript:;"><div class="tabLinkpr activeLinkpr" id="contpr-1" style="float:left;"><h1>Outward Report</h1></div></a> 
@@ -91,23 +85,8 @@
 </div>
 
 </fieldset>
-
-
-
-
-
-
-
-</div>
-<!-- @END -->
-
-<!-- @END -->
-</div>
-
 <?php //echo $totalweight; ?>
-<input id="partnamecheck" type="hidden" value="" name="partnamecheck" />
-
-	
+<input id="partnamecheck" type="hidden" value="" name="partnamecheck" />	
 <div align="right">
 <label>Total Weight</label>
 		<input id="totalweight_calcualation" type="text" DISABLED/>(in Kgs)  
@@ -115,27 +94,16 @@
 </div>
 
 <script language="javascript" type="text/javascript">
-
-
-
-	
 var section = "demos/datepicker";
 	$(function() {
 		$( "#datepicker" ).datepicker();
 	});
-
-
 
 $(document).ready(function() { 
 
 	 $("#export").hide();
 
 });
-
-
-
-
-
 
 function totalweight_check(){
 		 var partyname = $("#party_account_name").val();
@@ -160,52 +128,19 @@ $.ajax({
 
 <script type="text/javascript">
 
-/*function functionpdf(){
-	var party_account_name = $('#party_account_name').val();
-	var selector = $('#selector').val();
-	var selector1 = $('#selector1').val();
-		//		alert(selector);
-		if(party_account_name == 'Select' || selector == ' ' || selector1  == ' ')
-	{ 
-	alert("Please select the Partyname ");
-	}
-	else {
-		$("#check_bar").html('<span style="font-size:20px; color:red">Please wait.. Loading PDF might take some time..</span>');
-	
-	var dataString =  'partyname='+party_account_name+'&frmdate='+selector+'&todate='+selector1;
-	$.ajax({  
-		   type: "POST",  
-		  // url : "<?php echo fuel_url('billing_statement/billing_pdf');?>/",  
-		//   data: dataString,
-		   success: function(msg)
-		   {  
-			$("#check_bar").html('');
-			var dataString =  'partyname='+party_account_name+'&frmdate='+selector+'&todate='+selector1;
-			var url = "<?php echo fuel_url('customer_outward/billing_pdf');?>/?"+dataString;
-		    window.open(url);
-		   }  
-		}); 
-}
-}*/
-
-
-
-
-
 function functionpdf() {
 
 		 var party_account_name = $("#party_account_name").val();
 		 var selector = $('#selector').val();
 		 var selector1 = $('#selector1').val();
-		 $("#export").show();
+
 	if(party_account_name == 'Select' && selector == '' && selector1  == '' )
 	{ 
-	alert("Please select all the values");
-
-	}
-	else 
-	 {
-	   $.ajax({
+		alert("Please select all the values");
+		return;
+	} else {
+	 	$("#export").show();
+	   	$.ajax({
         type: "POST",
         url: "<?php echo fuel_url('customer_outward/export_party');?>",
 		data: 'partyname='+party_account_name+'&frmdate='+selector+'&todate='+selector1 ,
@@ -259,17 +194,37 @@ function functionpdf() {
 	}
 }
 
+function tableToExcel() {
+		var tab_text = '<html xmlns:x="urn:schemas-microsoft-com:office:excel">';
+tab_text = tab_text + '<head><xml><x:ExcelWorkbook><x:ExcelWorksheets><x:ExcelWorksheet>';
 
-var tableToExcel = (function() {
-  var uri = 'data:application/vnd.ms-excel;base64,'
-    , template = '<html xmlns:o="urn:schemas-microsoft-com:office:office" xmlns:x="urn:schemas-microsoft-com:office:excel" xmlns="http://www.w3.org/TR/REC-html40"><head><!--[if gte mso 9]><xml><x:ExcelWorkbook><x:ExcelWorksheets><x:ExcelWorksheet><x:Name>{worksheet}</x:Name><x:WorksheetOptions><x:DisplayGridlines/></x:WorksheetOptions></x:ExcelWorksheet></x:ExcelWorksheets></x:ExcelWorkbook></xml><![endif]--></head><body><table>{table}</table></body></html>'
-    , base64 = function(s) { return window.btoa(unescape(encodeURIComponent(s))) }
-    , format = function(s, c) { return s.replace(/{(\w+)}/g, function(m, p) { return c[p]; }) }
-	return function(table, name) {
-    if (!table.nodeType) table = document.getElementById(table)
-    var ctx = {worksheet: name || 'Worksheet', table: table.innerHTML}
-		window.location.href = uri + base64(format(template, ctx))
-	}
-})()
+tab_text = tab_text + '<x:WorksheetOptions><x:Panes></x:Panes></x:WorksheetOptions></x:ExcelWorksheet>';
+tab_text = tab_text + '</x:ExcelWorksheets></x:ExcelWorkbook></xml></head><body>';
+
+tab_text = tab_text + '<table><tr><td style="font-size:60px; font-style:italic; font-family: fantasy;"><h1>ASPEN STEEL PVT LTD</h1></td></tr><tr><td><h4>Branch At: Plot no 16E, Bidadi Industrial Area, Phase 2 Sector 1, Bidadi, Ramnagara-562105, <b>Email: aspensteel_unit2@yahoo.com </b></h4></td></tr><tr><td><h4>Head Office At: 54/1, Medahalli, Old Madras Road, Bangalore-560049</h4></td></tr><tr><td></td></tr></table>';
+
+tab_text = tab_text + "<table border='1px'>";
+tab_text = tab_text + $('#myTabels').html();
+tab_text = tab_text + '</table>';
+
+tab_text = tab_text + '<table border="1px"><tr></tr><tr><td></td><td></td><td></td><td></td><td></td><td></td><td><h3>Total Weight : </td><td>'+$('#totalweight_calcualation').val()+' ( in kgs )</h3></td><td></td></tr></table></body></html>';
+
+var data_type = 'data:application/vnd.ms-excel';
+
+var ua = window.navigator.userAgent;
+var msie = ua.indexOf("MSIE ");
+
+if (msie > 0 || !!navigator.userAgent.match(/Trident.*rv\:11\./)) {
+    if (window.navigator.msSaveBlob) {
+        var blob = new Blob([tab_text], {
+            type: "application/csv;charset=utf-8;"
+        });
+        navigator.msSaveBlob(blob, $('#party_account_name').val()+'_Outward_Report.xls');
+    }
+} else {
+	$('#export').attr('href', data_type + ', ' + encodeURIComponent(tab_text));
+    $('#export').attr('download', $('#party_account_name').val()+'_Outward_Report.xls');
+}
+}
 
 </script>  

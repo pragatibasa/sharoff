@@ -71,10 +71,12 @@ class workin_progress_model extends Base_module_model {
 	
 	function toolbar_list()
 	{
-		$query = $this->db->query("select DISTINCT aspen_tblinwardentry.vIRnumber as coilnumber , DATE_FORMAT(aspen_tblinwardentry.dReceivedDate, '%d-%m-%Y') as receiveddate, DATE_FORMAT(aspen_tblcuttinginstruction.dDate, '%d-%m-%Y') as sizegivendate ,DATE_FORMAT(aspen_tblrecoiling.dStartDate, '%d-%m-%Y') as recoilingdate ,DATE_FORMAT(aspen_tblslittinginstruction.dDate, '%d-%m-%Y') as slittingdate,aspen_tblpartydetails.nPartyName as partyname,aspen_tblmatdescription.vDescription as materialdescription, aspen_tblinwardentry.fThickness as thickness, aspen_tblinwardentry.fWidth as width, aspen_tblinwardentry.fpresent as weight,aspen_tblinwardentry.vprocess as process From aspen_tblinwardentry LEFT JOIN aspen_tblmatdescription  ON aspen_tblmatdescription.nMatId=aspen_tblinwardentry.nMatId LEFT JOIN aspen_tblcuttinginstruction  ON aspen_tblcuttinginstruction.vIRnumber=aspen_tblinwardentry.vIRnumber LEFT JOIN aspen_tblrecoiling  ON aspen_tblrecoiling .vIRnumber=aspen_tblinwardentry.vIRnumber LEFT JOIN aspen_tblpartydetails ON aspen_tblpartydetails .nPartyId=aspen_tblinwardentry.nPartyId 
+		$query = $this->db->query("select DISTINCT aspen_tblinwardentry.vIRnumber as coilnumber , DATE_FORMAT(aspen_tblinwardentry.dReceivedDate, '%d-%m-%Y') as receiveddate, DATE_FORMAT(aspen_tblcuttinginstruction.dDate, '%d-%m-%Y') as sizegivendate ,DATE_FORMAT(aspen_tblrecoiling.dStartDate, '%d-%m-%Y') as recoilingdate ,DATE_FORMAT(aspen_tblslittinginstruction.dDate, '%d-%m-%Y') as slittingdate,aspen_tblpartydetails.nPartyName as partyname,aspen_tblmatdescription.vDescription as materialdescription, aspen_tblinwardentry.fThickness as thickness, aspen_tblinwardentry.fWidth as width, aspen_tblinwardentry.fpresent as weight,aspen_tblinwardentry.vprocess as process, ifnull(aspen_tbl_cuttingslipgenerated.numTimesGenerated,0) as numTimesGenerated From aspen_tblinwardentry LEFT JOIN aspen_tblmatdescription  ON aspen_tblmatdescription.nMatId=aspen_tblinwardentry.nMatId LEFT JOIN aspen_tblcuttinginstruction  ON aspen_tblcuttinginstruction.vIRnumber=aspen_tblinwardentry.vIRnumber LEFT JOIN aspen_tblrecoiling  ON aspen_tblrecoiling .vIRnumber=aspen_tblinwardentry.vIRnumber LEFT JOIN aspen_tblpartydetails ON aspen_tblpartydetails .nPartyId=aspen_tblinwardentry.nPartyId 
 		LEFT JOIN aspen_tblslittinginstruction ON aspen_tblslittinginstruction .vIRnumber=aspen_tblinwardentry.vIRnumber
 		LEFT JOIN aspen_tblbillingstatus ON aspen_tblbillingstatus.vIRnumber=aspen_tblinwardentry.vIRnumber
+		LEFT JOIN aspen_tbl_cuttingslipgenerated ON aspen_tbl_cuttingslipgenerated.nPartyId=aspen_tblinwardentry.vIRnumber 
 		where aspen_tblinwardentry.vStatus = 'Work In Progress' or aspen_tblslittinginstruction.vStatus='WIP-Slitting' or aspen_tblrecoiling.vStatus='WIP-Recoiling' or aspen_tblcuttinginstruction.vStatus='WIP-Cutting' Group by aspen_tblinwardentry.vIRnumber"); 
+
 		$arr='';
 		if ($query->num_rows() > 0)
 		{
@@ -114,16 +116,29 @@ where aspen_tblinwardentry.vStatus = 'Work In Progress' or aspen_tblslittinginst
 	}
 	
 	
-	
-	function cutting_slipmodel($partyid='',$partyname = '') 
-	
-	{
-	if(isset($partyid) && isset($partyname)) {
+	function cutting_slipgenerated($partyid=''){
+		if(isset($partyid)){
+			$sqlpcheck= "select numTimesGenerated from aspen_tbl_cuttingslipgenerated where nPartyId='".$partyid."'";
+			$query = $this->db->query($sqlpcheck);
+			if ($query->num_rows() > 0) {
+				//update numTimesGenerated	
+				$sql = ("Update aspen_tbl_cuttingslipgenerated set numTimesGenerated=numTimesGenerated+1 where nPartyId='".$partyid."'");
+				$query1=$this->db->query ($sql);
+			}else{
+				$sql = "Insert into aspen_tbl_cuttingslipgenerated  (nPartyId,numTimesGenerated) VALUES('". $partyid. "',1)";
+				$query = $this->db->query($sql);
+			}
+		}
+	}
+
+	function cutting_slipmodel($partyid='',$partyname = '') {
+		if(isset($partyid) && isset($partyname)) {
 			$partyname = $partyname;
 			$partyid = $partyid;
 		}
-	$sqlpcheck= "Select vprocess from aspen_tblinwardentry where vIRnumber='".$partyid."'";
-	$query = $this->db->query($sqlpcheck);
+		$this->cutting_slipgenerated($partyid);
+		$sqlpcheck= "Select vprocess from aspen_tblinwardentry where vIRnumber='".$partyid."'";
+		$query = $this->db->query($sqlpcheck);
 		$arr='';
 		if ($query->num_rows() > 0) {
 		 	foreach ($query->result() as $row)
@@ -136,9 +151,8 @@ where aspen_tblinwardentry.vStatus = 'Work In Progress' or aspen_tblslittinginst
 	foreach ($arr as $row){
 	if( $row->vprocess =='Cutting')
 	{
-	$sqlcutting = "select aspen_tblpartydetails.nPartyName as partyname,aspen_tblmatdescription.vDescription as materialdescription,vInvoiceNo as Invoicenumber,fWidth as Width,fThickness as Thickness,fQuantity as Weight from aspen_tblinwardentry LEFT JOIN aspen_tblmatdescription  ON aspen_tblmatdescription.nMatId=aspen_tblinwardentry.nMatId 
-		LEFT JOIN aspen_tblcuttinginstruction  ON aspen_tblcuttinginstruction.vIRnumber=aspen_tblinwardentry.vIRnumber
-		LEFT JOIN aspen_tblpartydetails ON aspen_tblpartydetails .nPartyId=aspen_tblinwardentry.nPartyId where aspen_tblinwardentry.vIRnumber ='".$partyid."' and aspen_tblpartydetails.nPartyName ='".$partyname."' ";
+	$sqlcutting = "select aspen_tblpartydetails.nPartyName as partyname,aspen_tblmatdescription.vDescription as materialdescription,vInvoiceNo as Invoicenumber,fWidth as Width,fThickness as Thickness,fQuantity as Weight from aspen_tblinwardentry LEFT JOIN aspen_tblmatdescription  ON aspen_tblmatdescription.nMatId=aspen_tblinwardentry.nMatId LEFT JOIN aspen_tblpartydetails ON aspen_tblpartydetails .nPartyId=aspen_tblinwardentry.nPartyId where aspen_tblinwardentry.vIRnumber ='".$partyid."'";
+		
 		$querymain = $this->db->query($sqlcutting);
 		
 		$invoice = $partyid;
@@ -149,8 +163,11 @@ where aspen_tblinwardentry.vStatus = 'Work In Progress' or aspen_tblslittinginst
 		$Thickness = $querymain->row(0)->Thickness;
 		$Weight = $querymain->row(0)->Weight;
 				
-		$sqlitem ="select aspen_tblcuttinginstruction.nSno as bundlenumber, DATE_FORMAT(aspen_tblcuttinginstruction.dDate, '%d-%m-%Y') AS processdate, aspen_tblcuttinginstruction.nLength as length, aspen_tblcuttinginstruction.nNoOfPieces as noofsheets, aspen_tblcuttinginstruction.nBundleweight as bundleweight from aspen_tblcuttinginstruction where aspen_tblcuttinginstruction.vIRnumber='".$partyid."'";
+		$sqlitem ="select aspen_tblcuttinginstruction.nSno as bundlenumber, DATE_FORMAT(aspen_tblcuttinginstruction.dDate, '%d-%m-%Y') AS processdate, aspen_tblcuttinginstruction.nLength as length, aspen_tblcuttinginstruction.nNoOfPieces as noofsheets, aspen_tblcuttinginstruction.nBundleweight as bundleweight from aspen_tblcuttinginstruction where aspen_tblcuttinginstruction.vIRnumber='".$partyid."' and aspen_tblcuttinginstruction.vStatus='WIP-Cutting'";
+		
 		$queryitem = $this->db->query($sqlitem);
+
+		date_default_timezone_set('Asia/Kolkata');
 		
 		$pdf = new TCPDF(PDF_PAGE_ORIENTATION, PDF_UNIT, PDF_PAGE_FORMAT, true, 'UTF-8', false);
 		$pdfname= 'cuttingslip_'.$partyid.'.pdf';
@@ -187,6 +204,12 @@ where aspen_tblinwardentry.vStatus = 'Work In Progress' or aspen_tblslittinginst
 				<td align="center" width="100%"></td>
 				
 		</tr>
+			<tr>
+				<td align="left"><h1><b>Slip Date:</b> '.date("d-m-Y").'</h1></td>
+			</tr>
+			<tr>
+				<td align="center" width="100%"></td>	
+			</tr>
 			<tr>
 				<td align="left"><h1><b>Coil Number:</b> '.$invoice.'</h1></td>
 			</tr><tr>
@@ -291,8 +314,6 @@ where aspen_tblinwardentry.vStatus = 'Work In Progress' or aspen_tblslittinginst
 		$pdf->Output($pdfname, 'I');
 	
 	}
-	
-	
 	else if( $row->vprocess =='Recoiling')
 	{
 	$sqlrecoiling = "select aspen_tblpartydetails.nPartyName as partyname,aspen_tblmatdescription.vDescription as materialdescription,fWidth as Width,fThickness as Thickness,dStartDate as Startdate,dEndDate as Enddate
@@ -435,11 +456,9 @@ where aspen_tblinwardentry.vStatus = 'Work In Progress' or aspen_tblslittinginst
 		$pdf->Output($pdfname, 'I');
 	
 	}
-	
-	
 	else if( $row->vprocess =='Slitting')
 	{
-	$sqlSlitting = "select aspen_tblpartydetails.nPartyName as partyname,aspen_tblmatdescription.vDescription as materialdescription,fWidth as Width, fThickness as Thickness,dDate as Startdate from aspen_tblinwardentry LEFT JOIN aspen_tblmatdescription  ON aspen_tblmatdescription.nMatId=aspen_tblinwardentry.nMatId LEFT JOIN aspen_tblslittinginstruction  ON aspen_tblslittinginstruction.vIRnumber=aspen_tblinwardentry.vIRnumber
+	$sqlSlitting = "select aspen_tblpartydetails.nPartyName as partyname,aspen_tblmatdescription.vDescription as materialdescription,fWidth as Width, fThickness as Thickness,dDate as Startdate,fQuantity as Weight from aspen_tblinwardentry LEFT JOIN aspen_tblmatdescription  ON aspen_tblmatdescription.nMatId=aspen_tblinwardentry.nMatId LEFT JOIN aspen_tblslittinginstruction  ON aspen_tblslittinginstruction.vIRnumber=aspen_tblinwardentry.vIRnumber
 	LEFT JOIN aspen_tblpartydetails ON aspen_tblpartydetails .nPartyId=aspen_tblinwardentry.nPartyId where aspen_tblinwardentry.vIRnumber ='".$partyid."' and aspen_tblpartydetails.nPartyName ='".$partyname."' ";
 		$querymain = $this->db->query($sqlSlitting);
 		$invoice = $partyid;
@@ -447,9 +466,18 @@ where aspen_tblinwardentry.vStatus = 'Work In Progress' or aspen_tblslittinginst
 		$material_description = $querymain->row(0)->materialdescription;
 		$Width = $querymain->row(0)->Width;
 		$Thickness = $querymain->row(0)->Thickness;
+		$Weight = $querymain->row(0)->Weight;
 				
-		$sqlitem ="select aspen_tblslittinginstruction.nSno as slitnumber, DATE_FORMAT(aspen_tblslittinginstruction.dDate, '%d-%m-%Y') AS startdate,  aspen_tblslittinginstruction.nWidth as width from aspen_tblslittinginstruction where aspen_tblslittinginstruction.vIRnumber='".$partyid."'";
+		$sqlitem ="select aspen_tblslittinginstruction.nSno as slitnumber, 
+		DATE_FORMAT(aspen_tblslittinginstruction.dDate, '%d-%m-%Y') AS startdate, 
+		aspen_tblslittinginstruction.nLength as length,
+		 aspen_tblslittinginstruction.nWidth as width,
+		 aspen_tblslittinginstruction.nWeight as weight
+		  from aspen_tblslittinginstruction where aspen_tblslittinginstruction.vIRnumber='".$partyid."'";
+
 		$queryitem = $this->db->query($sqlitem);
+
+		date_default_timezone_set('Asia/Kolkata');
 		
 		$pdf = new TCPDF(PDF_PAGE_ORIENTATION, PDF_UNIT, PDF_PAGE_FORMAT, true, 'UTF-8', false);
 		$pdfname= 'slittingslip_'.$partyid.'.pdf';
@@ -487,6 +515,13 @@ where aspen_tblinwardentry.vStatus = 'Work In Progress' or aspen_tblslittinginst
 				<td align="center" width="100%"></td>
 				
 		</tr>
+		<tr>
+				<td align="left"><h1><b>Slip Date:</b> '.date("d-m-Y").'</h1></td>
+			</tr>
+			<tr>
+				<td align="center" width="100%"></td>
+				
+		</tr>
 			<tr>
 				<td align="left"><h1><b>Coil Number:</b> '.$invoice.'</h1></td>
 			</tr><tr>
@@ -508,16 +543,19 @@ where aspen_tblinwardentry.vStatus = 'Work In Progress' or aspen_tblslittinginst
 				
 		</tr>
 		<tr>
-				<td align="left"><h1>	<b>Width (mm): </b> '.$Width.'</h1></td> </tr>	<tr>
-				<td align="center" width="100%"></td>
-				
+			<td align="left"><h1><b>Width (mm): </b>'.$Width.'</h1></td> </tr>	<tr>
+			<td align="center" width="100%"></td>	
 		</tr>
-			<tr>
-			
-				<td align="left"><h1><b>Thickness (mm): </b> '.$Thickness.'</h1></td> 
-		</tr><tr>
-				<td align="center" width="100%"></td>
-				
+		<tr>
+			<td align="left"><h1><b>Thickness (mm): </b> '.$Thickness.'</h1></td> 
+		</tr>
+		<tr><td align="center" width="100%"></td></tr>
+		<tr>
+			<td align="left"><h1><b>Weight (kgs): </b> '.$Weight.'</h1></td>
+		</tr>
+		<tr><td align="center" width="100%"></td></tr>
+		<tr>
+			<td align="center" width="100%"></td>	
 		</tr>
 		</table>';
 		
@@ -534,7 +572,9 @@ where aspen_tblinwardentry.vStatus = 'Work In Progress' or aspen_tblslittinginst
 			<tr>
 				<th align="center"><h1><b>S.No.</b></h1></th>
 				<th align="center"><h1><b>Slitting Date</b></h1></th>
-				<th align="center"><h1><b>Number of Slits</b></h1></th>
+				<th align="center"><h1><b>Length</b></h1></th>
+				<th align="center"><h1><b>Width</b></h1></th>
+				<th align="center"><h1><b>Weight</b></h1></th>
 			</tr>';
 		if ($queryitem->num_rows() > 0)
 		{
@@ -545,7 +585,9 @@ where aspen_tblinwardentry.vStatus = 'Work In Progress' or aspen_tblslittinginst
 			<tr>
 				<td align="center"><h1>'.$rowitem->slitnumber.'</h1></td>
 				<td align="center" ><h1>'.$rowitem->startdate.'</h1></td>
+				<td align="center"><h1>'.$rowitem->length.'</h1></td>
 				<td align="center"><h1>'.$rowitem->width.'</h1></td>
+				<td align="center"><h1>'.round($rowitem->weight).'</h1></td>
 			</tr>';
 			}
 		}else{

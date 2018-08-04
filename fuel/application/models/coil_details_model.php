@@ -21,19 +21,19 @@ class Coil_details_model extends Base_module_model {
 	}
 
 
-	function totalweight_check($partyname = ''){
-	$sql=  "SELECT SUM( fpresent ) as weight FROM aspen_tblinwardentry LEFT JOIN aspen_tblpartydetails ON aspen_tblpartydetails.nPartyId = aspen_tblinwardentry.nPartyId where aspen_tblpartydetails.nPartyName = '".$partyname."'";
+	function totalweight_check($partyname = '') {
+		$sql=  "SELECT round(SUM( fpresent )) as weight FROM aspen_tblinwardentry LEFT JOIN aspen_tblpartydetails ON aspen_tblpartydetails.nPartyId = aspen_tblinwardentry.nPartyId where aspen_tblpartydetails.nPartyName = '".$partyname."' AND aspen_tblinwardentry.fpresent >= 5";
+	
 		$query = $this->db->query($sql);
 		$arr='';
-		if ($query->num_rows() > 0)
-		{
-		   foreach ($query->result() as $row)
-		   {
+		if ($query->num_rows() > 0) {
+		   foreach ($query->result() as $row) {
 		      $arr[] =$row;
 		   }
 		}
 		return $arr;
 	}
+
 	function print_partywisemodel($partyid='',$partyname = '') {
 		$sqlcutting = "select  nPartyName as partyname,vAddress1 as address1,vAddress2 as address2,vCity as city from aspen_tblpartydetails  where nPartyName ='".$partyname."' ";
 		$querymain = $this->db->query($sqlcutting);
@@ -181,21 +181,26 @@ class Coil_details_model extends Base_module_model {
 			}
 		}
 		json_encode($arr);
-	foreach ($arr as $row){
-	if($row->vprocess =='Cutting'){
-		$sqlci="SELECT DATE_FORMAT(aspen_tblcuttinginstruction.dDate, '%d-%m-%Y') as processdate, aspen_tblcuttinginstruction.nLength as length, aspen_tblcuttinginstruction.nSno as bundlenumber, aspen_tblcuttinginstruction.nNoOfPieces as bundles, aspen_tblcuttinginstruction.nBundleweight as weight, aspen_tblcuttinginstruction.vStatus as status,aspen_tblinwardentry.vprocess as process
-		FROM aspen_tblcuttinginstruction LEFT JOIN aspen_tblinwardentry ON aspen_tblinwardentry.vIRnumber = aspen_tblcuttinginstruction.vIRnumber WHERE aspen_tblcuttinginstruction.vIRnumber = '".$parentid."' order by aspen_tblcuttinginstruction.nSno";
+	foreach ($arr as $row) {
+	if($row->vprocess =='Cutting') {
+		$sqlci="SELECT DATE_FORMAT(aspen_tblcuttinginstruction.dDate, '%d-%m-%Y') as processdate, aspen_tblcuttinginstruction.nLength as length, aspen_tblcuttinginstruction.nSno as bundlenumber, aspen_tblcuttinginstruction.nNoOfPieces as bundles, aspen_tblcuttinginstruction.nBundleweight as weight, aspen_tblcuttinginstruction.vStatus as status,'Cutting' as process,
+		aspen_tblbillingstatus.nbalance AS balance, 
+		round(nBundleweight - (nBundleweight*nBilledNumber/nNoOfPieces),2) as balanceWeight
+		FROM aspen_tblcuttinginstruction 
+		LEFT JOIN aspen_tblbillingstatus ON aspen_tblcuttinginstruction.vIRnumber = aspen_tblbillingstatus.vIRnumber 
+		WHERE aspen_tblcuttinginstruction.nSno = aspen_tblbillingstatus.nSno and aspen_tblcuttinginstruction.vIRnumber = '".$parentid."' 
+		Group by aspen_tblbillingstatus.nSno
+		order by aspen_tblcuttinginstruction.nSno";
 		$query = $this->db->query($sqlci);
 		}
 		else if($row->vprocess =='Recoiling'){
-		$sqlci="select aspen_tblrecoiling.nSno as recoilnumber,DATE_FORMAT(aspen_tblrecoiling.dStartDate, '%d-%m-%Y') as startdate,DATE_FORMAT(aspen_tblrecoiling.dEndDate, '%d-%m-%Y') as enddate,aspen_tblrecoiling.nNoOfRecoils as norecoil,aspen_tblrecoiling.vStatus as status,aspen_tblinwardentry.vprocess as process from aspen_tblrecoiling  
+			$sqlci="select aspen_tblrecoiling.nSno as recoilnumber,DATE_FORMAT(aspen_tblrecoiling.dStartDate, '%d-%m-%Y') as startdate,DATE_FORMAT(aspen_tblrecoiling.dEndDate, '%d-%m-%Y') as enddate,aspen_tblrecoiling.nNoOfRecoils as norecoil,aspen_tblrecoiling.vStatus as status,aspen_tblinwardentry.vprocess as process from aspen_tblrecoiling  
 		  LEFT JOIN aspen_tblinwardentry ON aspen_tblinwardentry.vIRnumber = aspen_tblrecoiling.vIRnumber WHERE aspen_tblrecoiling.vIRnumber='".$parentid."'";
-		$query = $this->db->query($sqlci);
+			$query = $this->db->query($sqlci);
 		}
-		else if($row->vprocess =='Slitting'){
-			$sqlci="select aspen_tblslittinginstruction.nSno as slittnumber,DATE_FORMAT(aspen_tblslittinginstruction.dDate, '%d-%m-%Y') as date,aspen_tblslittinginstruction.nWidth as width, aspen_tblslittinginstruction.vStatus as status, aspen_tblinwardentry.vprocess as process from aspen_tblslittinginstruction  
-			LEFT JOIN aspen_tblinwardentry ON aspen_tblinwardentry.vIRnumber = aspen_tblslittinginstruction.vIRnumber WHERE aspen_tblslittinginstruction.vIRnumber='".$parentid."'";
-		$query = $this->db->query($sqlci);
+		else if($row->vprocess =='Slitting') {
+			$sqlci="select aspen_tblslittinginstruction.nSno as slittnumber,DATE_FORMAT(aspen_tblslittinginstruction.dDate, '%d-%m-%Y') as date,aspen_tblslittinginstruction.nWidth as width,aspen_tblslittinginstruction.nLength as length,aspen_tblslittinginstruction.nWeight as weight,aspen_tblbillingstatus.vBillingStatus as status, 'Slitting' as process from aspen_tblslittinginstruction LEFT JOIN aspen_tblbillingstatus ON aspen_tblslittinginstruction.vIRnumber=aspen_tblbillingstatus.vIRnumber WHERE aspen_tblslittinginstruction.nSno = aspen_tblbillingstatus.nSno and aspen_tblslittinginstruction.vIRnumber='".$parentid."' Group by aspen_tblbillingstatus.nSno";
+			$query = $this->db->query($sqlci);
 		}
 		else if($row->vprocess ==''){
 		$sqlci=" SELECT case when vprocess  = '' then 'NULL' else vprocess  end as process from aspen_tblinwardentry WHERE aspen_tblinwardentry.vIRnumber='".$parentid."'";
@@ -256,15 +261,15 @@ class Coil_details_model extends Base_module_model {
 		return $arr;
 	}
 	
-	function list_partyname($partyname = '') {	
+	function list_partyname($partyname = '') {
 		$sql ="SELECT DATE_FORMAT(aspen_tblinwardentry.dReceivedDate, '%d-%m-%Y') as receiveddate, aspen_tblmatdescription.vDescription as description, aspen_tblinwardentry.fThickness as thickness, aspen_tblinwardentry.fWidth as width, aspen_tblinwardentry.fQuantity as weight,aspen_tblinwardentry.fpresent as pweight, aspen_tblinwardentry.vStatus as status , aspen_tblinwardentry.vIRnumber as coilnumber,aspen_tblinwardentry.vprocess as process FROM aspen_tblinwardentry LEFT JOIN aspen_tblmatdescription ON aspen_tblmatdescription.nMatId = aspen_tblinwardentry.nMatId LEFT JOIN aspen_tblpartydetails ON aspen_tblpartydetails.nPartyId = aspen_tblinwardentry.nPartyId LEFT JOIN aspen_tblcuttinginstruction ON aspen_tblcuttinginstruction.vIRnumber = aspen_tblinwardentry.vIRnumber 
 		LEFT JOIN aspen_tblslittinginstruction ON aspen_tblslittinginstruction.vIRnumber = aspen_tblinwardentry.vIRnumber 
 		LEFT JOIN aspen_tblrecoiling ON aspen_tblrecoiling.vIRnumber = aspen_tblinwardentry.vIRnumber"; 
    		if(!empty($partyname)) { 
-		$sql .=" Where aspen_tblpartydetails.nPartyName='".$partyname."' AND aspen_tblinwardentry.fpresent >= 5";
+			$sql .=" Where aspen_tblpartydetails.nPartyName='".$partyname."' AND aspen_tblinwardentry.fpresent >= 5";
 		}
 		$sql .="  group by aspen_tblinwardentry.vIRnumber order by aspen_tblinwardentry.dReceivedDate desc";
-		//echo $sql;die();
+
 		$query = $this->db->query($sql);
 		$arr='';
 		if ($query->num_rows() > 0)

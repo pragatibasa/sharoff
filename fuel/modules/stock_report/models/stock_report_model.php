@@ -33,10 +33,20 @@ class stock_report_model extends Base_module_model {
 		return $arr;
 	}
 	
-	
+	function chk_user(){
+	$CI =& get_instance();
+	$userdata = $CI->fuel_auth->user_data();
+	$query = $this->db->select ('nPartyName')
+						  -> from  ('aspen_tblpartydetails')
+				 	      -> where ('nPartyName', $userdata['user_name'])
+						  ->join('fuel_users ', 'aspen_tblpartydetails.nPartyName = fuel_users.user_name', 'left')
+						  ->get();
+		
+		return $query->result();
+	}
 	
 	function totalweight_check($partyname = ''){
-	$sql=  "SELECT SUM( fpresent ) as weight FROM aspen_tblinwardentry LEFT JOIN aspen_tblpartydetails ON aspen_tblpartydetails.nPartyId = aspen_tblinwardentry.nPartyId  Where aspen_tblpartydetails.nPartyName='".$partyname."' AND aspen_tblinwardentry.fpresent >= 1";
+	$sql=  "SELECT SUM( fpresent) as weight FROM aspen_tblinwardentry LEFT JOIN aspen_tblpartydetails ON aspen_tblpartydetails.nPartyId = aspen_tblinwardentry.nPartyId  Where aspen_tblpartydetails.nPartyName='".$partyname."' AND aspen_tblinwardentry.fpresent >= 1";
 		$query = $this->db->query($sql);
 		$arr='';
 		if ($query->num_rows() > 0)

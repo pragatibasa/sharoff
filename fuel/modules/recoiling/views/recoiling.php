@@ -35,5 +35,4 @@ $(document).ready(function() {
 </div>
 
 <?php include_once(RECOILING_PATH.'views/_blocks/toolbar.php');?>		
-<?php include_once(RECOILING_PATH.'views/_blocks/layout.php');?>		
- 
+<?php include_once(RECOILING_PATH.'views/_blocks/layout.php');?>

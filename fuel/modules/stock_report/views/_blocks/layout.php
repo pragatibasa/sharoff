@@ -1,4 +1,3 @@
-
 <script language="javascript" type="text/javascript">
   $(window).load(function() {
 	$("tr#childlist").hide();
@@ -20,8 +19,6 @@
     });  
   });
 </script><br /><br />
-
-
 
 <div id="main_content" style="overflow:hidden;"> 
 <div class="tab-boxpr"> 
@@ -78,31 +75,12 @@
 		<input id="totalweight_calcualation" type="text" DISABLED/>(in Kgs)  
 		&nbsp; &nbsp; &nbsp;
 </div>
-
-
-
-
-
 <script language="javascript" type="text/javascript">
-
-
-
-
 $(document).ready(function() { 
 
 	 $("#export").hide();
 
 });
-
-
-
-
-
-
-
-
-
-
 function totalweight_check(){
 	var party_account_name = $('#party_account_name').val();
 	var dataString = '&party_account_name='+party_account_name;
@@ -119,12 +97,9 @@ $.ajax({
 	   }  
 	}); 
 }
-
 </script>
 
 <script type="text/javascript">
-
-
 	$("#party_account_name").change(function(data) {
 		 var account_id = $("#party_account_name").val();
 		 	 $("#export").show();
@@ -175,27 +150,41 @@ $.ajax({
 			$('#DynamicGridp_2').html(mediaClass);
 			 $("#myTabels").tablesorter();
 			totalweight_check();
-			
-	
-		});
-
-	
+		});	
 });
 
+function tableToExcel() {
+	var tab_text = '<html xmlns:x="urn:schemas-microsoft-com:office:excel">';
+tab_text = tab_text + '<head><xml><x:ExcelWorkbook><x:ExcelWorksheets><x:ExcelWorksheet>';
 
+tab_text = tab_text + '<x:WorksheetOptions><x:Panes></x:Panes></x:WorksheetOptions></x:ExcelWorksheet>';
+tab_text = tab_text + '</x:ExcelWorksheets></x:ExcelWorkbook></xml></head><body>';
 
-var tableToExcel = (function() {
-  var uri = 'data:application/vnd.ms-excel;base64,'
-    , template = '<html xmlns:o="urn:schemas-microsoft-com:office:office" xmlns:x="urn:schemas-microsoft-com:office:excel" xmlns="http://www.w3.org/TR/REC-html40"><head><!--[if gte mso 9]><xml><x:ExcelWorkbook><x:ExcelWorksheets><x:ExcelWorksheet><x:Name>{worksheet}</x:Name><x:WorksheetOptions><x:DisplayGridlines/></x:WorksheetOptions></x:ExcelWorksheet></x:ExcelWorksheets></x:ExcelWorkbook></xml><![endif]--></head><body><table>{table}</table></body></html>'
-    , base64 = function(s) { return window.btoa(unescape(encodeURIComponent(s))) }
-    , format = function(s, c) { return s.replace(/{(\w+)}/g, function(m, p) { return c[p]; }) }
-	return function(table, name) {
-    if (!table.nodeType) table = document.getElementById(table)
-    var ctx = {worksheet: name || 'Worksheet', table: table.innerHTML}
-		window.location.href = uri + base64(format(template, ctx))
-	}
-})()
+tab_text = tab_text + '<table><tr><td style="font-size:60px; font-style:italic; font-family: fantasy;"><h1>ASPEN STEEL PVT LTD</h1></td></tr><tr><td><h4>Branch At: Plot no 16E, Bidadi Industrial Area, Phase 2 Sector 1, Bidadi, Ramnagara-562105, <b>Email: aspensteel_unit2@yahoo.com </b></h4></td></tr><tr><td><h4>Head Office At: 54/1, Medahalli, Old Madras Road, Bangalore-560049</h4></td></tr><tr><td></td></tr></table>';
 
+tab_text = tab_text + "<table border='1px'>";
+tab_text = tab_text + $('#myTabels').html();
+tab_text = tab_text + '</table>';
+
+tab_text = tab_text + '<table border="1px"><tr></tr><tr><td></td><td></td><td></td><td></td><td></td><td><h3>Total Weight : </td><td>'+$('#totalweight_calcualation').val()+' ( in kgs )</h3></td><td></td></tr></table></body></html>';
+
+var data_type = 'data:application/vnd.ms-excel';
+
+var ua = window.navigator.userAgent;
+var msie = ua.indexOf("MSIE ");
+
+if (msie > 0 || !!navigator.userAgent.match(/Trident.*rv\:11\./)) {
+    if (window.navigator.msSaveBlob) {
+        var blob = new Blob([tab_text], {
+            type: "application/csv;charset=utf-8;"
+        });
+        navigator.msSaveBlob(blob, $('#party_account_name').val()+'_Stock_Report.xls');
+    }
+} else {
+	$('#export').attr('href', data_type + ', ' + encodeURIComponent(tab_text));
+    $('#export').attr('download', $('#party_account_name').val()+'_Stock_Report.xls');
+}
+}
 
 function showchild(parentid) {
 	$('#pr_container_name').html(parentid);

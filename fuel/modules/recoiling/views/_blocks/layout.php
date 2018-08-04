@@ -69,16 +69,17 @@
 		</div>
 		<div class="pad-10">
 			<div id="date_text_label">Recoiling Start Date </div>
-			<input type="text" id="date1" value="<?php echo date("Y-m-d"); ?>" />
+			<input type="text" id="date1" value="<?php echo date("Y-m-d"); ?>"/>
 		</div>								
 		<div class="pad-10">
 			<div id="recoilenddate_text_label"> Recoiling End Date </div>
 			<input id= "datepicker" type="text"  name="recoilenddate" /> 
-		</div><script>
-  $(function() {
-    $( "#datepicker" ).picker();
-  });
-  </script>	
+		</div>
+		<script>
+		  $(function() {
+		    $( "#datepicker" ).picker();
+		  });
+  		</script>
 		<div class="pad-10">
 			<div id="nocoil_text_label"> Number of Coil </div>
 			<input id= "nocoil" type="text"  name="No coil" /> 
@@ -209,7 +210,7 @@ for(key in json){
 	$('input[name='+key+']').val(json[key]);
 }
 
-function functionsave(){
+function functionsave() {
 	var pid = $('#pid').val();
 	var date1 = $('#date1').val();
 	var datepicker = $('#datepicker').val();

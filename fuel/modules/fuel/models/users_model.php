@@ -322,7 +322,15 @@ class Users_model extends Base_module_model {
 	
 	function recentinward()
 	{
-		$sql = "select vIRnumber, vInvoiceNo, dInvoiceDate, vStatus from aspen_tblinwardentry order by vIRnumber desc LIMIT 3";
+		$CI =& get_instance();
+		$userdata = $CI->fuel_auth->user_data();
+		$strWhereCondition = '';
+
+		if( $userdata['super_admin'] == 'no' )	
+			$strWhereCondition = sprintf("left join aspen_tblpartydetails on aspen_tblpartydetails.nPartyId = aspen_tblinwardentry.nPartyId where nPartyName = '%s'",mysql_real_escape_string($userdata['user_name']));
+
+		$sql = "select vIRnumber, vInvoiceNo, dInvoiceDate, vStatus from aspen_tblinwardentry $strWhereCondition order by dReceivedDate desc LIMIT 3";
+		
 		$query = $this->db->query($sql);
 		$arr='';
 		if ($query->num_rows() > 0) {

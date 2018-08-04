@@ -42,39 +42,28 @@ class Cutting_instruction_model extends Base_module_model {
 	}
 	
  function savechange(){ 
- $sqlnsno = $this->db->query ("SELECT nSno FROM aspen_tblcuttinginstruction");
+ 	$sqlnsno = $this->db->query ("SELECT nSno FROM aspen_tblcuttinginstruction");
 
-  if ($sqlnsno->num_rows() >= 0)
-		{
-		   foreach ($sqlnsno->result() as $row)
-		   {
-		      $arr[] =$row;
-		   }
+	if ($sqlnsno->num_rows() >= 0) {
+		foreach ($sqlnsno->result() as $row) {
+		  $arr[] =$row;
 		}
-		json_encode($arr);
-  foreach ($arr as $row){
-	if($row->nSno > 0){
-  $sql = $this->db->query ("UPDATE aspen_tblcuttinginstruction  SET vStatus='WIP-Cutting' WHERE vIRnumber='".$_POST['pid']."' and nSno!=0");
-  $sql = $this->db->query ("UPDATE aspen_tblinwardentry  SET vprocess='Cutting' WHERE vIRnumber='".$_POST['pid']."'");
-  
-   }
-  }
-  $sql = $this->db->query ("UPDATE aspen_tblinwardentry  SET vStatus='Work In Progress' WHERE vIRnumber='".$_POST['pid']."'");
-  
+	}
+	json_encode($arr);
+	$sql = $this->db->query ("UPDATE aspen_tblcuttinginstruction  SET vStatus='WIP-Cutting' WHERE vIRnumber='".$_POST['pid']."' and nSno!=0 and ( vStatus = '' OR vStatus = 'WIP-Cutting')");	
+	$sql = $this->db->query ("UPDATE aspen_tblinwardentry  SET vprocess='Cutting', vStatus='Work In Progress' WHERE vIRnumber='".$_POST['pid']."'");
  }
  
- function list_items($limit = NULL, $offset = NULL, $col = 'vIRnumber', $order = 'asc')
-    {
-		$this->db->select('*');
+function list_items($limit = NULL, $offset = NULL, $col = 'vIRnumber', $order = 'asc') {
+	$this->db->select('*');
+
+	$data = parent::list_items($limit, $offset, $col, $order);
+	return $data;    	
+}
 		
-        $data = parent::list_items($limit, $offset, $col, $order);
-        return $data;    	
-	}
-		
-	function getcoildetails() {
-		
-		$this->save($save);
-	}
+function getcoildetails() {		
+	$this->save($save);
+}
 	
 	function totalweight_checkmodel($partyid){
 	$sqlfb = "select 
@@ -96,12 +85,13 @@ class Cutting_instruction_model extends Base_module_model {
 			$partyname = $pname;
 			$partyid = $pid;
 		}
-		$sql ="SELECT aspen_tblinwardentry.vIRnumber, aspen_tblinwardentry.dReceivedDate, aspen_tblmatdescription.vDescription, aspen_tblinwardentry.fThickness, aspen_tblinwardentry.fWidth, aspen_tblinwardentry.fQuantity, aspen_tblinwardentry.vStatus
+		$sql ="SELECT aspen_tblinwardentry.vIRnumber,aspen_tblinwardentry.fLength, aspen_tblinwardentry.dReceivedDate, aspen_tblmatdescription.vDescription, aspen_tblinwardentry.fThickness, aspen_tblinwardentry.fWidth, aspen_tblinwardentry.fQuantity, aspen_tblinwardentry.vStatus
 		FROM aspen_tblinwardentry LEFT JOIN aspen_tblmatdescription ON aspen_tblmatdescription.nMatId = aspen_tblinwardentry.nMatId
 		LEFT JOIN aspen_tblpartydetails ON aspen_tblpartydetails.nPartyId = aspen_tblinwardentry.nPartyId ";
-		if(!empty($partyname) && !empty($partyid)) {
-		$sql.="WHERE aspen_tblpartydetails.nPartyName='".$partyname."' and aspen_tblinwardentry.vIRnumber='".$partyid."' ";
+		if(!empty($partyid)) {
+		$sql.="WHERE aspen_tblinwardentry.vIRnumber='".$partyid."' ";
 		}	
+
 		$query = $this->db->query($sql);
 		$arr='';
 		if ($query->num_rows() > 0)
@@ -180,21 +170,20 @@ function deleterow($deleteid)
   
   
   
-  function savebundle() 
-  {
-    if(isset( $_POST['pid']) && isset( $_POST['bundlenumber']) && isset( $_POST['date1']) && isset( $_POST['length']) && isset( $_POST['rate'])&& isset( $_POST['bundleweight']) ) {
-  $bundlenumber = $_POST['bundlenumber'];
-  $date1 = $_POST['date1'];
-  $length = $_POST['length'];
-  $rate = $_POST['rate'];
-  $bundleweight = $_POST['bundleweight'];
-  $pid = $_POST['pid'];
-  }
-  $sql = $this->db->query ("Insert into aspen_tblcuttinginstruction  (vIRnumber,dDate,nLength,nNoOfPieces,nBundleweight ) VALUES(  '". $pid. "',
+function savebundle() {
+	if(isset( $_POST['pid']) && isset( $_POST['bundlenumber']) && isset( $_POST['date1']) && isset( $_POST['length']) && isset( $_POST['rate'])&& isset( $_POST['bundleweight']) ) {
+		$bundlenumber = $_POST['bundlenumber'];
+		$date1 = $_POST['date1'];
+		$length = $_POST['length'];
+		$rate = $_POST['rate'];
+		$bundleweight = $_POST['bundleweight'];
+		$pid = $_POST['pid'];
+	}
+	$sql = $this->db->query ("Insert into aspen_tblcuttinginstruction  (vIRnumber,dDate,nLength,nNoOfPieces,nBundleweight ) VALUES(  '". $pid. "',
  '". $date1. "','". $length. "','". $rate. "','". $bundleweight. "' )");
-   $sql1 = $this->db->query ("Insert into aspen_hist_tblcuttinginstruction (vIRnumber,dDate,nLength,nNoOfPieces,nBundleweight ) VALUES(  '". $pid. "',
+	$sql1 = $this->db->query ("Insert into aspen_hist_tblcuttinginstruction (vIRnumber,dDate,nLength,nNoOfPieces,nBundleweight ) VALUES(  '". $pid. "',
   '". $date1. "','". $length. "','". $rate. "','". $bundleweight. "' )");
-  }	
+}	
   
     function editbundlemodel(){
 	   if(isset( $_POST['bundlenumber']) && isset( $_POST['pid']) && isset( $_POST['length']) && isset( $_POST['rate']) && isset( $_POST['bundleweight'])) {

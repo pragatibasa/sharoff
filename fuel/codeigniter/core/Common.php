@@ -504,6 +504,16 @@ return $_config[0];
 		return $str;
 	}
 
+	function getServiceAccountingCode($billType) {
+		$otherManufacturing = array( 'Cutting', 'Slitting', 'Recoiling' );
+		$warehousingStorage = array( 'SemiFinished','Directbilling' );
+		if(in_array($billType, $otherManufacturing)) {
+			return '(Other Manufacturing Service) : 998898'; 
+		} elseif (in_array($billType, $warehousingStorage)) {
+			return '(Warehousing and Storage Services) : 996729'; 
+		}
+	}
+
 
 /* End of file Common.php */
 /* Location: ./system/core/Common.php */
