@@ -11,8 +11,8 @@
 				</td>  
 				<td>
 	
-	
-	
+
+
 		<?php if(!empty($pname)){ ?>
 			<input type="text" id="pname" name="pname" value="<?php echo $pname; ?>" />
 			<?php }else{?>
@@ -23,7 +23,13 @@
 			</div>
 			<?php } ?>	
 				</td>
-			</tr>	
+			</tr>
+			<?php if(!empty($ppartyid)) { ?>
+			<tr>
+				<td><label>Parent Coil Number</label></td>
+				<td><label><?php echo $ppartyid; ?></label></td>
+			</tr>
+			<?php } ?>
 			<tr>
 				<td>
 					<label>Coil Number<span class="required">*</span></label>
@@ -36,10 +42,10 @@
 									function coilexist(){
 									var pid = $('#pid').val();
 									var isANumber = isNaN(pid) === false;
-									if (isANumber == false){
-										alert('Please input numeric characters only');
-										$('#pid').val('');
-									}
+									// if (isANumber == false){
+									// 	alert('Please input numeric characters only');
+									// 	$('#pid').val('');
+									// }
 										if ( pid != "" )
 										{
 										var dataString = 'pid='+pid;
@@ -80,7 +86,7 @@
 					<label>Lorry Number<span class="required">*</span></label>
 				</td> 
 				<td>
-					<input id="lno" name="vLorryNo" type="text"/> 
+					<input id="lno" value="<?php echo !empty($pcoildetails) ? $pcoildetails->vLorryNo : '';?>" name="vLorryNo" type="text"/> 
 				</td>
 			</tr>	
 			<tr>
@@ -88,7 +94,7 @@
 					<label>Invoice/Challan Number<span class="required">*</span></label>
 				</td>  
 				<td>
-					<input id="icno"  type="text" />
+					<input id="icno" value="<?php echo !empty($pcoildetails) ? $pcoildetails->vInvoiceNo : '';?>" type="text" />
 				</td>
 			</tr>
 			<tr>
@@ -96,7 +102,7 @@
 					<label>Invoice/Challan Date<span class="required">*</span></label>
 				</td>
 				<td> 
-					<input  id="date4"  type="text" />
+					<input  id="date4" value="<?php echo !empty($pcoildetails) ? $pcoildetails->dInvoiceDate : '';?>" type="text" />
 						<script>
   $(function() {
     $( "#date4" ).picker();
@@ -114,7 +120,12 @@
 	   <?php 
 	     echo '<option value="'.Select.'">'.Select."</option>";
          foreach($datam as $record) {
-          echo '<option value="'.$record->vDescription.'">'.$record->vDescription."</option>";
+			$selectedStr = '';
+			if(!empty($pcoildetails) && ( $pcoildetails->nMatId == $record->nMatId ) ) {
+				$selectedStr = "selected=selected";
+			}
+
+    		echo '<option '.$selectedStr.' value="'.$record->vDescription.'">'.$record->vDescription."</option>";
          } 
      ?>
      </select>
@@ -125,22 +136,24 @@
 					<label>Width in mm<span class="required">*</span></label>
 				</td>
 				<td> 
-					<input id="fWidth"  type="text" onkeyup=""/>
-					
+					<input id="fWidth" value="<?php  
+					if(empty($bundledetails) && empty($pcoildetails)) {
+						echo '';
+					} else if(!empty($pcoildetails) && !empty($bundledetails)) {
+						echo $bundledetails->nWidth;
+					} else if(!empty($pcoildetails) && empty($bundledetails)) {
+						echo $pcoildetails->fWidth;
+					} else 
+						echo '';?>" type="text" onkeyup=""/>
 					
 					<script>
-									
-									
-									$("#fWidth").keyup(function() {
-									if(parseInt($(this).val()) > 2000)
-									{ 
-									alert("Please enter the value below 2000mm.");
-									$("#fWidth").val('');
-									}
-																		});
-									
-
-		</script>	
+						$("#fWidth").keyup(function() {
+							if(parseInt($(this).val()) > 2000) { 
+								alert("Please enter the value below 2000mm.");
+								$("#fWidth").val('');
+							}
+						});
+					</script>	
 
 					
 				</td>
@@ -150,22 +163,16 @@
 					<label>Thickness in mm<span class="required">*</span></label>
 				</td>
 				<td> 
-	
-				
-					<input id="fThickness"  type="text" onkeyup=""/>
-									<script>
-									
-									
-									$("#fThickness").keyup(function() {
-									if(parseInt($(this).val()) > 100)
-									{ 
-										alert("Please enter the value below 100mm.");
-										$("#fThickness").val('');
-									}
-																		});
-									
-
-		</script>	
+					<input id="fThickness" value="<?php echo !empty($pcoildetails) ? $pcoildetails->fThickness : '';?>" type="text" onkeyup=""/>
+						<script>
+							$("#fThickness").keyup(function() {
+								if(parseInt($(this).val()) > 100)
+								{ 
+									alert("Please enter the value below 100mm.");
+									$("#fThickness").val('');
+								}
+							})
+						</script>	
 				</td>
 			</tr>
 			<tr>
@@ -173,7 +180,15 @@
 					<label>Length in mm</label>
 				</td>
 				<td> 
-					<input id="fLength"  type="text" />
+					<input id="fLength" value="<?php  
+					if(empty($bundledetails) && empty($pcoildetails)) {
+						echo '';
+					} else if(!empty($pcoildetails) && !empty($bundledetails)) {
+						echo $bundledetails->nLength;
+					} else if(!empty($pcoildetails) && empty($bundledetails)) {
+						echo $pcoildetails->fLength;
+					} else 
+						echo '';?>" type="text" />
 				</td>
 			</tr>
 			<tr>
@@ -181,18 +196,23 @@
 					<label>Weight in Kgs.<span class="required">*</span></label>
 				</td>
 				<td> 
-					<input id="fQuantity"  type="text" onchange=""/>
+					<input id="fQuantity" value="<?php  
+					if(empty($bundledetails) && empty($pcoildetails)) {
+						echo '';
+					} else if(!empty($pcoildetails) && !empty($bundledetails)) {
+						echo $bundledetails->nWeight;
+					} else if(!empty($pcoildetails) && empty($bundledetails)) {
+						echo $pcoildetails->fpresent;
+					} else 
+						echo '';?>" type="text" onchange=""/>
 					
 					<script>
-									
-									
-									$("#fQuantity").change(function() {
-									if(parseInt($(this).val()) < 100)
-									{ 
-										alert("Please enter the value above 100kg.");
-										$("#fQuantity").val('');
-									}
-																		});
+						$("#fQuantity").change(function() {
+							if(parseInt($(this).val()) < 100) { 
+								alert("Please enter the value above 100kg.");
+								$("#fQuantity").val('');
+							}
+						});
 									
 
 		</script>	
@@ -206,6 +226,22 @@
 				</td>
 				<td> 
 					<input id="status" name="vStatus" type="text" value="RECEIVED" DISABLED/>
+				</td>
+			</tr>
+			<tr>
+				<td>
+					<label>Cast No.</label>
+				</td>
+				<td>
+					<input id="cast" name="vCast" type="text" value="<?php echo !empty($pcoildetails) ? $pcoildetails->vCast : '';?>"/>
+				</td>
+			</tr>
+			<tr>
+				<td>
+					<label>Grade</label>
+				</td>
+				<td>
+					<input id="grade" name="vGrade" type="text" value="<?php echo !empty($pcoildetails) ? $pcoildetails->vGrade : '';?>"/>
 				</td>
 			</tr>
 			<tr>
@@ -275,8 +311,9 @@ function inwardregistrybutton(id)
 function functionsave()
 {
 	var pname = $('#pname').val();
-	//alert(pname);
 	var pid = $('#pid').val();
+	var ppartyid = '<?php echo $ppartyid ?>';
+	var parentBundleNumber = '<?php echo $bundleNumber ?>';
 	var date3 = $('#date3').val();
 	var lno = $('#lno').val();
 	var icno = $('#icno').val();
@@ -289,22 +326,16 @@ function functionsave()
 	var status = $('#status').val();
 	var hno = $('#hno').val();
 	var pna = $('#pna').val();
-	    if(pid == '' || pname == ''  || coil == '' || fWidth == '' || fThickness == '' || fQuantity == '')
-		{
+	var grade = $('#grade').val();
+	var cast = $('#cast').val();
+	if(pid == '' || pname == ''  || coil == '' || fWidth == '' || fThickness == '' || fQuantity == '') {
 		alert("Please Enter the required fields")
-	}
-	
-	else if(pname == 'undefined')
-	  {
-	  alert("Please Enter the Correct Party Name")
-	  }
-	 else if(coil  == 'Select')
-	  {
-	  alert("Please Enter the Mat Description")
-	  }
-else	
-{
-		var dataString =  'pid='+pid+'&date3='+date3+'&pname='+pname+'&lno='+lno+'&icno='+icno+'&date4='+date4+'&coil='+coil+'&fWidth='+fWidth+'&fThickness='+fThickness+'&fLength='+fLength+'&fQuantity='+fQuantity+'&status='+status+'&hno='+hno+'&pna='+pna;
+	} else if(pname == 'undefined') {
+	  	alert("Please Enter the Correct Party Name")
+	} else if(coil  == 'Select') {
+	  	alert("Please Enter the Mat Description")
+	} else {
+		var dataString = 'pid='+pid+'&date3='+date3+'&pname='+pname+'&lno='+lno+'&icno='+icno+'&date4='+date4+'&coil='+coil+'&fWidth='+fWidth+'&fThickness='+fThickness+'&fLength='+fLength+'&fQuantity='+fQuantity+'&status='+status+'&hno='+hno+'&pna='+pna+'&ppartyid='+ppartyid+'&parentBundleNumber='+parentBundleNumber+'&grade='+grade+'&cast='+cast;
 
 		$.ajax({  
 		   type: "POST",  
@@ -337,8 +368,6 @@ else
 		}
 	}
 
-
-
 function preview()
 {
 	var pname = $('#pname').val();
@@ -347,18 +376,8 @@ function preview()
     setTimeout("location.href='<?= site_url('inward/inwardbillgenerate'); ?>/?"+ dataString+"'", 3000);
 }
 	
-	
-	
-	
 var section = "demos/picker";
 	$(function() {
 		$( "#picker" ).picker();
 	});
-
-
-
-
-
-
-
 </script>

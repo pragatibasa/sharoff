@@ -411,23 +411,24 @@ function deleteItem(sn){
 function savechange(id) {
     var pid = $('#pid').val();
 	var dataString = 'pid='+pid;
- 	$.ajax({
-        type: 'POST',
-        url: "<?php echo fuel_url('slitting_instruction/save_button');?>",
+	
+	$.ajax({
+		type: 'POST',
+		url: "<?php echo fuel_url('slitting_instruction/save_button');?>",
 		data: dataString,
-        success: function() {
+		success: function() {
 			alert("Saved Succesfully");
 			refresh_folderlist();
 			totalwidth_check();
 			$.ajax({
-			    type: 'POST',
-    			url: "<?php echo fuel_url('slitting_instruction/getBalanceLength');?>",
+				type: 'POST',
+				url: "<?php echo fuel_url('slitting_instruction/getBalanceLength');?>",
 				data: dataString,
 				success: function(msg){
 					var msg3=JSON.parse(msg);
 					$('#remaining_length').val(msg3.remaining_weight);
 				}
-    		});
+			});
 		}
 	});
 }
@@ -475,9 +476,9 @@ function radioload(nSno,length,width,weight) {
 	$('#bundle_width_text_label').next('div').empty();
 	$('#bundle_width_text_label').next('div').append('<input type="text" value="'+width+'" class="width" style="width:130px; margin-right: 4px;" name="width" id="width_v"><input class="count" style="width:60px;" type="text" name="count" value="1" disabled/><input class="weight" type="text" name="weight" value="'+weight+'" disabled style="width:130px;margin-left:4px"/> <span class="measure">Kgs</span>');
 	$('#weight_v').val(weight);
-	
 }
 </script>
+
 <script>
 var json = <?php echo($adata); ?>;
 for(key in json){

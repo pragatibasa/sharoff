@@ -42,16 +42,29 @@ class Cutting_instruction_model extends Base_module_model {
 	}
 	
  function savechange(){ 
- 	$sqlnsno = $this->db->query ("SELECT nSno FROM aspen_tblcuttinginstruction");
-
-	if ($sqlnsno->num_rows() >= 0) {
-		foreach ($sqlnsno->result() as $row) {
-		  $arr[] =$row;
-		}
-	}
-	json_encode($arr);
-	$sql = $this->db->query ("UPDATE aspen_tblcuttinginstruction  SET vStatus='WIP-Cutting' WHERE vIRnumber='".$_POST['pid']."' and nSno!=0 and ( vStatus = '' OR vStatus = 'WIP-Cutting')");	
+	$sql = $this->db->query ("UPDATE aspen_tblcuttinginstruction SET vStatus='WIP-Cutting' WHERE vIRnumber='".$_POST['pid']."' and nSno!=0 and ( vStatus = '' OR vStatus = 'WIP-Cutting')");	
 	$sql = $this->db->query ("UPDATE aspen_tblinwardentry  SET vprocess='Cutting', vStatus='Work In Progress' WHERE vIRnumber='".$_POST['pid']."'");
+
+	$strSql = "select ai.*,ap.*,am.* from aspen_tblinwardentry as ai 
+	left join aspen_tblmatdescription as am on ai.nMatId = am.nMatId 
+	left join aspen_tblpartydetails as ap on ap.nPartyId = ai.nPartyId
+	where ai.vIRnumber = '".$_POST['pid']."'";
+	$query = $this->db->query($strSql);
+
+	$strBundleSql = "select * from aspen_tblcuttinginstruction where vIRnumber = '".$_POST['pid']."'";
+	$queryBundle = $this->db->query($strBundleSql);
+	if ($queryBundle->num_rows() > 0) {
+		$strBundle = '';
+		$index = 1;
+		foreach($queryBundle->result() as $key => $row) {
+			$strBundle .= '%n'.$index++.') '.$row->nLength.'mm - '.$row->nNoOfPieces.'Nos - '.$row->nBundleweight.'kgs';
+		}
+	} 
+
+	if($query->result()[0]->nProcessUpdates) {
+		sendSMS($query->result()[0]->nProcessUpdates,'Cutting instruction given for Coil no '.$_POST['pid'].'%n'.$query->result()[0]->vDescription.' '.$query->result()[0]->fThickness.'mm x '.$query->result()[0]->fWidth.'mm%nProcess:CTL'.$strBundle);
+	}
+
  }
  
 function list_items($limit = NULL, $offset = NULL, $col = 'vIRnumber', $order = 'asc') {
@@ -119,7 +132,7 @@ function deleterow($deleteid)
 		
  function coillistdetails($partyid = '') 
  {
-	$sqlci = "select nSno as bundlenumber, DATE_FORMAT(dDate, '%d-%m-%Y') AS processdate, nLength as length, nNoOfPieces as noofsheets, nBundleweight as weight, vStatus as status, vIRnumber as pnumber from aspen_tblcuttinginstruction WHERE aspen_tblcuttinginstruction.vIRnumber='".$partyid."'";
+	$sqlci = "select nSno as bundlenumber, DATE_FORMAT(dDate, '%d-%m-%Y') AS processdate, nLength as length, nNoOfPieces as noofsheets, nBundleweight as weight, vStatus as status, vIRnumber as pnumber from aspen_tblcuttinginstruction WHERE aspen_tblcuttinginstruction.vIRnumber='".$partyid."' and aspen_tblcuttinginstruction.vStatus != 'Billed' and aspen_tblcuttinginstruction.vStatus != 'Ready To Bill' and aspen_tblcuttinginstruction.vStatus != ''";
 	//echo $sqlci;
 	$query = $this->db->query($sqlci);
 		$arr='';
@@ -141,12 +154,10 @@ function deleterow($deleteid)
 
 	 
   
-  function weightbundle() 
-  {
-  $sqlchildweight ="SELECT sum(aspen_tblcuttinginstruction.nBundleweight) as childlength from aspen_tblcuttinginstruction where vIRnumber = ".$_POST['pid']; 
- $querychildweight = $this->db->query($sqlchildweight);
- if ($querychildweight->num_rows() > 0)
-    {
+  function weightbundle() {
+	$sqlchildweight ="SELECT sum(aspen_tblcuttinginstruction.nBundleweight) as childlength from aspen_tblcuttinginstruction where vIRnumber = '".$_POST['pid']."'"; 
+ 	$querychildweight = $this->db->query($sqlchildweight);
+ 	if ($querychildweight->num_rows() > 0) {
     foreach ($querychildweight->result() as $rowcw)
     {
     $childweight =$rowcw->childlength;
@@ -179,8 +190,8 @@ function savebundle() {
 		$bundleweight = $_POST['bundleweight'];
 		$pid = $_POST['pid'];
 	}
-	$sql = $this->db->query ("Insert into aspen_tblcuttinginstruction  (vIRnumber,dDate,nLength,nNoOfPieces,nBundleweight ) VALUES(  '". $pid. "',
- '". $date1. "','". $length. "','". $rate. "','". $bundleweight. "' )");
+	$sql = $this->db->query ("Insert into aspen_tblcuttinginstruction  (vIRnumber,dDate,nLength,nNoOfPieces,nBundleweight,vStatus ) VALUES(  '". $pid. "',
+ '". $date1. "','". $length. "','". $rate. "','". $bundleweight. "', 'WIP-Cutting' )");
 	$sql1 = $this->db->query ("Insert into aspen_hist_tblcuttinginstruction (vIRnumber,dDate,nLength,nNoOfPieces,nBundleweight ) VALUES(  '". $pid. "',
   '". $date1. "','". $length. "','". $rate. "','". $bundleweight. "' )");
 }	

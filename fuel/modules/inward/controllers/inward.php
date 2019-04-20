@@ -19,38 +19,44 @@ class inward extends Fuel_base_controller {
 		$this->load->module_model(INWARD_FOLDER, 'inward_model');
 		$this->data = $this->inward_model->example();
 		if(isset($this->data)) {
-			if(isset($this->data[0]))  {
-		}
-		
+			
 		$this->uri->init_get_params();
 		$this->pname = (string) $this->input->get('pname', TRUE);
+		$this->ppartyid = (string) $this->input->get('ppartyid', TRUE);
+		$this->pcoildetails = '';
 		if($this->pname == 'undefined' || $this->pname == '' || $this->pname == 'No Result'){
 			$this->pname = '';
-		}
-		$this->partyid = (string) $this->input->get('partyid', TRUE);
+		} 
 		$this->partyname = (string) $this->input->get('partyname', TRUE);
 		$this->datam = $this->inward_model->mat();
 		$this->fdata = $this->inward_model->party();
-		
 	}		
 }	
-	function index()
-	{
+	function index() {
 		if(!empty($this->data) && isset($this->data)) {
-			
+		
+			$bundleNumber = (string) $this->input->get('bundleNumber', TRUE);
+		
+			if(!empty(trim($this->ppartyid))) {
+				$this->pcoildetails = $this->inward_model->getParentCoilDetails($this->ppartyid);
+			} 
+			if(!empty($bundleNumber)) {
+				$vars['bundledetails'] = $this->inward_model->getParentBundleDetails($this->ppartyid,$bundleNumber);
+			}
+			$vars['bundleNumber'] = $bundleNumber;
 			$vars['data']= $this->data;
+			$vars['ppartyid']= $this->ppartyid;
 			$vars['pname'] = $this->pname;
-			$vars['datam']= $this->datam;
-			$vars['fdata']= $this->fdata;
+			$vars['datam'] = $this->datam;
+			$vars['fdata'] = $this->fdata;
+			$vars['pcoildetails'] = $this->pcoildetails;
             $this->_render('inward', $vars);
 		} else {
 			redirect(fuel_url('#'));
 		}
 	}
 	
-	
-	
-		function checkcoilno() {
+	function checkcoilno() {
 		if (!empty($_REQUEST)) {
 		$checkrecordinfo = $this->inward_model->checkcoilno($_REQUEST);
 		return $checkrecordinfo;
@@ -58,24 +64,21 @@ class inward extends Fuel_base_controller {
 		echo 'ERROR';
 		}
 	}
-	
-	
 
-		function inwardbillgenerate(){
-	 $queryStr = $_SERVER['QUERY_STRING'];
+	function inwardbillgenerate(){
+		 $queryStr = $_SERVER['QUERY_STRING'];
         parse_str($queryStr, $args);
         $pname = $args["pname"];
 		$pid = $args["pid"];
-	$this->load->module_model(INWARD_FOLDER, 'inward_model');
-	$inwardbillgenerateb = $this->inward_model->inwardbillgeneratemodel($pname,$pid);
+		$this->load->module_model(INWARD_FOLDER, 'inward_model');
+		$inwardbillgenerateb = $this->inward_model->inwardbillgeneratemodel($pname,$pid);
 	
 	}
 		
-
 	function savedetails(){
 		if (!empty($_POST)){
 		$this->load->module_model(INWARD_FOLDER, 'inward_model');
-			$arr = $this->inward_model->saveinwardentry($_POST['pid'],$_POST['pname'], $_POST['date3'],$_POST['lno'],$_POST['icno'],$_POST['date4'], $_POST['coil'],$_POST['fWidth'], $_POST['fThickness'],$_POST['fLength'],$_POST['fQuantity'],$_POST['status'],$_POST['hno'],$_POST['pna']);
+			$arr = $this->inward_model->saveinwardentry($_POST['pid'],$_POST['pname'], $_POST['date3'],$_POST['lno'],$_POST['icno'],$_POST['date4'], $_POST['coil'],$_POST['fWidth'], $_POST['fThickness'],$_POST['fLength'],$_POST['fQuantity'],$_POST['status'],$_POST['hno'],$_POST['pna'],$_POST['ppartyid'],$_POST['parentBundleNumber'],$_POST['grade'],$_POST['cast']);
 			if(empty($arr)) echo 'Success'; else echo 'Unable to save';
 	
 		}
@@ -83,22 +86,14 @@ class inward extends Fuel_base_controller {
 			//redirect(fuel_uri('#'));
 		}
 	}
-	
-	
-	
-	
-	
-			
-function autosuggest($pname = ''){
+		
+	function autosuggest($pname = ''){
 		if(empty($pname)) { 
 			$pname = $_POST['queryString'];
 		}
 		$pnamelists = $this->inward_model->list_pnamelists($pname);
 		return $pnamelists;
 	}
-
-	
-	
 }
 /* End of file */
 /* Location: ./fuel/modules/controllers*/

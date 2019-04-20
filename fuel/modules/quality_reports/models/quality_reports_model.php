@@ -13,13 +13,13 @@ class Quality_reports_model extends Base_module_model {
     }
 
     function getCoilDetails($coilNumber) {
-      $strCoilNumberSql = 'select * from aspen_tblinwardentry as ai left join aspen_tblpartydetails as ap on ai.nPartyId = ap.nPartyId where vIRnumber='.$coilNumber;
+      $strCoilNumberSql = "select * from aspen_tblinwardentry as ai left join aspen_tblpartydetails as ap on ai.nPartyId = ap.nPartyId where vIRnumber='".$coilNumber."'";
       $resCoillDetailsObj = $this->db->query($strCoilNumberSql);
       return $resCoillDetailsObj->row(0);
     }
 
     function getSlitDetails($coilNumber) {
-      $strSlitDetailsSql = 'select * from aspen_tblslittinginstruction where vIRnumber='.$coilNumber;
+      $strSlitDetailsSql = "select * from aspen_tblslittinginstruction where vIRnumber='".$coilNumber."'";
       $resSlitlDetailsObj = $this->db->query($strSlitDetailsSql);
       $arr = array();
       foreach ($resSlitlDetailsObj->result() as $row) {
@@ -29,7 +29,7 @@ class Quality_reports_model extends Base_module_model {
     }
 
     function getBundleDetails($coilNumber) {
-      $strBundleDetailsSql = 'select * from aspen_tblcuttinginstruction where vIRnumber='.$coilNumber;
+      $strBundleDetailsSql = "select * from aspen_tblcuttinginstruction where vIRnumber='".$coilNumber."'";
       $resBundleDetailsObj = $this->db->query($strBundleDetailsSql);
       $arr = array();
       foreach ($resBundleDetailsObj->result() as $row) {
@@ -39,9 +39,10 @@ class Quality_reports_model extends Base_module_model {
     }
 
     function insertCuttingDetails($postData,$fileData) {
+      date_default_timezone_set('Asia/Kolkata');
       $strInsertQualityDetails = "insert into aspen_tblQualityReports
-      (coil_number,prepared_by,verified_by,created_on,updated_on,final_judgement,report_type,reported_to) 
-      values('".$postData['coilnumber']."','".$postData['preparedBy']."','".$postData['verifiedBy']."','".date('Y-m-d H:i:s')."','".date('Y-m-d H:i:s')."','".$postData['finalJudgement']."',1,'".$postData['reportedTo']."')";
+      (coil_number,prepared_by,verified_by,created_on,updated_on,final_judgement,report_type,reported_to,coil_grade) 
+      values('".$postData['coilnumber']."','".$postData['preparedBy']."','".$postData['verifiedBy']."','".date('Y-m-d H:i:s')."','".date('Y-m-d H:i:s')."','".$postData['finalJudgement']."',1,'".$postData['reportedTo']."','".$postData['coilGrade']."')";
 
       $resInsertQualityReport = $this->db->query($strInsertQualityDetails);
       $label_id = mysql_insert_id();
@@ -53,7 +54,7 @@ class Quality_reports_model extends Base_module_model {
           (report_id,coil_number,bundle_number,length,weight,
           thickness,diagonal,last_5_sheets,first_5_sheets,wave,waveMM,
           waveNo,side,center, centerMM,centerNo,
-          dinch_mark,black_spots,scratches,wire_rope_marks,other_marks) values('".$label_id."','".$postData['coilnumber']."','".$row->nSno."',
+          dinch_mark,black_spots,scratches,wire_rope_marks,other_marks,cpk,surface_file) values('".$label_id."','".$postData['coilnumber']."','".$row->nSno."',
           '".$postData['length'][$index]."','".$postData['weight'][$index]."',
           '".$postData['thickness'][$index]."','".$postData['diagonal'][$index]."',
           '".$postData['last5'][$index]."','".$postData['first5'][$index]."',
@@ -64,16 +65,20 @@ class Quality_reports_model extends Base_module_model {
           '".$postData['centerNo'][$index]."',
           '".$postData['dinchMarks'][$index]."','".$postData['black_spots'][$index]."',
           '".$postData['scratches'][$index]."',
-          '".$postData['wire_rope_marks'][$index]."','".$postData['other_marks'][$index]."')";
+          '".$postData['wire_rope_marks'][$index]."','".$postData['other_marks'][$index]."','".$postData['cpk'][$index]."','".$fileData['cutFile']['name'][$index]."')";
           
           $resInsertSlitBundle = $this->db->query($strInsertSlitBundleDetails);
+
+          if($resInsertSlitBundle) {
+            move_uploaded_file($_FILES['cutFile']['tmp_name'][$index],WEB_ROOT.'uploads/'.$_FILES['cutFile']['name'][$index]);
+          }
         }
         echo 'success';exit;          
       }
     }
 
     function insertCoilDetails($postData,$fileData) {
-      // print_r($postData);print_r($fileData);exit;
+      date_default_timezone_set('Asia/Kolkata');
       $strInsertQualityDetails = "insert into aspen_tblQualityReports(coil_number,prepared_by,verified_by,created_on,updated_on,final_judgement,report_type) 
       values('".$postData['coilnumber']."','".$postData['preparedBy']."','".$postData['verifiedBy']."','".date('Y-m-d H:i:s')."','".date('Y-m-d H:i:s')."','".$postData['finalJudgement']."',2)";
 
@@ -93,11 +98,9 @@ class Quality_reports_model extends Base_module_model {
         move_uploaded_file($_FILES['coilFile5']['tmp_name'],WEB_ROOT.'/uploads/'.$_FILES['coilFile5']['name']);
         $strSlitDetails = "select * from aspen_tblslittinginstruction where vIRnumber = '".$postData['coilnumber']."'";
         $resSlittingDetails = $this->db->query($strSlitDetails);
-        
         foreach ($resSlittingDetails->result() as $index => $row) {
-          $camberValue = ($postData['camber'][$index] == 'yes') ? 1 : 0;
           $strInsertSlitBundleDetails = "insert into aspen_tblSlittingQualityReports
-          (slit_report_id,coil_number,slit_number,actual_thickness_min,actual_thickness_max,
+          (slit_report_id,coil_number,slit_number,actual_thickness_min,actual_thickness_max,thickness_r,
           actual_width_min,actual_width_max,burr_min,burr_max,strip_1,surface_desc1,
           surface_fileName1,strip_2,surface_desc2,
           surface_fileName2,
@@ -106,21 +109,21 @@ class Quality_reports_model extends Base_module_model {
           strip_4,surface_desc4,
           surface_fileName4,
           strip_5,surface_desc5,
-          surface_fileName5,camber,final_judgement) values('".$slitCoilReportId."','".$postData['coilnumber']."','".$row->nSno."',
-          '".$postData['actualThicknessMin'][$index]."','".$postData['actualThicknessMax'][$index]."',
+          surface_fileName5,final_judgement,cpk) values('".$slitCoilReportId."','".$postData['coilnumber']."','".$row->nSno."',
+          '".$postData['actualThicknessMin'][$index]."','".$postData['actualThicknessMax'][$index]."','".$postData['actualThicknessR'][$index]."',
           '".$postData['actualWidthMin'][$index]."','".$postData['actualWidthMax'][$index]."',
           '".$postData['burrMin'][$index]."','".$postData['burrMax'][$index]."',
           '".$postData['slitSurface'.$index][0]."',
-          '".$postData['slitSurfaceDescription'.$index][$index]."','".$fileData['slitFile'.$index]['name'][$index]."',
+          '".$postData['slitSurfaceDescription'.$index][0]."','".$fileData['slitFile'.$index]['name'][0]."',
           '".$postData['slitSurface'.$index][1]."',
-          '".$postData['slitSurfaceDescription'.$index][$index]."','".$fileData['slitFile'.$index]['name'][$index]."',
+          '".$postData['slitSurfaceDescription'.$index][1]."','".$fileData['slitFile'.$index]['name'][1]."',
           '".$postData['slitSurface'.$index][2]."',
-          '".$postData['slitSurfaceDescription'.$index][$index]."','".$fileData['slitFile'.$index]['name'][$index]."',
+          '".$postData['slitSurfaceDescription'.$index][2]."','".$fileData['slitFile'.$index]['name'][2]."',
           '".$postData['slitSurface'.$index][3]."',
-          '".$postData['slitSurfaceDescription'.$index][$index]."','".$fileData['slitFile'.$index]['name'][$index]."',
+          '".$postData['slitSurfaceDescription'.$index][3]."','".$fileData['slitFile'.$index]['name'][3]."',
           '".$postData['slitSurface'.$index][4]."',
-          '".$postData['slitSurfaceDescription'.$index][$index]."','".$fileData['slitFile'.$index]['name'][$index]."',
-          '".$camberValue."','".$postData['slitFinalJudgement'][$index]."')";
+          '".$postData['slitSurfaceDescription'.$index][4]."','".$fileData['slitFile'.$index]['name'][4]."',
+          '".$postData['slitFinalJudgement'][$index]."','".$postData['cpk'][$index]."')";
           
           $resInsertSlitBundle = $this->db->query($strInsertSlitBundleDetails);
           if($resInsertSlitBundle) {
@@ -176,9 +179,9 @@ class Quality_reports_model extends Base_module_model {
       $vars = array();
       $vars['slit_coil_details'] = $this->getCoilReportDetails($reportId);
       $vars['coil_details'] = $this->getCoilDetails($vars['slit_coil_details']->coil_number);
-      $vars['slit_details'] = $this->getSlitReportDetails($reportId);
+      $vars['slit_details'] = $this->getSlitReportDetails($vars['slit_coil_details']->id);
       $vars['surfaceDetails'] = $this->surfaceDetails();
-
+    
       $pdf = new TCPDF('L', PDF_UNIT, PDF_PAGE_FORMAT, true, 'UTF-8', false);
       $pdfname= 'QualityReport'.$vars['slit_coil_details']->coil_number.'.pdf';
       $resolution= array(72, 150);
@@ -187,7 +190,7 @@ class Quality_reports_model extends Base_module_model {
       $pdf->SetSubject('Quality Report');
       $pdf->SetKeywords('Aspen, quality, report, slitting');
       // set default header data
-      $pdf->SetHeaderData('', '', 'Slitting Inspection Report', 'Prepared on : '.date('d-m-Y',strtotime($vars['slit_coil_details']->created_on)).' by ASPEN STEEL PVT LTD');
+      $pdf->SetHeaderData('', '', 'Slitting Inspection Report', 'Prepared on : '.date('d-m-Y',strtotime($vars['slit_coil_details']->created_on)).' by ASPEN STEEL PVT LTD '."\n".'Branch At: Plot no 16E, Bidadi Industrial Area, Phase 2 Sector 1, Bidadi, Ramnagara-562109');
       $pdf->setHeaderFont(Array(PDF_FONT_NAME_MAIN, '', PDF_FONT_SIZE_MAIN));
       $pdf->setFooterFont(Array(PDF_FONT_NAME_DATA, '', PDF_FONT_SIZE_DATA));
       $pdf->SetDefaultMonospacedFont(PDF_FONT_MONOSPACED);
@@ -230,23 +233,24 @@ class Quality_reports_model extends Base_module_model {
        <table border="1" width="100%">
          <tr style="text-align:center;">
            <th><h1><b>Slit Number</b></h1></th>
-           <th colspan="2"><h1><b>Actual thickness</b></h1></th>
-           <th colspan="2"><h1><b>Actual Width</b></h1></th>
+           <th colspan="3"><h1><b>Thickness</b></h1></th>
+           <th colspan="2"><h1><b>Width</b></h1></th>
            <th colspan="2"><h1><b>Burr</b></h1></th>
            <th colspan="2"><h1><b>Surface/strip condition</b></h1></th>
-           <th><h1><b>Camber</b></h1></th>
+           <th><h1><b>CPK of width</b></h1></th>
            <th><h1><b>Final judgement</b></h1></th>
          </tr>
          <tr style="text-align:center;">
            <th></th>
-           <th><h1><b>Min</b></h1></th>
-           <th><h1><b>Max</b></h1></th>
+           <th><h1><b>L</b></h1></th>
+           <th><h1><b>R</b></h1></th>
+           <th><h1><b>C</b></h1></th>
 
-           <th><h1><b>Min</b></h1></th>
-           <th><h1><b>Max</b></h1></th>
+           <th><h1><b>Standard</b></h1></th>
+           <th><h1><b>Actual</b></h1></th>
 
-           <th><h1><b>Min</b></h1></th>
-           <th><h1><b>Max</b></h1></th>
+           <th><h1><b>Standard</b></h1></th>
+           <th><h1><b>Actual</b></h1></th>
 
            <th><h1><b>Condition</b></h1></th>
            <th><h1><b>Desc</b></h1></th>
@@ -255,7 +259,8 @@ class Quality_reports_model extends Base_module_model {
            <th></th>
          </tr>';
         foreach($vars['slit_details'] as $index => $value) {
-              $html .= '<tr style="text-align:center;"><td><h1><b>'.$value->slit_number.'</b></h1></td><td><h1><b>'.$value->actual_thickness_min.'</b></h1></td>';
+          
+              $html .= '<tr style="text-align:center;"><td><h1><b>'.$value->slit_number.'</b></h1></td><td><h1><b>'.$value->actual_thickness_min.'</b></h1></td><td><h1><b>'.$value->thickness_r.'</b></h1></td>';
               $html .= '<td><h1><b>'.$value->actual_thickness_max.'</b></h1></td><td><h1><b>'.$value->actual_width_min.'</b></h1></td><td><h1><b>'.$value->actual_width_max.'</b></h1></td>';
 
               $html .= '<td><h1><b>'.$value->burr_min.'</b></h1></td><td><h1><b>'.$value->burr_max.'</b></h1></td>';
@@ -263,7 +268,7 @@ class Quality_reports_model extends Base_module_model {
               $html .= '<td><h1><b>'.((strlen(trim($value->strip_1))>0) ? $vars['surfaceDetails'][$value->strip_1] : '-').'</b></h1></td>';
               $html .= '<td><h1><b>'.(($value->surface_desc1) ? $value->surface_desc1 : '-').'</b></h1></td>';
 
-              $html .= '<td><h1><b>'.(($value->camber == 1 ) ? 'Yes' : 'No').'</b></h1></td>';
+              $html .= '<td><h1><b>'.(($value->cpk) ? $value->cpk : '-').'</b></h1></td>';
               $html .= '<td><h1><b>'.(($value->final_judgement) ? $value->final_judgement : '-').'</b></h1></td></tr>';
             }
 
@@ -272,7 +277,8 @@ class Quality_reports_model extends Base_module_model {
        <table cellspacing="0" cellpadding="5" border="0">
          <tr><td align="left">&nbsp;</td><td align="right">&nbsp;</td></tr>
          <tr>
-           <td colspan="2" align="right" style="font-size:45px; font-style:italic; font-family: fantasy;"><b>QC sign ______________________</b></td>
+           <td style="font-size:45px; font-style:italic; font-family: fantasy;"><b>Production Engg sign ______________________</b></td>
+           <td align="right" style="font-size:45px; font-style:italic; font-family: fantasy;"><b>QC sign ______________________</b></td>
          </tr>
        </table>';
 
@@ -298,7 +304,7 @@ class Quality_reports_model extends Base_module_model {
       $pdf->SetSubject('Quality Report');
       $pdf->SetKeywords('Aspen, quality, report, cutting');
       // set default header data
-      $pdf->SetHeaderData('', '', 'Cutting Inspection Report', 'Prepared on : '.date('d-m-Y',strtotime($vars['quality_details']->created_on)).' by ASPEN STEEL PVT LTD');
+      $pdf->SetHeaderData('', '', 'Cutting Inspection Report', 'Prepared on : '.date('d-m-Y',strtotime($vars['quality_details']->created_on)).' by ASPEN STEEL PVT LTD'."\n".'Branch At: Plot no 16E, Bidadi Industrial Area, Phase 2 Sector 1, Bidadi, Ramnagara-562109');
       $pdf->setHeaderFont(Array(PDF_FONT_NAME_MAIN, '', PDF_FONT_SIZE_MAIN));
       $pdf->setFooterFont(Array(PDF_FONT_NAME_DATA, '', PDF_FONT_SIZE_DATA));
       $pdf->SetDefaultMonospacedFont(PDF_FONT_MONOSPACED);
@@ -311,39 +317,42 @@ class Quality_reports_model extends Base_module_model {
       $pdf->AddPage();
 
       $html = '
-       <table align="center" width="100%" cellspacing="0" cellpadding="5"  border="0.1">
+       <table align="center" width="100%" cellspacing="0" cellpadding="5" border="0.1" style="font-size:25px;">
          <tr>
-           <td width="100%" align="center" style="font-size:30px; font-style:italic; font-family: fantasy;"><h1>Coil Details</h1></td>
+           <td width="100%" align="center" style="font-size:25px; font-style:italic; font-family: fantasy;"><h1>Coil Details</h1></td>
          </tr>
          <tr>
-           <td width="50%" align="left"><h1><b>Coil Number: '.$vars['quality_details']->coil_number.'</b></h1></td>
-           <td align="left" width="50%"><h1> Party Name: '.$vars['coil_details']->nPartyName.' </h1></td>
+           <td width="40%" align="left" style="font-size:15px;"><h1><b>Coil Number: '.$vars['quality_details']->coil_number.'</b></h1></td>
+           <td align="left" width="60%" style="font-size:15px;"><h1> Party Name: '.$vars['coil_details']->nPartyName.' </h1></td>
          </tr>
          <tr>
-           <td width="50%" align="left"><h1><b>Coil Width: '.$vars['coil_details']->fWidth.'</b></h1></td>
-           <td width="50%" align="left"><h1><b>Coil Thickness: '.$vars['coil_details']->fThickness.'</b></h1></td>
+           <td width="40%" align="left" style="font-size:15px;"><h1><b>Coil Width: '.$vars['coil_details']->fWidth.'</b></h1></td>
+           <td width="60%" align="left" style="font-size:15px;"><h1><b>Coil Thickness: '.$vars['coil_details']->fThickness.'</b></h1></td>
          </tr>
          <tr>
-          <td width="50%" align="left"><h1><b>Operator Name: '.$vars['quality_details']->prepared_by.'</b></h1></td>
-          <td width="50%" align="left"><h1><b>Checked By: '.$vars['quality_details']->verified_by.'</b></h1></td>
+          <td width="40%" align="left" style="font-size:15px;"><h1><b>Operator Name: '.$vars['quality_details']->prepared_by.'</b></h1></td>
+          <td width="60%" align="left" style="font-size:15px;"><h1><b>Checked By: '.$vars['quality_details']->verified_by.'</b></h1></td>
          </tr>
          <tr>
-          <td width="50%" align="left"><h1><b>Reported To: '.$vars['quality_details']->reported_to.'</b></h1></td>
-          <td width="50%" align="left"><h1><b>Remarks: '.$vars['quality_details']->final_judgement.'</b></h1></td>
+          <td width="40%" align="left" style="font-size:15px;"><h1><b>Reported To: '.$vars['quality_details']->reported_to.'</b></h1></td>
+          <td width="60%" align="left" style="font-size:15px;"><h1><b>Remarks: '.$vars['quality_details']->final_judgement.'</b></h1></td>
+         </tr>
+         <tr>
+           <td width="40%" align="left" style="font-size:15px;"><h1><b>Coil Grade: '.$vars['quality_details']->coil_grade.'</b></h1></td>
          </tr>
        </table>';
        $html .= '<br /><table><tr style="text-align:center;"><td><h1><b>Bundle Details</b></h1></td></tr></table><br />
 
-       <table border="1" width="100%">
+       <table border="1" width="100%" cellpadding="6" style="font-size:30px; font-weight:bold;">
           <tr> <td></td>';
            foreach($vars['bundle_details'] as $bundle_detail) { 
-            $html .= '<td>Bundle Number '.$bundle_detail->bundle_number.'</td> ';
+            $html .= '<td align="center">Bundle No. '.$bundle_detail->bundle_number.'</td> ';
           } 
           $html .= '</tr><tr><td>Length Observed</td>';
           foreach($vars['bundle_details'] as $bundle_detail) { 
             $html .= '<td style="text-align: center;">'.$bundle_detail->length.'</td>';
           }
-          $html .= '</tr><tr> <td>Weight Observed</td>';
+          $html .= '</tr><tr> <td>Width Observed</td>';
           foreach($vars['bundle_details'] as $bundle_detail) { 
             $html .= '<td style="text-align: center;">'. $bundle_detail->weight.'</td>';
           }
@@ -355,6 +364,10 @@ class Quality_reports_model extends Base_module_model {
           $html .= '</tr><tr> <td>Diagonal in mm</td>';
           foreach($vars['bundle_details'] as $bundle_detail) { 
             $html .= '<td style="text-align: center;">'.$bundle_detail->diagonal.'</td>';
+          }
+          $html .= '</tr><tr> <td>CPK for length</td>';
+          foreach($vars['bundle_details'] as $bundle_detail) { 
+            $html .= '<td style="text-align: center;">'.$bundle_detail->cpk.'</td>';
           }
           $html .= '</tr><tr> <td>Last 5 sheets</td>';
           foreach($vars['bundle_details'] as $bundle_detail) { 
@@ -424,11 +437,12 @@ class Quality_reports_model extends Base_module_model {
       $html .= '</tr>';
       $html .= '</table>
 
-       <table cellspacing="0" cellpadding="5" border="0">
+       <table cellspacing="0" cellpadding="10" border="0">
+         <tr><td align="left">&nbsp;</td><td align="right">&nbsp;</td></tr>
          <tr><td align="left">&nbsp;</td><td align="right">&nbsp;</td></tr>
          <tr>
-           <td colspan="2" align="right" style="font-size:45px; font-style:italic; font-family: fantasy;"><b>QC sign ______________________</b></td>
-         </tr>
+           <td style="font-size:41px; font-style:italic; font-family: fantasy;"><b>Production Engg sign ______________________</b></td>
+           <td align="right" style="font-size:41px; font-style:italic; font-family: fantasy;"><b>QC sign ______________________</b></td>         </tr>
        </table>';
 
       $pdf->writeHTML($html, true, 0, true, true);

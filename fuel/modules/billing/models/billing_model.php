@@ -54,14 +54,13 @@ class Billing_model extends Base_module_model {
 	}
 
 	function getServiceTaxPercent() {
-		$queryServiceTax = $this->db->query("select * from aspen_tbltaxdetails");
+		$queryServiceTax = $this->db->query("select * from aspen_tbltaxdetails where vTypeOfTax = 'SERVICE TAX'");
 		$doubleServiceTaxPercent = '';
 		if($queryServiceTax->num_rows() > 0) {
-			foreach($queryServiceTax->result() as $row) {
-				$arr[$row->nTaxTypeId] =$row;
-			}
+			$row = $queryServiceTax->result();
+			$doubleServiceTaxPercent = $row[0]->nPercentage;
 		}
-		return json_encode($arr);
+		return $doubleServiceTaxPercent;
 	}
 
 	function billingpreviewviewmodel($pid, $pname,$nsno){
@@ -806,7 +805,7 @@ function bundlelistdetails($partyid = '',$nsno = '') {
 	 from aspen_tblcuttinginstruction
 	LEFT JOIN aspen_tblbillingstatus  ON aspen_tblcuttinginstruction.vIRnumber=aspen_tblbillingstatus.vIRnumber
 	WHERE aspen_tblcuttinginstruction.nSno = aspen_tblbillingstatus.nSno and  aspen_tblbillingstatus.vIRnumber='".$partyid."' and aspen_tblbillingstatus.nSno IN(".$nsno.")  group by aspen_tblbillingstatus.nSno";
-
+// print_r($sqlbu);exit;
 	/*	$sqlins = "UPDATE aspen_tblbillingstatus SET fbilledWeight='". $nsno. "' WHERE vIRnumber='".$partyid."' and nSno='".$nsno."'";*/
 	$query = $this->db->query($sqlbu);
 	$arr='';
@@ -914,8 +913,6 @@ function listbundledetailsslit($partyid = '',$slno = '') {
 	  where
 		aspen_tblpartydetails.nPartyName='".$partyname."' and aspen_tblinwardentry.vIRnumber='".$coilno."'";
 
-
-
   $querymain = $this->db->query($sqlrpt);
 
 
@@ -995,14 +992,12 @@ function listbundledetailsslit($partyid = '',$slno = '') {
 
 function billgeneratemodelslit($coilno='',$partyname='',$description='',$lorryno='',$totalrates='',$totalweight_checks='',$totalamtsslit='',$actualnumberbundle) {
 	 $sqlrpt = "select aspen_tblbilldetails.vOutLorryNo as lorryno,
-	 aspen_tblbilldetails.fTotalWeight as totalweight_checks,
-	 aspen_tblbilldetails.ntotalpcs as totalrates,
-	 aspen_tblbilldetails.ntotalamount as totalamtsslit,
 	 aspen_tblpartydetails.nPartyName as partyname,
 	 aspen_tblmatdescription.vDescription as description,
-	 aspen_tblinwardentry.vIRnumber as coilno
+	 aspen_tblinwardentry.vIRnumber as coilno,
+	 aspen_tblinwardentry.fThickness as thickness
 	 from aspen_tblinwardentry
-	  LEFT JOIN aspen_tblbilldetails  ON aspen_tblbilldetails.vIRnumber=aspen_tblinwardentry.vIRnumber
+	  LEFT JOIN aspen_tblbilldetails ON aspen_tblbilldetails.vIRnumber=aspen_tblinwardentry.vIRnumber
 	  LEFT JOIN aspen_tblmatdescription  ON aspen_tblmatdescription.nMatId=aspen_tblinwardentry.nMatId
 	  LEFT JOIN aspen_tblpartydetails ON aspen_tblpartydetails .nPartyId=aspen_tblinwardentry.nPartyId
 	  where
@@ -1017,6 +1012,7 @@ function billgeneratemodelslit($coilno='',$partyname='',$description='',$lorryno
 	 from aspen_tblslittinginstruction
 	LEFT JOIN aspen_tblbillingstatus  ON aspen_tblslittinginstruction.vIRnumber=aspen_tblbillingstatus.vIRnumber
 	WHERE aspen_tblslittinginstruction.nSno = aspen_tblbillingstatus.nSno and  aspen_tblbillingstatus.vIRnumber='".$coilno."'  and aspen_tblbillingstatus.nSno IN( ".$actualnumberbundle.") order by aspen_tblbillingstatus.nSno asc";
+
 	$queryitem = $this->db->query($sqlbundle);
 
   $pdf = new TCPDF(PDF_PAGE_ORIENTATION, PDF_UNIT, PDF_PAGE_FORMAT, true, 'UTF-8', false);
@@ -1052,6 +1048,10 @@ function billgeneratemodelslit($coilno='',$partyname='',$description='',$lorryno
 			<tr>
 				<td align="left">
 				<h1><b>Coil Number: </b></h1></td><td align="left"><h1>'.$coilno.'</h1></td>
+			</tr>
+			<tr>
+				<td align="left">
+					<h1><b>Thickness: </b></h1></td><td align="left"><h1>'.$querymain->row(0)->thickness.'mm</h1></td>
 			</tr>
 			<tr>
 				<td align="left">
@@ -1547,74 +1547,32 @@ function billgeneratemodelslit($coilno='',$partyname='',$description='',$lorryno
 		return $arr;
 	}*/
 
-	function savebilldetails_model($post) {
-    $billid = $_POST['billid'];
-    $partyid = $_POST['partyid'];
-    $txtamount = $_POST['txtamount'];
-    $txttotalweight = $_POST['txttotalweight'];
-    $txtscrap = $_POST['txtscrap'];
-    $txtoutward_num = $_POST['txtoutward_num'];
-    $txttotalpcs = $_POST['txttotalpcs'];
-    $mat_desc = $_POST['mat_desc'];
-    $thic = $_POST['thic'];
-    $actualnumberbundle = $_POST['actualnumberbundle'];
-    $pname = $_POST['pname'];
-    $wid = $_POST['wid'];
-    $len = $_POST['len'];
-    $wei = $_POST['wei'];
-    $txttotallength = $_POST['txttotallength'];
-    $txtweighttotal = $_POST['txtweighttotal'];
-    $txtwidthtotal = $_POST['txtwidthtotal'];
-    $txtadditional_type = $_POST['txtadditional_type'];
-    $txtamount_mt = $_POST['txtamount_mt'];
-    $txtnsubtotal = $_POST['txtnsubtotal'];
-    $txtgrandtotal = $_POST['txtgrandtotal'];
-    $container = $_POST['container'];
-    $taxTypes = $_POST['taxtypes'];
-		$txtservicetax = $txteductax = $txtsecedutax = $txtRateTotal = $serviceTaxPercent = 0;
+	function savebilldetails_model($billid,$partyid,$txtamount,$txttotalweight,$txtscrap,$txtoutward_num,$txttotalpcs,$mat_desc,$thic,$actualnumberbundle,$pname,$wid,$len,$wei,$txttotallength,$txtweighttotal,$txtwidthtotal,$txtadditional_type,$txtamount_mt,$txtnsubtotal,$txtservicetax,$txteductax,$txtsecedutax,$txtRateTotal,$txtgrandtotal,$container,$driverContact) {
 
-    $strWeightAmountSql = "(select DISTINCT nAmount as rate from aspen_tblpricetype1
-  left join aspen_tblmatdescription on aspen_tblmatdescription.nMatId=aspen_tblpricetype1.nMatId
-  left join aspen_tblinwardentry on aspen_tblinwardentry.nMatId=aspen_tblmatdescription.nMatId
-  left join aspen_tblbillingstatus on aspen_tblinwardentry.vIRnumber=aspen_tblbillingstatus.vIRnumber
-  where '".$thic."' between nMinThickness and nMaxThickness and aspen_tblmatdescription.vDescription= '".$mat_desc."' and aspen_tblinwardentry.vIRnumber='".$partyid."' and aspen_tblbillingstatus.nSno IN( ".$actualnumberbundle.") order by aspen_tblbillingstatus.nActualNo asc)";
-
-    $resWeightAmountSql = $this->db->query($strWeightAmountSql);
-    $weightAmount = $resWeightAmountSql->result()[0]->rate;
-
-    $sqlSelectedTaxDetails = 'select * from aspen_tbltaxdetails where nTaxTypeId in ('.$taxTypes.')';
-    $resObjServiceTaxDetails = $this->db->query($sqlSelectedTaxDetails);
-
-    $totalTaxAmount = 0;
-    $taxDetails = [];
-    if ($resObjServiceTaxDetails->num_rows() > 0) {
-        $sqlInsertTaxBillDetails = "insert into aspen_tblBillTaxAssociation ( nTaxTypeId,nBillNo,nTaxPercent,nTaxAmount) values";
-        foreach ($resObjServiceTaxDetails->result() as $row) {
-          $sqlInsertTaxBillDetails .= "(".$taxDetails['nTaxTypeId'] = $row->nTaxTypeId;
-          $sqlInsertTaxBillDetails .= ",".$billid;
-          $sqlInsertTaxBillDetails .= ",".$taxDetails['nTaxPercent'] = $row->nPercentage;
-          $sqlInsertTaxBillDetails .= ",".$taxDetails['nTaxAmount'] = ceil(($row->nPercentage * $txtnsubtotal)/100);
-          $totalTaxAmount = $totalTaxAmount + $taxDetails['nTaxAmount'];
-          $sqlInsertTaxBillDetails .= '),';
-        }
-    }
-    //inserting tax bill Details
-    $resSqlInsertTaxBillDetails = $this->db->query(preg_replace('/\,$/', '', $sqlInsertTaxBillDetails));
-
-		$sqlServiceTaxNAddressDetails = "select CONCAT_WS('-',CONCAT_WS(',', 'To M/s.',nPartyName,vAddress1,vAddress2,vCity),nPinId) as address from aspen_tblpartydetails
+		$sqlServiceTaxNAddressDetails = "select nPercentage from aspen_tbltaxdetails where vTypeOfTax = 'SERVICE TAX'
+											union
+										select CONCAT_WS('-',CONCAT_WS(',', 'To M/s.',nPartyName,vAddress1,vAddress2,vCity),nPinId) from aspen_tblpartydetails
 										right join aspen_tblinwardentry on aspen_tblinwardentry.nPartyId = aspen_tblpartydetails.nPartyId
-										where  aspen_tblinwardentry.vIRnumber=$partyid";
-
-		$resObjServiceTaxDetails = $this->db->query($sqlServiceTaxNAddressDetails);
-		$strBillingAddress = $resObjServiceTaxDetails->result()[0]->address;
+										where  aspen_tblinwardentry.vIRnumber='$partyid'";
+		
+										$resObjServiceTaxDetails = $this->db->query($sqlServiceTaxNAddressDetails);
+		$serviceTaxPercent = $resObjServiceTaxDetails->result()[0]->nPercentage;
+		$strBillingAddress = $resObjServiceTaxDetails->result()[1]->nPercentage;
 
 		$sql = "Insert into aspen_tblbilldetails (
-		   nBillNo, dBillDate, vIRnumber,fTotalWeight,fWeightAmount,fGrantTotal,nScrapSent,vOutLorryNo,nPartyId,vBillType,BillStatus,
-       ntotalpcs,ntotalamount,ocwtamount,ocwidthamount,oclengthamount,vAdditionalChargeType,fAmount,nsubtotal,grandtot_words,tBillingAddress)
-		  VALUES('". $billid. "',now(),'". $partyid. "','". $txttotalweight. "','".$weightAmount."','".$txtgrandtotal. "',
-      ". $txtscrap. ",'". $txtoutward_num. "',(SELECT aspen_tblpartydetails.nPartyId FROM aspen_tblpartydetails where aspen_tblpartydetails.nPartyName = '". $pname. "'),'Cutting','Billing','"
-      .$txttotalpcs."' ,'".$txtamount."','". $txtweighttotal. "','". $txtwidthtotal.
-      "','". $txttotallength. "','". $txtadditional_type."','". $txtamount_mt. "','". $txtnsubtotal. "','". $container."','".$strBillingAddress."')";
+		   nBillNo,dBillDate, vIRnumber, fTotalWeight, fWeightAmount, fServiceTax, fEduTax, fSHEduTax, fGrantTotal, nScrapSent, vOutLorryNo, nPartyId, vBillType, BillStatus, ntotalpcs, ntotalamount, ocwtamount, ocwidthamount, oclengthamount,vAdditionalChargeType,fAmount,nsubtotal,grandtot_words,nServiceTaxPercent,tBillingAddress,dFinalRate,vDriverContact)
+		  VALUES('". $billid. "',now(),'". $partyid. "','". $txttotalweight. "',(select DISTINCT nAmount as rate from aspen_tblpricetype1
+		left join aspen_tblmatdescription on aspen_tblmatdescription.nMatId=aspen_tblpricetype1.nMatId
+		left join aspen_tblinwardentry on aspen_tblinwardentry.nMatId=aspen_tblmatdescription.nMatId
+		left join aspen_tblbillingstatus on aspen_tblinwardentry.vIRnumber=aspen_tblbillingstatus.vIRnumber
+		where '".$thic."' between nMinThickness and nMaxThickness and aspen_tblmatdescription.vDescription= '".$mat_desc."' and aspen_tblinwardentry.vIRnumber='".$partyid."' and aspen_tblbillingstatus.nSno IN( ".$actualnumberbundle.") order by aspen_tblbillingstatus.nActualNo asc),'". $txtservicetax. "','". $txteductax. "','". $txtsecedutax. "','". $txtgrandtotal. "','". $txtscrap. "','". $txtoutward_num. "',(SELECT aspen_tblpartydetails.nPartyId  FROM aspen_tblpartydetails where aspen_tblpartydetails.nPartyName = '". $pname. "'),'Cutting','Billing','".$txttotalpcs."' ,'".$txtamount."','". $txtweighttotal. "','". $txtwidthtotal. "','". $txttotallength. "','". $txtadditional_type. "','". $txtamount_mt. "','". $txtnsubtotal. "','". $container. "',".$serviceTaxPercent.",'".$strBillingAddress."',".$txtRateTotal.",'".$driverContact."')";
+
+		$sql54 = "Insert into aspen_hist_tbl_billdetails (
+		 nBillNo,dBillDate, vIRnumber, fTotalWeight, fWeightAmount, fServiceTax, fEduTax, fSHEduTax, fGrantTotal, nScrapSent, vOutLorryNo, nPartyId, vBillType, BillStatus, ntotalpcs, ntotalamount, ocwtamount, ocwidthamount, oclengthamount,vAdditionalChargeType,fAmount,nsubtotal,grandtot_words,fStatus)
+		  VALUES('". $billid. "',now(),'". $partyid. "','". $txttotalweight. "',(select DISTINCT nAmount as rate from aspen_tblpricetype1
+		left join aspen_tblmatdescription on aspen_tblmatdescription.nMatId=aspen_tblpricetype1.nMatId
+		left join aspen_tblinwardentry on aspen_tblinwardentry.nMatId=aspen_tblmatdescription.nMatId
+		left join aspen_tblbillingstatus on aspen_tblinwardentry.vIRnumber=aspen_tblbillingstatus.vIRnumber where '".$thic."' between nMinThickness and nMaxThickness and aspen_tblmatdescription.vDescription= '".$mat_desc."' and aspen_tblinwardentry.vIRnumber='".$partyid."' and aspen_tblbillingstatus.nSno IN( ".$actualnumberbundle.") order by aspen_tblbillingstatus.nActualNo asc),'". $txtservicetax. "','". $txteductax. "','". $txtsecedutax. "','". $txtgrandtotal. "','". $txtscrap. "','". $txtoutward_num. "',(SELECT aspen_tblpartydetails.nPartyId  FROM aspen_tblpartydetails where aspen_tblpartydetails.nPartyName = '". $pname. "'),'Cutting','Billing','".$txttotalpcs."' ,'".$txtamount."','". $txtweighttotal. "','". $txtwidthtotal. "','". $txttotallength. "','". $txtadditional_type. "','". $txtamount_mt. "','". $txtnsubtotal. "','". $container. "', 'Billed Completely')";
 
 		$sql12="UPDATE aspen_tblbillingstatus p,
 				(select aspen_tblcuttinginstruction.nSno,
@@ -1625,8 +1583,7 @@ function billgeneratemodelslit($coilno='',$partyname='',$description='',$lorryno
 				set p.nbalance = p1.nbalance, p.vBillingStatus='Billed', p.nBilledNumber = p.nBilledNumber + p.nActualNo
 				where p.nSno = p1.nSno and p.vIRnumber = '$partyid'";
 
-		$sqlBundleBillingAssociationInsert = "Insert into aspen_tblBillBundleAssociation(nBundleNumber,nNoOfPcs,fbilledWeight,nBillNumber) select nSno as nBundleNumber, nActualNo as nNoOfPcs, fbilledWeight as fbilledWeight, $billid from aspen_tblbillingstatus where nSno IN ( $actualnumberbundle ) and vIRnumber=$partyid";
-
+		$sqlBundleBillingAssociationInsert = "Insert into aspen_tblBillBundleAssociation(nBundleNumber,nNoOfPcs,fbilledWeight,nBillNumber) select nSno as nBundleNumber, nActualNo as nNoOfPcs, fbilledWeight as fbilledWeight, $billid from aspen_tblbillingstatus where nSno IN ( $actualnumberbundle ) and vIRnumber='$partyid'";
 		$sql13="UPDATE aspen_tblcuttinginstruction SET vStatus='Billed' WHERE vIRnumber='".$partyid."' and
 		aspen_tblcuttinginstruction.nSno IN( ".$actualnumberbundle.")";
 
@@ -1641,27 +1598,91 @@ function billgeneratemodelslit($coilno='',$partyname='',$description='',$lorryno
 				SET p.fpresent = p1.present
 				where p.vIRnumber='".$partyid."'";
 
+		$sql148="UPDATE aspen_hist_tblinwardentry
+		SET aspen_hist_tblinwardentry.fpresent=
+		aspen_hist_tblinwardentry.fQuantity-(select (SUM( aspen_tblbillingstatus.fbilledWeight ) *1000)
+		from aspen_tblbillingstatus
+		where aspen_tblbillingstatus.vIRnumber='".$partyid."'  group by aspen_tblbillingstatus.vIRnumber)
+		where aspen_hist_tblinwardentry.vIRnumber='".$partyid."' ";
+
 		$sql146="UPDATE aspen_tblinwardentry
 		SET aspen_tblinwardentry.billedweight=(select (SUM( aspen_tblbillingstatus.fbilledWeight ) *1000)
 		from aspen_tblbillingstatus
-		where aspen_tblbillingstatus.vIRnumber='".$partyid."'  group by aspen_tblbillingstatus.vIRnumber),
-    vStatus='Billed',
-    dBillDate=(select CURDATE())
+		where aspen_tblbillingstatus.vIRnumber='".$partyid."'  group by aspen_tblbillingstatus.vIRnumber)
 		where aspen_tblinwardentry.vIRnumber='".$partyid."' ";
 
-		$sql33="Select fpresent from aspen_tblinwardentry where aspen_tblinwardentry.vIRnumber='".$partyid."' ";
 
+		$sql179="UPDATE aspen_hist_tblinwardentry
+		SET aspen_hist_tblinwardentry.billedweight=(select (SUM( aspen_tblbillingstatus.fbilledWeight ) *1000)
+		from aspen_tblbillingstatus
+		where aspen_tblbillingstatus.vIRnumber='".$partyid."'  group by aspen_tblbillingstatus.vIRnumber)
+		where aspen_hist_tblinwardentry.vIRnumber='".$partyid."' ";
+	//	echo $sql179;
+
+		$sql76="UPDATE aspen_tblinwardentry SET vStatus='Billed' WHERE vIRnumber='".$partyid."'";
+		$sql767="UPDATE aspen_hist_tblinwardentry SET vStatus='Billed' WHERE vIRnumber='".$partyid."'";
+
+		$sql156="UPDATE aspen_tblinwardentry
+		SET aspen_tblinwardentry.dBillDate=(select CURDATE())
+		where aspen_tblinwardentry.vIRnumber='".$partyid."' ";
+
+		$sql1567= "UPDATE aspen_hist_tblinwardentry
+		SET aspen_hist_tblinwardentry.dBillDate=(select CURDATE())
+		where aspen_hist_tblinwardentry.vIRnumber='".$partyid."' ";
+
+		$sql33="Select fpresent from aspen_tblinwardentry where aspen_tblinwardentry.vIRnumber='".$partyid."' ";
+		$query76 = $this->db->query($sql76);
+		$query767 = $this->db->query($sql767);
+
+		$query148 = $this->db->query($sql148);
 		$query = $this->db->query($sql);
+		$query5412 = $this->db->query($sql1567);
 		$query146 = $this->db->query($sql146);
+		$query556 = $this->db->query($sql156);
+		$query54 = $this->db->query($sql54);
+		$query549 = $this->db->query($sql179);
 		$query1 = $this->db->query($sql12);
 		$queryBundleBillingAssociationInsert = $this->db->query($sqlBundleBillingAssociationInsert);
 		$query2 = $this->db->query($sql13);
 		$query3 = $this->db->query($sql14);
 		$query33 = $this->db->query($sql33);
+		if($query33==1){
+			$sql15="UPDATE aspen_tblinwardentry
+		SET aspen_tblinwardentry.vStatus= 'Billed'
+		where aspen_tblinwardentry.vIRnumber='".$partyid."' ";
+
+		$query4 = $this->db->query($sql15);
+
+			$strSql = "select ai.*,ap.*,am.* from aspen_tblinwardentry as ai 
+			left join aspen_tblmatdescription as am on ai.nMatId = am.nMatId 
+			left join aspen_tblpartydetails as ap on ap.nPartyId = ai.nPartyId
+			where ai.vIRnumber = '$partyid'";
+			$strquery = $this->db->query($strSql);
+
+			if($strquery->result()[0]->nBillingUpdates) {
+				$strBundleSql = "select * from aspen_tblBillBundleAssociation as abb 
+				left join aspen_tblcuttinginstruction ac on ac.nSno = abb.nBundleNumber and ac.vIRnumber = '$partyid'
+				 where nBillNumber = $billid";
+
+				$queryBundle = $this->db->query($strBundleSql);
+				$strBundle = '';
+				if ($queryBundle->num_rows() > 0) {
+					$index = 1;
+					foreach($queryBundle->result() as $key => $row) {
+						$strBundle .= '%n'.$index++.') '.$row->nLength.'mm - '.$row->nNoOfPcs.'Nos - '.($row->fbilledWeight*1000).'kgs';
+					}
+				} 
+	
+				sendSMS($strquery->result()[0]->nBillingUpdates,'Bill raised for coil no '.$partyid.'%n'.$strquery->result()[0]->vDescription.' '.$strquery->result()[0]->fThickness.'mm x '.$strquery->result()[0]->fWidth.'mm'.$strBundle.'%nAppx weight '.($txttotalweight*1000).'kgs%nLoaded in '.$txtoutward_num.'%nOn:'.date('d/m/Y').'%nInvoice no:'.$billid.'%nDriver no:'.$driverContact);
+			}
+		}
+		else{
+			return 0;
+		}
 	}
 
 
-	function directbillingbill($billid,$partyid,$pname,$cust_add,$cust_rm,$mat_desc,$thic,$wid,$len,$wei,$inv_no,$totalweight_check,$totalrate,$totalamt,$txthandling,$txtadditional_type,$txtamount_mt,$txtoutward_num,$txtscrap,$txtservicetax,$txteductax,$txtsecedutax,$txtgrandtotal,$container){
+	function directbillingbill($billid,$partyid,$pname,$cust_add,$cust_rm,$mat_desc,$thic,$wid,$len,$wei,$inv_no,$totalweight_check,$totalrate,$totalamt,$txthandling,$txtadditional_type,$txtamount_mt,$txtoutward_num,$txtscrap,$txtservicetax,$txteductax,$txtsecedutax,$txtgrandtotal,$container,$driverContact){
 
 		$sqlServiceTaxNAddressDetails = "select nPercentage from aspen_tbltaxdetails where vTypeOfTax = 'SERVICE TAX'
 											union
@@ -1674,8 +1695,8 @@ function billgeneratemodelslit($coilno='',$partyname='',$description='',$lorryno
 		$strBillingAddress = $resObjServiceTaxDetails->result()[1]->nPercentage;
 
 		$sql = "Insert into aspen_tblbilldetails (
-		   nBillNo,dBillDate, vIRnumber, fTotalWeight, fWeightAmount, fServiceTax, fEduTax, fSHEduTax, fGrantTotal, nScrapSent, vOutLorryNo, nPartyId, vBillType, BillStatus, ntotalpcs, ntotalamount, ocwtamount, ocwidthamount, oclengthamount,vAdditionalChargeType,fAmount,nsubtotal,grandtot_words,nServiceTaxPercent,tBillingAddress)
-		  VALUES('". $billid. "',now(),'". $partyid. "','". $totalweight_check. "','". $totalrate. "','". $txtservicetax. "','". $txteductax. "','". $txtsecedutax. "','". $txtgrandtotal. "','". $txtscrap. "','". $txtoutward_num. "',(SELECT aspen_tblpartydetails.nPartyId  FROM aspen_tblpartydetails where aspen_tblpartydetails.nPartyName = '". $pname. "'),'Directbilling','Billing',0,'0','0','0','0','". $txtadditional_type. "','". $txtamount_mt. "','". $totalamt. "','". $container. "',".$serviceTaxPercent.",'".$strBillingAddress."')";
+		   nBillNo,dBillDate, vIRnumber, fTotalWeight, fWeightAmount, fServiceTax, fEduTax, fSHEduTax, fGrantTotal, nScrapSent, vOutLorryNo, nPartyId, vBillType, BillStatus, ntotalpcs, ntotalamount, ocwtamount, ocwidthamount, oclengthamount,vAdditionalChargeType,fAmount,nsubtotal,grandtot_words,nServiceTaxPercent,tBillingAddress,vDriverContact)
+		  VALUES('". $billid. "',now(),'". $partyid. "','". $totalweight_check. "','". $totalrate. "','". $txtservicetax. "','". $txteductax. "','". $txtsecedutax. "','". $txtgrandtotal. "','". $txtscrap. "','". $txtoutward_num. "',(SELECT aspen_tblpartydetails.nPartyId  FROM aspen_tblpartydetails where aspen_tblpartydetails.nPartyName = '". $pname. "'),'Directbilling','Billing',0,'0','0','0','0','". $txtadditional_type. "','". $txtamount_mt. "','". $totalamt. "','". $container. "',".$serviceTaxPercent.",'".$strBillingAddress."','".$driverContact."')";
 
 		 $sql54 = "Insert into aspen_hist_tbl_billdetails (
 		   nBillNo,dBillDate, vIRnumber, fTotalWeight, fWeightAmount, fServiceTax, fEduTax, fSHEduTax, fGrantTotal, nScrapSent, vOutLorryNo, nPartyId, vBillType, BillStatus, ntotalpcs, ntotalamount, ocwtamount, ocwidthamount, oclengthamount,vAdditionalChargeType,fAmount,nsubtotal,grandtot_words,fStatus)
@@ -1736,6 +1757,17 @@ function billgeneratemodelslit($coilno='',$partyname='',$description='',$lorryno
 		$query88 = $this->db->query($sql88);
 		$query3 = $this->db->query($sql14);
 		$query66 = $this->db->query($sql66);
+			
+		$strSql = "select ai.*,ap.*,am.* from aspen_tblinwardentry as ai 
+		left join aspen_tblmatdescription as am on ai.nMatId = am.nMatId 
+		left join aspen_tblpartydetails as ap on ap.nPartyId = ai.nPartyId
+		where ai.vIRnumber = ".$partyid."";
+		$strquery = $this->db->query($strSql);
+
+		if($strquery->result()[0]->nBillingUpdates) {
+			sendSMS($strquery->result()[0]->nBillingUpdates,'Bill raised for coil no '.$partyid.'%n'.$strquery->result()[0]->vDescription.' '.$strquery->result()[0]->fThickness.'mm x '.$strquery->result()[0]->fWidth.'mm%nAppx weight '.$totalweight_check.'kgs%nLoaded in '.$txtoutward_num.'%nOn:'.date('d/m/Y').'%nInvoice no:'.$billid.'%nDriver no:'.$driverContact);
+		}
+
 	}
 
 
@@ -2020,13 +2052,13 @@ function billgeneratemodelslit($coilno='',$partyname='',$description='',$lorryno
 
 	}
 
-	function functionpdfslittingprint($billid,$partyid,$pname,$cust_add,$cust_rm,$mat_desc,$thic,$wid,$len,$wei,$inv_no,$totalweight_check,$totalrate,$totalamt,$txthandling,$txtadditional_type,$txtamount_mt,$txtoutward_num,$txtscrap,$txtservicetax,$txteductax,$txtsecedutax,$txtgrandtotal,$container,$txtslitsubtotal,$bundleIds,$txtadditional_type1,$txtamount_mt1){
+	function functionpdfslittingprint($billid,$partyid,$pname,$cust_add,$cust_rm,$mat_desc,$thic,$wid,$len,$wei,$inv_no,$totalweight_check,$totalrate,$totalamt,$txthandling,$txtadditional_type,$txtamount_mt,$txtoutward_num,$txtscrap,$txtservicetax,$txteductax,$txtsecedutax,$txtgrandtotal,$container,$txtslitsubtotal,$bundleIds,$txtadditional_type1,$txtamount_mt1,$driverContact){
 
 		$sqlServiceTaxNAddressDetails = "select nPercentage from aspen_tbltaxdetails where vTypeOfTax = 'SERVICE TAX'
 											union
 										select CONCAT_WS('-',CONCAT_WS(',', 'To M/s.',nPartyName,vAddress1,vAddress2,vCity),nPinId) from aspen_tblpartydetails
 										right join aspen_tblinwardentry on aspen_tblinwardentry.nPartyId = aspen_tblpartydetails.nPartyId
-										where  aspen_tblinwardentry.vIRnumber=$partyid";
+										where  aspen_tblinwardentry.vIRnumber='".$partyid."'";
 
 		$resObjServiceTaxDetails = $this->db->query($sqlServiceTaxNAddressDetails);
 		$serviceTaxPercent = $resObjServiceTaxDetails->result()[0]->nPercentage;
@@ -2040,11 +2072,11 @@ function billgeneratemodelslit($coilno='',$partyname='',$description='',$lorryno
 
 		$sql22="UPDATE aspen_tblinwardentry SET vStatus='Billed' WHERE vIRnumber='".$partyid."'";
 
-		$sql14="UPDATE aspen_tblinwardentry SET aspen_tblinwardentry.fpresent = aspen_tblinwardentry.fpresent - $totalweight_check where aspen_tblinwardentry.vIRnumber=$partyid";
+		$sql14="UPDATE aspen_tblinwardentry SET aspen_tblinwardentry.fpresent = aspen_tblinwardentry.fpresent - $totalweight_check where aspen_tblinwardentry.vIRnumber='".$partyid."'";
 
-		$sql15="UPDATE aspen_tblinwardentry SET aspen_tblinwardentry.billedweight = aspen_tblinwardentry.billedweight + $totalweight_check where aspen_tblinwardentry.vIRnumber=$partyid";
+		$sql15="UPDATE aspen_tblinwardentry SET aspen_tblinwardentry.billedweight = aspen_tblinwardentry.billedweight + $totalweight_check where aspen_tblinwardentry.vIRnumber='".$partyid."'";
 
-		$sqlBundleBillingAssociationInsert = "Insert into aspen_tblBillBundleAssociation(nBundleNumber,nNoOfPcs,fbilledWeight,nBillNumber) select nSno as nBundleNumber, nActualNo as nNoOfPcs, fbilledWeight as fbilledWeight, $billid from aspen_tblbillingstatus where nSno IN ( $bundleIds ) and vIRnumber=$partyid";
+		$sqlBundleBillingAssociationInsert = "Insert into aspen_tblBillBundleAssociation(nBundleNumber,nNoOfPcs,fbilledWeight,nBillNumber) select nSno as nBundleNumber, nActualNo as nNoOfPcs, fbilledWeight as fbilledWeight, $billid from aspen_tblbillingstatus where nSno IN ( $bundleIds ) and vIRnumber='".$partyid."'";
 
 		$sql33="Select fpresent from aspen_tblinwardentry where aspen_tblinwardentry.vIRnumber='".$partyid."' ";
 
@@ -2055,6 +2087,27 @@ function billgeneratemodelslit($coilno='',$partyname='',$description='',$lorryno
 		$query4 = $this->db->query($sql15);
 		$queryBundleBillingAssociationInsert = $this->db->query($sqlBundleBillingAssociationInsert);
 		$query33 = $this->db->query($sql33);
+		
+		$strSql = "select ai.*,ap.*,am.* from aspen_tblinwardentry as ai 
+		left join aspen_tblmatdescription as am on ai.nMatId = am.nMatId 
+		left join aspen_tblpartydetails as ap on ap.nPartyId = ai.nPartyId
+		where ai.vIRnumber = '".$partyid."'";
+		$strquery = $this->db->query($strSql);
+
+		if($strquery->result()[0]->nBillingUpdates) {
+			$strBundleSql = "select nWidth,count(nWidth) as count,sum(nWeight) as sum from aspen_tblBillBundleAssociation as abb  left join aspen_tblslittinginstruction as asi on asi.nSno = abb.nBundleNumber where abb.nBillNumber = $billid and asi.vIRnumber = '".$partyid."' and asi.nSno in ($bundleIds) group by nWidth,nLength;";
+
+			$queryBundle = $this->db->query($strBundleSql);
+			$strBundle = '';
+			if ($queryBundle->num_rows() > 0) {
+				$index = 1;
+				foreach($queryBundle->result() as $key => $row) {
+					$strBundle .= '%n'.$index++.') '.$row->nWidth.'mm - '.$row->count.'Nos - '.($row->sum).'kgs';
+				}
+			} 
+
+			sendSMS($strquery->result()[0]->nBillingUpdates,'Bill raised for coil no '.$partyid.'%n'.$strquery->result()[0]->vDescription.' '.$strquery->result()[0]->fThickness.'mm x '.$strquery->result()[0]->fWidth.'mm'.$strBundle.'%nAppx weight '.$totalweight_check.'kgs%nLoaded in '.$txtoutward_num.'%nOn:'.date('d/m/Y').'%nInvoice no:'.$billid.'%nDriver no:'.$driverContact);
+		}
 	}
 
 	function savebundlemodel(){
@@ -2068,7 +2121,7 @@ function billgeneratemodelslit($coilno='',$partyname='',$description='',$lorryno
 	}
 
 
-function finalbillgeneratemodel($partyid='',$actualnumberbundle='',$cust_add='',$cust_rm='',$billid='') {
+function finalbillgeneratemodel($partyid='',$actualnumberbundle='',$cust_add='',$cust_rm='',$billid='',$gstType) {
 	$sqlbilling= "select aspen_tblbilldetails.nBillNo as billnumber,
 	DATE_FORMAT(aspen_tblbilldetails.dBillDate, '%d/%m/%Y') as billdate,
 	aspen_tblpartydetails.nPartyName as partyname,
@@ -2085,11 +2138,11 @@ function finalbillgeneratemodel($partyid='',$actualnumberbundle='',$cust_add='',
 	left join aspen_tblpricetype1 on aspen_tblpricetype1.nMatId=aspen_tblmatdescription.nMatId
 	left join aspen_tblbillingstatus on aspen_tblinwardentry.vIRnumber=aspen_tblbillingstatus.vIRnumber
 	LEFT JOIN aspen_tblbilldetails ON aspen_tblbilldetails.vIRnumber=aspen_tblinwardentry.vIRnumber
-	LEFT JOIN aspen_tbladditionalbillchargetype ON aspen_tbladditionalbillchargetype.nBillNo=aspen_tblbilldetails.nBillNo where aspen_tblinwardentry.vIRnumber ='".$partyid."' and  aspen_tblbilldetails.nBillNo='".$billid."' ";
+	LEFT JOIN aspen_tbladditionalbillchargetype ON aspen_tbladditionalbillchargetype.nBillNo=aspen_tblbilldetails.nBillNo where aspen_tblinwardentry.vIRnumber ='".$partyid."' and  aspen_tblbilldetails.nBillNo='".$billid."'";
 
 		$querymain = $this->db->query($sqlbilling);
 
-		// $serviceTaxPercent = $this->getServiceTaxPercent();
+		$serviceTaxPercent = $this->getServiceTaxPercent();
 
 		$billnumber = $querymain->row(0)->billnumber;
 		$billdate = $querymain->row(0)->billdate;
@@ -2131,6 +2184,26 @@ function finalbillgeneratemodel($partyid='',$actualnumberbundle='',$cust_add='',
 		$wei = $querymain->row(0)->wei;
 		$cgstNumber = $querymain->row(0)->cgstNumber;
 
+		if($gstType == 'Within') {
+			$gstSection	= '<tr>
+							<td width="89%">
+							<h3><b>CGST @ 9%</b></h3>
+							</td> <td><h3>'.($servicetax/2).'</h3></td>
+						</tr>
+						<tr>
+							<td width="89%">
+							<h3><b>SGST @ 9%</b></h3>
+							</td> <td><h3>'.($servicetax/2).'</h3></td>
+						</tr>';
+
+		} else if($gstType == 'Inter') {
+			$gstSection	= '<tr>
+							<td width="89%">
+							<h3><b>IGST @ 18%</b></h3>
+							</td> <td><h3>'.ceil($servicetax).'</h3></td>
+						</tr>';
+		}
+
 		$sqlitem ="select Distinct aspen_tblbillingstatus.nSno as bundlenumber,aspen_tblcuttinginstruction.nLength as length,aspen_tblbillingstatus.nActualNo as noofpcs,aspen_tblbillingstatus.fWeight as wei,aspen_tblbillingstatus.fbilledWeight as weight  from aspen_tblcuttinginstruction
 	LEFT JOIN aspen_tblbillingstatus  ON aspen_tblcuttinginstruction.vIRnumber=aspen_tblbillingstatus.vIRnumber
 	WHERE aspen_tblcuttinginstruction.nSno = aspen_tblbillingstatus.nSno and  aspen_tblbillingstatus.vIRnumber='".$partyid."'  and aspen_tblbillingstatus.nSno IN( ".$actualnumberbundle.") order by aspen_tblbillingstatus.nSno asc";
@@ -2165,7 +2238,7 @@ function finalbillgeneratemodel($partyid='',$actualnumberbundle='',$cust_add='',
 				<td width="25%" align:"right"><h4>GST Regn. No: 29AABCA4807H1ZS</h4></td>
 			</tr>
 			<tr>
-				<td align="center" width="100%"><h4>Branch At: Plot no 16E, Bidadi Industrial Area, Phase 2 Sector 1, Bidadi, Ramnagara-562105, <b>Email: aspensteel_unit2@yahoo.com </b></h4></td>
+				<td align="center" width="100%"><h4>Branch At: Plot no 16E, Bidadi Industrial Area, Phase 2 Sector 1, Bidadi, Ramnagara-562109, <b>Email: aspensteel_unit2@yahoo.com </b></h4></td>
 			</tr>
 			<tr>
 				<td align="center" width="100%"><h4>Head Office At: 54/1, Medahalli, Old Madras Road, Bangalore-560049</h4></td>
@@ -2279,7 +2352,7 @@ function finalbillgeneratemodel($partyid='',$actualnumberbundle='',$cust_add='',
 			<h3><b>SUBTOTAL</b></h3>
 			</td> <td><h3>'.$subtotal.'</h3></td>
 		</tr>
-	   '.$this->getTaxDetailsSection($billnumber).'
+		'.$gstSection.'
 		<tr>
 			<td align="center" width="100%"><hr color=#00CC33 size=5 width=100></td>
 		</tr>
@@ -2906,7 +2979,7 @@ EOD;
 						left join aspen_tblslittinginstruction on  aspen_tblslittinginstruction.vIRnumber = aspen_tblinwardentry.vIRnumber
 						left join aspen_tblBillBundleAssociation on aspen_tblslittinginstruction.nSno = aspen_tblBillBundleAssociation.nBundleNumber
 						left join aspen_tblmatdescription on aspen_tblmatdescription.nMatId = aspen_tblinwardentry.nMatId
-						where aspen_tblBillBundleAssociation.nBillNumber = $billnumber and aspen_tblinwardentry.vIRnumber=$partyid order by aspen_tblslittinginstruction.nSno";
+						where aspen_tblBillBundleAssociation.nBillNumber = $billnumber and aspen_tblinwardentry.vIRnumber='".$partyid."' order by aspen_tblslittinginstruction.nSno";
 
 		$queryBundleDetails = $this->db->query($strSqlSlittingBundleDetails);
 
@@ -2934,7 +3007,7 @@ EOD;
 						<td width="25%" align:"right"><h4>GST Regn. No: 29AABCA4807H1ZS</h4></td>
 					</tr>
 					<tr>
-						<td align="center" width="100%"><h4>Aspen Steel Pvt Ltd, Plot no 16E, Bidadi Industrial Area, Phase 2 Sector 1, Bidadi, Ramnagara-562105, <b>Email: aspensteel_unit2@yahoo.com </b></h4></td>
+						<td align="center" width="100%"><h4>Aspen Steel Pvt Ltd, Plot no 16E, Bidadi Industrial Area, Phase 2 Sector 1, Bidadi, Ramnagara-562109, <b>Email: aspensteel_unit2@yahoo.com </b></h4></td>
 					</tr>
 					<tr>
 						<td align="center" width="100%"><hr color=#00CC33 size=5 width=100></td>
@@ -3417,7 +3490,7 @@ $html = '<table width="100%"  cellspacing="0" cellpadding="5" border="0">
 				<td width="25%" align:"right"><h4>GST Regn. No: 29AABCA4807H1ZS</h4></td>
 		</tr>
 		<tr>
-			<td align="center" width="100%"><h4>Branch At: Plot no 16E, Bidadi Industrial Area, Phase 2 Sector 1, Bidadi, Ramnagara-562105, <b>Email: aspensteel_unit2@yahoo.com </b></h4></td>
+			<td align="center" width="100%"><h4>Branch At: Plot no 16E, Bidadi Industrial Area, Phase 2 Sector 1, Bidadi, Ramnagara-562109, <b>Email: aspensteel_unit2@yahoo.com </b></h4></td>
 		</tr>
 		<tr>
 			<td align="center" width="100%"><h4>Head Office At: 54/1, Medahalli, Old Madras Road, Bangalore-560049</h4></td>
@@ -3551,6 +3624,268 @@ $html = '<table width="100%"  cellspacing="0" cellpadding="5" border="0">
 		$pdf->Output($pdfname, 'I');
 	}
 
+		/*function directbillingmodelpdf($partyid='') {
+	$sqlbilling= "select aspen_tblbilldetails.nBillNo as billnumber,DATE_FORMAT(aspen_tblbilldetails.dBillDate, '%d-%m-%Y') as billdate,aspen_tblpartydetails.nPartyName as partyname,aspen_tblpartydetails.nTinNumber as tinnmber,aspen_tblpartydetails.vAddress1 as address1,aspen_tblpartydetails.vAddress2 as address2,aspen_tblpartydetails.vCity as city,aspen_tblbilldetails.vOutLorryNo as trucknumber,aspen_tblmatdescription.vDescription as materialdescription,aspen_tblinwardentry.vInvoiceNo as invoiceno,DATE_FORMAT(aspen_tblinwardentry.dInvoiceDate, '%d-%m-%Y') as invoicedate ,aspen_tblinwardentry.fWidth as width,aspen_tblinwardentry.fThickness as thickness,aspen_tblbillingstatus.nSno as Sno,aspen_tblbillingstatus.nActualNo as Length,aspen_tblpricetype1.nAmount as rate,aspen_tblbillingstatus.nActualNo as noofpcs,
+	aspen_tblbillingstatus.fbilledWeight as weight,aspen_tblbilldetails.ntotalpcs as totalpcs,aspen_tblbilldetails.fTotalWeight as totalweight,round(aspen_tblbilldetails.fWeightAmount) as weihtamount,aspen_tblbilldetails.ntotalamount as totalamount,aspen_tblbilldetails.nScrapSent as Scrapsent,round(aspen_tblbilldetails.ocwtamount) as wtamount,round(aspen_tblbilldetails.ocwidthamount) as widthamount,aspen_tblbilldetails.oclengthamount as lengthamount,round(aspen_tblbilldetails.fServiceTax) as servicetax,round(aspen_tblbilldetails.fEduTax) as edutax,aspen_tblbilldetails.fSHEduTax as shedutax,aspen_tblbilldetails.fGrantTotal as grandtotal,aspen_tblbilldetails.vAdditionalChargeType as additionalchargetype,round(aspen_tblbilldetails.fAmount) as amount,round(aspen_tblbilldetails.nsubtotal) as subtotal,aspen_tblbilldetails.grandtot_words as container from aspen_tblinwardentry LEFT JOIN aspen_tblmatdescription  ON aspen_tblmatdescription.nMatId=aspen_tblinwardentry.nMatId LEFT JOIN aspen_tblpartydetails ON aspen_tblpartydetails .nPartyId=aspen_tblinwardentry.nPartyId
+	left join aspen_tblpricetype1 on aspen_tblpricetype1.nMatId=aspen_tblmatdescription.nMatId
+	left join aspen_tblbillingstatus on aspen_tblinwardentry.vIRnumber=aspen_tblbillingstatus.vIRnumber
+	LEFT JOIN aspen_tblbilldetails ON aspen_tblbilldetails.vIRnumber=aspen_tblinwardentry.vIRnumber
+	LEFT JOIN aspen_tbladditionalbillchargetype ON aspen_tbladditionalbillchargetype.nBillNo=aspen_tblbilldetails.nBillNo where aspen_tblinwardentry.vIRnumber ='".$partyid."' LIMIT 1 ";
+
+
+		$querymain = $this->db->query($sqlbilling);
+
+
+		$billnumber = $querymain->row(0)->billnumber;
+		$billdate = $querymain->row(0)->billdate;
+		$invoice =$partyid;
+		$party_name = $querymain->row(0)->partyname;
+		$width = $querymain->row(0)->width;
+		$thickness = $querymain->row(0)->thickness;
+		$invoicedate = $querymain->row(0)->invoicedate;
+		$address_one = $querymain->row(0)->address1;
+		$address_two = $querymain->row(0)->address2;
+		$invoiceno = $querymain->row(0)->invoiceno;
+		$city = $querymain->row(0)->city;
+		$trucknumber = $querymain->row(0)->trucknumber;
+		$material_descriptio = $querymain->row(0)->materialdescription;
+		$additionalchargetype = $querymain->row(0)->additionalchargetype;
+		$amount = $querymain->row(0)->amount;
+		$Sno = $querymain->row(0)->Sno;
+		$rate = $querymain->row(0)->rate;
+		$Length = $querymain->row(0)->Length;
+		$noofpcs = $querymain->row(0)->noofpcs;
+		$weight = $querymain->row(0)->weight;
+		$Scrapsent = $querymain->row(0)->Scrapsent;
+		$totalpcs = $querymain->row(0)->totalpcs;
+		$totalweight = $querymain->row(0)->totalweight;
+		$weihtamount = $querymain->row(0)->weihtamount;
+		$totalamount = $querymain->row(0)->totalamount;
+		$wtamount = $querymain->row(0)->wtamount;
+		$widthamount = $querymain->row(0)->widthamount;
+		$lengthamount = $querymain->row(0)->lengthamount;
+		$servicetax = $querymain->row(0)->servicetax;
+		$edutax = $querymain->row(0)->edutax;
+		$shedutax = $querymain->row(0)->shedutax;
+		$grandtotal = $querymain->row(0)->grandtotal;
+		$subtotal = $querymain->row(0)->subtotal;
+		$tin_number = $querymain->row(0)->tinnmber;
+		$container = $querymain->row(0)->container;
+
+		$pdf = new TCPDF(PDF_PAGE_ORIENTATION, PDF_UNIT, PDF_PAGE_FORMAT, true, 'UTF-8', false);
+		$pdfname= 'directbillingslip_'.$partyid.'.pdf';
+		$pdf->SetAuthor('ASPEN');
+		$pdf->SetTitle('Invoice');
+		$pdf->SetSubject('Invoice');
+		$pdf->SetKeywords('Aspen, bill, invoice');
+		$pdf->setHeaderFont(Array(PDF_FONT_NAME_MAIN, '', PDF_FONT_SIZE_MAIN));
+		$pdf->setFooterFont(Array(PDF_FONT_NAME_DATA, '', PDF_FONT_SIZE_DATA));
+		$pdf->SetDefaultMonospacedFont(PDF_FONT_MONOSPACED);
+		$pdf->SetMargins(PDF_MARGIN_LEFT, PDF_MARGIN_TOP, PDF_MARGIN_RIGHT);
+		$pdf->SetHeaderMargin(PDF_MARGIN_HEADER);
+		$pdf->SetFooterMargin(PDF_MARGIN_FOOTER);
+		$pdf->SetAutoPageBreak(TRUE, PDF_MARGIN_BOTTOM);
+		$pdf->setImageScale(PDF_IMAGE_SCALE_RATIO);
+		$pdf->SetFont('helvetica', '', 8);
+		$pdf->AddPage();
+
+
+		$html = '
+		<table width="100%"  cellspacing="0" cellpadding="0" border="0">
+
+			<tr>
+				<td width="16%" align:"left"><h4>TIN:29730066589</h4></td>
+				<td width="70%"align="center" style="font-size:60px; font-style:italic; font-family: fantasy;"><h1>ASPEN STEEL PVT LTD</h1></td>
+				<td width="25%" align:"right"><h4>Service Tax Regn. No: (BAS)/AABCA4807HST001</h4></td>
+		</tr>
+
+		<tr>
+				<td align="center" width="100%"><h4>54/1, 17/18th Km. MEDAHALLI, OLD MADRAS ROAD, Bangalore - 560049, <b> Ph: 6590 4772 / 3200 3260 Email: aspensteel@yahoo.in </b></h4></td>
+
+		</tr>
+
+		<tr>
+				<td align="center" width="100%"><hr color=#00CC33 size=5 width=100></td>
+
+		</tr>
+
+
+		<tr>
+				<td width="100%"></td>
+		</tr>
+		<tr>
+				<td width="30%" align:"left"><h3>Billnumber : '.$billnumber.'</h3></td>
+				<td width="40%" align="center"><h3>Coilnumber : '.$invoice.'</h3></td>
+				<td width="33.33%" align:"right"><h3>Billdate : '.$billdate.'</h3></td>
+
+			</tr>
+
+		</table>
+		<table width="100%" cellspacing="0" cellpadding="0" >
+			<tr>
+				<td align="left"></td>
+				<td></td>
+				<td></td>
+			</tr>
+			<tr>
+				<td width="30%" align:"left">
+					<h3>To M/s., &nbsp; '.$party_name.' , '.$address_one.' &nbsp;'.$address_two.',&nbsp;'.$city.'</h3>
+				</td>
+				<td width="40%" align="center"><h3> Desp. By Lorry No. : '.$trucknumber.'</h3> </td>
+
+				<td width="33.33%" align:"right"><h3>Delivery: Full &nbsp; Part-1&nbsp; Part-2</h3></td>
+
+			</tr>
+			<tr>
+				<td align="left"></td>
+				<td></td>
+				<td></td>
+			</tr>
+			<tr>
+				<td width="30%" align:"left">
+					<h3>Tin Number : '.$tin_number.'</h3>
+				</td>
+				<td width="40%" align="center"><h3> Inward Date : 	<b> '.$invoicedate.'</b></h3> </td>
+				<td width="33.33%" align:"right"><h3>Inward Challan No.:'.$invoiceno.'</h3></td>
+			</tr>
+			<tr>
+				<td align="left"></td>
+				<td></td>
+				<td></td>
+			</tr>
+		</table>';
+
+		$html .= '
+		<table cellspacing="0" cellpadding="5" border="0px" width="100%">
+
+
+
+		<tr>
+				<td style="font-weight:bold;" width="40%"><h2>Handling / Processing charges:</h2></td>
+				<td style="font-weight:bold" width="15.6%"><h2></h2></td>
+
+			</tr>
+
+			<tr>
+				<th style="font-weight:bold;" width="25%"></th>
+				<th style="font-weight:bold;" width="25%"><h2>Weight</h2></th>
+				<th style="font-weight:bold" width="25%"><h2>Rate</h2></th>
+				<th style="font-weight:bold" width="25%"><h2>Amount</h2></th>
+
+			</tr>
+			<tr>
+				<td align="center" width="100%"><hr color=#00CC33 size=5 width=100></td>
+
+		</tr>
+		<tr>
+		<td width="100px" align="left"><h3>'.$material_descriptio.'</h3></td>
+		<td width="40px" align="left"><h3>'.$thickness.'</h3></td>
+		<td width="20px" align="right">*</td>
+		<td width="70px" align="right"><h3>'.$width.'</h3></td>
+		</tr>
+			';
+
+
+			$html .= '
+
+			<tr>
+				<td style="font-weight:bold;" width="25%"><h2>Total</h2></td>
+				<td style="font-weight:bold" width="25%"><h2>'.$totalweight.'</h2></td>
+				<td style="font-weight:bold" width="25%"><h2>'.$weihtamount.'</h2></td>
+
+			</tr>
+			<tr>
+				<td align="center" width="100%"><hr color=#00CC33 size=5 width=100></td>
+
+		</tr>
+		</table>';
+
+		$html .= '
+		<table width="100%" cellspacing="5" cellpadding="5" border="0">
+		<tr>
+		<td width="89%">
+					<h3><b>Scrap pieces: </b></h3>
+				</td> <td><h3>'.$Scrapsent.'</h3></td>
+		</tr>
+
+		<tr>
+		<td width="89%">
+					<h3><b>Additional Charge:&nbsp;</b></h3>
+				</td> <td><h3>'.$additionalchargetype.'</h3></td>
+		</tr>
+		<tr>
+		<td width="89%">
+					<h3><b>Strapping Charge:&nbsp;</b></h3>
+				</td> <td><h3>'.$amount.'</h3></td>
+		</tr>
+
+
+		<tr>
+				<td align="center" width="100%"><hr color=#00CC33 size=5 width=100></td>
+
+		</tr>
+		<tr>
+		<td width="89%">
+					<h3><b>SUBTOTAL</b></h3>
+				</td> <td><h3>'.$subtotal.'</h3></td>
+		</tr>
+		<tr>
+		<td width="89%">
+					<h3><b>Service Tax @ 12%</b></h3>
+				</td> <td><h3>'.$servicetax.'</h3></td>
+		</tr>
+		<tr>
+		<td width="89%">
+					<h3><b>Edn. Cess @ 2% on Service Tax</b></h3>
+				</td> <td><h3>'.$edutax.'</h3></td>
+		</tr>
+		<tr>
+		<td width="89%">
+					<h3><b>S. & H. Edn. Cess @ 1% on Service Tax</b></h3>
+				</td> <td><h3>'.$shedutax.'</h3></td>
+		</tr>
+		<tr>
+				<td align="center" width="100%"><hr color=#00CC33 size=5 width=100></td>
+
+		</tr>
+		<tr>
+		<td width="89%">
+					<h3><b>Grand Total</b></h3>
+				</td> <td><h3>'.$grandtotal.'</h3></td>
+		</tr>
+		<tr>
+		<td width="25%">
+					<h3>Grand Total in Words :</h3>
+				</td> 	<td width="75%"><h3>'.$container.'</h3></td>
+		</tr>
+
+		<tr>
+			<td width="70%">
+				<h3><b>Received the above goods in good condition.</b></h3>
+				</td>
+				<td width="30%"><h3> For ASPEN STEEL (P) LTD.</h3></td>
+		</tr>
+		<tr>
+			<td>
+
+				</td>
+		</tr>
+
+		<tr>
+			<td width="70%">
+				<h3><b>Receivers Signature</b></h3>
+				</td>
+				<td width="30%"><h3> Manager/Director</h3></td>
+		</tr>
+
+		</table>';
+		$pdf->writeHTML($html, true, 0, true, true);
+		$pdf->Ln();
+		$pdf->lastPage();
+		$pdf->Output($pdfname, 'I');
+	}
+	*/
+
 	function semibillingmodelpdf($partyid,$billid,$pname,$cust_add,$cust_rm,$mat_desc,$wid,$thic,$len,$wei,$inv_no,$totalweight_check,
 	$totalrate,$totalamt,$txthandling, $txtadditional_type,$txtamount_mt,$txtoutward_num,$txtscrap,$txtservicetax,$txteductax,$txtsecedutax,$txtgrandtotal ,$container,$txtnsubtotal) {
 	$sqlrpt = "select aspen_tblbilldetails.vOutLorryNo as lorryno,
@@ -3623,7 +3958,7 @@ $html = '
 				<td width="25%" align:"right"><h4>GST Regn. No: 29AABCA4807H1ZS</h4></td>
 		</tr>
 		<tr>
-				<td align="center" width="100%"><h4>Aspen Steel Pvt Ltd, Plot no 16E, Bidadi Industrial Area, Phase 2 Sector 1, Bidadi, Ramnagara-562105, <b>Email: aspensteel_unit2@yahoo.com </b></h4></td>
+				<td align="center" width="100%"><h4>Aspen Steel Pvt Ltd, Plot no 16E, Bidadi Industrial Area, Phase 2 Sector 1, Bidadi, Ramnagara-562109, <b>Email: aspensteel_unit2@yahoo.com </b></h4></td>
 		</tr>
 
 		<tr>
@@ -3812,23 +4147,275 @@ $html = '
 		$pdf->Ln();
 		$pdf->lastPage();
 		$pdf->Output($pdfname, 'I');
-  }
+	}
 
-  function getTaxDetailsSection($billNo) {
-    $strSqlTaxDetails = 'select * from aspen_tblBillTaxAssociation as abt
-    left join aspen_tbltaxdetails as at on abt.nTaxTypeId = at.nTaxTypeId
-    where abt.nBillNo = '.$billNo;
 
-    $resSqlTaxDetails = $this->db->query($strSqlTaxDetails);
-    $strHtmlTaxDetails = '';
-    foreach ($resSqlTaxDetails->result() as $row) {
-      $strHtmlTaxDetails .= '<tr>';
-      $strHtmlTaxDetails .= '<td width="555px" border="0" align="left"><h3>'.$row->vTypeOfTax.' @ '.$row->nTaxPercent.'%</h3></td>';
-      $strHtmlTaxDetails .= '<td><h3>'.$row->nTaxAmount.'</h3></td>';
-      $strHtmlTaxDetails .= '</tr>';
-    }
-    return $strHtmlTaxDetails;
-  }
+
+
+	/*function semibillingmodelpdf($partyid='') {
+	$sqlbilling= "select aspen_tblbilldetails.nBillNo as billnumber,DATE_FORMAT(aspen_tblbilldetails.dBillDate, '%d-%m-%Y') as billdate,aspen_tblpartydetails.nPartyName as partyname,aspen_tblpartydetails.nTinNumber as tinnmber,aspen_tblpartydetails.vAddress1 as address1,aspen_tblpartydetails.vAddress2 as address2,aspen_tblpartydetails.vCity as city,aspen_tblbilldetails.vOutLorryNo as trucknumber,aspen_tblmatdescription.vDescription as materialdescription,aspen_tblinwardentry.vInvoiceNo as invoiceno,DATE_FORMAT(aspen_tblinwardentry.dInvoiceDate, '%d-%m-%Y') as invoicedate ,aspen_tblinwardentry.fWidth as width,aspen_tblinwardentry.fThickness as thickness,aspen_tblbillingstatus.nSno as Sno,aspen_tblbillingstatus.nActualNo as Length,aspen_tblpricetype1.nAmount as rate,aspen_tblbillingstatus.nActualNo as noofpcs,
+	aspen_tblbillingstatus.fbilledWeight as weight,aspen_tblbilldetails.ntotalpcs as totalpcs,aspen_tblbilldetails.fTotalWeight as totalweight,round(aspen_tblbilldetails.fWeightAmount) as weihtamount,aspen_tblbilldetails.ntotalamount as totalamount,aspen_tblbilldetails.nScrapSent as Scrapsent,round(aspen_tblbilldetails.ocwtamount) as wtamount,round(aspen_tblbilldetails.ocwidthamount) as widthamount,aspen_tblbilldetails.oclengthamount as lengthamount,round(aspen_tblbilldetails.fServiceTax) as servicetax,round(aspen_tblbilldetails.fEduTax) as edutax,aspen_tblbilldetails.fSHEduTax as shedutax,aspen_tblbilldetails.fGrantTotal as grandtotal,aspen_tblbilldetails.vAdditionalChargeType as additionalchargetype,round(aspen_tblbilldetails.fAmount) as amount,round(aspen_tblbilldetails.nsubtotal) as subtotal,aspen_tblbilldetails.grandtot_words as container from aspen_tblinwardentry LEFT JOIN aspen_tblmatdescription  ON aspen_tblmatdescription.nMatId=aspen_tblinwardentry.nMatId LEFT JOIN aspen_tblpartydetails ON aspen_tblpartydetails .nPartyId=aspen_tblinwardentry.nPartyId
+	left join aspen_tblpricetype1 on aspen_tblpricetype1.nMatId=aspen_tblmatdescription.nMatId
+	left join aspen_tblbillingstatus on aspen_tblinwardentry.vIRnumber=aspen_tblbillingstatus.vIRnumber
+	LEFT JOIN aspen_tblbilldetails ON aspen_tblbilldetails.vIRnumber=aspen_tblinwardentry.vIRnumber
+	LEFT JOIN aspen_tbladditionalbillchargetype ON aspen_tbladditionalbillchargetype.nBillNo=aspen_tblbilldetails.nBillNo where aspen_tblinwardentry.vIRnumber ='".$partyid."' LIMIT 1 ";
+//echo $sqlbilling;
+
+		$querymain = $this->db->query($sqlbilling);
+
+
+		$billnumber = $querymain->row(0)->billnumber;
+		$billdate = $querymain->row(0)->billdate;
+		$invoice =$partyid;
+		$party_name = $querymain->row(0)->partyname;
+		$width = $querymain->row(0)->width;
+		$thickness = $querymain->row(0)->thickness;
+		$invoicedate = $querymain->row(0)->invoicedate;
+		$address_one = $querymain->row(0)->address1;
+		$address_two = $querymain->row(0)->address2;
+		$invoiceno = $querymain->row(0)->invoiceno;
+		$city = $querymain->row(0)->city;
+		$trucknumber = $querymain->row(0)->trucknumber;
+		$material_descriptio = $querymain->row(0)->materialdescription;
+		$additionalchargetype = $querymain->row(0)->additionalchargetype;
+		$amount = $querymain->row(0)->amount;
+		$Sno = $querymain->row(0)->Sno;
+		$rate = $querymain->row(0)->rate;
+		$Length = $querymain->row(0)->Length;
+		$noofpcs = $querymain->row(0)->noofpcs;
+		$weight = $querymain->row(0)->weight;
+		$Scrapsent = $querymain->row(0)->Scrapsent;
+		$totalpcs = $querymain->row(0)->totalpcs;
+		$totalweight = $querymain->row(0)->totalweight;
+		$weihtamount = $querymain->row(0)->weihtamount;
+		$totalamount = $querymain->row(0)->totalamount;
+		$wtamount = $querymain->row(0)->wtamount;
+		$widthamount = $querymain->row(0)->widthamount;
+		$lengthamount = $querymain->row(0)->lengthamount;
+		$servicetax = $querymain->row(0)->servicetax;
+		$edutax = $querymain->row(0)->edutax;
+		$shedutax = $querymain->row(0)->shedutax;
+		$grandtotal = $querymain->row(0)->grandtotal;
+		$subtotal = $querymain->row(0)->subtotal;
+		$tin_number = $querymain->row(0)->tinnmber;
+		$container = $querymain->row(0)->container;
+
+		$pdf = new TCPDF(PDF_PAGE_ORIENTATION, PDF_UNIT, PDF_PAGE_FORMAT, true, 'UTF-8', false);
+		$pdfname= 'cuttingslip_'.$partyid.'.pdf';
+		$pdf->SetAuthor('ASPEN');
+		$pdf->SetTitle('Invoice');
+		$pdf->SetSubject('Invoice');
+		$pdf->SetKeywords('Aspen, bill, invoice');
+		$pdf->setHeaderFont(Array(PDF_FONT_NAME_MAIN, '', PDF_FONT_SIZE_MAIN));
+		$pdf->setFooterFont(Array(PDF_FONT_NAME_DATA, '', PDF_FONT_SIZE_DATA));
+		$pdf->SetDefaultMonospacedFont(PDF_FONT_MONOSPACED);
+		$pdf->SetMargins(PDF_MARGIN_LEFT, PDF_MARGIN_TOP, PDF_MARGIN_RIGHT);
+		$pdf->SetHeaderMargin(PDF_MARGIN_HEADER);
+		$pdf->SetFooterMargin(PDF_MARGIN_FOOTER);
+		$pdf->SetAutoPageBreak(TRUE, PDF_MARGIN_BOTTOM);
+		$pdf->setImageScale(PDF_IMAGE_SCALE_RATIO);
+		$pdf->SetFont('helvetica', '', 8);
+		$pdf->AddPage();
+
+
+
+				$html = '
+		<table width="100%"  cellspacing="0" cellpadding="0" border="0">
+
+			<tr>
+				<td width="16%" align:"left"><h4>TIN:29730066589</h4></td>
+				<td width="70%"align="center" style="font-size:60px; font-style:italic; font-family: fantasy;"><h1>ASPEN STEEL PVT LTD</h1></td>
+				<td width="25%" align:"right"><h4>Service Tax Regn. No: (BAS)/AABCA4807HST001</h4></td>
+		</tr>
+
+		<tr>
+				<td align="center" width="100%"><h4>54/1, 17/18th Km. MEDAHALLI, OLD MADRAS ROAD, Bangalore - 560049, <b> Ph: 6590 4772 / 3200 3260 Email: aspensteel@yahoo.in </b></h4></td>
+
+		</tr>
+
+		<tr>
+				<td align="center" width="100%"><hr color=#00CC33 size=5 width=100></td>
+
+		</tr>
+
+
+		<tr>
+				<td width="100%"></td>
+		</tr>
+		<tr>
+				<td width="30%" align:"left"><h3>Billnumber : '.$billnumber.'</h3></td>
+				<td width="40%" align="center"><h3>Coilnumber : '.$invoice.'</h3></td>
+				<td width="33.33%" align:"right"><h3>Billdate : '.$billdate.'</h3></td>
+
+			</tr>
+
+		</table>
+		<table width="100%" cellspacing="0" cellpadding="0" >
+			<tr>
+				<td align="left"></td>
+				<td></td>
+				<td></td>
+			</tr>
+			<tr>
+				<td width="30%" align:"left">
+					<h3>To M/s., &nbsp; '.$party_name.' , '.$address_one.' &nbsp;'.$address_two.',&nbsp;'.$city.'</h3>
+				</td>
+				<td width="40%" align="center"><h3> Desp. By Lorry No. : '.$trucknumber.'</h3> </td>
+
+				<td width="33.33%" align:"right"><h3>Delivery: Full &nbsp; Part-1&nbsp; Part-2</h3></td>
+
+			</tr>
+			<tr>
+				<td align="left"></td>
+				<td></td>
+				<td></td>
+			</tr>
+			<tr>
+				<td width="30%" align:"left">
+					<h3>Tin Number : '.$tin_number.'</h3>
+				</td>
+				<td width="40%" align="center"><h3> Inward Date : 	<b> '.$invoicedate.'</b></h3> </td>
+				<td width="33.33%" align:"right"><h3>Inward Challan No.:'.$invoiceno.'</h3></td>
+			</tr>
+			<tr>
+				<td align="left"></td>
+				<td></td>
+				<td></td>
+			</tr>
+		</table>';
+
+		$html .= '
+		<table cellspacing="0" cellpadding="5" border="0px" width="100%">
+		<tr>
+				<td align="center" width="100%"><hr color=#00CC33 size=5 width=100></td>
+
+		</tr>
+		<tr>
+				<th style="font-weight:bold;" width="13%"><h3>Sl. No.</h3></th>
+				<th style="font-weight:bold"  width="22%"><h3>DESCRIPTION</h3></th>
+				<th style="font-weight:bold"  width="16.6%"><h3></h3></th>
+				<th style="font-weight:bold" width="16.6%"><h3>Qty. In M/T</h3></th>
+				<th style="font-weight:bold"  width="16.6%"><h3></h3></th>
+				<th style="font-weight:bold"  width="15.6%"><h3>Rate per M/T</h3></th>
+
+			</tr>
+		<tr>
+				<td align="center" width="100%"><hr color=#00CC33 size=5 width=100></td>
+
+		</tr>
+		<tr>
+		<td width="100px" align="left"><h3>1</h3></td>
+		<td width="90px" align="left"><h3>'.$material_descriptio.'</h3></td>
+		<td width="33px" align="left"><h3>'.$thickness.'</h3></td>
+		<td width="20px" align="right">*</td>
+		<td width="50px" align="right"><h3>'.$width.'</h3></td>
+<td width="70px" align="right"><h3>'.$totalweight.'</h3></td>
+		<td width="200px" align="right"><h3>'.$weihtamount.'</h3></td>
+		</tr>
+
+';
+
+		$html .= '
+
+		</table>';
+
+		$html .= '
+		<table width="100%" cellspacing="5" cellpadding="5" border="0">
+			<tr>
+				<td align="center" width="100%"><hr color=#00CC33 size=5 width=100></td>
+
+		</tr>
+			<tr>
+				<td style="font-weight:bold;" width="13%"><h3></h3></td>
+				<td style="font-weight:bold"  width="23%"></td>
+				<td style="font-weight:bold" width="33%"><h3></h3></td>
+				<td style="font-weight:bold"  width="15.6%"><h3></h3></td>
+
+
+			</tr>
+
+		<tr>
+		<td width="89%">
+					<h3><b>Strapping Charge:&nbsp;'.$additionalchargetype.'</b></h3>
+				</td> <td><h3>'.$amount.'</h3></td>
+		</tr>
+
+		<tr>
+		<td width="89%">
+					<h3><b>For weight</b></h3>
+				</td> <td><h3>'.$wtamount.'</h3></td>
+		</tr>
+		<tr>
+		<td width="89%">
+					<h3><b>For width</b></h3>
+				</td> <td><h3>'.$widthamount.'</h3></td>
+		</tr>
+		<tr>
+		<td width="89%">
+					<h3><b>For length </b></h3>
+				</td> <td><h3>'.$lengthamount.'</h3></td>
+		</tr>
+		<tr>
+		<td width="89%">
+					<h3><b>SUBTOTAL</b></h3>
+				</td> <td><h3>'.$subtotal.'</h3></td>
+		</tr>
+		<tr>
+		<td width="89%">
+					<h3><b>Service Tax @ 12%</b></h3>
+				</td> <td><h3>'.$servicetax.'</h3></td>
+		</tr>
+		<tr>
+		<td width="89%">
+					<h3><b>Edn. Cess @ 2% on Service Tax</b></h3>
+				</td> <td><h3>'.$edutax.'</h3></td>
+		</tr>
+		<tr>
+		<td width="89%">
+					<h3><b>S. & H. Edn. Cess @ 1% on Service Tax</b></h3>
+				</td> <td><h3>'.$shedutax.'</h3></td>
+		</tr>
+		<tr>
+				<td align="center" width="100%"><hr color=#00CC33 size=5 width=100></td>
+
+		</tr>
+		<tr>
+		<td width="89%">
+					<h3><b>Grand Total</b></h3>
+				</td> <td><h3>'.$grandtotal.'</h3></td>
+		</tr>
+		<tr>
+		<td width="25%">
+					<h3>Grand Total in Words :</h3>
+				</td> 	<td width="75%"><h3>'.$container.'</h3></td>
+		</tr>
+
+		<tr>
+			<td width="70%">
+				<h3><b>Received the above goods in good condition.</b></h3>
+				</td>
+				<td width="30%"><h3> For ASPEN STEEL (P) LTD.</h3></td>
+		</tr>
+		<tr>
+			<td>
+
+				</td>
+		</tr>
+
+		<tr>
+			<td width="70%">
+				<h3><b>Receivers Signature</b></h3>
+				</td>
+				<td width="30%"><h3> Manager/Director</h3></td>
+		</tr>
+
+		</table>';
+		$pdf->writeHTML($html, true, 0, true, true);
+		$pdf->Ln();
+		$pdf->lastPage();
+		$pdf->Output($pdfname, 'I');
+	}*/
+
 }
 
 class Billings_model extends Base_module_record {

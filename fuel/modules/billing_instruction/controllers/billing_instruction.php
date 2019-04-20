@@ -3,7 +3,7 @@ require_once(FUEL_PATH.'/libraries/Fuel_base_controller.php');
 
 class Billing_instruction extends Fuel_base_controller {
 
-	public $nav_selected =  'billing_instruction';
+	public $nav_selected = 'billing_instruction';
 	public $view_location = 'billing_instruction';
 	private $data;
 	private $adata;
@@ -42,7 +42,7 @@ class Billing_instruction extends Fuel_base_controller {
 			$vars['adata']= $this->billingtable_cntrlr();
 			$vars['sdata']= $this->billingviewcntrlr($this->partyid, $this->partyname, $this->process);
 			$vars['semidata']= $this->billingsemifinished($this->partyid, $this->partyname);
-			
+			$vars['parentCount'] = $this->billing_instruction_model->getParentPartyDetails($this->partyid);
 			$this->_render('billing_instruction', $vars);
 		} else {
 			redirect(fuel_url('billing_instruction'));
@@ -102,6 +102,7 @@ class Billing_instruction extends Fuel_base_controller {
 				$obj->sdate = date('d-m-Y',strtotime($sl->sdate));
 				$obj->billingstatus = $sl->billingstatus;
 				$obj->dl = '/?slitnumber='.$sl->slitnumber;
+				$obj->vParentBundleNumber = $sl->vParentBundleNumber; 
 				$files[] = $obj;
 			}
 			echo json_encode($files);

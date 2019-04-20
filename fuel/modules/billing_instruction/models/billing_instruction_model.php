@@ -82,12 +82,14 @@ class Billing_instruction_model extends Base_module_model {
 					aspen_tblslittinginstruction.nWidth as width,
 					aspen_tblslittinginstruction.nWeight as weight,
 					aspen_tblslittinginstruction.dDate as sdate,
-					aspen_tblbillingstatus.vBillingStatus as billingstatus 
+					aspen_tblbillingstatus.vBillingStatus as billingstatus,
+					aspen_tblinwardentry.vParentBundleNumber 
 				from aspen_tblslittinginstruction
-			  	LEFT JOIN aspen_tblbillingstatus ON aspen_tblslittinginstruction.vIRnumber=aspen_tblbillingstatus.vIRnumber 
+				  LEFT JOIN aspen_tblbillingstatus ON aspen_tblslittinginstruction.vIRnumber=aspen_tblbillingstatus.vIRnumber 
+				  left join aspen_tblinwardentry on aspen_tblinwardentry.vParentIRNumber = aspen_tblslittinginstruction.vIRnumber and aspen_tblinwardentry.vParentBundleNumber = aspen_tblslittinginstruction.nSno
 			  	WHERE aspen_tblslittinginstruction.nSno = aspen_tblbillingstatus.nSno and aspen_tblslittinginstruction.vIRnumber='".$partyid."' and  aspen_tblslittinginstruction.vStatus =  'Ready To Bill' 
 			  	Group by aspen_tblbillingstatus.nSno";
-		
+
 		$query = $this->db->query($sqlsi);
 		$arr = '';
 		if($query->num_rows() > 0) {
@@ -126,14 +128,13 @@ class Billing_instruction_model extends Base_module_model {
 		$checkInwardsStatusRow = $checkInwardsStatusQuery->result();
 		
 		if( $checkInwardsStatusRow[0]->vStatus == 'RECEIVED' || $process != '') {
-			$sql ="SELECT aspen_tblinwardentry.vIRnumber,  aspen_tblmatdescription.vDescription, aspen_tblinwardentry.fThickness, aspen_tblinwardentry.fWidth, aspen_tblinwardentry.fQuantity,aspen_tblinwardentry.vInvoiceNo, aspen_tblinwardentry.vStatus
+			$sql ="SELECT aspen_tblinwardentry.vIRnumber,aspen_tblmatdescription.vDescription,aspen_tblinwardentry.fThickness,aspen_tblinwardentry.fWidth,aspen_tblinwardentry.fQuantity,aspen_tblinwardentry.vInvoiceNo,aspen_tblinwardentry.vStatus,aspen_tblinwardentry.fpresent
 			FROM aspen_tblinwardentry LEFT JOIN aspen_tblmatdescription ON aspen_tblmatdescription.nMatId = aspen_tblinwardentry.nMatId
 			LEFT JOIN aspen_tblpartydetails ON aspen_tblpartydetails.nPartyId = aspen_tblinwardentry.nPartyId ";
 			if(!empty($partyname) && !empty($partyid)) {
 				$sql.="WHERE aspen_tblpartydetails.nPartyName='".$partyname."' and aspen_tblinwardentry.vIRnumber='".$partyid."' ";
 			}	
-		} 
-		else {
+		} else {
 			$sql = "select inw.vIRnumber,
 					aspen_tblmatdescription.vDescription,
 					inw.fThickness,
@@ -146,8 +147,8 @@ class Billing_instruction_model extends Base_module_model {
 					LEFT JOIN aspen_tblpartydetails ON aspen_tblpartydetails.nPartyId = inw.nPartyId
 					left join (select 
 					coalesce(aspen_tblcuttinginstruction.vIRnumber,$partyid) as vIRnumber,coalesce(round(sum(nBundleweight-(nBundleweight*nBilledNumber/nNoOfPieces)),2),0) as fQuantity from aspen_tblcuttinginstruction left join aspen_tblbillingstatus on aspen_tblcuttinginstruction.vIRnumber = aspen_tblbillingstatus.vIRnumber and aspen_tblcuttinginstruction.nSno = aspen_tblbillingstatus.nSno where aspen_tblcuttinginstruction.vIRnumber =$partyid) t on t.vIRnumber = inw.vIRnumber
-					left join (select coalesce(aspen_tblslittinginstruction.vIRnumber,$partyid) as vIRnumber,coalesce(sum(nWeight),0) as nWeight from aspen_tblslittinginstruction LEFT JOIN aspen_tblbillingstatus ON aspen_tblslittinginstruction.vIRnumber=aspen_tblbillingstatus.vIRnumber WHERE aspen_tblslittinginstruction.nSno = aspen_tblbillingstatus.nSno and aspen_tblslittinginstruction.vIRnumber=$partyid and aspen_tblbillingstatus.vBillingStatus != 'Billed') p on p.vIRnumber = inw.vIRnumber 
-					where inw.vIRnumber=$partyid";
+					left join (select coalesce(aspen_tblslittinginstruction.vIRnumber,$partyid) as vIRnumber,coalesce(sum(nWeight),0) as nWeight from aspen_tblslittinginstruction LEFT JOIN aspen_tblbillingstatus ON aspen_tblslittinginstruction.vIRnumber=aspen_tblbillingstatus.vIRnumber WHERE aspen_tblslittinginstruction.nSno = aspen_tblbillingstatus.nSno and aspen_tblslittinginstruction.vIRnumber='$partyid' and aspen_tblbillingstatus.vBillingStatus != 'Billed') p on p.vIRnumber = inw.vIRnumber 
+					where inw.vIRnumber='$partyid'";
 		}
 
 		$query = $this->db->query($sql);
@@ -182,7 +183,12 @@ class Billing_instruction_model extends Base_module_model {
 		}
 		return json_encode($arr[0]);
 	}
- 
+
+	function getParentPartyDetails($partyid) {
+		$checkdata = "select count(*) as count from aspen_tblinwardentry where vParentIRNumber = '".$partyid."'";
+		$checkquery = $this->db->query($checkdata);
+		return $checkquery->result()[0]->count;
+	}
 } 
 class Billinginstruction_model extends Base_module_record {
  

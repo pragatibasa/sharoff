@@ -1,6 +1,6 @@
 <?php  
 if (!defined('BASEPATH')) exit('No direct script access allowed');
- require_once(APPPATH.'helpers/tcpdf/config/lang/eng.php');
+require_once(APPPATH.'helpers/tcpdf/config/lang/eng.php');
 require_once(APPPATH.'helpers/tcpdf/tcpdf.php');
 
 class inward_model extends Base_module_model {
@@ -33,7 +33,7 @@ class inward_model extends Base_module_model {
 		}
 	}
 	
-		function checkcoilno($REQUEST) {
+	function checkcoilno($REQUEST) {
 		if($REQUEST){
 		$pid = $REQUEST["pid"];
 		//$child_name = $_REQUEST["child_name"];
@@ -47,7 +47,19 @@ class inward_model extends Base_module_model {
 			echo '1';
 		}
 	}
-	
+
+	function getParentCoilDetails($coilNumber) {
+		$checkdata = "select * from aspen_tblinwardentry where vIRnumber = '".$coilNumber."'";
+		$checkquery = $this->db->query($checkdata);
+		return $checkquery->result()[0];
+	}
+
+	function getParentBundleDetails($coilNumber,$bundleNumber) {
+		$checkdata = "select * from aspen_tblslittinginstruction where vIRnumber = '".$coilNumber."' and nSno = $bundleNumber";
+		$checkquery = $this->db->query($checkdata);
+		return $checkquery->result()[0];
+	}
+
 	function inwardbillgeneratemodel($pname='',$pid='') {   
 	$sqlinward = "select aspen_tblpartydetails.nPartyName as partyname ,aspen_tblinwardentry.vIRnumber as coilnumber, DATE_FORMAT(dReceivedDate, '%d-%m-%Y')  as receiveddate ,aspen_tblmatdescription.vDescription as matdescription, aspen_tblinwardentry.fThickness as thickness, aspen_tblinwardentry.fWidth as width,aspen_tblinwardentry.fQuantity as Weight, aspen_tblinwardentry.vLorryNo AS Lorryno,aspen_tblinwardentry.vInvoiceNo as invoiceno, DATE_FORMAT(dInvoiceDate, '%d-%m-%Y') as invoicedate,aspen_tblinwardentry.vStatus as status from aspen_tblinwardentry  left join aspen_tblpartydetails on aspen_tblpartydetails.nPartyId = aspen_tblinwardentry.nPartyId left join aspen_tblmatdescription on aspen_tblmatdescription.nMatId = aspen_tblinwardentry.nMatId  where aspen_tblinwardentry.vIRnumber ='".$pid."'";
 		$querymain = $this->db->query($sqlinward);
@@ -140,28 +152,47 @@ class inward_model extends Base_module_model {
 	
 		
 	function saveinwardentry($pid,$pname, $date3,$lno,$icno,$date4,$coil,$fWidth, 
-							$fThickness,$fLength,$fQuantity,$status,$hno,$pna)
+							$fThickness,$fLength,$fQuantity,$status,$hno,$pna,$ppartyId,$parentBundleNumber,$grade,$cast)
 	{
-		$sql = "Insert into aspen_tblinwardentry  (
+		$updateSql = '';
+		if(!empty($ppartyId)) {
+			$ppartyId = $ppartyId;
+			$updateSql = "update aspen_tblinwardentry set fpresent = ( fpresent - $fQuantity )  where vIRnumber ='". $ppartyId . "'";
+			$query = $this->db->query($updateSql);
+		} else {
+			$ppartyId = "NULL";
+		} 
+
+		if(empty($parentBundleNumber)) {
+			$parentBundleNumber = "NULL";
+		}
+
+		$sql = "Insert into aspen_tblinwardentry (
 		nPartyId,vIRnumber,dReceivedDate,dBillDate,vLorryNo,vInvoiceNo,dInvoiceDate,nMatId,fWidth,fThickness,fLength,fQuantity,vStatus,
-		vHeatnumber,vPlantname,fpresent,billedweight) 
-		VALUES((SELECT aspen_tblpartydetails.nPartyId  FROM aspen_tblpartydetails where aspen_tblpartydetails.nPartyName = '". $pname. "'),  '". $pid. "','". $date3. "', CURDATE(),'". $lno. "','". $icno. "','". $date4. "',(SELECT aspen_tblmatdescription.nMatId  FROM aspen_tblmatdescription where aspen_tblmatdescription.vDescription = '". $coil. "'),'". $fWidth. "','". $fThickness. "','". $fLength. "','". $fQuantity. "','". $status. "','". $hno. "','". $pna. "','". $fQuantity. "',0 )";
+		vHeatnumber,vPlantname,fpresent,billedweight,dSysDate,vprocess,vParentIRNumber,vParentBundleNumber,vGrade,vCast) 
+		VALUES((SELECT aspen_tblpartydetails.nPartyId FROM aspen_tblpartydetails where aspen_tblpartydetails.nPartyName = '". $pname. "'),  '". $pid. "','". $date3. "', CURDATE(),'". $lno. "','". $icno. "','". $date4. "',(SELECT aspen_tblmatdescription.nMatId  FROM aspen_tblmatdescription where aspen_tblmatdescription.vDescription = '". $coil. "'),'". $fWidth. "','". $fThickness. "','". $fLength. "','". $fQuantity. "','". $status. "','". $hno. "','". $pna. "','". $fQuantity. "',0,now(),'','".$ppartyId."','".$parentBundleNumber."','".$grade."','".$cast."' )";
 		
-		$sql1 = "Insert into aspen_hist_tblinwardentry  (
+		$sql1 = "Insert into aspen_hist_tblinwardentry (
 		nPartyId,vIRnumber,dReceivedDate,dBillDate,vLorryNo,vInvoiceNo,dInvoiceDate,nMatId,fWidth,fThickness,fLength,fQuantity,vStatus,
-		vHeatnumber,vPlantname,fpresent,billedweight) 
-		VALUES((SELECT aspen_tblpartydetails.nPartyId  FROM aspen_tblpartydetails where aspen_tblpartydetails.nPartyName = '". $pname. "'),  '". $pid. "','". $date3. "', CURDATE(),'". $lno. "','". $icno. "','". $date4. "',(SELECT aspen_tblmatdescription.nMatId  FROM aspen_tblmatdescription where aspen_tblmatdescription.vDescription = '". $coil. "'),'". $fWidth. "','". $fThickness. "','". $fLength. "','". $fQuantity. "','". $status. "','". $hno. "','". $pna. "','". $fQuantity. "',0 )";
-		
+		vHeatnumber,vPlantname,fpresent,billedweight,dSysDate) 
+		VALUES((SELECT aspen_tblpartydetails.nPartyId  FROM aspen_tblpartydetails where aspen_tblpartydetails.nPartyName = '". $pname. "'),  '". $pid. "','". $date3. "', CURDATE(),'". $lno. "','". $icno. "','". $date4. "',(SELECT aspen_tblmatdescription.nMatId  FROM aspen_tblmatdescription where aspen_tblmatdescription.vDescription = '". $coil. "'),'". $fWidth. "','". $fThickness. "','". $fLength. "','". $fQuantity. "','". $status. "','". $hno. "','". $pna. "','". $fQuantity. "',0,now())";
+
 		$query = $this->db->query($sql);
-		$query1 = $this->db->query($sql1);
-		
+		//$query1 = $this->db->query($sql1);
+
+		$strSql = "select * from aspen_tblpartydetails where nPartyName = '". $pname. "'";
+		$query = $this->db->query($strSql);
+
+		if($query->result()[0]->nInwardUpdates) {
+			sendSMS($query->result()[0]->nInwardUpdates,'Received Coil No '.$pid.'%n'.$coil.' '.$fThickness.'mm x '.$fWidth.'mm '.$fQuantity.'kgs%nOn '.date('d/m/Y').'%nVehicle no '.$lno.'%nRef:'.$icno);
+		}
 	}
 	
 	
 	
 	
 	function mat() {
-		$sql = "select vDescription from aspen_tblmatdescription";
+		$sql = "select * from aspen_tblmatdescription";
 		$query = $this->db->query($sql);
 		$arr='';
 		if ($query->num_rows() > 0)

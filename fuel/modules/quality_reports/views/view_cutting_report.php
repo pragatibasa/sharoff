@@ -1,4 +1,10 @@
 <?php  include_once(QUALITY_REPORTS_PATH.'views/layout.php'); ?>
+<style>
+  #cuttingReport td {
+    padding:5px;
+  }
+</style>
+
 <div id="innerpanel">
   <fieldset>
     <div style="margin-bottom: 20px;border-bottom: 1px solid #e5e5e5;">
@@ -21,6 +27,10 @@
           <td><label>:<?=$coil_details->fWidth?></label></td>
         </tr>
         <tr>
+          <td><label>Coil Grade</label></td>
+          <td><label>:<?=$quality_details->coil_grade?></label></td>
+        </tr>
+        <tr>
           <td><label>Operator Name</label></td>
           <td><label>:<?=$quality_details->prepared_by?></label></td>
         </tr>
@@ -41,12 +51,13 @@
     <fieldset>
         <legend> Report details for coil</legend>
         <table id="cuttingReport" border="1" align="center" cellspacing="10" cellpadding="10">
-        <tr> <td></td><?php foreach($bundle_details as $bundle_detail) { ?><td>Bundle Number <?=$bundle_detail->bundle_number?></td> <?php } ?> </tr>
+        <tr> <td></td><?php foreach($bundle_details as $bundle_detail) { ?><td>Bundle No. <?=$bundle_detail->bundle_number?></td> <?php } ?> </tr>
             <tr> <td>Length Observed</td><?php foreach($bundle_details as $bundle_detail) { ?><td style="text-align: center;"><?php echo $bundle_detail->length ?></td> <?php } ?> </tr>
-            <tr> <td>Weight Observed</td> <?php foreach($bundle_details as $bundle_detail) { ?><td style="text-align: center;"><?php echo $bundle_detail->weight ?></td> <?php } ?> </tr>
+            <tr> <td>Width Observed</td> <?php foreach($bundle_details as $bundle_detail) { ?><td style="text-align: center;"><?php echo $bundle_detail->weight ?></td> <?php } ?> </tr>
             <tr> <td>Thickness Observed</td> <?php foreach($bundle_details as $bundle_detail) { ?><td style="text-align: center;"><?php echo $bundle_detail->thickness ?></td> <?php } ?> </tr>
 
             <tr> <td>Diagonal in mm</td><?php foreach($bundle_details as $bundle_detail) { ?><td style="text-align: center;"><?php echo $bundle_detail->diagonal ?></td> <?php } ?> </tr>
+            <tr> <td>CPK for length</td><?php foreach($bundle_details as $bundle_detail) { ?><td style="text-align: center;"><?php echo $bundle_detail->cpk ?></td> <?php } ?> </tr>
             <tr> <td>Last 5 sheets</td><?php foreach($bundle_details as $bundle_detail) { ?><td style="text-align: center;"><?php echo $bundle_detail->last_5_sheets ?></td> <?php } ?> </tr>
             <tr> <td>First 5 sheets</td><?php foreach($bundle_details as $bundle_detail) { ?><td style="text-align: center;"><?php echo $bundle_detail->first_5_sheets ?></td> <?php } ?> </tr>
 
@@ -64,6 +75,7 @@
             <tr> <td>Scratches</td><?php foreach($bundle_details as $bundle_detail) { ?><td style="text-align: center;"><?php echo $bundle_detail->scratches ?></td> <?php } ?> </tr>
             <tr> <td>Wire rope marks</td><?php foreach($bundle_details as $bundle_detail) { ?><td style="text-align: center;"><?php echo $bundle_detail->wire_rope_marks ?></td> <?php } ?> </tr>
             <tr> <td>Marks</td><?php foreach($bundle_details as $bundle_detail) { ?><td style="text-align: center;"><?php echo $bundle_detail->other_marks ?></td> <?php } ?> </tr>
+            <tr> <td>Image</td><?php foreach($bundle_details as $bundle_detail) { ?><td style="text-align: center;"><a href="<?=base_url().'uploads/'.$bundle_detail->surface_file?>"><?=$bundle_detail->surface_file?></a></td> <?php } ?> </tr>
         </table>
     </fieldset>
     </div>

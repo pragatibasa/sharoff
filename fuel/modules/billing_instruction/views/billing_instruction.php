@@ -64,7 +64,11 @@ var pchk = getUrlVars()["process"];
 	<h2 class="ico ico_azure_storage"><?=lang('module_billing_instruction')?></h2>
 </div>
 <?php 
-
+if($parentCount > 0) {
+?><div class="alert alert-info" role="alert">This coil has been snipped.</div>
+<?php }
+?>
+<?php 
  if($process=='Cutting')
  {  
  include_once(BILLING_INSTRUCTION_PATH.'views/_blocks/layout.php');

@@ -65,24 +65,32 @@ class slitting_instruction_model extends Base_module_model {
 	}
 	 
 	function savechangemodel (){ 
-		$sqlnsno = $this->db->query ("SELECT nSno FROM aspen_tblslittinginstruction");
-
-		if ($sqlnsno->num_rows() >= 0){
-		   foreach ($sqlnsno->result() as $row){
-				$arr[] =$row;
-			}
-		}
-		json_encode($arr);
-		foreach ($arr as $row){
-			if($row->nSno > 0){
-			$sql = $this->db->query ("UPDATE aspen_tblslittinginstruction  SET vStatus='WIP-Slitting' WHERE vIRnumber='".$_POST['pid']."' and nSno!=0");
-			$sql = $this->db->query ("UPDATE aspen_tblinwardentry  SET vprocess='Slitting' WHERE vIRnumber='".$_POST['pid']."'");
-  
-			}
-		}
-		$sql = $this->db->query ("UPDATE aspen_tblinwardentry  SET vStatus='Work In Progress' WHERE vIRnumber='".$_POST['pid']."'");
+		$sql = $this->db->query ("UPDATE aspen_tblslittinginstruction SET vStatus='WIP-Slitting' WHERE vIRnumber='".$_POST['pid']."' and nSno!=0");
+		$sql = $this->db->query ("UPDATE aspen_tblinwardentry SET vprocess='Slitting',vStatus='Work In Progress' WHERE vIRnumber='".$_POST['pid']."'");
 		
-  
+		$strSql = "select ai.*,ap.*,am.* from aspen_tblinwardentry as ai 
+		left join aspen_tblmatdescription as am on ai.nMatId = am.nMatId 
+		left join aspen_tblpartydetails as ap on ap.nPartyId = ai.nPartyId
+		where ai.vIRnumber = '".$_POST['pid']."'";
+		$query = $this->db->query($strSql);
+
+		if($query->result()[0]->nProcessUpdates) {
+			$strBundleSql = "select count(nWidth) as count, nWidth,sum(nWeight) as totalWeight from aspen_tblslittinginstruction where vIRnumber='".$_POST['pid']."' group by nWidth With Rollup";
+			$queryBundle = $this->db->query($strBundleSql);
+			if ($queryBundle->num_rows() > 0) {
+				$strBundle = '';
+				$index = 1;
+				$totalWeight = 0;
+				foreach($queryBundle->result() as $key => $row) {
+					if($row->nWidth !== NULL)
+						$strBundle .= '%n'.$index++.') '.$row->nWidth.'mm - '.$row->count.'Nos - '.$row->totalWeight.'kgs';
+					else 
+						$totalWeight = $row->totalWeight;
+				}
+			} 
+
+			sendSMS($query->result()[0]->nProcessUpdates,'Slitting instruction given for Coil '.$_POST['pid'].'%n'.$query->result()[0]->vDescription.' '.$query->result()[0]->fThickness.'mm x '.$query->result()[0]->fWidth.'mm%nProcess:Slitting'.$strBundle.'%nTotal weight '.$totalWeight.'kgs');
+		}
 	}
 	
 	function getCuttingInstruction($pid) {
@@ -101,7 +109,7 @@ class slitting_instruction_model extends Base_module_model {
 		LEFT JOIN aspen_tblbillingstatus ON aspen_tblbillingstatus.vIRnumber = aspen_tblinwardentry.vIRnumber
 		LEFT JOIN aspen_tblpartydetails ON aspen_tblpartydetails.nPartyId = aspen_tblinwardentry.nPartyId ";
 		if(!empty($partyid)) {
-			$sql.="WHERE aspen_tblinwardentry.vIRnumber='".$partyid."' ";
+			$sql.="WHERE aspen_tblinwardentry.vIRnumber='".$partyid."'";
 		}
 		$query = $this->db->query($sql);
 		$arr='';
@@ -110,7 +118,7 @@ class slitting_instruction_model extends Base_module_model {
 				$arr[] =$row;
 		   	}
 		}
-		$strExhaustedLength = 'select COALESCE(sum(distinct nLength),0) as usedLength from aspen_tblslittinginstruction where vIRnumber ='.$partyid;
+		$strExhaustedLength = "select COALESCE(sum(distinct nLength),0) as usedLength from aspen_tblslittinginstruction where vIRnumber ='".$partyid."'";
 
 		$queryExhaustedLength = $this->db->query($strExhaustedLength);
 
@@ -149,7 +157,7 @@ function BundleTable($pid) {
 		$arrWidths = explode(',', $widths);
 		foreach ($arrWidths as $key => $width) {
 			$weight = round((0.00000785*$width*$thickness*$length));
-			$sql = $this->db->query ("Insert into aspen_tblslittinginstruction(vIRnumber,dDate,nWidth,nWeight,nLength) VALUES(  '". $pid. "','". $date. "','". $width. "','".$weight."','".$length."')");
+			$sql = $this->db->query ("Insert into aspen_tblslittinginstruction(vIRnumber,dDate,nWidth,nWeight,nLength,vStatus) VALUES(  '". $pid. "','". $date. "','". $width. "','".$weight."','".$length."','WIP-Slitting')");
 		}
   	}
 		
@@ -166,8 +174,7 @@ function BundleTable($pid) {
     }
 	
 	function slitlistdetails($partyid = '') {
-		$sqlci = "select aspen_tblslittinginstruction.nSno as Sno,DATE_FORMAT(aspen_tblslittinginstruction.dDate, '%d-%m-%Y') AS Slittingdate,aspen_tblslittinginstruction.nWidth as width, aspen_tblslittinginstruction.vIRnumber as pnumber, aspen_tblslittinginstruction.nWeight as weight, aspen_tblslittinginstruction.nLength as length FROM aspen_tblslittinginstruction WHERE aspen_tblslittinginstruction.vIRnumber='".$partyid."'";
-		
+		$sqlci = "select aspen_tblslittinginstruction.nSno as Sno,DATE_FORMAT(aspen_tblslittinginstruction.dDate, '%d-%m-%Y') AS Slittingdate,aspen_tblslittinginstruction.nWidth as width, aspen_tblslittinginstruction.vIRnumber as pnumber, aspen_tblslittinginstruction.nWeight as weight, aspen_tblslittinginstruction.nLength as length FROM aspen_tblslittinginstruction WHERE aspen_tblslittinginstruction.vIRnumber='".$partyid."' and aspen_tblslittinginstruction.vStatus in ('','WIP-Slitting')";
 		$query = $this->db->query($sqlci);
 		$arr='';
 		if ($query->num_rows() > 0)

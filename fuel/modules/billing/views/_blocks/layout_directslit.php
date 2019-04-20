@@ -165,9 +165,11 @@
 <fieldset>
 <legend>Processing Charges:</legend>
 <div class="pad-10">
-	<input type="text" id="txtoutward_num" name="txtoutward_num" value="Outward Lorry Number" onfocus="if (this.value=='Outward Lorry Number') {this.value = '';}" onblur="if(this.value=='') {this.value = 'Outward Lorry Number';}" /> 
+	<input type="text" id="txtoutward_num" name="txtoutward_num" placeholder="Outward Lorry Number" /> 
 	&nbsp; 
-	<input type="text" id="txtscrap" name="txtscrap" value="Scrap Sent" onfocus="if (this.value=='Scrap Sent') {this.value = '';}" onblur="if(this.value=='') {this.value = 'Scrap Sent';}" /> 
+	<input type="text" id="driverContact" name="driverContact" placeholder="Driver Contact Number" />  
+	&nbsp;
+	<input type="text" id="txtscrap" name="txtscrap" placeholder="Scrap Sent" /> 
 	<!--<input id="textsavelorry" type="button" value="Enter" onClick="savelorrydetails" />-->
 </div>
 								
@@ -516,7 +518,6 @@ function taxspec(){
 
 
 function functionpdfslitprint(){
-
   var bundlenumbers = $('#txtbundleids').val();
   if( bundlenumbers == '' || bundlenumbers.length == 0 ) {
     alert("Please select atleast one bundle for the bill");
@@ -546,6 +547,7 @@ function functionpdfslitprint(){
   var txtamount_mt1 = $('#txtamount_mt1').val();
 
 	var txtoutward_num=$('#txtoutward_num').val();
+	var driverContact=$('#driverContact').val();
 	var txtscrap=$('#txtscrap').val();
 	var txtservicetax=$('#txtservicetax').val();
 	var txteductax=$('#txteductax').val();
@@ -554,9 +556,9 @@ function functionpdfslitprint(){
 	var container=$('#container').val();
 	var txtslitsubtotal=$('#txtslitsubtotal').val();
 	var bundlenumbers = $('#txtbundleids').val();
-  var gstType = $('input[name=gstType]:checked').val();
+  	var gstType = $('input[name=gstType]:checked').val();
 
-	var dataString = 'billid='+billid+'&partyid='+partyid+'&pname='+pname+'&cust_add='+cust_add+'&cust_rm='+cust_rm+'&mat_desc='+mat_desc+'&thic='+thic+'&wid='+wid+'&len='+len+'&wei='+wei+'&inv_no='+inv_no+'&totalweight_check='+totalweight_check+'&totalrate='+totalrate+'&totalamt='+totalamt+'&txthandling='+txthandling+'&txtadditional_type='+txtadditional_type+'&txtamount_mt='+txtamount_mt+'&txtoutward_num='+txtoutward_num+'&txtscrap='+txtscrap+'&txtservicetax='+txtservicetax+'&txteductax='+txteductax+'&txtsecedutax='+txtsecedutax+'&txtgrandtotal='+txtgrandtotal+'&container='+container+'&txtslitsubtotal='+txtslitsubtotal+'&bundleNumbers='+bundlenumbers+'&txtadditional_type1='+txtadditional_type1+'&txtamount_mt1='+txtamount_mt1;
+	var dataString = 'billid='+billid+'&partyid='+partyid+'&pname='+pname+'&cust_add='+cust_add+'&cust_rm='+cust_rm+'&mat_desc='+mat_desc+'&thic='+thic+'&wid='+wid+'&len='+len+'&wei='+wei+'&inv_no='+inv_no+'&totalweight_check='+totalweight_check+'&totalrate='+totalrate+'&totalamt='+totalamt+'&txthandling='+txthandling+'&txtadditional_type='+txtadditional_type+'&txtamount_mt='+txtamount_mt+'&txtoutward_num='+txtoutward_num+'&driverContact='+driverContact+'&txtscrap='+txtscrap+'&txtservicetax='+txtservicetax+'&txteductax='+txteductax+'&txtsecedutax='+txtsecedutax+'&txtgrandtotal='+txtgrandtotal+'&container='+container+'&txtslitsubtotal='+txtslitsubtotal+'&bundleNumbers='+bundlenumbers+'&txtadditional_type1='+txtadditional_type1+'&txtamount_mt1='+txtamount_mt1;
 	
 	$.ajax({  
 	   type: "POST",  
@@ -577,18 +579,19 @@ function functionpdfslit() {
 	var pname 				= $('#pname').val();
 	var mat_desc 			= $('#mat_desc').val();
 	var txtoutward_num		= $('#txtoutward_num').val();  
+	var driverContact		= $('#driverContact').val();  
 	var totalrates 			= $('#totalrates').val();
 	var totalweight_checks	= $('#totalweight_checks').val();
 	var totalamtsslit		= $('#totalamtsslit').val();
   var actualnumberbundle = $('#txtbundleids').val();
 
-	var dataString = 'coilno='+pid+'&partyname='+pname+'&description='+mat_desc+'&lorryno='+txtoutward_num+'&totalrates='+totalrates+'&totalweight_checks='+totalweight_checks+'&totalamtsslit='+totalamtsslit+'&actualnumberbundle='+actualnumberbundle;
+	var dataString = 'coilno='+pid+'&partyname='+pname+'&description='+mat_desc+'&lorryno='+txtoutward_num+'&driverContact='+driverContact+'&totalrates='+totalrates+'&totalweight_checks='+totalweight_checks+'&totalamtsslit='+totalamtsslit+'&actualnumberbundle='+actualnumberbundle;
 	$.ajax({  
 		type: "POST",
 		// url : "<?php echo fuel_url('billing_statement/billing_pdf');?>/",  
 		data: dataString,
 		success: function(msg) {  
-			var dataStringone =  'coilno='+pid+'&partyname='+pname+'&description='+mat_desc+'&lorryno='+txtoutward_num+'&totalrates='+totalrates+'&totalweight_checks='+totalweight_checks+'&totalamtsslit='+totalamtsslit+'&actualnumberbundle='+actualnumberbundle;
+			var dataStringone =  'coilno='+pid+'&partyname='+pname+'&description='+mat_desc+'&lorryno='+txtoutward_num+'&driverContact='+driverContact+'&totalrates='+totalrates+'&totalweight_checks='+totalweight_checks+'&totalamtsslit='+totalamtsslit+'&actualnumberbundle='+actualnumberbundle;
 			var url = "<?php echo fuel_url('billing/billingslit_pdf');?>/?"+dataStringone;
 			window.open(url);
 		}
@@ -679,11 +682,12 @@ function functionpdf(){
 	var pname = $('#pname').val();
 	var mat_desc = $('#mat_desc').val();
 	var txtoutward_num = $('#txtoutward_num').val();  
+	var driverContact = $('#driverContact').val();  
 	var txttotalpcs = $('#txttotalpcs').val();
 	var txttotalweight = $('#txttotalweight').val();
 	var txtamount = $('#txtamount').val();
 	
-	var dataString = 'coilno='+pid+'&partyname='+pname+'&description='+mat_desc+'&lorryno='+txtoutward_num+'&totalpcs='+txttotalpcs+'&totalweight='+txttotalweight+'&totamount='+txtamount;
+	var dataString = 'coilno='+pid+'&partyname='+pname+'&description='+mat_desc+'&lorryno='+txtoutward_num+'&driverContact='+driverContact+'&totalpcs='+txttotalpcs+'&totalweight='+txttotalweight+'&totamount='+txtamount;
 	$.ajax({  
 		   type: "POST",  
 		  // url : "<?php echo fuel_url('billing_statement/billing_pdf');?>/",  
@@ -691,7 +695,7 @@ function functionpdf(){
 		   success: function(msg)
 		   {  
 			
-			var dataStringone =  'coilno='+pid+'&partyname='+pname+'&description='+mat_desc+'&lorryno='+txtoutward_num+'&totalpcs='+txttotalpcs+'&totalweight='+txttotalweight+'&totamount='+txtamount;
+			var dataStringone =  'coilno='+pid+'&partyname='+pname+'&description='+mat_desc+'&lorryno='+txtoutward_num+'&driverContact='+driverContact+'&totalpcs='+txttotalpcs+'&totalweight='+txttotalweight+'&totamount='+txtamount;
 			var url = "<?php echo fuel_url('billing/billing_pdf');?>/?"+dataStringone;
 		    window.open(url);
 		   }  

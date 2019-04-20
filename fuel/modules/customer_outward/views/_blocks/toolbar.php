@@ -6,10 +6,11 @@
 		<select id="party_account_name"  name="party_account_name" style="min-width:200px;" >
 			<?php
 				echo '<option value="'.Select.'">'.Select."</option>";
+
 	        	$CI =& get_instance();
 	        	$userdata = $CI->fuel_auth->user_data();
 	        	if(($userdata['super_admin']== 'yes')) {
-	        		foreach($data as $record) {
+					foreach($data as $record) {
                     	echo '<option value="'.$record->nPartyName.'">'.$record->nPartyName."</option>";
 					}
 				} else {

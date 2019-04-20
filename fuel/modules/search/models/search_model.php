@@ -24,7 +24,7 @@ class search_model extends Base_module_model {
   	}
 
   	function getCoilDetails($coilNo) {
-      $strSql = 'select * from aspen_tblinwardentry ai left join aspen_tblmatdescription as am on am.nMatId = ai.nMatId where vIRnumber = '.$coilNo;
+      $strSql = "select * from aspen_tblinwardentry ai left join aspen_tblmatdescription as am on am.nMatId = ai.nMatId where vIRnumber = '".$coilNo."'";
       $querymain = $this->db->query($strSql);
       return $querymain->row(0);
   	}
@@ -40,7 +40,7 @@ class search_model extends Base_module_model {
 
     function getCoilBalanceDetails($coilNo, $process) {
       if($process == 'Slitting') {
-        $strSql = 'select aspen_tblslittinginstruction.vIRnumber,
+        $strSql = "select aspen_tblslittinginstruction.vIRnumber,
         aspen_tblslittinginstruction.nSno,
         aspen_tblslittinginstruction.dDate,
         aspen_tblslittinginstruction.nWidth,
@@ -49,9 +49,9 @@ class search_model extends Base_module_model {
         aspen_tblbillingstatus.vBillingStatus as vStatus
           from aspen_tblbillingstatus 
           left join aspen_tblslittinginstruction on ( aspen_tblslittinginstruction.nSno = aspen_tblbillingstatus.nSno and aspen_tblbillingstatus.vIRnumber = aspen_tblslittinginstruction.vIRnumber ) 
-          where aspen_tblbillingstatus.vIRnumber = '.$coilNo .' order by aspen_tblbillingstatus.nSno';
+          where aspen_tblbillingstatus.vIRnumber = '".$coilNo ."' order by aspen_tblbillingstatus.nSno";
       } else 
-        $strSql = 'select * from aspen_tblbillingstatus where vIRnumber = '.$coilNo .' order by nSno';
+        $strSql = "select * from aspen_tblbillingstatus where vIRnumber = '".$coilNo ."' order by nSno";
   
       $querymain = $this->db->query($strSql);
       foreach ($querymain->result() as $row) {
@@ -61,7 +61,7 @@ class search_model extends Base_module_model {
     }
 
     function getBillDetailsByCoilNumber($coilNo) {
-      $strSql = 'select ab.*, GROUP_CONCAT(abb.nBundleNumber SEPARATOR ", " ) as bundleCount from aspen_tblbilldetails ab left join aspen_tblBillBundleAssociation abb on ab.nBillNo = abb.nBillNumber where vIRnumber = '.$coilNo.' group by nBillNumber';
+      $strSql = "select ab.*, GROUP_CONCAT(abb.nBundleNumber SEPARATOR ', ' ) as bundleCount from aspen_tblbilldetails ab left join aspen_tblBillBundleAssociation abb on ab.nBillNo = abb.nBillNumber where vIRnumber = '".$coilNo."' group by nBillNumber";
       $querymain = $this->db->query($strSql);
       foreach ($querymain->result() as $row) {
         $arr[] =$row;

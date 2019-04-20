@@ -1,0 +1,43 @@
+dl {
+  width: 100%;
+  overflow: hidden;
+  padding: 0;
+  margin: 0
+}
+dt, dd {
+  float: left;
+  padding: 0;
+  margin: 0
+}
+
+@media screen
+{
+    .noPrint{}
+    dt {
+        width: 25%;
+    }
+    dd {
+        width: 75%;
+    }
+    .noScreen{display:none;}
+}
+
+@media print
+{
+    .noPrint{display:none;}
+    .noScreen{}
+    dt {
+        width: 30%;
+    }
+    dd {
+        width: 70%;
+    }
+    @page { margin: 0; }
+    body { margin-top: 1.6cm; }
+    .navbar-static, #fuel_header, .search-actions, #main_top_panel {
+		display: none;
+	}
+	.search_bill_details {
+		width: 100%;
+	}
+}

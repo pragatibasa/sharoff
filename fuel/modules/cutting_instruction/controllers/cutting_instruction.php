@@ -97,7 +97,7 @@ class cutting_instruction extends Fuel_base_controller {
 	}*/
 	
 	
-		function delete_bundle(){
+	function delete_bundle(){
        /* $queryStr = $_SERVER['QUERY_STRING'];
         parse_str($queryStr, $args);
         $bundle = $args["bundlenumber"];
@@ -106,10 +106,6 @@ class cutting_instruction extends Fuel_base_controller {
 		$this->cutting_instruction_model->delete_bundlenumber($_POST['Bundlenumber'], $_POST['Pid']);
 		//echo $priceid;
 	}
-
-	
-	
-	
 	
 	function totalweight_check(){
 		$this->load->module_model(CUTTING_INSTRUCTION_FOLDER, 'cutting_instruction_model');

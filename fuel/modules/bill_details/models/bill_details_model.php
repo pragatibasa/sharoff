@@ -10,19 +10,136 @@ class bill_details_model extends Base_module_model {
         parent::__construct('aspen_tblbilldetails');// table name
     }
 
-	function list_items($limit = NULL, $offset = NULL, $col = 'nBillNo', $order = 'desc') {
+	function getPaginatedBillDetails($get) {
 
+		$aColumns = array( 'nBillNo', 'vIRnumber', 'dBillDate', 'nPartyName', 'BillStatus' );
 		$CI =& get_instance();
-		$userdata = $CI->fuel_auth->user_data();
+		$userdata = $CI->fuel_auth->user_data(); 
 
-		$this->db->select('aspen_tblbilldetails.nBillNo,aspen_tblbilldetails.dBillDate,aspen_tblpartydetails.nPartyName,aspen_tblbilldetails.BillStatus');
-		$this->db->join('aspen_tblpartydetails', 'aspen_tblbilldetails.nPartyId = aspen_tblpartydetails.nPartyId', 'left');
-		if(!($userdata['super_admin']== 'yes')) {
-			$this->db->where('nPartyName', $userdata['user_name']);
+		$superadmin = $userdata['super_admin'];
+        
+	    /* Indexed column (used for fast and accurate table cardinality) */
+        $sIndexColumn = "nBillNo";
+        
+        $sTable = "aspen_tblbilldetails";
+
+        $sLimit = "";
+        if ( isset( $get['start'] ) && $get['length'] != '-1' )
+        {
+            $sLimit = "LIMIT ".mysql_real_escape_string( $get['start'] ).", ".
+                mysql_real_escape_string( $get['length'] );
+        }
+        $sOrder = '';
+        if ( isset( $get['order'] ) )
+	    {
+            $sOrder = "ORDER BY ";
+
+			if ( $get[ 'columns'][$get['order'][0]['column']]['orderable'] == "true" ) {
+				$sOrder .= $aColumns[ intval( $get['order'][0]['column'] ) ]."
+					".mysql_real_escape_string( $get['order'][0]['dir'] ) .", ";
+			}
+            
+            $sOrder = substr_replace( $sOrder, "", -2 );
+            if ( $sOrder == "ORDER BY" )
+            {
+                $sOrder = "";
+            }
 		}
+        $sWhere = "";
 
-	    $data = parent::list_items($limit, $offset, $col, $order);
-        return $data;
+		if($superadmin != 'yes') {
+			$sWhere = "Where nPartyName = '".$userdata['user_name']."'";
+		}
+        if ( $get['search']['value'] != "" )
+        {
+			if ( $sWhere == "" )
+                {
+                    $sWhere = "WHERE ";
+                }
+            for ( $i=0 ; $i<count($aColumns) ; $i++ )
+            {
+                $sWhere .= $aColumns[$i]." LIKE '%".mysql_real_escape_string( $get['search']['value'] )."%' OR ";
+            }
+            $sWhere = substr_replace( $sWhere, "", -3 );
+        }
+
+        /* Individual column filtering */
+        for ( $i=0 ; $i<count($aColumns) ; $i++ )
+        {
+            if ( $get['columns'][$i]['searchable'] == "true" && $get['columns'][$i]['search']['value'] != '' )
+            {
+                if ( $sWhere == "" )
+                {
+                    $sWhere = "WHERE ";
+                }
+                else
+                {
+                    $sWhere .= " AND ";
+                }
+                $sWhere .= $aColumns[$i]." LIKE '%".mysql_real_escape_string($get['sSearch_'.$i])."%' ";
+            }
+        }
+
+        $sQuery = "
+		SELECT SQL_CALC_FOUND_ROWS ".str_replace(" , ", " ", implode(", ", $aColumns))."
+        FROM   $sTable
+        left join aspen_tblpartydetails on aspen_tblpartydetails.nPartyId = aspen_tblbilldetails.nPartyId 
+		$sWhere
+		$sOrder
+		$sLimit
+	";
+
+    $rResult = $this->db->query( $sQuery );
+    $arr = $rResult->result();
+    
+	/* Data set length after filtering */
+	$sQuery = "
+		SELECT FOUND_ROWS() as rowscount
+	";
+	$rResultFilterTotal = $this->db->query( $sQuery );
+    $aResultFilterTotal = $rResultFilterTotal->result();
+	$iFilteredTotal = $aResultFilterTotal[0]->rowscount;
+	
+	/* Total data set length */
+	$sQuery = "
+		SELECT COUNT(".$sIndexColumn.") as totalcount
+		FROM   $sTable
+	";
+	$rResultTotal = $this->db->query( $sQuery );
+    $aResultTotal = $rResultTotal->result();
+	$iTotal = $aResultTotal[0]->totalcount;
+	
+	
+	/*
+	 * Output
+	 */
+	$output = array(
+		// "sEcho" => intval($get['sEcho']),
+		"iTotalRecords" => $iTotal,
+		"iTotalDisplayRecords" => $iFilteredTotal,
+		"aaData" => array()
+	);
+
+	$latestBillNo = $this->getLatestBillNumber();
+    foreach($arr as $aRow) {
+        $row = array();
+		$aRow = (array) $aRow;
+
+		for ( $i=0 ; $i<count($aColumns) ; $i++ )
+		{
+			
+			if ( $aColumns[$i] != ' ' )
+			{
+				/* General output */
+				$row[] = $aRow[ $aColumns[$i] ];
+				if($latestBillNo == $aRow['nBillNo']) {
+					$row['latest'] = true;
+				}
+			}
+		}
+		$output['aaData'][] = $row;
+	}
+	echo json_encode( $output );exit;
 	}
 
 	function chk_user(){
@@ -43,6 +160,7 @@ class bill_details_model extends Base_module_model {
 	}
 
 	function generateDuplicateBill( $billNo='' ) {
+
 		$sqlbilling= "select aspen_tblbilldetails.nBillNo as billnumber,
 						DATE_FORMAT(aspen_tblbilldetails.dBillDate, '%d/%m/%Y') as billdate,
 						aspen_tblpartydetails.nPartyName as partyname,
@@ -163,7 +281,7 @@ class bill_details_model extends Base_module_model {
 	}
 
 	$html .='<tr>
-				<td align="center"><b>Duplicate Job Work / Delivery Challan</b></td>
+				<td align="center"><b>Job Work / Delivery Challan</b></td>
 			</tr>
 			<tr>
 				<td width="16%" align:"left"><h4>TIN:29730066589</h4></td>
@@ -171,7 +289,7 @@ class bill_details_model extends Base_module_model {
 				<td width="25%" align:"right"><h4>GST Regn. No: 29AABCA4807H1ZS</h4></td>
 			</tr>
 			<tr>
-				<td align="center" width="100%"><h4>Branch At: Plot no 16E, Bidadi Industrial Area, Phase 2 Sector 1, Bidadi, Ramnagara-562105, <br><b>Email: aspensteel_unit2@yahoo.com </b></h4></td>
+				<td align="center" width="100%"><h4>Branch At: Plot no 16E, Bidadi Industrial Area, Phase 2 Sector 1, Bidadi, Ramnagara-562109, <br><b>Email: aspensteel_unit2@yahoo.com </b></h4></td>
 			</tr>
 			<tr>
 				<td align="center" width="100%"><h4>Head Office At: 54/1, Medahalli, Old Madras Road, Bangalore-560049</h4></td>
@@ -182,7 +300,7 @@ class bill_details_model extends Base_module_model {
 				<td align="center" width="100%"><hr color=#00CC33 size=3 width=100></td>
 			</tr>
 			<tr>
-				<td width="30%" align:"left"><h3>Duplicate of Bill : '.$billnumber.'</h3></td>
+				<td width="30%" align:"left"><h3>Billnumber : '.$billnumber.'</h3></td>
 				<td width="51%" align="center"><h3>Coilnumber : '.$invoice.'</h3></td>
 				<td width="33.33%" align:"right"><h3>Billdate : '.$billdate.'</h3></td>
 			</tr>
@@ -283,7 +401,11 @@ class bill_details_model extends Base_module_model {
 			<h3><b>SUBTOTAL</b></h3>
 			</td> <td><h3>'.$subtotal.'</h3></td>
 		</tr>
-		'.$this->getTaxDetailsSection($billNo).'
+		<tr>
+		<td width="89%">
+			<h3><b>CGST @ '.$serviceTaxPercent.'%</b></h3>
+			</td> <td><h3>'.ceil($servicetax).'</h3></td>
+		</tr>
 		<tr>
 			<td align="center" width="100%"><hr color=#00CC33 size=5 width=100></td>
 		</tr>
@@ -411,7 +533,7 @@ class bill_details_model extends Base_module_model {
 	}
 
 	$html .='<tr>
-				<td align="center"><b>Duplicate Job Work / Delivery Challan</b></td>
+				<td align="center"><b>Job Work / Delivery Challan</b></td>
 			</tr>
 			<tr>
 				<td width="16%" align:"left"><h4>TIN:29730066589</h4></td>
@@ -419,7 +541,7 @@ class bill_details_model extends Base_module_model {
 				<td width="25%" align:"right"><h4>GST Regn. No: 29AABCA4807H1ZS</h4></td>
 		</tr>
 		<tr>
-			<td align="center" width="100%"><h4>Branch At: Plot no 16E, Bidadi Industrial Area, Phase 2 Sector 1, Bidadi, Ramnagara-562105, <br><b>Email: aspensteel_unit2@yahoo.com </b></h4></td>
+			<td align="center" width="100%"><h4>Branch At: Plot no 16E, Bidadi Industrial Area, Phase 2 Sector 1, Bidadi, Ramnagara-562109, <br><b>Email: aspensteel_unit2@yahoo.com </b></h4></td>
 		</tr>
 		<tr>
 			<td align="center" width="100%"><h4>Head Office At: 54/1, Medahalli, Old Madras Road, Bangalore-560049</h4></td>
@@ -430,7 +552,7 @@ class bill_details_model extends Base_module_model {
 				<td align="center" width="100%"><hr color=#00CC33 size=3 width=100></td>
 			</tr>
 			<tr>
-				<td width="30%" align:"left"><h3>Duplicate of Billnumber : '.$billNo.'</h3></td>
+				<td width="30%" align:"left"><h3>Billnumber : '.$billNo.'</h3></td>
 				<td width="40%" align="center"><h3>Coilnumber : '.$partyid.'</h3></td>
 				<td width="33.33%" align:"right"><h3>Billdate : '.$billdate.' </h3></td>
 			</tr>
@@ -517,7 +639,11 @@ class bill_details_model extends Base_module_model {
 			<h3><b>SUBTOTAL</b></h3>
 			</td> <td><h3>'.$totalamt.'</h3></td>
 		</tr>
-	   '.$this->getTaxDetailsSection($billNo).'
+		<tr>
+		<td width="89%">
+			<h3><b>CGST @ '.$serviceTaxPercent.'%</b></h3>
+			</td> <td><h3>'.ceil($txtservicetax).'</h3></td>
+		</tr>
 		<tr>
 			<td align="center" width="100%"><hr color=#00CC33 size=5 width=100></td>
 		</tr>
@@ -652,7 +778,7 @@ class bill_details_model extends Base_module_model {
 						left join aspen_tblslittinginstruction on  aspen_tblslittinginstruction.vIRnumber = aspen_tblinwardentry.vIRnumber
 						left join aspen_tblBillBundleAssociation on aspen_tblslittinginstruction.nSno = aspen_tblBillBundleAssociation.nBundleNumber
 						left join aspen_tblmatdescription on aspen_tblmatdescription.nMatId = aspen_tblinwardentry.nMatId
-						where aspen_tblBillBundleAssociation.nBillNumber = $billnumber and aspen_tblinwardentry.vIRnumber=$invoice order by aspen_tblslittinginstruction.nSno";
+						where aspen_tblBillBundleAssociation.nBillNumber = $billnumber and aspen_tblinwardentry.vIRnumber='$invoice' order by aspen_tblslittinginstruction.nSno";
 
 		$queryBundleDetails = $this->db->query($strSqlSlittingBundleDetails);
 
@@ -682,7 +808,7 @@ class bill_details_model extends Base_module_model {
 	}
 
 	$html .='<tr>
-						<td align="center"><b>Duplicate Job Work / Delivery Challan</b></td>
+						<td align="center"><b>Job Work / Delivery Challan</b></td>
 					</tr>
 					<tr>
 						<td width="16%" align:"left"><h4>TIN:29730066589</h4></td>
@@ -690,7 +816,7 @@ class bill_details_model extends Base_module_model {
 						<td width="25%" align:"right"><h4>GST Regn. No: 29AABCA4807H1ZS</h4></td>
 					</tr>
 					<tr>
-						<td align="center" width="100%"><h4>Aspen Steel Pvt Ltd, Plot no 16E, Bidadi Industrial Area, Phase 2 Sector 1, Bidadi, Ramnagara-562105, <br><b>Email: aspensteel_unit2@yahoo.com </b></h4></td>
+						<td align="center" width="100%"><h4>Aspen Steel Pvt Ltd, Plot no 16E, Bidadi Industrial Area, Phase 2 Sector 1, Bidadi, Ramnagara-562109, <br><b>Email: aspensteel_unit2@yahoo.com </b></h4></td>
 					</tr>
 					<tr>
 						<td align="center" width="100%"><hr color=#00CC33 size=5 width=100></td>
@@ -798,7 +924,10 @@ class bill_details_model extends Base_module_model {
 				<td width="550px" border="0" align="left"><b>Subtotal </b></td>
 				<td><b>'.$subtotal.'</b>&nbsp;&nbsp;</td>
 			</tr>
-	     '.$this->getTaxDetailsSection($billNo).'
+			<tr>
+				<td width="550px" border="0" align="left"><b>CGST @ '.$serviceTaxPercent.'%</b></td>
+				<td><b>'.$servicetax.'</b>&nbsp;&nbsp;</td>
+			</tr>
 			<tr>
 				<td width="550px" border="0" align="left"><b>Grand Total</b></td>
 				<td><b>'.$grandtotal.'</b>&nbsp;&nbsp;</td>
@@ -895,10 +1024,10 @@ class bill_details_model extends Base_module_model {
 					aspen_tblBillBundleAssociation.nBundleNumber IN ($strBundleNos)
 				) p1
 			SET p.fpresent = p.fpresent+p1.weight, p.billedweight = p.billedweight-p1.weight
-			where p.vIRnumber=$intCoilNumber";
+			where p.vIRnumber='".$intCoilNumber."'";
 
 			$strSqlUpdateInwardEntryStatus = "UPDATE aspen_tblinwardentry set vStatus = case when (fpresent=fQuantity or billedweight <= 0) then 'Ready to Bill' else 'Billed' end
-						where vIRnumber=$intCoilNumber";
+						where vIRnumber='".$intCoilNumber."'";
 
 			//Updating bill record status
 			$strSqlUpdateBillStatus = "UPDATE aspen_tblbilldetails set BillStatus = 'Cancelled' where nBillNo = $billNo";
@@ -909,10 +1038,10 @@ class bill_details_model extends Base_module_model {
 				aspen_tblbillingstatus.nBilledNumber-aspen_tblBillBundleAssociation.nNoOfPcs as billed,
 				aspen_tblbillingstatus.fbilledWeight-aspen_tblBillBundleAssociation.fbilledWeight as billedWeight from aspen_tblbillingstatus
 				left join aspen_tblBillBundleAssociation on aspen_tblBillBundleAssociation.nBundleNumber = aspen_tblbillingstatus.nSno and aspen_tblBillBundleAssociation.nBillNumber = $billNo
-				where vIRnumber=$intCoilNumber and nSno in ($strBundleNos)) as p1 on p.nSno = p1.nSno
-				SET p.nbalance = p1.balance, p.nBilledNumber = p1.billed,p.fbilledWeight=p1.billedWeight where p.vIRnumber=$intCoilNumber and p.nSno in ($strBundleNos)";
+				where vIRnumber='".$intCoilNumber."' and nSno in ($strBundleNos)) as p1 on p.nSno = p1.nSno
+				SET p.nbalance = p1.balance, p.nBilledNumber = p1.billed,p.fbilledWeight=p1.billedWeight where p.vIRnumber='".$intCoilNumber."' and p.nSno in ($strBundleNos)";
 
-			$strSqlUpdateBundleBillingStatus = "UPDATE aspen_tblbillingstatus set vBillingStatus = case when (fbilledWeight=0 or nBilledNumber = 0) then 'Not Billed' else 'Billed' end where vIRnumber=$intCoilNumber and nSno in ($strBundleNos)";
+			$strSqlUpdateBundleBillingStatus = "UPDATE aspen_tblbillingstatus set vBillingStatus = case when (fbilledWeight=0 or nBilledNumber = 0) then 'Not Billed' else 'Billed' end where vIRnumber='".$intCoilNumber."' and nSno in ($strBundleNos)";
 
 			$objUpdateCoilWeights			= $this->db->query($strSqlUpdateCoilWeights);
 			$objSqlUpdateInwardEntryStatus	= $this->db->query($strSqlUpdateInwardEntryStatus);
@@ -967,15 +1096,15 @@ class bill_details_model extends Base_module_model {
 					from aspen_tblinwardentry
 					left join aspen_tblslittinginstruction on aspen_tblinwardentry.vIRnumber = aspen_tblslittinginstruction.vIRnumber
 					where
-					aspen_tblslittinginstruction.vIRnumber= $intCoilNumber and
+					aspen_tblslittinginstruction.vIRnumber= '$intCoilNumber' and
 					aspen_tblslittinginstruction.nSno IN ($strBundleNos)
 				) p1
 			SET p.fpresent = p1.present,p.billedweight = p1.billed
-			where p.vIRnumber=$intCoilNumber";
+			where p.vIRnumber='$intCoilNumber'";
 
 			//updating inward entry status
 			$strSqlUpdateInwardEntryStatus = "UPDATE aspen_tblinwardentry set vStatus = case when (fpresent =fQuantity or billedweight = 0) then 'Ready to Bill' else 'Billed' end
-			where vIRnumber=$intCoilNumber";
+			where vIRnumber='$intCoilNumber'";
 
 			//Updating back billing status records
 			$strSqlUpdateBillingStatus = "UPDATE aspen_tblbillingstatus SET vBillingStatus='Ready To Bill' WHERE vIRnumber='".$intCoilNumber."' AND nSno IN (".$strBundleNos.")";
@@ -1013,10 +1142,10 @@ class bill_details_model extends Base_module_model {
 					aspen_tblBillBundleAssociation.nBundleNumber IN ($strBundleNos)
 				) p1
 			SET p.fpresent = p.fpresent+p1.weight, p.billedweight = p.billedweight-p1.weight
-			where p.vIRnumber=$intCoilNumber";
+			where p.vIRnumber='$intCoilNumber'";
 
 			$strSqlUpdateInwardEntryStatus = "UPDATE aspen_tblinwardentry set vStatus = case when (fpresent=fQuantity or billedweight <= 0) then 'Ready to Bill' else 'Billed' end
-						where vIRnumber=$intCoilNumber";
+						where vIRnumber='$intCoilNumber'";
 
 			//Updating back billing status records
 			$strSqlUpdateBillingStatus = "UPDATE aspen_tblbillingstatus as p
@@ -1024,10 +1153,10 @@ class bill_details_model extends Base_module_model {
 				aspen_tblbillingstatus.nBilledNumber-aspen_tblBillBundleAssociation.nNoOfPcs as billed,
 				aspen_tblbillingstatus.fbilledWeight-aspen_tblBillBundleAssociation.fbilledWeight as billedWeight from aspen_tblbillingstatus
 				left join aspen_tblBillBundleAssociation on aspen_tblBillBundleAssociation.nBundleNumber = aspen_tblbillingstatus.nSno and aspen_tblBillBundleAssociation.nBillNumber = $billNo
-				where vIRnumber=$intCoilNumber and nSno in ($strBundleNos)) as p1 on p.nSno = p1.nSno
-				SET p.nbalance = p1.balance, p.nBilledNumber = p1.billed,p.fbilledWeight=p1.billedWeight where p.vIRnumber=$intCoilNumber and p.nSno in ($strBundleNos)";
+				where vIRnumber='".$intCoilNumber."' and nSno in ($strBundleNos)) as p1 on p.nSno = p1.nSno
+				SET p.nbalance = p1.balance, p.nBilledNumber = p1.billed,p.fbilledWeight=p1.billedWeight where p.vIRnumber='$intCoilNumber' and p.nSno in ($strBundleNos)";
 
-			$strSqlUpdateBundleBillingStatus = "UPDATE aspen_tblbillingstatus set vBillingStatus = case when (fbilledWeight=0 or nBilledNumber = 0) then 'Not Billed' else 'Billed' end where vIRnumber=$intCoilNumber and nSno in ($strBundleNos)";
+			$strSqlUpdateBundleBillingStatus = "UPDATE aspen_tblbillingstatus set vBillingStatus = case when (fbilledWeight=0 or nBilledNumber = 0) then 'Not Billed' else 'Billed' end where vIRnumber='$intCoilNumber' and nSno in ($strBundleNos)";
 
 			//Updating bill record status
 			$strSqlUpdateBillStatus = "DELETE from aspen_tblbilldetails where nBillNo = $billNo";
@@ -1044,7 +1173,7 @@ class bill_details_model extends Base_module_model {
 			//Updating the data back
 			//Updating inward entry back
 			$strSqlUpdateCoilWeights = "UPDATE aspen_tblinwardentry
-			SET fpresent = fpresent+($arrBillRecord->fTotalWeight*1000), billedweight = fpresent+($arrBillRecord->fTotalWeight*1000) where vIRnumber=$intCoilNumber";
+			SET fpresent = fpresent+($arrBillRecord->fTotalWeight*1000), billedweight = fpresent+($arrBillRecord->fTotalWeight*1000) where vIRnumber='".$intCoilNumber."'";
 
 			//Updating bill record status
 			$strSqlUpdateBillStatus = "DELETE from aspen_tblbilldetails where nBillNo = $billNo";
@@ -1054,21 +1183,6 @@ class bill_details_model extends Base_module_model {
 			echo true;exit;
 		}
 	}
-
-  function getTaxDetailsSection($billNo) {
-    $strSqlTaxDetails = 'select * from aspen_tblBillTaxAssociation as abt
-    left join aspen_tbltaxdetails as at on abt.nTaxTypeId = at.nTaxTypeId
-    where abt.nBillNo = '.$billNo;
-    $resSqlTaxDetails = $this->db->query($strSqlTaxDetails);
-    $strHtmlTaxDetails = '';
-    foreach ($resSqlTaxDetails->result() as $row) {
-      $strHtmlTaxDetails .= '<tr>';
-      $strHtmlTaxDetails .= '<td width="555px" border="0" align="left"><h3>'.$row->vTypeOfTax.' @ '.$row->nTaxPercent.'%</h3></td>';
-      $strHtmlTaxDetails .= '<td><h3>'.$row->nTaxAmount.'</h3></td>';
-      $strHtmlTaxDetails .= '</tr>';
-    }
-    return $strHtmlTaxDetails;
-  }
 }
 
 class Billings_model extends Base_module_record {

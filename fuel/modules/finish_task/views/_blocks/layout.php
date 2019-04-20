@@ -523,15 +523,16 @@ function functionfinish() {
 	}
  else
  {
- var dataString = 'pid='+pid+'&pname='+pname+'&txtbundleids='+txtbundleids+'&txtbundleweight='+txtbundleweight+'&txtboxscrap='+txtboxscrap;
+	$('#finishci').prop('disabled','true');
+ 	var dataString = 'pid='+pid+'&pname='+pname+'&txtbundleids='+txtbundleids+'&txtbundleweight='+txtbundleweight+'&txtboxscrap='+txtboxscrap;
     $.ajax({
         type: 'POST',
         url: "<?php echo fuel_url('finish_task/statuschange');?>",
         data: dataString,
         success: function(){ 
-//	window.location.reload();
-  refresh_folderlist();
-  }
+			$('#finishci').removeAttr('disabled');
+  			refresh_folderlist();
+  		}
     });
  }
 }
@@ -546,23 +547,21 @@ function functionslit() {
  var txtboxscrap = $('#txtboxscrap').val();
  var pid  = $('#pid').val();
  var pname = $('#pname').val();
-if(!$("input[name='list']:checked").val())
- {
+if(!$("input[name='list']:checked").val()) {
   alert('Please select the Radio button');
   return false;
- }
- else
- {
- var dataString = 'pid='+pid+'&pname='+pname+'&txtbundleids='+txtbundleids+'&txtbundleweight='+txtbundleweight+'&txtboxscrap='+txtboxscrap;
+ } else {
+	$('#finishsi').prop('disabled','true');
+	var dataString = 'pid='+pid+'&pname='+pname+'&txtbundleids='+txtbundleids+'&txtbundleweight='+txtbundleweight+'&txtboxscrap='+txtboxscrap;
     $.ajax({
         type: 'POST',
         url: "<?php echo fuel_url('finish_task/statuschangeslit');?>",
         data: dataString,
         success: function(){ 
-	
-  alert("Finished Complete");
-  refresh_folderlist();
-  }
+			$('#finishsi').removeAttr('disabled');			
+			alert("Finished Complete");
+			refresh_folderlist();
+  		}
     });
  }
 }

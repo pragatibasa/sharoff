@@ -48,7 +48,7 @@ $config['modules_allowed'] = array(
 	'cutting_instruction',
 	//'rate_details',
 	'partyname_details',
-	'coil_details', 
+	'coil_details',
 //	'cronjobs',
 	'slitting_instruction',
 	'transfer_instruction',
@@ -65,15 +65,17 @@ $config['modules_allowed'] = array(
 	'inventory_tax_details',
 	'rate_direct_billing',
 	'bill_details',
-	'search'
+	'search',
+	'quality_reports',
+	'coil_labels'
 	);
 //Configuration ASPEN PANEL
-$config['nav']['Aspen Steel']=array( 
+$config['nav']['Aspen Steel']=array(
 	//'inward_entry/create' => 'Create Inward Entry',
 //	'inward_entry' => lang('module_inward_entry'),
 //	'workin_progress' => lang('workin_progress'),
 //	'reports' => lang('reports'),
-	);							
+	);
 
 $config['nav']['modules'] = array();
 
@@ -82,7 +84,7 @@ $config['nav']['Aspen_Steel'] = array('inward_entry' => 'Inward Register',
 										'inward' => 'Inward',
 										'partywise_register' => 'Partywise Register',
 										'workin_progress' => 'Workin Progress',
-									
+
 );
 
 
@@ -98,7 +100,7 @@ $config['nav']['Master'] = array('rate_details_width' => 'Rate Details Width',
           'slitting_thickness'=> ' Slit Thickness',
           'recoiling_thickness'=> 'Recoiling Thickness',
           'rate_direct_billing' => ' Rate for Direct Bill',
-         
+
 );
 
 
@@ -113,6 +115,8 @@ $config['nav']['Reports'] = array('stock_report' => 'Customer Stock Report ',
 										'total_average' => 'Total party holding',
 										'average_party' => 'Partywise Average Holding',
 										'bill_details' => 'Bill Details',
+										'quality_reports' => 'Quality Reports',
+										'coil_labels' => 'Coil Labels'
 );
 
 //'support'
@@ -124,7 +128,7 @@ $config['settings_view'] = array('tools', 'manage', 'Aspen_Steel',  'Master',  '
 // whether the admin backend is enabled
 $config['admin_enabled'] = TRUE;
 
-// will auto search view files. 
+// will auto search view files.
 // If the URI is about/history and the about/history view does not exist but about does, it will render the about page
 $config['auto_search_views'] = TRUE;
 
@@ -140,8 +144,8 @@ $config['assets_upload_max_height']  = 768;
 $config['assets_excluded_dirs'] = array(
 	'js',
 	'css',
-	'cache', 
-	'swf', 
+	'cache',
+	'swf',
 	);
 
 // text editor settings  (options are markitup or ckeditor)

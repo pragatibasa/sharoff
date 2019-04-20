@@ -17,3 +17,4 @@ $route[FUEL_ROUTE.'slitting_instruction/totalwidth'] = 'slitting_instruction/tot
 $route[FUEL_ROUTE.'slitting_instruction/getBalanceLength'] = 'slitting_instruction/getBalanceLength';
 $route[FUEL_ROUTE.'slitting_instruction/getLengthWithWidthGreater'] = 'slitting_instruction/getLengthWithWidthGreater';
 $route[FUEL_ROUTE.'slitting_instruction/cancelcoils'] = 'slitting_instruction/cancelcoils';
+$route[FUEL_ROUTE.'slitting_instruction/getTotalWidth'] = 'slitting_instruction/getTotalWidth';

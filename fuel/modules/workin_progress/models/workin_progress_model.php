@@ -6,16 +6,16 @@ require_once(APPPATH.'helpers/tcpdf/config/lang/eng.php');
 require_once(APPPATH.'helpers/tcpdf/tcpdf.php');
 
 class workin_progress_model extends Base_module_model {
- 
+
 	public $foreign_keys = array('nPartyId'=>array(WORKIN_PROGRESS_FOLDER=>'workin_to_permissions_model'),'nMatId'=>array(WORKIN_PROGRESS_FOLDER=>'workin_to_users_model'));
-		
+
 	protected $key_field = 'dReceivedDate';
-		
+
     function __construct()
     {
         parent::__construct('aspen_tblinwardentry');// table name
     }
-	
+
 	function list_items($limit = NULL, $offset = NULL, $col = 'vIRnumber', $order = 'asc')
     {
 		$this->db->select('aspen_tblinwardentry.dReceivedDate,aspen_tblrecoiling.dStartDate,aspen_tblpartydetails.nPartyName ,aspen_tblinwardentry.vIRnumber,aspen_tblmatdescription.vDescription , aspen_tblinwardentry.fThickness, aspen_tblinwardentry.fWidth,aspen_tblinwardentry.fQuantity, aspen_tblinwardentry.vStatus, aspen_tblrecoiling.nNoOfRecoils');
@@ -24,16 +24,16 @@ class workin_progress_model extends Base_module_model {
 		$this->db->join('aspen_tblmatdescription', 'aspen_tblmatdescription.nMatId = aspen_tblinwardentry.nMatId', 'left');
 		$this->db->join('aspen_tblrecoiling', 'aspen_tblrecoiling.vIRnumber = aspen_tblinwardentry.vIRnumber', 'left');
 	    $data = parent::list_items($limit, $offset, $col, $order);
-        return $data;    	
+        return $data;
 	}
 
-	function save($post) 
+	function save($post)
 	{
 		$post['status'] = "New";
 		parent::save($post);
 		return true;
 	}
-	
+
 	function form_fields($values = array())
 	{
 		$fields = parent::form_fields();
@@ -44,17 +44,17 @@ class workin_progress_model extends Base_module_model {
 		$fields['vIRnumber']['label'] = 'Coil Number';
 		$fields['nPartyId']['label'] = "Parties";
 		$fields['nMatId']['label'] = "Material Description";
-		
+
 		$workin_to_permissions_model_options = $CI->workin_to_permissions_model->options_list('nPartyId', 'nPartyName');
 		$workin_to_users_model_options = $CI->workin_to_users_model->options_list('nMatId', 'vDescription');
 
 	    $workin_to_description_model_options = $CI->workin_to_cutting_model->options_list('nMatId', 'vDescription');
-	
+
 		return $fields;
 	}
-	
+
 	function editCoilDetails() {
-		$query = $this->db->query("select * from aspen_tblinwardentry order by col name  limit 0,1"); 
+		$query = $this->db->query("select * from aspen_tblinwardentry order by col name  limit 0,1");
 		$arr='';
 		if ($query->num_rows() > 0)
 		{
@@ -62,20 +62,21 @@ class workin_progress_model extends Base_module_model {
 		   {
 		      $arr[] =$row;
 		   }
-		} 
+		}
 		return $arr;
 	}
 	function example() {
 		return true;
 	}
-	
+
 	function toolbar_list()
 	{
-		$query = $this->db->query("select DISTINCT aspen_tblinwardentry.vIRnumber as coilnumber , DATE_FORMAT(aspen_tblinwardentry.dReceivedDate, '%d-%m-%Y') as receiveddate, DATE_FORMAT(aspen_tblcuttinginstruction.dDate, '%d-%m-%Y') as sizegivendate ,DATE_FORMAT(aspen_tblrecoiling.dStartDate, '%d-%m-%Y') as recoilingdate ,DATE_FORMAT(aspen_tblslittinginstruction.dDate, '%d-%m-%Y') as slittingdate,aspen_tblpartydetails.nPartyName as partyname,aspen_tblmatdescription.vDescription as materialdescription, aspen_tblinwardentry.fThickness as thickness, aspen_tblinwardentry.fWidth as width, aspen_tblinwardentry.fpresent as weight,aspen_tblinwardentry.vprocess as process, ifnull(aspen_tbl_cuttingslipgenerated.numTimesGenerated,0) as numTimesGenerated From aspen_tblinwardentry LEFT JOIN aspen_tblmatdescription  ON aspen_tblmatdescription.nMatId=aspen_tblinwardentry.nMatId LEFT JOIN aspen_tblcuttinginstruction  ON aspen_tblcuttinginstruction.vIRnumber=aspen_tblinwardentry.vIRnumber LEFT JOIN aspen_tblrecoiling  ON aspen_tblrecoiling .vIRnumber=aspen_tblinwardentry.vIRnumber LEFT JOIN aspen_tblpartydetails ON aspen_tblpartydetails .nPartyId=aspen_tblinwardentry.nPartyId 
+    $strWorkingProgressList = "select DISTINCT aspen_tblinwardentry.vIRnumber as coilnumber , DATE_FORMAT(aspen_tblinwardentry.dReceivedDate, '%d-%m-%Y') as receiveddate, DATE_FORMAT(aspen_tblcuttinginstruction.dDate, '%d-%m-%Y') as sizegivendate ,DATE_FORMAT(aspen_tblrecoiling.dStartDate, '%d-%m-%Y') as recoilingdate ,DATE_FORMAT(aspen_tblslittinginstruction.dDate, '%d-%m-%Y') as slittingdate,aspen_tblpartydetails.nPartyName as partyname,aspen_tblmatdescription.vDescription as materialdescription, aspen_tblinwardentry.fThickness as thickness, aspen_tblinwardentry.fWidth as width, aspen_tblinwardentry.fpresent as weight,aspen_tblinwardentry.vprocess as process, ifnull(aspen_tbl_cuttingslipgenerated.numTimesGenerated,0) as numTimesGenerated From aspen_tblinwardentry LEFT JOIN aspen_tblmatdescription  ON aspen_tblmatdescription.nMatId=aspen_tblinwardentry.nMatId LEFT JOIN aspen_tblcuttinginstruction  ON aspen_tblcuttinginstruction.vIRnumber=aspen_tblinwardentry.vIRnumber LEFT JOIN aspen_tblrecoiling  ON aspen_tblrecoiling .vIRnumber=aspen_tblinwardentry.vIRnumber LEFT JOIN aspen_tblpartydetails ON aspen_tblpartydetails .nPartyId=aspen_tblinwardentry.nPartyId
 		LEFT JOIN aspen_tblslittinginstruction ON aspen_tblslittinginstruction .vIRnumber=aspen_tblinwardentry.vIRnumber
 		LEFT JOIN aspen_tblbillingstatus ON aspen_tblbillingstatus.vIRnumber=aspen_tblinwardentry.vIRnumber
-		LEFT JOIN aspen_tbl_cuttingslipgenerated ON aspen_tbl_cuttingslipgenerated.nPartyId=aspen_tblinwardentry.vIRnumber 
-		where aspen_tblinwardentry.vStatus = 'Work In Progress' or aspen_tblslittinginstruction.vStatus='WIP-Slitting' or aspen_tblrecoiling.vStatus='WIP-Recoiling' or aspen_tblcuttinginstruction.vStatus='WIP-Cutting' Group by aspen_tblinwardentry.vIRnumber"); 
+		LEFT JOIN aspen_tbl_cuttingslipgenerated ON aspen_tbl_cuttingslipgenerated.nPartyId=aspen_tblinwardentry.vIRnumber
+		where aspen_tblinwardentry.vStatus = 'Work In Progress' or aspen_tblslittinginstruction.vStatus='WIP-Slitting' or aspen_tblrecoiling.vStatus='WIP-Recoiling' or aspen_tblcuttinginstruction.vStatus='WIP-Cutting' Group by aspen_tblinwardentry.vIRnumber";
+		$query = $this->db->query($strWorkingProgressList);
 
 		$arr='';
 		if ($query->num_rows() > 0)
@@ -84,7 +85,7 @@ class workin_progress_model extends Base_module_model {
 		   {
 		      $arr[] =$row;
 		   }
-		} 
+		}
 		return $arr;
 	}
 
@@ -100,8 +101,8 @@ where aspen_tblinwardentry.vStatus = 'Work In Progress' or aspen_tblslittinginst
     }
     }
 	return $bweight;
-  }	
-  
+  }
+
   function generate_cuttingslip_model() {
 	$sqlcs = "select aspen_tblpartydetails.nPartyName as partyname,aspen_tblmatdescription.vDescription as materialdescription,vInvoiceNo as Invoicenumber,fWidth as Width,fThickness as Thickness,fQuantity as Weight from aspen_tblinwardentry LEFT JOIN aspen_tblmatdescription  ON aspen_tblmatdescription.nMatId=aspen_tblinwardentry.nMatId LEFT JOIN aspen_tblpartydetails ON aspen_tblpartydetails .nPartyId=aspen_tblinwardentry.nPartyId where aspen_tblinwardentry.vIRnumber='".$_POST['coilnumber']."'";
 	$query = $this->db->query($sqlcs);
@@ -111,17 +112,17 @@ where aspen_tblinwardentry.vStatus = 'Work In Progress' or aspen_tblslittinginst
 		   {
 		      $arr[] =$row;
 		   }
-		} 
+		}
 		return $arr;
 	}
-	
-	
+
+
 	function cutting_slipgenerated($partyid=''){
 		if(isset($partyid)){
 			$sqlpcheck= "select numTimesGenerated from aspen_tbl_cuttingslipgenerated where nPartyId='".$partyid."'";
 			$query = $this->db->query($sqlpcheck);
 			if ($query->num_rows() > 0) {
-				//update numTimesGenerated	
+				//update numTimesGenerated
 				$sql = ("Update aspen_tbl_cuttingslipgenerated set numTimesGenerated=numTimesGenerated+1 where nPartyId='".$partyid."'");
 				$query1=$this->db->query ($sql);
 			}else{
@@ -152,9 +153,9 @@ where aspen_tblinwardentry.vStatus = 'Work In Progress' or aspen_tblslittinginst
 	if( $row->vprocess =='Cutting')
 	{
 	$sqlcutting = "select aspen_tblpartydetails.nPartyName as partyname,aspen_tblmatdescription.vDescription as materialdescription,vInvoiceNo as Invoicenumber,fWidth as Width,fThickness as Thickness,fQuantity as Weight from aspen_tblinwardentry LEFT JOIN aspen_tblmatdescription  ON aspen_tblmatdescription.nMatId=aspen_tblinwardentry.nMatId LEFT JOIN aspen_tblpartydetails ON aspen_tblpartydetails .nPartyId=aspen_tblinwardentry.nPartyId where aspen_tblinwardentry.vIRnumber ='".$partyid."'";
-		
+
 		$querymain = $this->db->query($sqlcutting);
-		
+
 		$invoice = $partyid;
 		$party_name = $querymain->row(0)->partyname;
 		$material_description = $querymain->row(0)->materialdescription;
@@ -162,13 +163,13 @@ where aspen_tblinwardentry.vStatus = 'Work In Progress' or aspen_tblslittinginst
 		$Width = $querymain->row(0)->Width;
 		$Thickness = $querymain->row(0)->Thickness;
 		$Weight = $querymain->row(0)->Weight;
-				
+
 		$sqlitem ="select aspen_tblcuttinginstruction.nSno as bundlenumber, DATE_FORMAT(aspen_tblcuttinginstruction.dDate, '%d-%m-%Y') AS processdate, aspen_tblcuttinginstruction.nLength as length, aspen_tblcuttinginstruction.nNoOfPieces as noofsheets, aspen_tblcuttinginstruction.nBundleweight as bundleweight from aspen_tblcuttinginstruction where aspen_tblcuttinginstruction.vIRnumber='".$partyid."' and aspen_tblcuttinginstruction.vStatus='WIP-Cutting'";
-		
+
 		$queryitem = $this->db->query($sqlitem);
 
 		date_default_timezone_set('Asia/Kolkata');
-		
+
 		$pdf = new TCPDF(PDF_PAGE_ORIENTATION, PDF_UNIT, PDF_PAGE_FORMAT, true, 'UTF-8', false);
 		$pdfname= 'cuttingslip_'.$partyid.'.pdf';
 		$pdf->SetAuthor('Abhilash');
@@ -184,13 +185,13 @@ where aspen_tblinwardentry.vStatus = 'Work In Progress' or aspen_tblslittinginst
 		$pdf->SetAutoPageBreak(TRUE, PDF_MARGIN_BOTTOM);
 		$pdf->setImageScale(PDF_IMAGE_SCALE_RATIO);
 		$pdf->SetFont('helvetica', '', 7);
-		$pdf->AddPage();		
-		
+		$pdf->AddPage();
+
 				$html = '
 			<div align="center">
-					
+
 		<table width="100%"  cellspacing="0" cellpadding="0" border="0">
-	
+
 			<tr>
 				<td width="16%" align:"left"></td>
 				<td width="70%"align="center" style="font-size:60px; font-style:italic; font-family: fantasy;"><h1>CUTTING SLIP</h1></td>
@@ -198,69 +199,69 @@ where aspen_tblinwardentry.vStatus = 'Work In Progress' or aspen_tblslittinginst
 		</tr>
 		<tr>
 				<td align="center" width="100%"><hr color=#00CC33 size=5 width=100></td>
-				
+
 		</tr>
 		<tr>
 				<td align="center" width="100%"></td>
-				
+
 		</tr>
 			<tr>
 				<td align="left"><h1><b>Slip Date:</b> '.date("d-m-Y").'</h1></td>
 			</tr>
 			<tr>
-				<td align="center" width="100%"></td>	
+				<td align="center" width="100%"></td>
 			</tr>
 			<tr>
 				<td align="left"><h1><b>Coil Number:</b> '.$invoice.'</h1></td>
 			</tr><tr>
 				<td align="center" width="100%"></td>
-				
+
 		</tr>
 	<tr><td align="left">
 					<h1><b>Party Name: </b> '.$partyname.'</h1></td>
-				
-		</tr>	
+
+		</tr>
 			<tr>
 				<td align="center" width="100%"></td>
-				
-		</tr>	
-		
+
+		</tr>
+
 			<tr>
 				<td align="left"><h1>	<b>Material Description: </b> '.$material_description.'</h1></td> </tr>	<tr>
 				<td align="center" width="100%"></td>
-				
+
 		</tr>
 		<tr>
 				<td align="left"><h1>	<b>Width (mm): </b> '.$Width.'</h1></td> </tr>	<tr>
 				<td align="center" width="100%"></td>
-				
+
 		</tr>
 			<tr>
-			
-				<td align="left"><h1><b>Thickness (mm): </b> '.$Thickness.'</h1></td> 
+
+				<td align="left"><h1><b>Thickness (mm): </b> '.$Thickness.'</h1></td>
 		</tr><tr>
 				<td align="center" width="100%"></td>
-				
+
 		</tr>
-		
+
 		<tr>
-			
-				<td align="left"><h1><b>Weight (mm): </b> '.$Weight.'</h1></td> 
+
+				<td align="left"><h1><b>Weight (mm): </b> '.$Weight.'</h1></td>
 		</tr><tr>
 				<td align="center" width="100%"></td>
-				
+
 		</tr>
-	
+
 		</table>';
-		
+
 				$html .= '
 				<table cellspacing="0" cellpadding="5" border="0">
 			<tr>
-				<td>&nbsp;</td> 
+				<td>&nbsp;</td>
 			</tr>
 		</table>';
-		
-		
+
+
 		$html .= '
 		<table cellspacing="0" cellpadding="5" border="1px">
 			<tr>
@@ -294,9 +295,9 @@ where aspen_tblinwardentry.vStatus = 'Work In Progress' or aspen_tblslittinginst
 			</tr>';
 		}
 		$html .= '
-			
-		</table>';	
-		
+
+		</table>';
+
 		$html .= '
 		<table cellspacing="0" cellpadding="5" border="0">
 			<tr>
@@ -312,25 +313,25 @@ where aspen_tblinwardentry.vStatus = 'Work In Progress' or aspen_tblslittinginst
 		$pdf->Ln();
 		$pdf->lastPage();
 		$pdf->Output($pdfname, 'I');
-	
+
 	}
 	else if( $row->vprocess =='Recoiling')
 	{
 	$sqlrecoiling = "select aspen_tblpartydetails.nPartyName as partyname,aspen_tblmatdescription.vDescription as materialdescription,fWidth as Width,fThickness as Thickness,dStartDate as Startdate,dEndDate as Enddate
-	from aspen_tblinwardentry LEFT JOIN aspen_tblmatdescription  ON aspen_tblmatdescription.nMatId=aspen_tblinwardentry.nMatId 
+	from aspen_tblinwardentry LEFT JOIN aspen_tblmatdescription  ON aspen_tblmatdescription.nMatId=aspen_tblinwardentry.nMatId
 	LEFT JOIN aspen_tblrecoiling  ON aspen_tblrecoiling.vIRnumber=aspen_tblinwardentry.vIRnumber
 	LEFT JOIN aspen_tblpartydetails ON aspen_tblpartydetails .nPartyId=aspen_tblinwardentry.nPartyId where aspen_tblinwardentry.vIRnumber ='".$partyid."' and aspen_tblpartydetails.nPartyName ='".$partyname."' ";
 		$querymain = $this->db->query($sqlrecoiling);
-		
+
 		$invoice = $partyid;
 		$party_name = $querymain->row(0)->partyname;
 		$material_description = $querymain->row(0)->materialdescription;
 		$Width = $querymain->row(0)->Width;
 		$Thickness = $querymain->row(0)->Thickness;
-				
+
 		$sqlitem ="select aspen_tblrecoiling.nSno as recoilnumber, DATE_FORMAT(aspen_tblrecoiling.dStartDate, '%d-%m-%Y') AS startdate,  aspen_tblrecoiling.nNoOfRecoils as noofrecoils from aspen_tblrecoiling where aspen_tblrecoiling.vIRnumber='".$partyid."'";
 		$queryitem = $this->db->query($sqlitem);
-		
+
 		$pdf = new TCPDF(PDF_PAGE_ORIENTATION, PDF_UNIT, PDF_PAGE_FORMAT, true, 'UTF-8', false);
 		$pdfname= 'recoilingslip_'.$partyid.'.pdf';
 		$pdf->SetAuthor('Abhilash');
@@ -346,14 +347,14 @@ where aspen_tblinwardentry.vStatus = 'Work In Progress' or aspen_tblslittinginst
 		$pdf->SetAutoPageBreak(TRUE, PDF_MARGIN_BOTTOM);
 		$pdf->setImageScale(PDF_IMAGE_SCALE_RATIO);
 		$pdf->SetFont('helvetica', '', 7);
-		$pdf->AddPage();		
-		
+		$pdf->AddPage();
+
 				$html = '
-				
+
 					<div align="center">
-					
+
 		<table width="100%"  cellspacing="0" cellpadding="0" border="0">
-	
+
 			<tr>
 				<td width="16%" align:"left"></td>
 				<td width="70%"align="center" style="font-size:60px; font-style:italic; font-family: fantasy;"><h1>RECOILING SLIP</h1></td>
@@ -361,54 +362,54 @@ where aspen_tblinwardentry.vStatus = 'Work In Progress' or aspen_tblslittinginst
 		</tr>
 		<tr>
 				<td align="center" width="100%"><hr color=#00CC33 size=5 width=100></td>
-				
+
 		</tr>
 		<tr>
 				<td align="center" width="100%"></td>
-				
+
 		</tr>
 			<tr>
 				<td align="left"><h1><b>Coil Number:</b> '.$invoice.'</h1></td>
 			</tr><tr>
 				<td align="center" width="100%"></td>
-				
+
 		</tr>
 	<tr><td align="left">
 					<h1><b>Party Name: </b> '.$partyname.'</h1></td>
-				
-		</tr>	
+
+		</tr>
 			<tr>
 				<td align="center" width="100%"></td>
-				
-		</tr>	
-		
+
+		</tr>
+
 			<tr>
 				<td align="left"><h1>	<b>Material Description: </b> '.$material_description.'</h1></td> </tr>	<tr>
 				<td align="center" width="100%"></td>
-				
+
 		</tr>
 		<tr>
 				<td align="left"><h1>	<b>Width (mm): </b> '.$Width.'</h1></td> </tr>	<tr>
 				<td align="center" width="100%"></td>
-				
+
 		</tr>
 			<tr>
-			
-				<td align="left"><h1><b>Thickness (mm): </b> '.$Thickness.'</h1></td> 
+
+				<td align="left"><h1><b>Thickness (mm): </b> '.$Thickness.'</h1></td>
 		</tr><tr>
 				<td align="center" width="100%"></td>
-				
+
 		</tr>
 		</table>';
-		
+
 				$html .= '
 				<table cellspacing="0" cellpadding="5" border="0">
 			<tr>
-				<td>&nbsp;</td> 
+				<td>&nbsp;</td>
 			</tr>
 		</table>';
-		
-		
+
+
 		$html .= '
 		<table cellspacing="0" cellpadding="5" border="1px">
 			<tr>
@@ -436,9 +437,9 @@ where aspen_tblinwardentry.vStatus = 'Work In Progress' or aspen_tblslittinginst
 			</tr>';
 		}
 		$html .= '
-			
-		</table>';	
-		
+
+		</table>';
+
 		$html .= '
 		<table cellspacing="0" cellpadding="5" border="0">
 			<tr>
@@ -454,7 +455,7 @@ where aspen_tblinwardentry.vStatus = 'Work In Progress' or aspen_tblslittinginst
 		$pdf->Ln();
 		$pdf->lastPage();
 		$pdf->Output($pdfname, 'I');
-	
+
 	}
 	else if( $row->vprocess =='Slitting')
 	{
@@ -467,9 +468,9 @@ where aspen_tblinwardentry.vStatus = 'Work In Progress' or aspen_tblslittinginst
 		$Width = $querymain->row(0)->Width;
 		$Thickness = $querymain->row(0)->Thickness;
 		$Weight = $querymain->row(0)->Weight;
-				
-		$sqlitem ="select aspen_tblslittinginstruction.nSno as slitnumber, 
-		DATE_FORMAT(aspen_tblslittinginstruction.dDate, '%d-%m-%Y') AS startdate, 
+
+		$sqlitem ="select aspen_tblslittinginstruction.nSno as slitnumber,
+		DATE_FORMAT(aspen_tblslittinginstruction.dDate, '%d-%m-%Y') AS startdate,
 		aspen_tblslittinginstruction.nLength as length,
 		 aspen_tblslittinginstruction.nWidth as width,
 		 aspen_tblslittinginstruction.nWeight as weight
@@ -478,7 +479,7 @@ where aspen_tblinwardentry.vStatus = 'Work In Progress' or aspen_tblslittinginst
 		$queryitem = $this->db->query($sqlitem);
 
 		date_default_timezone_set('Asia/Kolkata');
-		
+
 		$pdf = new TCPDF(PDF_PAGE_ORIENTATION, PDF_UNIT, PDF_PAGE_FORMAT, true, 'UTF-8', false);
 		$pdfname= 'slittingslip_'.$partyid.'.pdf';
 		$pdf->SetAuthor('Abhilash');
@@ -494,14 +495,14 @@ where aspen_tblinwardentry.vStatus = 'Work In Progress' or aspen_tblslittinginst
 		$pdf->SetAutoPageBreak(TRUE, PDF_MARGIN_BOTTOM);
 		$pdf->setImageScale(PDF_IMAGE_SCALE_RATIO);
 		$pdf->SetFont('helvetica', '', 7);
-		$pdf->AddPage();		
-		
+		$pdf->AddPage();
+
 				$html = '
-				
+
 				<div align="center">
-					
+
 		<table width="100%"  cellspacing="0" cellpadding="0" border="0">
-	
+
 			<tr>
 				<td width="16%" align:"left"></td>
 				<td width="70%"align="center" style="font-size:60px; font-style:italic; font-family: fantasy;"><h1>SLITTING SLIP</h1></td>
@@ -509,45 +510,45 @@ where aspen_tblinwardentry.vStatus = 'Work In Progress' or aspen_tblslittinginst
 		</tr>
 		<tr>
 				<td align="center" width="100%"><hr color=#00CC33 size=5 width=100></td>
-				
+
 		</tr>
 		<tr>
 				<td align="center" width="100%"></td>
-				
+
 		</tr>
 		<tr>
 				<td align="left"><h1><b>Slip Date:</b> '.date("d-m-Y").'</h1></td>
 			</tr>
 			<tr>
 				<td align="center" width="100%"></td>
-				
+
 		</tr>
 			<tr>
 				<td align="left"><h1><b>Coil Number:</b> '.$invoice.'</h1></td>
 			</tr><tr>
 				<td align="center" width="100%"></td>
-				
+
 		</tr>
 	<tr><td align="left">
 					<h1><b>Party Name: </b> '.$partyname.'</h1></td>
-				
-		</tr>	
+
+		</tr>
 			<tr>
 				<td align="center" width="100%"></td>
-				
-		</tr>	
-		
+
+		</tr>
+
 			<tr>
 				<td align="left"><h1>	<b>Material Description: </b> '.$material_description.'</h1></td> </tr>	<tr>
 				<td align="center" width="100%"></td>
-				
+
 		</tr>
 		<tr>
 			<td align="left"><h1><b>Width (mm): </b>'.$Width.'</h1></td> </tr>	<tr>
-			<td align="center" width="100%"></td>	
+			<td align="center" width="100%"></td>
 		</tr>
 		<tr>
-			<td align="left"><h1><b>Thickness (mm): </b> '.$Thickness.'</h1></td> 
+			<td align="left"><h1><b>Thickness (mm): </b> '.$Thickness.'</h1></td>
 		</tr>
 		<tr><td align="center" width="100%"></td></tr>
 		<tr>
@@ -555,18 +556,18 @@ where aspen_tblinwardentry.vStatus = 'Work In Progress' or aspen_tblslittinginst
 		</tr>
 		<tr><td align="center" width="100%"></td></tr>
 		<tr>
-			<td align="center" width="100%"></td>	
+			<td align="center" width="100%"></td>
 		</tr>
 		</table>';
-		
+
 				$html .= '
 				<table cellspacing="0" cellpadding="5" border="0">
 			<tr>
-				<td>&nbsp;</td> 
+				<td>&nbsp;</td>
 			</tr>
 		</table>';
-		
-		
+
+
 		$html .= '
 		<table cellspacing="0" cellpadding="5" border="1px">
 			<tr>
@@ -581,7 +582,7 @@ where aspen_tblinwardentry.vStatus = 'Work In Progress' or aspen_tblslittinginst
 			foreach($queryitem->result() as $rowitem)
 			{
 		$html .= '
-	
+
 			<tr>
 				<td align="center"><h1>'.$rowitem->slitnumber.'</h1></td>
 				<td align="center" ><h1>'.$rowitem->startdate.'</h1></td>
@@ -596,13 +597,13 @@ where aspen_tblinwardentry.vStatus = 'Work In Progress' or aspen_tblslittinginst
 				<td align="center">&nbsp;</td>
 				<td align="center">&nbsp;</td>
 				<td align="center" >&nbsp;</td>
-				
+
 			</tr>';
 		}
 		$html .= '
-			
-		</table>';	
-		
+
+		</table>';
+
 		$html .= '
 		<table cellspacing="0" cellpadding="5" border="0">
 			<tr>
@@ -618,9 +619,9 @@ where aspen_tblinwardentry.vStatus = 'Work In Progress' or aspen_tblslittinginst
 		$pdf->Ln();
 		$pdf->lastPage();
 		$pdf->Output($pdfname, 'I');
-	
+
 	}
-	
+
 		$arr='';
 		if ($query->num_rows() > 0)
 		{
@@ -629,12 +630,12 @@ where aspen_tblinwardentry.vStatus = 'Work In Progress' or aspen_tblslittinginst
 		      $arr[] =$row;
 		   }
 		}
-		return json_encode($arr[0]);	
+		return json_encode($arr[0]);
 	}
 
 	}
-  
-}	
+
+}
 class Workinprogress_model extends Base_module_record {
- 
+
 }

@@ -174,6 +174,10 @@ function deleterow()
 			return $cancel;
 		}
 	}
+
+	function getTotalWidth() {
+		echo $this->slitting_instruction_model->totalwidthmodel($_REQUEST['pid'])[0]->totalWidth;exit;
+	}
 }
 /* End of file */
 /* Location: ./fuel/modules/controllers*/

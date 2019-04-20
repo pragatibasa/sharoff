@@ -164,9 +164,7 @@ tab_text = tab_text + '<table><tr><td style="font-size:60px; font-style:italic; 
 
 tab_text = tab_text + "<table border='1px'>";
 tab_text = tab_text + $('#myTabels').html();
-tab_text = tab_text + '</table>';
-
-tab_text = tab_text + '<table border="1px"><tr></tr><tr><td></td><td></td><td></td><td></td><td></td><td><h3>Total Weight : </td><td>'+$('#totalweight_calcualation').val()+' ( in kgs )</h3></td><td></td></tr></table></body></html>';
+tab_text = tab_text + '</table></body></html>';
 
 var data_type = 'data:application/vnd.ms-excel';
 
@@ -178,7 +176,7 @@ if (msie > 0 || !!navigator.userAgent.match(/Trident.*rv\:11\./)) {
         var blob = new Blob([tab_text], {
             type: "application/csv;charset=utf-8;"
         });
-        navigator.msSaveBlob(blob, $('#party_account_name').val()+'_Stock_Report.xls');
+        navigator.msSaveBlob(blob, 'Test file.xls');
     }
 } else {
 	$('#export').attr('href', data_type + ', ' + encodeURIComponent(tab_text));

@@ -128,19 +128,52 @@ $.ajax({
 
 <script type="text/javascript">
 
+/*function functionpdf(){
+	var party_account_name = $('#party_account_name').val();
+	var selector = $('#selector').val();
+	var selector1 = $('#selector1').val();
+		//		alert(selector);
+		if(party_account_name == 'Select' || selector == ' ' || selector1  == ' ')
+	{ 
+	alert("Please select the Partyname ");
+	}
+	else {
+		$("#check_bar").html('<span style="font-size:20px; color:red">Please wait.. Loading PDF might take some time..</span>');
+	
+	var dataString =  'partyname='+party_account_name+'&frmdate='+selector+'&todate='+selector1;
+	$.ajax({  
+		   type: "POST",  
+		  // url : "<?php echo fuel_url('billing_statement/billing_pdf');?>/",  
+		//   data: dataString,
+		   success: function(msg)
+		   {  
+			$("#check_bar").html('');
+			var dataString =  'partyname='+party_account_name+'&frmdate='+selector+'&todate='+selector1;
+			var url = "<?php echo fuel_url('customer_outward/billing_pdf');?>/?"+dataString;
+		    window.open(url);
+		   }  
+		}); 
+}
+}*/
+
+
+
+
+
 function functionpdf() {
 
 		 var party_account_name = $("#party_account_name").val();
 		 var selector = $('#selector').val();
 		 var selector1 = $('#selector1').val();
-
+		 $("#export").show();
 	if(party_account_name == 'Select' && selector == '' && selector1  == '' )
 	{ 
-		alert("Please select all the values");
-		return;
-	} else {
-	 	$("#export").show();
-	   	$.ajax({
+	alert("Please select all the values");
+
+	}
+	else 
+	 {
+	   $.ajax({
         type: "POST",
         url: "<?php echo fuel_url('customer_outward/export_party');?>",
 		data: 'partyname='+party_account_name+'&frmdate='+selector+'&todate='+selector1 ,

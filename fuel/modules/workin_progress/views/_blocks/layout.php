@@ -1,29 +1,29 @@
 <script language="javascript" type="text/javascript">
   $(window).load(function() {
 	$("tr#childlist").hide();
-	var lfScrollbar = $('#contentsfolder');	 
-	fleXenv.updateScrollBars(lfScrollbar); 
+	var lfScrollbar = $('#contentsfolder');
+	fleXenv.updateScrollBars(lfScrollbar);
   });
-  
+
 </script>
 
-<div class="tab-boxpr"> 
+<div class="tab-boxpr">
 	<div style="width:640px;">
-    <a href="javascript:;"><div class="tabLinkpr activeLinkpr" id="contpr-1" style="float:left;"><h1>Workinprogress</h1></div></a> 
+    <a href="javascript:;"><div class="tabLinkpr activeLinkpr" id="contpr-1" style="float:left;"><h1>Workinprogress</h1></div></a>
     </div>
 </div>
 
 <!-- MAIN Workinprogress @START -->
-<div id="main_content" style="overflow:hidden;">  
+<div id="main_content" style="overflow:hidden;">
 <div>
 <div class="tabcontentpr" id="contpr-1-1" >
 <div id="party_list" style="width:100%; height:500px; overflow-x:hidden; overflow-y:auto;">
- 
+
 <script src="<?=$this->asset->js_path('jquery.tablesorter.pager', 'workin_progress')?>"></script>
 <script src="<?=$this->asset->js_path('jquery.tablesorter', 'workin_progress')?>	"></script>
 <script src="<?=$this->asset->js_path('jquery.tablesorter.widgets', 'workin_progress')?>	"></script>
   <div>
-<div> 
+<div>
 <table id="myTable" class="tablesorter tablesorter-blue"  >
 	<?php if( isset($workinprogress_lists->status) && $workinprogress_lists->status == 'No Results!') {
   		?><tr><td><?php echo $workinprogress_lists->status;?></td></tr><?php
@@ -34,10 +34,10 @@
       <th>Received Date</th>
       <th>Size Given Date</th>
       <th>Partyname</th>
-	 <th>Material Description</th>
+	    <th>Material Description</th>
       <th>Thickness</th>
       <th>Width</th>
-	  <th>Weight</th>
+	    <th>Weight</th>
       <th>Process</th>
 	   <th>Action</th>
     </tr>
@@ -47,7 +47,7 @@
     for($i=0; $i<count($workinprogress_lists); $i++) { ?>
       <?php if ($workinprogress_lists[$i]->slipGenerated==1) { ?>
 	<tr class="odd">
-      <?php } else { ?>	
+      <?php } else { ?>
         <tr class="even">
       <?php } ?>
      <td><?php echo $workinprogress_lists[$i]->coilnumber?></td>
@@ -58,18 +58,18 @@
 	  <td><?php echo $workinprogress_lists[$i]->thickness?></td>
 	   <td><?php echo $workinprogress_lists[$i]->width?></td>
 	        <td><?php echo $workinprogress_lists[$i]->weight?></td>
-	  <td><?php echo $workinprogress_lists[$i]->process?></td>  
+	  <td><?php echo $workinprogress_lists[$i]->process?></td>
 	  <td><?php	 echo $al = '<a title="Cutting Instruction" href="' .$workinprogress_lists[$i]->al .'"><span class="badge badge-success" style="color: #FFFFFF;">Cutting</span></a>';
 	  		 echo $as = '<a title="Slitting Instruction" href="' .$workinprogress_lists[$i]->slit .'"><span class="badge badge-success" style="color: #FFFFFF;">Slitting</span></a>';
 			 echo $fi = '<a  title="Finish Task" href="' .$workinprogress_lists[$i]->fi .'"><span class="badge badge-info" style="color: #FFFFFF;">Finish</span></a>';
-			 echo $bl = '<a title="Billing Instruction" href="' .$workinprogress_lists[$i]->bl .'"><span class="badge badge-important" style="color: #FFFFFF;">Billing</span></a>'; 
-			 echo $cs = '<a title="Print" href="' .$workinprogress_lists[$i]->cs .'"  target="_blank"><span class="badge" style="color: #FFFFFF;" >Processing Slip</span></a>'; 
-			 	  
+			 echo $bl = '<a title="Billing Instruction" href="' .$workinprogress_lists[$i]->bl .'"><span class="badge badge-important" style="color: #FFFFFF;">Billing</span></a>';
+			 echo $cs = '<a title="Print" href="' .$workinprogress_lists[$i]->cs .'"  target="_blank"><span class="badge" style="color: #FFFFFF;" >Processing Slip</span></a>';
+			 echo $cs = '<a title="Quality Report" href="' .$workinprogress_lists[$i]->qc .'"><span class="badge" style="color: #FFFFFF;" >Quality Report</span></a>';
 			 ?> </td>
 	   </tr>
 	     <tr class="even"></tr>
 	<?php }
-	} ?>	
+	} ?>
   </tbody>
 </table>
 </div>
@@ -78,7 +78,7 @@
 </div>
 </div>
 </div>
-<input id= "txtcoilids" type="hidden" hidden/> 
+<input id= "txtcoilids" type="hidden" hidden/>
 <div align="right">
 <label>Total Weight: in (Kgs)</label>
 <input id="txtboxweight" type="text" value="<?php echo $tweight; ?>" DISABLED/> &nbsp; &nbsp; &nbsp;
@@ -91,7 +91,7 @@
   $("#myTable").tablesorter();
 });
 
-</script>  
+</script>
   <script type="text/javascript">
 
 $('#myTable tr').bind('click', function(e) {
@@ -113,4 +113,4 @@ function cuttinginstruction(id)
 	var coilnumber = $('#vno'+id).val();
 	document.getElementById('partnamecheck').value = coilnumber;
 }
-</script>  
+</script>

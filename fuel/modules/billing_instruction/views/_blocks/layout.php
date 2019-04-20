@@ -60,7 +60,7 @@
 		</table>
 		<fieldset>
 			<legend>Cutting Details</legend>
-			<a href="<?php echo fuel_url('billing_instruction/?partyid='.$partyid.'&partyname='.$partyname.'&status');?>">Bill Residual Weight</a>
+				<?=json_decode($sdata)->fpresent?> kgs <a href="<?php echo fuel_url('billing_instruction/?partyid='.$partyid.'&partyname='.$partyname.'&status');?>">Bill Residual Weight</a> / <a href="<?php echo fuel_url('inward/?ppartyid='.$partyid.'&pname='.$partyname)?>">Snip</a>
 			<br>
 			<br>
 				<div>Or select a bundle to bill </div>
@@ -114,13 +114,13 @@ function loadfolderlist(account, accname){
         dataType: "json"
         }).done(function( msg ) {
 			if(msg.length == 0) {
-				$('#DynamicGrid_2').hide();
-				$('#DynamicGridLoading_2').hide();
-				var loading1 = '<div id="error_msg"> '+
-	                           'No Result!'+ 
-							   '</div>';
-				$('#content').html(loading1);  
-			} else {
+			$('#DynamicGrid_2').hide();
+			$('#DynamicGridLoading_2').hide();
+			var loading1 = '<div id="error_msg"> '+
+                           'No Result!'+ 
+						   '</div>';
+			$('#content').html(loading1);  
+			} else{
             var partydata = [];
             for (var i = 0; i < msg.length; i++) {
             var item = msg[i];

@@ -163,24 +163,25 @@
                         <td><label>Actual Thickness</label></td>
                         <td>
                           <label> : </label>
-                          <input type="text" class="actualThicknessMin" name="actualThicknessMin[]" placeholder="Min" />
-                          <input type="text" class="actualThicknessMax" name="actualThicknessMax[]" placeholder="Max" />
+                          <input type="text" style="width:200px;" class="actualThicknessMin" name="actualThicknessMin[]" placeholder="L" />
+                          <input type="text" style="width:200px;" class="actualThicknessMax" name="actualThicknessMax[]" placeholder="C" />
+                          <input type="text" style="width:200px;" class="actualThicknessR" name="actualThicknessR[]" placeholder="R" />
                         </td>
                       </tr>
                       <tr>
                         <td><label>Actual Width</label></td>
                         <td>
                           <label> : </label>
-                          <input type="text" class="actualWidthMin" name="actualWidthMin[]" placeholder="Min" />
-                          <input type="text" class="actualWidthMax" name="actualWidthMax[]" placeholder="Max" />
+                          <input type="text" class="actualWidthMin" name="actualWidthMin[]" placeholder="Standard" />
+                          <input type="text" class="actualWidthMax" name="actualWidthMax[]" placeholder="Actual" />
                         </td>
                       </tr>
                       <tr>
                         <td><label>Burr</label></td>
                         <td>
                           <label> : </label>
-                          <input type="text" class="burrMin" name="burrMin[]" placeholder="Min" />
-                          <input type="text" class="burrMax" name="burrMax[]" placeholder="Max" />
+                          <input type="text" class="burrMin" name="burrMin[]" placeholder="Standard" />
+                          <input type="text" class="burrMax" name="burrMax[]" placeholder="Actual" />
                         </td>
                       </tr>
                       <tr>
@@ -274,12 +275,19 @@
                           <input type="file" name="slitFile<?php echo $index;?>[]"/>
                         </td>
                       </tr>
-                      <tr>
+                      <!-- <tr>
                         <td><label>Camber</label></td>
                         <td>
                           <label> : </label>
                           <input type="radio" class="camber" name="camber[<?php echo $index;?>]" value="yes" />Yes
                           <input type="radio" class="camber" name="camber[<?php echo $index;?>]" checked="checked" value="no" />No
+                        </td>
+                      </tr> -->
+                      <tr>
+                        <td><label>CPK of width</label></td>
+                        <td>
+                          <label> : </label>
+                          <input type="text" class="cpk" name="cpk[<?php echo $index;?>]"/>
                         </td>
                       </tr>
                       <tr>
@@ -331,7 +339,9 @@ $(document).ready(function(){
   $('.copydetails').click(function() {
     $('.actualThicknessMin').val($('.actualThicknessMin')[0].value);
     $('.actualThicknessMax').val($('.actualThicknessMax')[0].value);
+    $('.actualThicknessR').val($('.actualThicknessR')[0].value);
 
+    
     $('.actualWidthMin').val($('.actualWidthMin')[0].value);
     $('.actualWidthMax').val($('.actualWidthMax')[0].value);
 
@@ -352,7 +362,7 @@ $(document).ready(function(){
 
     $('.slitFinalJudgement').val($('.slitFinalJudgement')[0].value);
 
-    $('.camber[value="'+$('.camber:checked')[0].value+'"]').prop('checked', true);
+    $('.cpk').val($('.cpk')[0].value);
   });
 });
 </script>

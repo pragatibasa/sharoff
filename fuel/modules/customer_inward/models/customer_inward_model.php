@@ -39,7 +39,7 @@ class customer_inward_model extends Base_module_model {
 		LEFT JOIN aspen_tblpartydetails ON aspen_tblpartydetails .nPartyId=aspen_tblinwardentry.nPartyId 
 		where
     aspen_tblpartydetails.nPartyName='".$partyname."' and aspen_tblinwardentry.dReceivedDate BETWEEN '".$frmdate."' AND '".$todate."' order by aspen_tblinwardentry.vIRnumber asc";
-		print_r($sql);exit;
+		
 		$query = $this->db->query($sql);
 		
 		//echo $sql;

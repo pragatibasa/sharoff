@@ -132,7 +132,7 @@ class finish_task_model extends Base_module_model {
 		FROM aspen_tblinwardentry LEFT JOIN aspen_tblmatdescription ON aspen_tblmatdescription.nMatId = aspen_tblinwardentry.nMatId
 		LEFT JOIN aspen_tblpartydetails ON aspen_tblpartydetails.nPartyId = aspen_tblinwardentry.nPartyId ";
 		if(!empty($partyname) && !empty($partyid)) {
-			$sql.="WHERE aspen_tblinwardentry.vIRnumber='".$partyid."' ";
+		$sql.="WHERE aspen_tblpartydetails.nPartyName='".$partyname."' and aspen_tblinwardentry.vIRnumber='".$partyid."' ";
 		}	
 		$query = $this->db->query($sql);
 		$arr='';

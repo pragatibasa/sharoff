@@ -60,7 +60,7 @@
 		</table>
 		<fieldset>
 			<legend>Slitting Details</legend>
-			<a href="<?php echo fuel_url('billing_instruction/?partyid='.$partyid.'&partyname='.$partyname.'&status');?>">Bill Residual Weight</a>
+			<?=json_decode($sdata)->fpresent?> kgs <a href="<?php echo fuel_url('billing_instruction/?partyid='.$partyid.'&partyname='.$partyname.'&status');?>">Bill Residual Weight</a> / <a href="<?php echo fuel_url('inward/?ppartyid='.$partyid.'&pname='.$partyname)?>">Snip</a>
 			<br>
 			<br>
 				<div>Or select a bundle to bill </div>
@@ -129,6 +129,7 @@ function loadfolderlist_slit(account, accname) {
             thisdata["weight"] = item.weight;
             thisdata["slitting date"] = item.sdate;
             thisdata["Billing status"] = item.billingstatus;
+			thisdata["upgrade"] = ( item.vParentBundleNumber == null ) ? '<a href="<?php echo fuel_url('inward/?ppartyid='.$partyid.'&pname='.$partyname.'&bundleNumber=');?>'+item.serialnumber+'">Upgrade</a>' : 'Upgraded';
 			//thisdata["action"] = '';
             partydata.push(thisdata);
 			}
