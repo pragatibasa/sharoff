@@ -1,4 +1,0 @@
-<?php 
-define('AVERAGE_PARTY_VERSION', '1.0');
-define('AVERAGE_PARTY_FOLDER', 'average_party');
-define('AVERAGE_PARTY_PATH', MODULES_PATH.AVERAGE_PARTY_FOLDER.'/');

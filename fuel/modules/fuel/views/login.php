@@ -20,7 +20,7 @@
 </head>
 <body>
 		<div id="header_login">
-		<center><img src="<?=img_path('aspen-logo1.png')?>" width="430" height="100" alt="FUEL CMS" border="0" id="login_logo" /></center>
+		<center><img src="<?=img_path('SST LOGO.png')?>" width="250" height="100" alt="FUEL CMS" border="0" id="login_logo" /></center>
 		</div>
 <div id="login">
 	<div id="login_inner">

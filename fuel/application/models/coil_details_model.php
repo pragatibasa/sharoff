@@ -149,7 +149,7 @@ class Coil_details_model extends Base_module_model {
 				<td align="right">&nbsp;</td>
 			</tr>
 			<tr>
-				<td colspan="2" align="center">ASPEN BANGALORE</td>
+				<td colspan="2" align="center">SHAROFF BANGALORE</td>
 			</tr>
 		</table>';
 

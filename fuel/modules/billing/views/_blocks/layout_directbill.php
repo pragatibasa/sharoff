@@ -89,27 +89,27 @@
 </form>
 <table cellpadding="0" cellspacing="0" border="0" style="width:100%;">
 	<tr><td>
-	<fieldset>
+	<!-- <fieldset>
 <legend>Aditional Charges:</legend> 
 	<div class="pad-10">
-	<!--	<input type="checkbox" id="additional_chk" name="additional_chk" value="" /> &nbsp; -->
-		<input type="text" id="txtadditional_type" name="txtadditional_type" value="" onfocus="if (this.value=='New Additional Charge Type') {this.value = '';}" onblur="if(this.value=='') {this.value = 'New Additional Charge Type';}" /> 
+		<input type="checkbox" id="additional_chk" name="additional_chk" value="" /> &nbsp;
+				<input type="text" id="txtadditional_type" name="txtadditional_type" value="" onfocus="if (this.value=='New Additional Charge Type') {this.value = '';}" onblur="if(this.value=='') {this.value = 'New Additional Charge Type';}" /> 
 		&nbsp; 
 		<input type="text" id="txtamount_mt" name="txtamount_mt" value="0"/> 
 
 	</div>
-	</fieldset>
+	</fieldset> -->
 	</td>
 	<td>&nbsp;</td>
 	<td>
 	<fieldset>
-<legend>Handling Charges:</legend> 
+<legend>Billing Weight:</legend> 
 	<div class="pad-10">
 	<!--	<input type="checkbox" id="additional_chk" name="additional_chk" value="" /> &nbsp; -->
-		<input type="text" id="txthandling" name="txthandling"  /> 
+		<!-- <input type="text" id="txthandling" name="txthandling"  /> 
 		&nbsp; 
 		*
-		&nbsp;
+		&nbsp; -->
 		<!--<input type="text" id="txtamount_mt" name="txtamount_mt" value="0"/> -->
 		<input id="wei" name="fQuantity" type="text" DISABLED /> Kgs
 		<input class="btn btn-success" id="done"  type="button" value="For Billing" onClick="directbilling(); "/>
@@ -139,7 +139,7 @@
 <tr>
 <td>
 <fieldset>
-<legend>Processing Charges:</legend>
+<legend>Other Details:</legend>
 <div class="pad-10">
 	<input type="text" id="txtoutward_num" name="txtoutward_num" placeholder="Outward Lorry Number"/> 
 	&nbsp; 
@@ -158,7 +158,9 @@
 			</div>
 		
 <div class="pad-10">
-	Total: <input type="text" id="totalweight_check" DISABLED/> &nbsp;&nbsp;&nbsp;<input type="text" id="totalrate" DISABLED/>&nbsp; <input type="text" id="totalamt"  DISABLED/>&nbsp;&nbsp;
+	Total: <input type="text" id="totalweight_check" DISABLED/> 
+	<!-- &nbsp;&nbsp;&nbsp;<input type="text" id="totalrate" DISABLED/> -->
+	<!-- &nbsp; <input type="text" id="totalamt"  DISABLED/>&nbsp;&nbsp; -->
 </div>
 </fieldset>
 </form>
@@ -330,13 +332,6 @@ function triConvert(num){
 	<!--<input class="btn btn-danger" style="cursor: pointer;" id="txtcancelbill" type="button" value="Cancel Bill" onclick="cancelbill();" />-->
 </div>
 
-<div align="left">
-	<!--<input class="btn btn-danger"  style="cursor: pointer;" id="txtcancelbill" type="button" value="Cancel Bill" onclick="cancelbill();" />-->
-	Select type of GST tax to be applied	<br>
-	<input style="margin: 10px;" type="radio" class="gstType" name="gstType" value="Within">&nbsp; Within State</br>
-	<input style="margin: 10px;" type="radio" class="gstType" name="gstType" value="Inter">&nbsp; Inter State
-</div>
-
 <div align="right">
 	<input class="btn btn-success" style="cursor: pointer;" id="txtbillpreview" type="button" value="Preview and Print Bill" onclick="functionpdfprint();" />
 	<input class="btn btn-inverse" style="cursor: pointer;" id="txtbillloadingslip" type="button" value="Loading Slip" onclick="functionpdf();" />	
@@ -387,8 +382,8 @@ function taxspec(){
 	document.getElementById("txtgrandtotal").value = grandtotal;
 }
   function functionpdfprint(){
-	subtotalvalue();
-	numbertowords();
+	// subtotalvalue();
+	// numbertowords();
 	var billid = $('#billid').val();
 	if(billid == '')
 	{
@@ -677,8 +672,8 @@ var cust_rm=$('#cust_rm').val();
  var txthandling=$('#txthandling').val();
 var wei=$('#wei').val();
 totalweight_check();
-totalrate();
-totalamt();
+// totalrate();
+// totalamt();
 	var loading = '<div id="DynamicGridLoading_2"> '+
             	   ' <img src="<?=img_path() ?>loading.gif" /><span> Loading Processing Details... </span> '+ 
     	    	   ' </div>';
@@ -703,8 +698,8 @@ totalamt();
             var item = msg[i];
             var thisdata = {};
             thisdata["weight(in M/T)"] = item.weight;
-            thisdata["Rate(in M/T)"] = item.rate;
-            thisdata["Amount"] = item.amount;
+            // thisdata["Rate(in M/T)"] = item.rate;
+            // thisdata["Amount"] = item.amount;
            /* var edit = '<a class="ico_coil_edit" title="Edit" href="#" onClick=functionedit('+item.bundlenumber+','+item.notobebilled+')><img src="<?php echo img_path('iconset/ico_edit.png'); ?>" /></a>';
             thisdata["action"] =  edit;*/
 			//thisdata["action"] = '';

@@ -234,7 +234,7 @@ tab_text = tab_text + '<head><xml><x:ExcelWorkbook><x:ExcelWorksheets><x:ExcelWo
 tab_text = tab_text + '<x:WorksheetOptions><x:Panes></x:Panes></x:WorksheetOptions></x:ExcelWorksheet>';
 tab_text = tab_text + '</x:ExcelWorksheets></x:ExcelWorkbook></xml></head><body>';
 
-tab_text = tab_text + '<table><tr><td style="font-size:60px; font-style:italic; font-family: fantasy;"><h1>ASPEN STEEL PVT LTD</h1></td></tr><tr><td><h4>Branch At: Plot no 16E, Bidadi Industrial Area, Phase 2 Sector 1, Bidadi, Ramnagara-562105, <b>Email: aspensteel_unit2@yahoo.com </b></h4></td></tr><tr><td><h4>Head Office At: 54/1, Medahalli, Old Madras Road, Bangalore-560049</h4></td></tr><tr><td></td></tr></table>';
+tab_text = tab_text + '<table><tr><td style="font-size:60px; font-style:italic; font-family: fantasy;"><h1>SHAROFF STEEL TRADERS</h1></td></tr><tr><td><h4>Branch At: Plot No 29-A, Bidadi Industrial Area Abbanakuppe, Bidadi Hobli, Ramanagar Dist-562109<b>Email: sharoffsteel@gmail.com</b></h4></td></tr><tr><td><h4>Head Office At: #67/B, Timber Yard Lay Out, Mysore Road Bangalore – 560026</h4></td></tr><tr><td></td></tr></table>';
 
 tab_text = tab_text + "<table border='1px'>";
 tab_text = tab_text + $('#myTabels').html();

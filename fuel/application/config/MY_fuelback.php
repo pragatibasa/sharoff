@@ -64,7 +64,7 @@ $config['modules_allowed'] = array(
 	'mother_data',*/
 	);
 //Configuration ASPEN PANEL
-$config['nav']['Aspen Steel']=array( 
+$config['nav']['Sharoff Steel']=array( 
 	//'inward_entry/create' => 'Create Inward Entry',
 //	'inward_entry' => lang('module_inward_entry'),
 //	'workin_progress' => lang('workin_progress'),

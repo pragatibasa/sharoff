@@ -8,8 +8,8 @@ class inward extends Fuel_base_controller {
 	public $view_location = 'inward';
 	private $datam;
 	private $fdata;
-	
-	
+
+
 	function __construct()
 	{
 		parent::__construct();
@@ -19,30 +19,31 @@ class inward extends Fuel_base_controller {
 		$this->load->module_model(INWARD_FOLDER, 'inward_model');
 		$this->data = $this->inward_model->example();
 		if(isset($this->data)) {
-			
+
 		$this->uri->init_get_params();
 		$this->pname = (string) $this->input->get('pname', TRUE);
 		$this->ppartyid = (string) $this->input->get('ppartyid', TRUE);
 		$this->pcoildetails = '';
 		if($this->pname == 'undefined' || $this->pname == '' || $this->pname == 'No Result'){
 			$this->pname = '';
-		} 
+		}
 		$this->partyname = (string) $this->input->get('partyname', TRUE);
 		$this->datam = $this->inward_model->mat();
 		$this->fdata = $this->inward_model->party();
-	}		
-}	
+	}
+}
 	function index() {
 		if(!empty($this->data) && isset($this->data)) {
-		
+
 			$bundleNumber = (string) $this->input->get('bundleNumber', TRUE);
-		
+
 			if(!empty(trim($this->ppartyid))) {
 				$this->pcoildetails = $this->inward_model->getParentCoilDetails($this->ppartyid);
-			} 
+			}
 			if(!empty($bundleNumber)) {
 				$vars['bundledetails'] = $this->inward_model->getParentBundleDetails($this->ppartyid,$bundleNumber);
 			}
+
 			$vars['bundleNumber'] = $bundleNumber;
 			$vars['data']= $this->data;
 			$vars['ppartyid']= $this->ppartyid;
@@ -50,12 +51,13 @@ class inward extends Fuel_base_controller {
 			$vars['datam'] = $this->datam;
 			$vars['fdata'] = $this->fdata;
 			$vars['pcoildetails'] = $this->pcoildetails;
+			$vars['max_coil_number'] = $this->inward_model->getNextCoilNumber()->max_coil_number;
             $this->_render('inward', $vars);
 		} else {
 			redirect(fuel_url('#'));
 		}
 	}
-	
+
 	function checkcoilno() {
 		if (!empty($_REQUEST)) {
 		$checkrecordinfo = $this->inward_model->checkcoilno($_REQUEST);
@@ -72,23 +74,23 @@ class inward extends Fuel_base_controller {
 		$pid = $args["pid"];
 		$this->load->module_model(INWARD_FOLDER, 'inward_model');
 		$inwardbillgenerateb = $this->inward_model->inwardbillgeneratemodel($pname,$pid);
-	
+
 	}
-		
+
 	function savedetails(){
 		if (!empty($_POST)){
 		$this->load->module_model(INWARD_FOLDER, 'inward_model');
-			$arr = $this->inward_model->saveinwardentry($_POST['pid'],$_POST['pname'], $_POST['date3'],$_POST['lno'],$_POST['icno'],$_POST['date4'], $_POST['coil'],$_POST['fWidth'], $_POST['fThickness'],$_POST['fLength'],$_POST['fQuantity'],$_POST['status'],$_POST['hno'],$_POST['pna'],$_POST['ppartyid'],$_POST['parentBundleNumber'],$_POST['grade'],$_POST['cast']);
+			$arr = $this->inward_model->saveinwardentry($_POST['pid'],$_POST['pname'], $_POST['date3'],$_POST['lno'],$_POST['icno'],$_POST['date4'], $_POST['coil'],$_POST['fWidth'], $_POST['fThickness'],$_POST['fLength'],$_POST['fQuantity'],$_POST['status'],$_POST['hno'],$_POST['pna'],$_POST['ppartyid'],$_POST['parentBundleNumber'],$_POST['grade'],$_POST['cast'],$_POST['date5'],$_POST['jid'],$_POST['ssid']);
 			if(empty($arr)) echo 'Success'; else echo 'Unable to save';
-	
+
 		}
 		else{
 			//redirect(fuel_uri('#'));
 		}
 	}
-		
+
 	function autosuggest($pname = ''){
-		if(empty($pname)) { 
+		if(empty($pname)) {
 			$pname = $_POST['queryString'];
 		}
 		$pnamelists = $this->inward_model->list_pnamelists($pname);

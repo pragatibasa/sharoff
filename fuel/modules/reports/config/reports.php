@@ -11,4 +11,4 @@ $config['modules']['reports'] = array(
 	'permission' => 'reports',
 	'nav_selected' => 'reports'
 );
-$config['nav']['aspen_steel']['reports'] = lang('module_reports');
+$config['nav']['sharoff_steel']['reports'] = lang('module_reports');

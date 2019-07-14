@@ -214,13 +214,13 @@
 		if ( ! file_exists($file_path))
 		{
 			$file_path = APPPATH.'config/config'.EXT;
-			
+
 			if ( ! file_exists($file_path))
 			{
 				exit('The configuration file does not exist.');
 			}
 		}
-	
+
 		require($file_path);
 
 		// Does the $config array exist in the file?
@@ -242,7 +242,7 @@
 		}
 
 $_config[0]=& $config;
-return $_config[0];	
+return $_config[0];
 }
 
 // ------------------------------------------------------------------------
@@ -508,11 +508,35 @@ return $_config[0];
 		$otherManufacturing = array( 'Cutting', 'Slitting', 'Recoiling' );
 		$warehousingStorage = array( 'SemiFinished','Directbilling' );
 		if(in_array($billType, $otherManufacturing)) {
-			return '(Other Manufacturing Service) : 998898'; 
+			return '(Other Manufacturing Service) : 998898';
 		} elseif (in_array($billType, $warehousingStorage)) {
-			return '(Warehousing and Storage Services) : 996729'; 
+			return '(Warehousing and Storage Services) : 996729';
 		}
 	}
+
+	function sendSMS($contact,$msg) {
+                        // Account details
+        $apiKey = urlencode('riQ0XJ3yyrA-ccu7j4FzGWSNGV1EsQeFqe07LPUOy7');
+
+        // Message details
+        $sender = urlencode('ASPENS');
+        $message = rawurlencode($msg);
+
+        // Prepare data for POST request
+        $data = array('apikey' => $apiKey, 'numbers' => $contact, "sender" => $sender, "message" => $message,"test" => false);
+
+        // Send the POST request with cURL
+        $ch = curl_init('https://api.textlocal.in/send/');
+        curl_setopt($ch, CURLOPT_POST, true);
+        curl_setopt($ch, CURLOPT_POSTFIELDS, $data);
+        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+        $response = curl_exec($ch);
+        curl_close($ch);
+
+        // Process your response here
+        echo $response;
+  }
+
 
 
 /* End of file Common.php */

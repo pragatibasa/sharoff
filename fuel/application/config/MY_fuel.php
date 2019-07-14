@@ -35,6 +35,7 @@ $config['modules_allowed'] = array(
 	'inward',
 	'inward_entry_create',
 	'partywise_register',
+	'weigh_updation',
 	'group_access',
 	'aged_payable',
 	'workin_progress',
@@ -67,10 +68,12 @@ $config['modules_allowed'] = array(
 	'bill_details',
 	'search',
 	'quality_reports',
-	'coil_labels'
+	'coil_labels',
+	'coil_reconcile',
+	'vehicle_despatch',
 	);
 //Configuration ASPEN PANEL
-$config['nav']['Aspen Steel']=array(
+$config['nav']['Sharoff Steel']=array(
 	//'inward_entry/create' => 'Create Inward Entry',
 //	'inward_entry' => lang('module_inward_entry'),
 //	'workin_progress' => lang('workin_progress'),
@@ -80,11 +83,11 @@ $config['nav']['Aspen Steel']=array(
 $config['nav']['modules'] = array();
 
 
-$config['nav']['Aspen_Steel'] = array('inward_entry' => 'Inward Register',
+$config['nav']['Sharoff_Steel'] = array('inward_entry' => 'Inward Register',
 										'inward' => 'Inward',
 										'partywise_register' => 'Partywise Register',
 										'workin_progress' => 'Workin Progress',
-
+										'weigh_updation' => 'Weigh Bridge Outward Updation'
 );
 
 
@@ -109,6 +112,8 @@ $config['nav']['Reports'] = array('stock_report' => 'Customer Stock Report ',
 										'customer_inward' => 'Customer Inward Report',
 										'customer_billing' => 'Customer Billing Report',
 										'customer_outward' => 'Customer Outward Report',
+										'coil_reconcile' => 'Coil Reconcilliation Report',
+										'vehicle_despatch' => 'Vehicle wise despatch Report',
 										//'customer_summary' => 'Customer Summary',
 										'factory_material' => 'Factory Material Movement ',
 										//'partywise_report_holding' => 'Partywise Average ',
@@ -121,7 +126,7 @@ $config['nav']['Reports'] = array('stock_report' => 'Customer Stock Report ',
 
 //'support'
 $config['apps_view'] = array('site', 'apps', 'Accounts', 'Amazon',);
-$config['settings_view'] = array('tools', 'manage', 'Aspen_Steel',  'Master',  'Reports');
+$config['settings_view'] = array('tools', 'manage', 'Sharoff_Steel',  'Master',  'Reports');
 
 
 

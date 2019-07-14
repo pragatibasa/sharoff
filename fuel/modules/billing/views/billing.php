@@ -8,7 +8,7 @@ function load_party_account() {
     var bundlenumber = "<?php echo $nsno; ?>";
     var slitnumber = "<?php echo $slno; ?>";
     var recoilnumber = "<?php echo $recno; ?>";
-	
+
     $('#content').html('Bundles List!');
 }
 
@@ -67,19 +67,19 @@ function load_folder_account() {
     var account_id = "<?php echo $partyid; ?>";
     var accountname = "<?php echo $partyname; ?>";
     var bundlenumber = "<?php echo $nsno; ?>";
-    loadfolderlist(account_id, accountname,bundlenumber);	
+    loadfolderlist(account_id, accountname,bundlenumber);
 }
 function load_folder_accountslit() {
     var account_id = "<?php echo $partyid; ?>";
     var accountname = "<?php echo $partyname; ?>";
     var slitnumber = "<?php echo $slno; ?>";
-    loadfolderlistslit(account_id, accountname,slitnumber);	
+    loadfolderlistslit(account_id, accountname,slitnumber);
 }
 function load_recoil_account() {
     var account_id = "<?php echo $partyid; ?>";
     var accountname = "<?php echo $partyname; ?>";
     var recoilnumber = "<?php echo $recno; ?>";
-    loadfolderlistrecoil(account_id, accountname,recoilnumber);	
+    loadfolderlistrecoil(account_id, accountname,recoilnumber);
 }
 /* Refresh the left folder, then if there was something selected, reselect
     it so that the right pane refreshes.  */
@@ -124,7 +124,7 @@ function refresh_folderlisttwo() {
     var account_id = "<?php echo $partyid; ?>";
     var selected = "<?php echo $partyid; ?>";
     var bundlenumber = "<?php echo $nsno; ?>";
-	
+
     load_processing_account();
 	loadlengthgrate_account();
     loadweightgrate_account();
@@ -152,7 +152,7 @@ function refresh_folderlistthree() {
     var account_id = "<?php echo $partyid; ?>";
     var selected = "<?php echo $partyid; ?>";
     var bundlenumber = "<?php echo $nsno; ?>";
-	
+
     load_processing_account();
 }
 function refresh_folderlistthreeslit() {
@@ -172,7 +172,7 @@ function refresh_folderlistthreerecoil() {
 }
 
 
-$(document).ready(function() { 
+$(document).ready(function() {
 
     /*$("#party_account_name").change(function(data) {
         load_party_account();
@@ -204,32 +204,31 @@ if(pchk=="Cutting"){
 <div id="main_top_panel">
 	<h2 class="ico ico_azure_storage"><?=lang('module_billing')?></h2>
 </div>
-	
-<?php 
+
+<?php
 
  if($processchk=='Cutting')
- {  
+ {
  include_once(BILLING_PATH.'views/_blocks/layout.php');
 }
 
 else if($processchk=='Slitting')
-{ 
+{
  include_once(BILLING_PATH.'views/_blocks/layout_directslit.php');
-} 
+}
 
 
 else if($processchk=='Recoiling')
-{ 
- include_once(BILLING_PATH.'views/_blocks/layout_directrecoil.php'); 
-} 
+{
+ include_once(BILLING_PATH.'views/_blocks/layout_directrecoil.php');
+}
 
 else if($processchk=='sf')
-{ 
- include_once(BILLING_PATH.'views/_blocks/layout_directbillsemi.php'); 
-} 
+{
+ include_once(BILLING_PATH.'views/_blocks/layout_directbillsemi.php');
+}
 
 else
 {
- include_once(BILLING_PATH.'views/_blocks/layout_directbill.php'); 
+ include_once(BILLING_PATH.'views/_blocks/layout_directbill.php');
 }?>
- 

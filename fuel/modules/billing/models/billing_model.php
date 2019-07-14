@@ -978,7 +978,7 @@ function listbundledetailsslit($partyid = '',$slno = '') {
 				<td align="right">&nbsp;</td>
 			</tr>
 			<tr>
-				<td colspan="2" align="center" style="font-size:45px; font-style:italic; font-family: fantasy;"><b>**ASPEN BANGALORE**</b></td>
+				<td colspan="2" align="center" style="font-size:45px; font-style:italic; font-family: fantasy;"><b>**SHAROFF BANGALORE**</b></td>
 			</tr>
 		</table>';
 
@@ -1121,7 +1121,7 @@ function billgeneratemodelslit($coilno='',$partyname='',$description='',$lorryno
 				<td align="right">&nbsp;</td>
 			</tr>
 			<tr>
-				<td colspan="2" align="center" style="font-size:45px; font-style:italic; font-family: fantasy;"><b>**ASPEN BANGALORE**</b></td>
+				<td colspan="2" align="center" style="font-size:45px; font-style:italic; font-family: fantasy;"><b>**SHAROFF BANGALORE**</b></td>
 			</tr>
 		</table>';
   $pdf->writeHTML($html, true, 0, true, true);
@@ -1214,7 +1214,7 @@ function billgeneratemodelslit($coilno='',$partyname='',$description='',$lorryno
 				<td align="right">&nbsp;</td>
 			</tr>
 			<tr>
-				<td colspan="2" align="center" style="font-size:45px; font-style:italic; font-family: fantasy;"><b>**ASPEN BANGALORE**</b></td>
+				<td colspan="2" align="center" style="font-size:45px; font-style:italic; font-family: fantasy;"><b>**SHAROFF BANGALORE**</b></td>
 			</tr>
 		</table>';
 
@@ -1311,7 +1311,7 @@ function billgeneratemodelslit($coilno='',$partyname='',$description='',$lorryno
 				<td align="right">&nbsp;</td>
 			</tr>
 			<tr>
-				<td colspan="2" align="center" style="font-size:45px; font-style:italic; font-family: fantasy;"><b>**ASPEN BANGALORE**</b></td>
+				<td colspan="2" align="center" style="font-size:45px; font-style:italic; font-family: fantasy;"><b>**SHAROFF BANGALORE**</b></td>
 			</tr>
 		</table>';
   $pdf->writeHTML($html, true, 0, true, true);
@@ -1392,7 +1392,7 @@ function billgeneratemodelslit($coilno='',$partyname='',$description='',$lorryno
 				<td align="right">&nbsp;</td>
 			</tr>
 			<tr>
-				<td colspan="2" align="center" style="font-size:45px; font-style:italic; font-family: fantasy;"><b>**ASPEN BANGALORE**</b></td>
+				<td colspan="2" align="center" style="font-size:45px; font-style:italic; font-family: fantasy;"><b>**SHAROFF BANGALORE**</b></td>
 			</tr>
 		</table>';
   $pdf->writeHTML($html, true, 0, true, true);
@@ -1495,7 +1495,7 @@ function billgeneratemodelslit($coilno='',$partyname='',$description='',$lorryno
 				<td align="right">&nbsp;</td>
 			</tr>
 			<tr>
-				<td colspan="2" align="center" style="font-size:45px; font-style:italic; font-family: fantasy;"><b>**ASPEN BANGALORE**</b></td>
+				<td colspan="2" align="center" style="font-size:45px; font-style:italic; font-family: fantasy;"><b>**SHAROFF BANGALORE**</b></td>
 			</tr>
 		</table>';
 
@@ -1688,7 +1688,7 @@ function billgeneratemodelslit($coilno='',$partyname='',$description='',$lorryno
 											union
 										select CONCAT_WS('-',CONCAT_WS(',', 'To M/s.',nPartyName,vAddress1,vAddress2,vCity),nPinId) from aspen_tblpartydetails
 										right join aspen_tblinwardentry on aspen_tblinwardentry.nPartyId = aspen_tblpartydetails.nPartyId
-										where  aspen_tblinwardentry.vIRnumber=$partyid";
+										where  aspen_tblinwardentry.vIRnumber='".$partyid."'";
 
 		$resObjServiceTaxDetails = $this->db->query($sqlServiceTaxNAddressDetails);
 		$serviceTaxPercent = $resObjServiceTaxDetails->result()[0]->nPercentage;
@@ -1761,7 +1761,7 @@ function billgeneratemodelslit($coilno='',$partyname='',$description='',$lorryno
 		$strSql = "select ai.*,ap.*,am.* from aspen_tblinwardentry as ai 
 		left join aspen_tblmatdescription as am on ai.nMatId = am.nMatId 
 		left join aspen_tblpartydetails as ap on ap.nPartyId = ai.nPartyId
-		where ai.vIRnumber = ".$partyid."";
+		where ai.vIRnumber = '".$partyid."'";
 		$strquery = $this->db->query($strSql);
 
 		if($strquery->result()[0]->nBillingUpdates) {
@@ -1769,8 +1769,6 @@ function billgeneratemodelslit($coilno='',$partyname='',$description='',$lorryno
 		}
 
 	}
-
-
 
 	/*function semibill($billid,$partyid,$pname,$cust_add,$cust_rm,$mat_desc,$thic,$wid,$len,$wei,$inv_no,$totalweight_check,$totalrate,$totalamt,$txthandling,$txtadditional_type,$txtamount_mt,$txtoutward_num,$txtscrap,$txtservicetax,$txteductax,$txtsecedutax,$txtgrandtotal,$container,$txtnsubtotal){
 		$sql = "Insert into aspen_tblbilldetails (nBillNo,
@@ -2066,7 +2064,7 @@ function billgeneratemodelslit($coilno='',$partyname='',$description='',$lorryno
 
 		$sql = "Insert into aspen_tblbilldetails (
 		   nBillNo,dBillDate, vIRnumber, fTotalWeight, fWeightAmount, fServiceTax, fEduTax, fSHEduTax, fGrantTotal, nScrapSent, vOutLorryNo, nPartyId, vBillType, BillStatus, ntotalpcs, ntotalamount, ocwtamount, ocwidthamount, oclengthamount,vAdditionalChargeType,fAmount,nsubtotal,grandtot_words,dFinalRate, nServiceTaxPercent,tBillingAddress,vAdditionalChargeType1,fAmount1)
-		  VALUES('". $billid. "',now(),'". $partyid. "','". $totalweight_check. "','". $totalrate. "','". $txtservicetax. "','". $txteductax. "','". $txtsecedutax. "','". $txtgrandtotal. "','". $txtscrap. "','". $txtoutward_num. "',(SELECT aspen_tblpartydetails.nPartyId  FROM aspen_tblpartydetails where aspen_tblpartydetails.nPartyName = '". $pname. "'),'Slitting','Billing',0,$totalamt,'0','0','0','". $txtadditional_type. "','". $txtamount_mt. "','". $txtslitsubtotal. "','". $container. "','".$totalrate."',$serviceTaxPercent,'".$strBillingAddress."','".$txtadditional_type1."','".$txtamount_mt1."')";
+		  VALUES('". $billid. "',now(),'". $partyid. "','". $totalweight_check. "','". $totalrate. "','".$txtservicetax. "','". $txteductax. "','". $txtsecedutax. "','". $txtgrandtotal. "','". $txtscrap. "','". $txtoutward_num. "',(SELECT aspen_tblpartydetails.nPartyId  FROM aspen_tblpartydetails where aspen_tblpartydetails.nPartyName = '". $pname. "'),'Slitting','Billing',0,0,'0','0','0','". $txtadditional_type. "','". $txtamount_mt. "','". $txtslitsubtotal. "','". $container. "','".$totalrate."',$serviceTaxPercent,'".$strBillingAddress."','".$txtadditional_type1."','".$txtamount_mt1."')";
 
 		$sql12="UPDATE aspen_tblbillingstatus SET vBillingStatus='Billed' WHERE vIRnumber='".$partyid."' and nSno IN ( $bundleIds )";
 
@@ -2184,6 +2182,7 @@ function finalbillgeneratemodel($partyid='',$actualnumberbundle='',$cust_add='',
 		$wei = $querymain->row(0)->wei;
 		$cgstNumber = $querymain->row(0)->cgstNumber;
 
+		$gstSection = '';
 		if($gstType == 'Within') {
 			$gstSection	= '<tr>
 							<td width="89%">
@@ -2233,15 +2232,14 @@ function finalbillgeneratemodel($partyid='',$actualnumberbundle='',$cust_add='',
 				<td align="center"><b>Job Work / Delivery Challan</b></td>
 			</tr>
 			<tr>
-				<td width="16%" align:"left"><h4>TIN:29730066589</h4></td>
-				<td width="70%"align="center" style="font-size:60px; font-style:italic; font-family: fantasy;"><h1>ASPEN STEEL PVT LTD</h1></td>
-				<td width="25%" align:"right"><h4>GST Regn. No: 29AABCA4807H1ZS</h4></td>
+				<td width="80%"align="right" style="font-size:60px; font-style:italic; font-family: fantasy;"><h1>SHAROFF STEEL TRADERS</h1></td>
+				<td width="20%" align="right"><h4>GST Regn. No: 29AAEFS1551L1ZX</h4></td>
 			</tr>
 			<tr>
-				<td align="center" width="100%"><h4>Branch At: Plot no 16E, Bidadi Industrial Area, Phase 2 Sector 1, Bidadi, Ramnagara-562109, <b>Email: aspensteel_unit2@yahoo.com </b></h4></td>
+				<td align="center" width="100%"><h4>Branch At: Plot No 29-A, Bidadi Industrial Area Abbanakuppe, Bidadi Hobli, Ramanagar Dist-562109<b><br>Email: sharoffsteel@gmail.com</b></h4></td>
 			</tr>
 			<tr>
-				<td align="center" width="100%"><h4>Head Office At: 54/1, Medahalli, Old Madras Road, Bangalore-560049</h4></td>
+				<td align="center" width="100%"><h4>Head Office At: #67/B, Timber Yard Lay Out, Mysore Road Bangalore – 560026</h4></td>
 			</tr>
 		</table>
 		<table>
@@ -2256,9 +2254,7 @@ function finalbillgeneratemodel($partyid='',$actualnumberbundle='',$cust_add='',
 			<tr><td></td></tr>
 			<tr>
 				<td width="30%" align:"left">
-					<h3>To M/s., &nbsp;'.$party_name.', '.$address_one.' &nbsp;'.$address_two.',&nbsp;'.$city.'-'.$pincode.'<br>
-					Tin Number : '.$tin_number.'
-					</h3>
+					<h3>To M/s., &nbsp;'.$party_name.', '.$address_one.' &nbsp;'.$address_two.',&nbsp;'.$city.'-'.$pincode.'</h3>
 				</td>
 				<td width="40%" align="center"><h3> Desp. By Lorry No. : '.$trucknumber.'</h3> </td>
 				<td width="33.33%" align:"right"><h3>Delivery: Full &nbsp; Part-1&nbsp; Part-2</h3></td>
@@ -2281,8 +2277,6 @@ function finalbillgeneratemodel($partyid='',$actualnumberbundle='',$cust_add='',
 			<th style="font-weight:bold"  width="22%"><h3>Description</h3></th>
 			<th style="font-weight:bold"  width="16.6%"><h3>No. Of Pcs</h3></th>
 			<th style="font-weight:bold"  width="16.6%"><h3>Qty. In M/T</h3></th>
-			<th style="font-weight:bold"  width="16.6%"><h3>Rate per M/T</h3></th>
-			<th style="font-weight:bold"  width="15.6%"><h3>Amount</h3></th>
 		</tr>
 		<tr>
 			<td align="center" width="100%"><hr color=#00CC33 size=5 width=100></td>
@@ -2293,7 +2287,6 @@ function finalbillgeneratemodel($partyid='',$actualnumberbundle='',$cust_add='',
 			<td width="40px" align="left"><h3>'.$thickness.'</h3></td>
 			<td width="20px" align="right">*</td>
 			<td width="70px" align="right"><h3>'.$width.'</h3></td>
-			<td width="240px" align="right"><h3>'.$weihtamount.'</h3></td>
 		</tr>';
 
 		if ($queryitem->num_rows() > 0)
@@ -2325,53 +2318,20 @@ function finalbillgeneratemodel($partyid='',$actualnumberbundle='',$cust_add='',
 				<td style="font-weight:bold"  width="23%"></td>
 				<td style="font-weight:bold"  width="16.6%"><h3>'.$totalpcs.'</h3></td>
 				<td style="font-weight:bold" width="33%"><h3>'.round($totalweight,3).'</h3></td>
-				<td style="font-weight:bold"  width="15.6%"><h3>'.$totalamount.'</h3></td>
 			</tr>
-		<tr>
-		<td width="89%">
-			<h3><b>Other Charges:&nbsp;'.$additionalchargetype.'</b></h3>
-			</td> <td><h3>'.$amount.'</h3></td>
-		</tr>
-		<tr>
-		<td width="89%">
-			<h3><b>For weight</b></h3>
-			</td> <td><h3>'.$wtamount.'</h3></td>
-		</tr>
-		<tr>
-		<td width="89%">
-			<h3><b>For width</b></h3>
-			</td> <td><h3>'.$widthamount.'</h3></td>
-		</tr>
-		<tr>
-		<td width="89%">
-			<h3><b>For length </b></h3>
-			</td> <td><h3>'.$lengthamount.'</h3></td>
-		</tr>
-		<tr>
-		<td width="89%">
-			<h3><b>SUBTOTAL</b></h3>
-			</td> <td><h3>'.$subtotal.'</h3></td>
-		</tr>
-		'.$gstSection.'
 		<tr>
 			<td align="center" width="100%"><hr color=#00CC33 size=5 width=100></td>
 		</tr>
 		<tr>
 		<td width="89%">
 			<h3><b>Grand Total</b></h3>
-			</td> <td><h3>'.$grandtotal.'</h3></td>
+			</td> <td><h3>'.$totalweight.'</h3></td>
 		</tr>
 		<tr>
-			<td width="25%">
-				<h3>Grand Total in Words :</h3>
-			</td>
-			<td width="75%"><h3>'.$container.'</h3></td>
-		</tr>
-		<tr>
-			<td width="70%">
+			<td width="65%">
 				<h3><b>Received the above goods in good condition.</b></h3>
 			</td>
-			<td width="30%"><h3> For ASPEN STEEL (P) LTD.</h3></td>
+			<td width="35%"><h3> For SHAROFF STEEL TRADERS.</h3></td>
 		</tr>
 		<tr>
 			<td></td>
@@ -2546,7 +2506,7 @@ EOD;
 				<td align="right">&nbsp;</td>
 			</tr>
 			<tr>
-				<td colspan="2" align="center" style="font-size:45px; font-style:italic; font-family: fantasy;"><b>**ASPEN BANGALORE**</b></td>
+				<td colspan="2" align="center" style="font-size:45px; font-style:italic; font-family: fantasy;"><b>**SHAROFF BANGALORE**</b></td>
 			</tr>
 		</table>';
 
@@ -2950,6 +2910,7 @@ EOD;
 		$container = $querymain->row(0)->container;
 		$serviceTaxPercent = $querymain->row(0)->serviceTaxPercent;
 
+$gstSection = '';
 		if($gstType == 'Within') {
 			$gstSection	= '
 						<tr>
@@ -3002,12 +2963,11 @@ EOD;
 
 		$html = '<table width="100%" cellspacing="0" cellpadding="4" border="0">
 					<tr>
-						<td width="16%" align:"left"><h4>TIN:29730066589</h4></td>
-						<td width="70%"align="center" style="font-size:60px; font-style:italic; font-family: fantasy;"><h1>ASPEN STEEL PVT LTD</h1></td>
-						<td width="25%" align:"right"><h4>GST Regn. No: 29AABCA4807H1ZS</h4></td>
+						<td width="80%"align="right" style="font-size:60px; font-style:italic; font-family: fantasy;"><h1>SHAROFF STEEL TRADERS</h1></td>
+						<td width="20%" align="right"><h4>GST Regn. No: 29AAEFS1551L1ZX</h4></td>
 					</tr>
 					<tr>
-						<td align="center" width="100%"><h4>Aspen Steel Pvt Ltd, Plot no 16E, Bidadi Industrial Area, Phase 2 Sector 1, Bidadi, Ramnagara-562109, <b>Email: aspensteel_unit2@yahoo.com </b></h4></td>
+						<td align="center" width="100%"><h4>Aspen Steel Pvt Ltd, Plot no 16E, Bidadi Industrial Area, Phase 2 Sector 1, Bidadi, Ramnagara-562109, <b><br>Email: sharoffsteel@gmail.com</b></h4></td>
 					</tr>
 					<tr>
 						<td align="center" width="100%"><hr color=#00CC33 size=5 width=100></td>
@@ -3026,9 +2986,7 @@ EOD;
 					</tr>
 					<tr>
 						<td width="30%" align:"left">
-							<h3>To M/s., &nbsp; '.$party_name.' , '.$address_one.' &nbsp;'.$address_two.',&nbsp;'.$city.'
-								<br>Tin Number : '.$tinnmber.'
-							</h3>
+							<h3>To M/s., &nbsp; '.$party_name.' , '.$address_one.' &nbsp;'.$address_two.',&nbsp;'.$city.'</h3>
 						</td>
 						<td width="40%" align="center"><h3> Desp. By Lorry No. : '.$trucknumber.'</h3></td>
 						<td width="33.33%" align:"right"><h3>Delivery: Full &nbsp; Part-1&nbsp; Part-2</h3></td>
@@ -3058,9 +3016,9 @@ EOD;
 						<th style="font-weight:bold;" width="10%"><h4>Sl. No.</h4></th>
 						<th style="font-weight:bold"  width="30%"><h4>Description</h4></th>
 						<th style="font-weight:bold"  width="13%"><h4>Width (in mm)</h4></th>
-						<th style="font-weight:bold" width="16.6%"><h4>Qty. In M/T</h4></th>
-						<th style="font-weight:bold"  width="16.6%"><h4>Rate per M/T</h4></th>
-						<th style="font-weight:bold"  width="16.6%"><h4>Amount</h4></th>
+						<th style="font-weight:bold" width="16.6%"></th>
+						<th style="font-weight:bold"  width="16.6%"></th>
+						<th style="font-weight:bold"  width="16.6%"><h4>Qty. In M/T</h4></th>
 					</tr>
 					<tr><td align="center" width="100%"><hr color=#00CC33 size=5 width=100></td></tr>
 					<tr><td colspan="3"><b>Service Accounting Code '.getServiceAccountingCode($billType).' </b></td></tr>
@@ -3075,9 +3033,9 @@ EOD;
 										<td width="10%"><b>'.$rowitem->nBundleNumber.'</b></td>
 										<td width="30%"><b>'.$rowitem->description.'</b></td>
 										<td width="13%"><b>'.$rowitem->width.'</b></td>
-										<td width="16.6%"><b>'.$rowitem->weight.'</b></td>
-										<td width="16.6%"><b>'.$rowitem->rate.'</b></td>
-										<td width="33%"><b>'.ceil($rowitem->amount).'</b></td>
+										<td width="16.6%"></td>
+										<td width="16.6%"></td>
+										<td width="33%"><b>'.$rowitem->weight.'</b></td>
 										<td width="15.6%"></td>
 									</tr>';
 						}
@@ -3093,9 +3051,9 @@ EOD;
 			</tr>
 			<tr>
 				<td width="300px" align="left"><b>TOTAL: </b></td>
-				<td width="105px" align="center"><b>'.round(($totalweight/1000),3).'</b></td>
-				<td width="110px" align="center"><b>'.$weihtamount.'</b></td>
-				<td width="95px" align="center"><b>'.$totalamount.'</b></td>
+				<td width="105px" align="center"><b></b></td>
+				<td width="110px" align="center"><b></b></td>
+				<td width="95px" align="center"><b>'.round(($totalweight/1000),3).'</b></td>
 			</tr>
 			<tr><td>&nbsp;&nbsp;</td><td>&nbsp;&nbsp;</td></tr>
 			<tr>
@@ -3103,35 +3061,19 @@ EOD;
 				<td width="160px" align="right"><b>'.$Scrapsent.'</b></td>
 			</tr>
 			<tr>
-				<td width="420px" align="left"><b>Additional Charges : '.$additionalchargetype.'</b></td>
-				<td width="160px" align="right"><b>'.$amount.'</b></td>
-			</tr>
-			<tr>
-				<td width="420px" align="left"><b>Strapping Charge : '.$additionalchargetype1.'</b></td>
-				<td width="160px" align="right"><b>'.$amount1.'</b></td>
-			</tr>
-			<tr>
 				<td width="450px" border="0" align="left"></td>
 				<td><hr width=100%></td>
-			</tr>
-			<tr>
-				<td width="550px" border="0" align="left"><b>Subtotal </b></td>
-				<td><b>'.$subtotal.'</b>&nbsp;&nbsp;</td>
 			</tr>
 			'.$gstSection.'
 			<tr>
 				<td width="550px" border="0" align="left"><b>Grand Total</b></td>
-				<td><b>'.$grandtotal.'</b>&nbsp;&nbsp;</td>
-			</tr>
-			<tr>
-				<td width="200px" border="0" align="left"><b>Grand Total In words</b></td>
-				<td width="300px" border="0" align="left"><b>'.$container.'</b>&nbsp;</td>
+				<td><b>'.round(($totalweight/1000),3).'</b>&nbsp;&nbsp;</td>
 			</tr>
 			<tr>
 				<td width="65%">
 					<b>Received the above goods in good condition.</b>
 				</td>
-				<td width="25%"><b>For ASPEN STEEL (P) LTD.</b></td>
+				<td width="35%"><b>For SHAROFF STEEL TRADERS.</b></td>
 			</tr>
 			<tr><td></td></tr>
 			<tr>
@@ -3441,26 +3383,6 @@ EOD;
 		$city= $querymain1->row(0)->city;
 		$pinCode = $querymain1->row(0)->pincode;
 
-		if($gstType == 'Within') {
-			$gstSection	= '<tr>
-							<td width="89%">
-							<h3><b>CGST @ 9%</b></h3>
-							</td> <td><h3>'.($txtservicetax/2).'</h3></td>
-						</tr>
-						<tr>
-							<td width="89%">
-							<h3><b>SGST @ 9%</b></h3>
-							</td> <td><h3>'.($txtservicetax/2).'</h3></td>
-						</tr>';
-
-		} else if($gstType == 'Inter') {
-			$gstSection	= '<tr>
-							<td width="89%">
-							<h3><b>IGST @ 18%</b></h3>
-							</td> <td><h3>'.ceil($txtservicetax).'</h3></td>
-						</tr>';
-		}
-
 		$pdf = new TCPDF(PDF_PAGE_ORIENTATION, PDF_UNIT, PDF_PAGE_FORMAT, true, 'UTF-8', false);
 		$pdfname= 'loadingslip_'.$pname.'.pdf';
 		$resolution= array(72, 150);
@@ -3485,15 +3407,14 @@ $html = '<table width="100%"  cellspacing="0" cellpadding="5" border="0">
 				<td align="center"><b>Job Work / Delivery Challan</b></td>
 			</tr>
 			<tr>
-				<td width="16%" align:"left"><h4>TIN:29730066589</h4></td>
-				<td width="70%"align="center" style="font-size:60px; font-style:italic; font-family: fantasy;"><h1>ASPEN STEEL PVT LTD</h1></td>
-				<td width="25%" align:"right"><h4>GST Regn. No: 29AABCA4807H1ZS</h4></td>
+				<td width="80%"align="right" style="font-size:60px; font-style:italic; font-family: fantasy;"><h1>SHAROFF STEEL TRADERS</h1></td>
+				<td width="20%" align="right"><h4>GST Regn. No: 29AAEFS1551L1ZX</h4></td>
 		</tr>
 		<tr>
-			<td align="center" width="100%"><h4>Branch At: Plot no 16E, Bidadi Industrial Area, Phase 2 Sector 1, Bidadi, Ramnagara-562109, <b>Email: aspensteel_unit2@yahoo.com </b></h4></td>
+			<td align="center" width="100%"><h4>Branch At: Plot No 29-A, Bidadi Industrial Area Abbanakuppe, Bidadi Hobli, Ramanagar Dist-562109<b><br>Email: sharoffsteel@gmail.com</b></h4></td>
 		</tr>
 		<tr>
-			<td align="center" width="100%"><h4>Head Office At: 54/1, Medahalli, Old Madras Road, Bangalore-560049</h4></td>
+			<td align="center" width="100%"><h4>Head Office At: #67/B, Timber Yard Lay Out, Mysore Road Bangalore – 560026</h4></td>
 		</tr>
 		</table>
 		<table width="100%" cellspacing="0" cellpadding="0" >
@@ -3508,9 +3429,7 @@ $html = '<table width="100%"  cellspacing="0" cellpadding="5" border="0">
 			<tr><td></td></tr>
 			<tr>
 				<td width="30%" align:"left">
-					<h3>To M/s., &nbsp; '.$pname.' , '.$add1.' &nbsp;'.$add2.',&nbsp;'.$city.'-'.$pinCode.'
-						<br>Tin Number : '.$tin_number.'
-					</h3>
+					<h3>To M/s., &nbsp; '.$pname.' , '.$add1.' &nbsp;'.$add2.',&nbsp;'.$city.'-'.$pinCode.'</h3>
 				</td>
 				<td width="40%" align="center"><h3> Desp. By Lorry No. : '.$txtoutward_num.'</h3> </td>
 				<td width="33.33%" align:"right"><h3>Delivery: Full &nbsp; Part-1&nbsp; Part-2</h3></td>
@@ -3532,9 +3451,6 @@ $html = '<table width="100%"  cellspacing="0" cellpadding="5" border="0">
 				<th style="font-weight:bold;" width="13%"><h3>Sl. No.</h3></th>
 				<th style="font-weight:bold" width="40%"><h3>Description</h3></th>
 				<th style="font-weight:bold" width="16.6%"><h3>Qty. In M/T</h3></th>
-				<th style="font-weight:bold"  width="16.6%"><h3>Rate per M/T</h3></th>
-				<th style="font-weight:bold"  width="16.6%"><h3>Amount</h3></th>
-
 			</tr>
 		<tr>
 			<td align="center" width="100%"><hr color=#00CC33 size=5 width=100></td>
@@ -3547,7 +3463,6 @@ $html = '<table width="100%"  cellspacing="0" cellpadding="5" border="0">
 		<td width="30px" align="right">*</td>
 		<td width="50px" align="right"><h3>'.$wid.'</h3></td>
 		<td width="110px" align="right"><h3>'.round($totalweight_check,3).'</h3></td>
-		<td width="110px" align="right"><h3>'.$txthandling.'</h3></td>
 		</tr>
 
 		</table>';
@@ -3561,53 +3476,20 @@ $html = '<table width="100%"  cellspacing="0" cellpadding="5" border="0">
 				<td style="font-weight:bold"  width="23%"></td>
 				<td style="font-weight:bold"  width="16.6%"><h3></h3></td>
 				<td style="font-weight:bold"  width="18%"><h3>'.round($totalweight_check,3).'</h3></td>
-				<td style="font-weight:bold"  width="15.6%"><h3>'.$txthandling.'</h3></td>
-				<td style="font-weight:bold"  width="15.6%"><h3>'.$totalamt.'</h3></td>
 			</tr>
-		<tr>
-		<td width="90%">
-			<h3><b>Other Charges:&nbsp;'.$txtadditional_type.'</b></h3>
-			</td> <td><h3>'.$txtamount_mt.'</h3></td>
-		</tr>
-		<tr>
-		<td width="89%">
-			<h3><b>For weight</b></h3>
-			</td> <td><h3>--</h3></td>
-		</tr>
-		<tr>
-		<td width="89%">
-			<h3><b>For width</b></h3>
-			</td> <td><h3>--</h3></td>
-		</tr>
-		<tr>
-		<td width="89%">
-			<h3><b>For length </b></h3>
-			</td> <td><h3>--</h3></td>
-		</tr>
-		<tr>
-		<td width="89%">
-			<h3><b>SUBTOTAL</b></h3>
-			</td> <td><h3>'.$totalamt.'</h3></td>
-		</tr>
-		'.$gstSection.'
 		<tr>
 			<td align="center" width="100%"><hr color=#00CC33 size=5 width=100></td>
 		</tr>
 		<tr>
 		<td width="89%">
 			<h3><b>Grand Total</b></h3>
-			</td> <td><h3>'.$txtgrandtotal.'</h3></td>
+			</td> <td><h3>'.round($totalweight_check,3).'</h3></td>
 		</tr>
 		<tr>
-		<td width="25%">
-			<h3>Grand Total in Words :</h3>
-			</td> 	<td width="75%"><h3>'.$container.'</h3></td>
-		</tr>
-		<tr>
-			<td width="70%">
+			<td width="65%">
 				<h3><b>Received the above goods in good condition.</b></h3>
 				</td>
-				<td width="30%"><h3> For ASPEN STEEL (P) LTD.</h3></td>
+				<td width="35%"><h3>For SHAROFF STEEL TRADERS.</h3></td>
 		</tr>
 		<tr><td></td></tr>
 		<tr>
@@ -3953,20 +3835,16 @@ $html = '
 		<table width="100%"  cellspacing="0" cellpadding="0" border="0">
 
 			<tr>
-				<td width="16%" align:"left"><h4>TIN:29730066589</h4></td>
-				<td width="70%"align="center" style="font-size:60px; font-style:italic; font-family: fantasy;"><h1>ASPEN STEEL PVT LTD</h1></td>
-				<td width="25%" align:"right"><h4>GST Regn. No: 29AABCA4807H1ZS</h4></td>
+				<td width="80%"align="right" style="font-size:60px; font-style:italic; font-family: fantasy;"><h1>SHAROFF STEEL TRADERS</h1></td>
+				<td width="20%" align="right"><h4>GST Regn. No: 29AAEFS1551L1ZX</h4></td>
 		</tr>
 		<tr>
-				<td align="center" width="100%"><h4>Aspen Steel Pvt Ltd, Plot no 16E, Bidadi Industrial Area, Phase 2 Sector 1, Bidadi, Ramnagara-562109, <b>Email: aspensteel_unit2@yahoo.com </b></h4></td>
+				<td align="center" width="100%"><h4>Aspen Steel Pvt Ltd, Plot no 16E, Bidadi Industrial Area, Phase 2 Sector 1, Bidadi, Ramnagara-562109, <b><br>Email: sharoffsteel@gmail.com</b></h4></td>
 		</tr>
-
 		<tr>
 				<td align="center" width="100%"><hr color=#00CC33 size=5 width=100></td>
 
 		</tr>
-
-
 		<tr>
 				<td width="100%"></td>
 		</tr>
@@ -3976,7 +3854,6 @@ $html = '
 				<td width="33.33%" align:"right"><h3>Billdate : '.$billdate.' </h3></td>
 
 			</tr>
-
 		</table>
 		<table width="100%" cellspacing="0" cellpadding="0" >
 			<tr>
@@ -3986,9 +3863,7 @@ $html = '
 			</tr>
 			<tr>
 				<td width="30%" align:"left">
-					<h3>To M/s., &nbsp; '.$pname.' , '.$add1.' &nbsp;'.$add1.',&nbsp;'.$city.'
-						<br>Tin Number : '.$tin_number.'
-					</h3>
+					<h3>To M/s., &nbsp; '.$pname.' , '.$add1.' &nbsp;'.$add1.',&nbsp;'.$city.'</h3>
 				</td>
 				<td width="40%" align="center"><h3> Desp. By Lorry No. : '.$txtoutward_num.'</h3> </td>
 
@@ -4036,7 +3911,6 @@ $html = '
 			</tr>
 		<tr>
 				<td align="center" width="100%"><hr color=#00CC33 size=5 width=100></td>
-
 		</tr>
 		<tr><td colspan="3"><h3>Service Accounting Code '.getServiceAccountingCode($billType).' </h3></td></tr>
 		<tr>
@@ -4124,10 +3998,10 @@ $html = '
 		</tr>
 
 		<tr>
-			<td width="70%">
+			<td width="65%">
 				<h3><b>Received the above goods in good condition.</b></h3>
 				</td>
-				<td width="30%"><h3> For ASPEN STEEL (P) LTD.</h3></td>
+				<td width="35%"><h3> For SHAROFF STEEL TRADERS.</h3></td>
 		</tr>
 		<tr>
 			<td>

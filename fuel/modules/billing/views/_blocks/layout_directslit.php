@@ -137,21 +137,6 @@
 
 </fieldset>
 </form>
-
-
-
-<fieldset>
-<legend>Aditional Charges:</legend> 
-	<div class="pad-10">
-		<input type="text" id="txtadditional_type" name="txtadditional_type" value="" placeholder="New Additional Charge Type"/> 
-		&nbsp; 
-		<input type="text" id="txtamount_mt" name="txtamount_mt" value="0"/>
-    <br>
-    <input type="text" id="txtadditional_type1" name="txtadditional_type1" value="" placeholder="New Additional Charge Type"/> 
-    &nbsp; 
-    <input type="text" id="txtamount_mt1" name="txtamount_mt1" value="0"/> 
-	</div>
-</fieldset>
 <table cellpadding="0" cellspacing="0" border="0" width="100%">
 <tr>
 <td> 
@@ -182,7 +167,7 @@
 			</div>
 		
 <div class="pad-10">
-	Total: <input type="text" style="width:250px;" id="totalweight_checks" DISABLED /> &nbsp;&nbsp;&nbsp;<input type="text" style="width:250px;" id="totalrates" DISABLED/>&nbsp;&nbsp;&nbsp;&nbsp;<input type="text" style="width:250px;" id="totalamtsslit"  DISABLED/>&nbsp;&nbsp;
+	Total: <input type="text" style="width:250px;" id="totalweight_checks" DISABLED /> &nbsp;&nbsp;&nbsp;
 </div>
 </fieldset>
 </form>
@@ -303,12 +288,12 @@ function triConvert(num){
 
             <input type="hidden" size="80" id="container" DISABLED/>
 </div>
-<div align="left">
-  <!--<input class="btn btn-danger"  style="cursor: pointer;" id="txtcancelbill" type="button" value="Cancel Bill" onclick="cancelbill();" />-->
+<!-- <div align="left">
+  <input class="btn btn-danger"  style="cursor: pointer;" id="txtcancelbill" type="button" value="Cancel Bill" onclick="cancelbill();" />
   Select type of GST tax to be applied  <br>
   <input style="margin: 10px;" type="radio" class="gstType" name="gstType" value="Within">&nbsp; Within State</br>
   <input style="margin: 10px;" type="radio" class="gstType" name="gstType" value="Inter">&nbsp; Inter State
-</div>
+</div> -->
 
 <div align="right">
 	<input class="btn btn-success" style="cursor: pointer;" id="txtbillpreview" type="button" value="Save and Print Bill" onclick="functionpdfslitprint();" />
@@ -331,21 +316,21 @@ function numbertowords() {
  numReversed=obStr.split("");
  actnumber=numReversed.reverse();
 
- if(Number(junkVal) >=0){
-  //do nothing
- }
- else{
-  alert('wrong Number cannot be converted');
-  return false;
- }
- if(Number(junkVal)==0){
-  document.getElementById('container').value=obStr+''+'Rupees Zero Only';
-  return false;
- }
- if(actnumber.length>9){
-  alert('Oops!!!! the Number is too big to covertes');
-  return false;
- }
+//  if(Number(junkVal) >=0){
+//   //do nothing
+//  }
+//  else{
+//   alert('wrong Number cannot be converted');
+//   return false;
+//  }
+//  if(Number(junkVal)==0){
+//   document.getElementById('container').value=obStr+''+'Rupees Zero Only';
+//   return false;
+//  }
+//  if(actnumber.length>9){
+//   alert('Oops!!!! the Number is too big to covertes');
+//   return false;
+//  }
 
  var iWords=["Zero", " One", " Two", " Three", " Four", " Five", " Six", " Seven", " Eight", " Nine"];
  var ePlace=['Ten', ' Eleven', ' Twelve', ' Thirteen', ' Fourteen', ' Fifteen', ' Sixteen', ' Seventeen', ' Eighteen', ' Nineteen'];
@@ -835,8 +820,8 @@ totalamtslit();
             var item = msg[i];
             var thisdata = {};
             thisdata["weight(in M/T)"] = item.weight;
-            thisdata["Rate(in M/T)"] = item.rate;
-            thisdata["Amount"] = item.amount;
+            // thisdata["Rate(in M/T)"] = item.rate;
+            // thisdata["Amount"] = item.amount;
            /* var edit = '<a class="ico_coil_edit" title="Edit" href="#" onClick=functionedit('+item.bundlenumber+','+item.notobebilled+')><img src="<?php echo img_path('iconset/ico_edit.png'); ?>" /></a>';
             thisdata["action"] =  edit;*/
 			//thisdata["action"] = '';

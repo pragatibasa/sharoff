@@ -16,9 +16,7 @@ class Company_details_model extends Base_module_model {
 		/*	 cid cname ide_receive ide_payable addr1 addr2 city state zipcode country update_state ctno toll_no fax email web tax_id vat cst_no service_tax duty_no
 		*/
 				
-	function savecompany($cname, $ide_receive,$ide_payable,$addr1,$addr2,$city,$state, 
-							$zipcode,$country,$update_state,$ctno,$toll_no,$fax, 
-							$email,$web,$tax_id,$vat,$cst_no,$service_tax,$duty_no)
+	function savecompany($inputArr)
 	{
 	$sql = "Insert into aspen_company_details  (
 		company_name,identifier_receivable,identifier_payable,addr1,addr2,city,state,zipcode,country,update_company,tele_no,

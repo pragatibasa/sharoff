@@ -19,7 +19,7 @@ class partyname_details_model extends Base_module_model {
 	}
  
 
- function my_custom_options_state( $val = 'aspen_tblpartydetails.vState', $val = 'aspen_tblpartydetails.vState',                                 $where = 'aspen_tblpartydetails.vState',$order = 'aspen_tblpartydetails.vState')
+ function my_custom_options_state( $val = 'aspen_tblpartydetails.vState', $val = 'aspen_tblpartydetails.vState', $where = 'aspen_tblpartydetails.vState',$order = 'aspen_tblpartydetails.vState')
 	{
 		$val = 'aspen_tblpartydetails.vState';
 		$this->db->select('DISTINCT aspen_tblpartydetails.vState');
@@ -55,8 +55,7 @@ class partyname_details_model extends Base_module_model {
 			$fields['vCountry'] = array('type' => 'select','label' => 'Country', 'options' => $options
 			                      ,'first_option' => 'India');
 			$optionsstate = $this->partyname_details_model->my_custom_options_state();
-			$fields['vState'] = array('type' => 'select','label' => 'State', 'options' => $optionsstate
-			                      ,'first_option' => 'Karnataka');
+			$fields['vState'] = array('type' => 'select','label' => 'State', 'options' => array('Andaman and Nicobar Islands','Andhra Pradesh','Arunachal Pradesh','Assam','Bihar','Chandigarh','Chhattisgarh','Dadra and Nagar Haveli','Daman and Diu','Delhi','Goa','Gujarat','Haryana','Himachal Pradesh','Jammu and Kashmir','Jharkhand','Karnataka','Kerala','Lakshadweep','Madhya Pradesh','Maharashtra','Manipur','Meghalaya','Mizoram','Nagaland','Orissa','Pondicherry','Punjab','Rajasthan','Sikkim','Tamil Nadu','Tripura','Uttaranchal','Uttar Pradesh','West Bengal'));
 		/*	$fields['vCusrate'] = array('type' => 'enum', 'label' => 'Customer Rate', 'options' => array('yes' => 'Add Discount','no' => 'Remove Discount'), 'required' => TRUE);*/
 			$fields['vCusrate']['type']= 'hidden';
 			$fields['vCusrateadd']= array('label' => 'Special Price : Add ');

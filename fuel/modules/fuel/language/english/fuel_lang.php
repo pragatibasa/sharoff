@@ -5,11 +5,11 @@
 | General
 |--------------------------------------------------------------------------
 */
-$lang['fuel_page_title'] = 'Aspen Steel Pvt Ltd';
+$lang['fuel_page_title'] = 'Sharoff Steel Pvt Ltd';
 $lang['logged_in_as'] = 'Welcome';
 $lang['logout'] = 'Logout';
 $lang['fuel_developed_by'] = '<a href="http://www.hooduku.com">Hooduku Inc</a>';
-$lang['fuel_copyright'] = 'Copyright &copy; %1s Aspen Steel Pvt Ltd. All Rights Reserved.';
+$lang['fuel_copyright'] = 'Copyright &copy; %1s Sharoff Steel Traders. All Rights Reserved.';
 
 
 /*
@@ -138,8 +138,8 @@ $lang['module_navigation'] = 'Navigation';
 $lang['module_assets'] = 'Assets';
 $lang['module_sitevariables'] = 'Site Variables';
 $lang['module_users'] = 'Users';
-$lang['module_information_child'] = 'General Information';  
-$lang['module_birth_details'] = 'Birth Details'; 
+$lang['module_information_child'] = 'General Information';
+$lang['module_birth_details'] = 'Birth Details';
 $lang['module_permissions'] = 'Permissions';
 $lang['module_manage_cache'] = 'Page Cache';
 $lang['module_manage_activity'] = 'Activity Log';
