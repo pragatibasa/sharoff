@@ -39,7 +39,7 @@ class weigh_updation_model extends Base_module_model {
     }
 
     function saveOutwardWeightment($inputArr) {
-      $strInsertOutwardWeightment = "insert into outwardWeighment(date, vehicleNumber, bridgeName, slipNo, loadedWeight, emptyWeight, netWeight) values('".$inputArr['date']."', '".$inputArr['vehiclenumber']."', '".$inputArr['weighBridgeName']."', '".$inputArr['slipNo']."', '".$inputArr['loaded-weight']."', '".$inputArr['empty-weight']."', '".$inputArr['net-weight']."')";
+      $strInsertOutwardWeightment = "insert into outwardWeighment(date, vehicleNumber, bridgeName, slipNo, loadedWeight, emptyWeight, netWeight, createdDate) values('".$inputArr['date']."', '".$inputArr['vehiclenumber']."', '".$inputArr['weighBridgeName']."', '".$inputArr['slipNo']."', '".$inputArr['loaded-weight']."', '".$inputArr['empty-weight']."', '".$inputArr['net-weight']."',CURDATE())";
 
       $resInsertOutwardWeightment = $this->db->query($strInsertOutwardWeightment);
       $outwardWeighmentId = mysql_insert_id();

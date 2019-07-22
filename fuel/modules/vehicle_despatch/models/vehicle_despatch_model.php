@@ -52,4 +52,17 @@ where vehicleNumber = '".$vehicleNumber."' and date = '".$date."' and netWeight 
       }
       return $arr;
   }
+
+  function getWeighmentDetails($date, $vehicleNumber, $weight) {
+      $strSql = "Select * from outwardWeighment where vehicleNumber = '".$vehicleNumber."' and date = '".$date."' and netWeight = '".$weight."'";
+
+      $query = $this->db->query($strSql);
+      $arr='';
+      if ($query->num_rows() > 0) {
+          foreach ($query->result() as $row) {
+              $arr[] =$row;
+          }
+      }
+      return $arr;
+  }
 }

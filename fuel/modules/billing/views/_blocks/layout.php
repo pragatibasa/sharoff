@@ -988,7 +988,7 @@ function totalvalue(bundleid){
 				document.getElementById("txtamount").value = 0;
 			} else {
 				$.each(msg5, function(i, j){
-					document.getElementById("txtamount").value = (j.total == "") ? 0 : j.total;
+					// document.getElementById("txtamount").value = (j.total == "") ? 0 : j.total;
 				});
 			}
 		}

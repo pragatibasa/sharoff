@@ -72,9 +72,9 @@ class customer_inward extends Fuel_base_controller {
 	
 	
 	function export_party($partyname = '',$frmdate = '', $todate = '') {
-	$partyname = $_POST['partyname'];	
-	$frmdate = $_POST['frmdate'];	
-	$todate = $_POST['todate'];	
+	    $partyname = $_POST['partyname'];
+	    $frmdate = $_POST['frmdate'];
+	    $todate = $_POST['todate'];
 		$this->load->model('customer_inward_model');
 		$containers = $this->customer_inward_model->export_partyname($partyname,$frmdate, $todate);
 		if(!empty($containers)){

@@ -195,8 +195,8 @@ function allocateWeight() {
                   thisdata["Partyname"] = item.partyname;
                   thisdata["Bill Weight"] = item.billweight*1000+'<input type="hidden" name="billWeight[]" value="'+item.billweight*1000+'"/>';
 
-            			var selectcoil = '<input type="checkbox" data-bill-weight="'+item.billweight+'" name="billnumbers[]" class="checkbundle" id="check_'+item.billnumber+'" value="'+item.billnumber+'" onClick="enableWeights('+item.billnumber+')" />';
-            			thisdata["select"] = selectcoil;
+                  var selectcoil = '<input type="checkbox" data-bill-weight="'+item.billweight+'" name="billnumbers[]" class="checkbundle" id="check_'+item.billnumber+'" value="'+item.billnumber+'" onClick="enableWeights('+item.billnumber+')" />';
+                  thisdata["select"] = selectcoil;
 
                   thisdata["Material Weight"] = '<input class="'+item.billnumber+' material_weight" disabled type="text" size="5" name="material_weight[]" onblur="calculateAllocatedWeights('+item.billnumber+')" />';
                   thisdata["Packing Material Weight"] = '<input class="'+item.billnumber+' packing_weight" disabled type="text" size="5" name="packing_weight[]" onblur="calculateAllocatedWeights('+item.billnumber+')" />';
@@ -256,6 +256,7 @@ function calculateAllocatedWeights(billNumber) {
 }
 
 function saveWeightmentDetails() {
+    $('#save-weighment-outward').attr('disabled','disabled');
   var data = $('form').serialize();
   $.ajax({
     type: "POST",
@@ -265,6 +266,8 @@ function saveWeightmentDetails() {
       if(msg == 'success') {
         alert('Weighment has been successfully updated. Please click to update a new weighment');
         window.location="<?php echo fuel_url('weigh_updation');?>";
+      } else {
+          $('#save-weighment-outward').attr('disabled','false');
       }
   });
 }

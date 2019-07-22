@@ -38,9 +38,9 @@ class vehicle_despatch extends Fuel_base_controller {
 
         if(!empty($weighments)) {
             $files = array();
-            foreach($weighments as $vehicle) {
+            foreach($weighments as $weight) {
                 $obj = new stdClass();
-                $obj->weight = $vehicle->weight;
+                $obj->weight = $weight->weight;
                 $files[] = $obj;
             }
             echo json_encode($files);
@@ -78,7 +78,27 @@ class vehicle_despatch extends Fuel_base_controller {
             echo json_encode($status);
         }
         exit;
+    }
 
+    function getWeighmentDetails() {
+        $weighmentDetails = $this->vehicle_despatch_model->getWeighmentDetails($_POST['date'], $_POST['vehiclenumber'], $_POST['weight']);
+
+        if(!empty($weighmentDetails)) {
+            $files = array();
+            foreach($weighmentDetails as $weighment) {
+                $obj = new stdClass();
+                $obj->bridgeName = $weighment->bridgeName;
+                $obj->slipNo = $weighment->slipNo;
+                $obj->createdDate = $weighment->createdDate;
+                $obj->netWeight = $weighment->netWeight;
+                $files[] = $obj;
+            }
+            echo json_encode($files);
+        } else {
+            $status = array("status"=>"No Results!");
+            echo json_encode($status);
+        }
+        exit;
     }
 }
 

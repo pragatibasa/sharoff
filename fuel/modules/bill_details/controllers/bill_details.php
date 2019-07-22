@@ -19,7 +19,7 @@ class bill_details extends Fuel_base_controller {
 	}
 
 	function list_bill_details() {
-		$containers			= $this->bill_details_model->getPaginatedBillDetails($_REQUEST);
+		$containers	= $this->bill_details_model->getPaginatedBillDetails($_REQUEST);
 	}
 
 	function duplicate_bill() {

@@ -117,7 +117,7 @@ $.ajax({
 			mediaClass += '<table id="myTabels" class="tablesorter tablesorter-blue">';
 			mediaClass +='<thead>';
 			mediaClass +='<tr>';
-			mediaClass += '  <th>Select</th>';
+			mediaClass += '  <th class="select">Select</th>';
 			mediaClass += '  <th>Coilnumber</th>';
 			mediaClass += '  <th>Received Date</th>';
 			mediaClass += '  <th>Description</th>';
@@ -133,7 +133,7 @@ $.ajax({
 				var item = msg[i];
 				mediaClass += '<tr>';
 
-		 	mediaClass += '<td>' + '<input type="radio" id="radio_'+item.coilnumber+'" name="list" value="'+item.coilnumber+'"   onClick=showchild("'+item.coilnumber+'") />' + '</td>';
+		 	mediaClass += '<td class="select">' + '<input type="radio" id="radio_'+item.coilnumber+'" name="list" value="'+item.coilnumber+'"   onClick=showchild("'+item.coilnumber+'") />' + '</td>';
 				mediaClass += '<td>' + item.coilnumber + '</td>';
 				mediaClass += '<td>' + item.receiveddate + '</td>';
 				mediaClass += '<td>' + item.description + '</td>';
@@ -160,10 +160,18 @@ function tableToExcel() {
     tab_text = tab_text + '<x:WorksheetOptions><x:Panes></x:Panes></x:WorksheetOptions></x:ExcelWorksheet>';
     tab_text = tab_text + '</x:ExcelWorksheets></x:ExcelWorkbook></xml></head><body>';
 
-    tab_text = tab_text + '<table><tr><td style="font-size:60px; font-style:italic; font-family: fantasy;"><h1>Stock Report for '+$('#party_account_name').val()+'</h1></td></tr></table>';
+    tab_text = tab_text + '<table><tr><td style="font-size:60px; font-style:italic; font-family: fantasy;" colspan="7" align="center"><h1>Stock Report for '+$('#party_account_name').val()+'</h1></td></tr><tr></tr><tr></tr></table>';
+
+    var table = document.getElementById('myTabels'),
+        tableClone = table.cloneNode(true),
+        elementsToRemove = tableClone.querySelectorAll('.select');
+
+    for (var i = elementsToRemove.length; i--;) {
+        elementsToRemove[i].remove();
+    }
 
     tab_text = tab_text + "<table border='1px'>";
-    tab_text = tab_text + $('#myTabels').html();
+    tab_text = tab_text + tableClone.innerHTML;
     tab_text = tab_text + '</table></body></html>';
 
     var data_type = 'data:application/vnd.ms-excel';

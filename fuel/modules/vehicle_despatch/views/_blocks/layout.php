@@ -32,30 +32,13 @@ select.vehiclenumber, select.weighmentWeight {
 #contentprocess td:nth-child(5), #contentprocess td:nth-child(6), #contentprocess td:nth-child(7) {
   text-align: center;
 }
-
-.total-bill-weight {
-  float: left;
-  width: 39%;
-  text-align: center;
-}
-
-.sum-allocated-weight {
-  float: right;
-  width: 35%;
-  text-align: left;
-}
-
-.total {
-  display: none;
-}
-
-.submit-container {
-    clear: both;
-    display: none;
-}
 </style>
 
 <form class="weigh-updation">
+    <div>
+        <a style="border:none;padding:0px;float: right;" href="#" id="export" onclick="saveToExcel();"><input class="btn btn-success"  type="button" value="Export to an excel"/> </a> &nbsp; &nbsp; &nbsp;
+<!--        <input class="btn btn-success" style="float: right;" id="save-weighment-outward" type="button" value="Export to an excel" onclick="saveToExcel();">-->
+    </div>
   <section>
     <p>
       <label for="card">
@@ -85,17 +68,9 @@ select.vehiclenumber, select.weighmentWeight {
     </div>
   </div>
 </section>
-</br>
-</br>
-</br>
-</br>
-</br>
-</br>
-<div class="submit-container">
-  <input class="btn btn-success" id="save-weighment-outward" type="button" value="Save Weighment Details" onclick="saveWeightmentDetails();">
-</div>
 </form>
 <script>
+    var reportData;
 $(function() {
   $( "#date" ).picker({
     onSelect: function(datetext, inst) {
@@ -172,7 +147,7 @@ function displayWeighments() {
                   var item = msg[i];
                   // $('#txtRateTotal').val(item.rate);
                   var thisdata = {};
-                  thisdata[''] = i+1;
+                  thisdata['Sl No'] = i+1;
                   thisdata["Coil Number"] = item.vIRnumber;
                   thisdata["Partyname"] = item.partyname;
                   thisdata["Bill Number"] = item.billnumber;
@@ -206,5 +181,54 @@ function displayWeighments() {
                 }
           }
     });
+
+    $.ajax({
+        type: "POST",
+        url: "<?php echo fuel_url('vehicle_despatch/getWeighmentDetails');?>",
+        data: "date="+$('#date').val()+"&vehiclenumber="+$('.vehiclenumber').val()+"&weight="+$('.weighmentWeight').val(),
+        dataType: "json"
+    }).done(function( msg ) {
+        reportData = msg;
+    });
+}
+
+function saveToExcel() {
+    var tab_text = '<html xmlns:x="urn:schemas-microsoft-com:office:excel">';
+    tab_text = tab_text + '<head><xml><x:ExcelWorkbook><x:ExcelWorksheets><x:ExcelWorksheet>';
+
+    tab_text = tab_text + '<x:WorksheetOptions><x:Panes></x:Panes></x:WorksheetOptions></x:ExcelWorksheet>';
+    tab_text = tab_text + '</x:ExcelWorksheets></x:ExcelWorkbook></xml></head><body>';
+
+    tab_text = tab_text + '<table><tr><td style="font-size:60px; font-style:italic; font-family:fantasy;" colspan="7" align="center"><h1>Vehicle Dispatch Report</h1></td></tr>';
+
+    tab_text = tab_text + '<tr></tr><tr><td><b>Vehicle Despatch Date: </b></td><td><b>'+$('#date').val()+'</b></td></tr>' +
+        '<tr><td><b>Vehicle Number: </b></td><td><b>'+$('.vehiclenumber').val()+'</b></td></tr> ' +
+        '<tr><td><b>Weigh Bridge Name: </b></td><td align="right"><b>'+reportData[0].bridgeName+'</b></td></tr> ' +
+        '<tr><td><b>Weighment Slip No: </b></td><td><b>'+reportData[0].slipNo+'</b></td></tr> ' +
+        '<tr><td><b>Net Weight: </b></td><td><b>'+reportData[0].netWeight+'</b></td></tr> ' +
+        '<tr><td><b>Report created date: </b></td><td><b>'+reportData[0].createdDate+'</b></td></tr> ' +
+        '<tr></tr><tr></tr>'+
+        '</table>';
+
+    tab_text = tab_text + "<table border='1px'>";
+    tab_text = tab_text + $('#contentprocess').html();
+    tab_text = tab_text + '</table>';
+
+    var data_type = 'data:application/vnd.ms-excel';
+
+    var ua = window.navigator.userAgent;
+    var msie = ua.indexOf("MSIE ");
+
+    if (msie > 0 || !!navigator.userAgent.match(/Trident.*rv\:11\./)) {
+        if (window.navigator.msSaveBlob) {
+            var blob = new Blob([tab_text], {
+                type: "application/csv;charset=utf-8;"
+            });
+            navigator.msSaveBlob(blob, '_Stock_Report.xls');
+        }
+    } else {
+        $('#export').attr('href', data_type + ', ' + encodeURIComponent(tab_text));
+        $('#export').attr('download', 'vehicle_despatch_report_'+$('#date').val()+'.xls');
+    }
 }
 </script>
