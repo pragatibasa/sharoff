@@ -1547,7 +1547,7 @@ function billgeneratemodelslit($coilno='',$partyname='',$description='',$lorryno
 		return $arr;
 	}*/
 
-	function savebilldetails_model($billid,$partyid,$txtamount,$txttotalweight,$txtscrap,$txtoutward_num,$txttotalpcs,$mat_desc,$thic,$actualnumberbundle,$pname,$wid,$len,$wei,$txttotallength,$txtweighttotal,$txtwidthtotal,$txtadditional_type,$txtamount_mt,$txtnsubtotal,$txtservicetax,$txteductax,$txtsecedutax,$txtRateTotal,$txtgrandtotal,$container,$driverContact) {
+	function savebilldetails_model($billid,$billdate, $partyid,$txtamount,$txttotalweight,$txtscrap,$txtoutward_num,$txttotalpcs,$mat_desc,$thic,$actualnumberbundle,$pname,$wid,$len,$wei,$txttotallength,$txtweighttotal,$txtwidthtotal,$txtadditional_type,$txtamount_mt,$txtnsubtotal,$txtservicetax,$txteductax,$txtsecedutax,$txtRateTotal,$txtgrandtotal,$container,$driverContact) {
 
 		$sqlServiceTaxNAddressDetails = "select nPercentage from aspen_tbltaxdetails where vTypeOfTax = 'SERVICE TAX'
 											union
@@ -1559,9 +1559,12 @@ function billgeneratemodelslit($coilno='',$partyname='',$description='',$lorryno
 		$serviceTaxPercent = $resObjServiceTaxDetails->result()[0]->nPercentage;
 		$strBillingAddress = $resObjServiceTaxDetails->result()[1]->nPercentage;
 
+        $date = str_replace('/', '-', $billdate );
+        $newDate = date("Y-m-d", strtotime($date));
+
 		$sql = "Insert into aspen_tblbilldetails (
 		   nBillNo,dBillDate, vIRnumber, fTotalWeight, fWeightAmount, fServiceTax, fEduTax, fSHEduTax, fGrantTotal, nScrapSent, vOutLorryNo, nPartyId, vBillType, BillStatus, ntotalpcs, ntotalamount, ocwtamount, ocwidthamount, oclengthamount,vAdditionalChargeType,fAmount,nsubtotal,grandtot_words,nServiceTaxPercent,tBillingAddress,dFinalRate,vDriverContact)
-		  VALUES('". $billid. "',now(),'". $partyid. "','". $txttotalweight. "',(select DISTINCT nAmount as rate from aspen_tblpricetype1
+		  VALUES('". $billid. "', '".$newDate."','". $partyid. "','". $txttotalweight. "',(select DISTINCT nAmount as rate from aspen_tblpricetype1
 		left join aspen_tblmatdescription on aspen_tblmatdescription.nMatId=aspen_tblpricetype1.nMatId
 		left join aspen_tblinwardentry on aspen_tblinwardentry.nMatId=aspen_tblmatdescription.nMatId
 		left join aspen_tblbillingstatus on aspen_tblinwardentry.vIRnumber=aspen_tblbillingstatus.vIRnumber

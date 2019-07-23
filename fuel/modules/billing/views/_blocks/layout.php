@@ -2,14 +2,16 @@
 <form>
 <fieldset>
 <legend>Bill Details:</legend>
-<table cellpadding="1" cellspacing="10" border="0">
+<table cellpadding="1" cellspacing="10" border="0" style="width:100%;">
 <tr>
-	<td>
+	<td align="left" width="50%">
 		<span><label>Bill Number:</label></span>
-	</td>
-	<td>
 		<input id="billid" name="billid" value="<?php echo $billid; ?>" type="text"  />
 	</td>
+    <td align="left" width="50%">
+        <span><label>Bill Date:</label></span>
+        <input id="billdate" name="billdate" type="text"/>
+    </td>
 </tr>
 </table>
 </fieldset>
@@ -173,13 +175,13 @@
 	<!--<input id="textsavelorry" type="button" value="Enter" onClick="savelorrydetails" />-->
 </div>
 
-			<div id="contentsholderprocess" class="flexcroll" style="width:100%; height:300px; overflow-x:hidden; overflow-y:auto;">
-			<div id="contentprocess" style="width:100%; overflow:hidden;">
-			<div id="DynamicGrid_2">
-				No Record!
-			</div>
-			</div>
-			</div>
+<div id="contentsholderprocess" class="flexcroll" style="width:100%; height:300px; overflow-x:hidden; overflow-y:auto;">
+    <div id="contentprocess" style="width:100%; overflow:hidden;">
+        <div id="DynamicGrid_2">
+            No Record!
+        </div>
+    </div>
+</div>
 
 <div class="pad-10">
 	Total: <input type="text" id="txttotalpcs" onchange="docalculate();" style="width:80px !important;" DISABLED/> &nbsp;&nbsp; <input type="text" id="txttotalweight" onchange="docalculate();"  style="width:80px !important;"DISABLED/>&nbsp;&nbsp;
@@ -206,7 +208,14 @@
 <script>
 var doubleServiceTax = "<?php echo $servicetaxpercent;?>";
 $('document').ready(function() {
-	$('#txtbillpreview').click(function() {
+    $('#billdate').picker({
+        dateFormat: 'dd/mm/yy',
+        minDate: '-1,'
+    });
+
+    $('#billdate').picker('setDate', 'today');
+
+    $('#txtbillpreview').click(function() {
 		savebill_details();
 	});
 })
@@ -412,8 +421,6 @@ $.ajax({
     return false;
     }
 }
-
-
 
 function functionpdf(){
 	var pid = $('#pid').val();
@@ -1138,6 +1145,7 @@ function savebill_details() {
 			return false;
 
 		var billid = $('#billid').val();
+		var billdate = $('#billdate').val();
 		var partyid = $('#pid').val();
 		var txtamount = $('#txtamount').val();
 		var txttotalweight = $('#txttotalweight').val();
@@ -1166,7 +1174,7 @@ function savebill_details() {
 		var container=$('#container').val();
 		var gstType = $('input[name=gstType]:checked').val();
 
-		var dataString =  'billid='+billid+'&partyid='+partyid+'&txtamount='+txtamount+'&txttotalweight='+txttotalweight+'&txtscrap='+txtscrap+'&txtoutward_num='+txtoutward_num+'&driverContact='+driverContact+'&txttotalpcs='+txttotalpcs+'&mat_desc='+mat_desc+'&thic='+thic+'&actualnumberbundle='+actualnumberbundle+'&pname='+pname+'&wid='+wid+'&len='+len+'&wei='+wei+'&txttotallength='+txttotallength+'&txtweighttotal='+txtweighttotal+'&txtwidthtotal='+txtwidthtotal+'&txtadditional_type='+txtadditional_type+'&txtamount_mt='+txtamount_mt+'&txtnsubtotal='+txtnsubtotal+'&txtservicetax='+txtservicetax+'&txteductax='+txteductax+'&txtsecedutax='+txtsecedutax+'&txtRateTotal='+txtRateTotal+'&txtgrandtotal='+txtgrandtotal+'&container='+container;
+		var dataString = 'billdate='+billdate+'&billid='+billid+'&partyid='+partyid+'&txtamount='+txtamount+'&txttotalweight='+txttotalweight+'&txtscrap='+txtscrap+'&txtoutward_num='+txtoutward_num+'&driverContact='+driverContact+'&txttotalpcs='+txttotalpcs+'&mat_desc='+mat_desc+'&thic='+thic+'&actualnumberbundle='+actualnumberbundle+'&pname='+pname+'&wid='+wid+'&len='+len+'&wei='+wei+'&txttotallength='+txttotallength+'&txtweighttotal='+txtweighttotal+'&txtwidthtotal='+txtwidthtotal+'&txtadditional_type='+txtadditional_type+'&txtamount_mt='+txtamount_mt+'&txtnsubtotal='+txtnsubtotal+'&txtservicetax='+txtservicetax+'&txteductax='+txteductax+'&txtsecedutax='+txtsecedutax+'&txtRateTotal='+txtRateTotal+'&txtgrandtotal='+txtgrandtotal+'&container='+container;
 		$.ajax({
 		   type: "POST",
 		   url : "<?php echo fuel_url('billing/savebilldetails');?>/",
