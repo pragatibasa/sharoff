@@ -23,11 +23,11 @@ class Partywise_register extends Fuel_base_controller {
 		$this->load->model('party_details_model');
 		$this->data = $this->Partywise_register_model->getPartyDetailsCredentials();
 		if(isset($this->data)) {
-			if(isset($this->data[0]))  {
-		}
-	}
+		    if(isset($this->data[0]))  {
+		    }
+	    }
 		
-}
+    }
 	
 	function index()
 	{
@@ -73,6 +73,7 @@ class Partywise_register extends Fuel_base_controller {
 			$obj->coilnumber = $container->coilnumber;
 			$obj->receiveddate = $container->receiveddate;
 			$obj->description = $container->description;
+			$obj->grade = $container->grade;
 			$obj->thickness = $container->thickness;
 			$obj->width = $container->width;
 			$obj->weight = $container->weight;

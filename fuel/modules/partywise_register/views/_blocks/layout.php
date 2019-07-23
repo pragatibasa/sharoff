@@ -114,6 +114,7 @@ $.ajax({
 			mediaClass += '  <th>Coilnumber</th>';
 			mediaClass += '  <th>Received Date</th>';
 			mediaClass += '  <th>Description</th>';
+			mediaClass += '  <th>Grade</th>';
 			mediaClass += '  <th>Thickness</th>';
 			mediaClass += '  <th>Width</th>';
 			mediaClass += '  <th>Weight</th>';
@@ -133,6 +134,7 @@ $.ajax({
 				mediaClass += '<td>' + item.coilnumber + '</td>';
 				mediaClass += '<td>' + item.receiveddate + '</td>';
 				mediaClass += '<td>' + item.description + '</td>';
+				mediaClass += '<td>' + item.grade + '</td>';
 				mediaClass += '<td>' + item.thickness + '</td>';
 				mediaClass += '<td>' + item.width + '</td>';
 				mediaClass += '<td>' + item.weight + '</td>';

@@ -56,6 +56,7 @@ class Workin_progress extends Fuel_base_controller {
 			$obj->slittingdate = $container->slittingdate;
 			$obj->partyname = $container->partyname;
 			$obj->materialdescription = $container->materialdescription;
+			$obj->grade = $container->grade;
 			$obj->thickness = $container->thickness;
 			$obj->width = $container->width;
 			$obj->weight = $container->weight;
