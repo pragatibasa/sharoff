@@ -42,7 +42,7 @@ class weigh_updation extends Fuel_base_controller {
 			 $obj = new stdClass();
 			 $obj->billnumber = $bill->nBillNo;
 			 $obj->partyname = $bill->nPartyName;
-			 $obj->billweight = $bill->fTotalWeight;
+			 $obj->billweight = ($bill->vBillType == 'Slitting' ) ? round(($bill->fTotalWeight/1000),3) : $bill->fTotalWeight;
 			 $files[] = $obj;
 		 }
 		 echo json_encode($files);

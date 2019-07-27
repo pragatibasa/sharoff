@@ -251,9 +251,16 @@ function calculateAllocatedWeights(billNumber) {
     $('.total-allocated-weight.'+billNumber).text(totAllocatedWeight).val(totAllocatedWeight);
     $('.difference-weight.'+billNumber).text(differenceWeight).val(differenceWeight);
 
-    $('.allocated-weight').text(parseInt($('.allocated-weight').text())+parseInt($('.total-allocated-weight.'+billNumber).val())+' kgs');
-  }
-}
+            var sum = 0
+            $('input[name="totAllocatedWeight[]"]').each(function(index) {
+                if($(this).val()) {
+                    sum += parseInt($(this).val());
+                }
+            });
+
+            $('.allocated-weight').text(sum+' kgs');
+        }
+    }
 
 function saveWeightmentDetails() {
     $('#save-weighment-outward').attr('disabled','disabled');

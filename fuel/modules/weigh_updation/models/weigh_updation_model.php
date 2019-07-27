@@ -26,6 +26,7 @@ class weigh_updation_model extends Base_module_model {
 
     function getBillWithVehicleNumber($date, $vehicle) {
       $strSql = "select aspen_tblbilldetails.*, aspen_tblpartydetails.nPartyName from aspen_tblbilldetails left join aspen_tblpartydetails on aspen_tblbilldetails.nPartyId = aspen_tblpartydetails.nPartyId where vOutLorryNo = '".$vehicle."' and dBillDate = '".$date."'";
+
       $query = $this->db->query($strSql);
   		$arr='';
   		if ($query->num_rows() > 0)
