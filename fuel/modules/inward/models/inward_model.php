@@ -169,8 +169,8 @@ class inward_model extends Base_module_model {
 
 		$sql = "Insert into aspen_tblinwardentry (
 		nPartyId,vIRnumber,dReceivedDate,dBillDate,vLorryNo,vInvoiceNo,dInvoiceDate,nMatId,fWidth,fThickness,fLength,fQuantity,vStatus,
-		vHeatnumber,vPlantname,fpresent,billedweight,dSysDate,vprocess,vParentIRNumber,vParentBundleNumber,vGrade,vCast,vehicleEntryDate,jid,ssid)
-		VALUES((SELECT aspen_tblpartydetails.nPartyId FROM aspen_tblpartydetails where aspen_tblpartydetails.nPartyName = '". $pname. "'),  '". $pid. "','". $date3. "', CURDATE(),'". $lno. "','". $icno. "','". $date5. "',(SELECT aspen_tblmatdescription.nMatId  FROM aspen_tblmatdescription where aspen_tblmatdescription.vDescription = '". $coil. "'),'". $fWidth. "','". $fThickness. "','". $fLength. "','". $fQuantity. "','". $status. "','". $hno. "','". $pna. "','". $fQuantity. "',0,now(),'','".$ppartyId."','".$parentBundleNumber."','".$grade."','".$cast."', '". $date4. "', '". $jid. "', '". $ssid. "' )";
+		vHeatnumber,vPlantname,fpresent,billedweight,dSysDate,vprocess,vParentIRNumber,vParentBundleNumber,vGrade,vCast,jid,ssid)
+		VALUES((SELECT aspen_tblpartydetails.nPartyId FROM aspen_tblpartydetails where aspen_tblpartydetails.nPartyName = '". $pname. "'),  '". $pid. "','". $date3. "', CURDATE(),'". $lno. "','". $icno. "','". $date5. "',(SELECT aspen_tblmatdescription.nMatId  FROM aspen_tblmatdescription where aspen_tblmatdescription.vDescription = '". $coil. "'),'". $fWidth. "','". $fThickness. "','". $fLength. "','". $fQuantity. "','". $status. "','". $hno. "','". $pna. "','". $fQuantity. "',0,now(),'','".$ppartyId."','".$parentBundleNumber."','".$grade."','".$cast."', '". $jid. "', '". $ssid. "' )";
 
 		$sql1 = "Insert into aspen_hist_tblinwardentry (
 		nPartyId,vIRnumber,dReceivedDate,dBillDate,vLorryNo,vInvoiceNo,dInvoiceDate,nMatId,fWidth,fThickness,fLength,fQuantity,vStatus,

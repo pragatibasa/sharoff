@@ -388,7 +388,7 @@ table.data th a { text-decoration: none; }
 table.data th a, table.data th span { color: #000000; display: block; line-height: 22px; padding: 0 0 0 20px; width: 100%;}
 table.data th.asc a { background: transparent url(../images/th_arrow_asc.png) no-repeat 5px center; }
 table.data th.desc a { background: transparent url(../images/th_arrow_desc.png) no-repeat 5px center; }
-table.data th { /*text-align: left;*/ background:url(../images/imgs/tablebg_cell3.png) repeat-x; padding:8px 0px;/*padding:8px 0 8px 10px;*/ border-left:1px solid #d7d7d7; border-bottom:1px solid #d7d7d7;}
+table.data th { text-align: left; background:url(../images/imgs/tablebg_cell3.png) repeat-x; padding:8px 0px;/*padding:8px 0 8px 10px;*/ border-left:1px solid #d7d7d7; border-bottom:1px solid #d7d7d7;}
 table.data td.next_last { width: 100%; }
 table.data td.actions { text-align: left; white-space: nowrap; /*padding-left: 5px;*/ }
 table.data tr.rowaction:hover td { background-color: #B8DDED !important; cursor: pointer; }

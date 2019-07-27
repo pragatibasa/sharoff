@@ -514,28 +514,46 @@ return $_config[0];
 		}
 	}
 
-	function sendSMS($contact,$msg) {
-                        // Account details
-        $apiKey = urlencode('riQ0XJ3yyrA-ccu7j4FzGWSNGV1EsQeFqe07LPUOy7');
-
-        // Message details
-        $sender = urlencode('ASPENS');
-        $message = rawurlencode($msg);
-
-        // Prepare data for POST request
-        $data = array('apikey' => $apiKey, 'numbers' => $contact, "sender" => $sender, "message" => $message,"test" => false);
-
-        // Send the POST request with cURL
-        $ch = curl_init('https://api.textlocal.in/send/');
-        curl_setopt($ch, CURLOPT_POST, true);
-        curl_setopt($ch, CURLOPT_POSTFIELDS, $data);
-        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-        $response = curl_exec($ch);
-        curl_close($ch);
-
-        // Process your response here
-        echo $response;
-  }
+//	function sendSMS($contact,$msg) {
+//        $user="T2014082804"; //your username
+//        $password="adminsharoff"; //your password
+//        $mobilenumbers="919379394798"; //enter Mobile numbers comma seperated
+//        $message = "* We offer JSW steel material at best price *"; //enter Your Message
+//        $senderid="SHAROFF"; //Your senderid
+//        $messagetype="N"; //Type Of Your Message
+//        $url="http://info.bulksms-service.com/WebserviceSMS.aspx";
+//        //domain name: Domain name Replace With Your Domain
+//        $message = urlencode($message);
+//        $ch = curl_init();
+//        if (!$ch){die("Couldn't initialize a cURL handle");}
+//        $ret = curl_setopt($ch, CURLOPT_URL,$url);
+//        curl_setopt ($ch, CURLOPT_POST, 1);
+//        curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
+//        curl_setopt($ch, CURLOPT_SSL_VERIFYHOST, 2);
+//        curl_setopt ($ch, CURLOPT_POSTFIELDS,
+//            "User=$user&passwd=$password&mobilenumber=$mobilenumbers&message=$message&sid=$senderid&mtype=$messagetype");
+//        $ret = curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
+//
+////If you are behind proxy then please uncomment below line and provide your proxy ip with port.
+//// $ret = curl_setopt($ch, CURLOPT_PROXY, "PROXY IP ADDRESS:PORT");
+//
+//        $curlresponse = curl_exec($ch); // execute
+//        if(curl_errno($ch))
+//            echo 'curl error : '. curl_error($ch);
+//
+//        if (empty($ret)) {
+//            // some kind of an error happened
+//            die(curl_error($ch));
+//            curl_close($ch); // close cURL handler
+//        } else {
+//            $info = curl_getinfo($ch);
+//            curl_close($ch); // close cURL handler
+//            //echo "<br>";
+//            echo $curlresponse;    //echo "Message Sent Succesfully" ;
+//
+//        }
+//
+//    }
 
 
 

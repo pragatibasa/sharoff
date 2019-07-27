@@ -111,9 +111,8 @@ $.ajax({
 			mediaClass +='<thead>';
 			mediaClass +='<tr>';
 			mediaClass += '  <th>Select</th>';
-			mediaClass += '  <th>Coilnumber</th>';
-			mediaClass += '  <th>Received Date</th>';
-			mediaClass += '  <th>Description</th>';
+			mediaClass += '  <th>Coil Number</th>';
+			mediaClass += '  <th>Material Desc</th>';
 			mediaClass += '  <th>Grade</th>';
 			mediaClass += '  <th>Thickness</th>';
 			mediaClass += '  <th>Width</th>';
@@ -132,7 +131,6 @@ $.ajax({
 				
 		 	mediaClass += '<td>' + '<input type="radio" id="radio_'+item.coilnumber+'" name="list" value="'+item.coilnumber+'"   onClick=showchild("'+item.coilnumber+'") />' + '</td>';
 				mediaClass += '<td>' + item.coilnumber + '</td>';
-				mediaClass += '<td>' + item.receiveddate + '</td>';
 				mediaClass += '<td>' + item.description + '</td>';
 				mediaClass += '<td>' + item.grade + '</td>';
 				mediaClass += '<td>' + item.thickness + '</td>';

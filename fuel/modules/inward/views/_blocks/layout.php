@@ -67,7 +67,7 @@
 			</tr>
 			<tr>
 				<td>
-					<label>Coil Received Date</label>
+					<label>Inward Date</label>
 				</td>
 				<td>
 					<input id="date3" type="text" />
@@ -83,30 +83,30 @@
 				<td><input id="jid" type="text"/></td>
 			</tr>
 			<tr>
-				<td><label>Sharoff steel coil id</label></td>
+				<td><label>SST id</label></td>
 				<td><input id="ssid" type="text"/></td>
 			</tr>
 			<tr>
 				<td>
-					<label>Lorry Number<span class="required">*</span></label>
+					<label>Vehicle Number<span class="required">*</span></label>
 				</td>
 				<td>
 					<input id="lno" value="<?php echo !empty($pcoildetails) ? $pcoildetails->vLorryNo : '';?>" name="vLorryNo" type="text"/>
 				</td>
 			</tr>
-			<tr>
-				<td>
-					<label>Vehicle Entry Date</label>
-				</td>
-				<td>
-					<input id="date4" type="text" />
-						<script>
-							$(function() {
-								$( "#date4" ).picker();
-							});
-						</script>
-				</td>
-			</tr>
+<!--			<tr>-->
+<!--				<td>-->
+<!--					<label>Vehicle Entry Date</label>-->
+<!--				</td>-->
+<!--				<td>-->
+<!--					<input id="date4" type="text" />-->
+<!--						<script>-->
+<!--							$(function() {-->
+<!--								$( "#date4" ).picker();-->
+<!--							});-->
+<!--						</script>-->
+<!--				</td>-->
+<!--			</tr>-->
 			<tr>
 				<td>
 					<label>Invoice/Challan Number<span class="required">*</span></label>
@@ -211,7 +211,7 @@
 			</tr>
 			<tr>
 				<td>
-					<label>Weight in Kgs.<span class="required">*</span></label>
+					<label>Weight in M/T<span class="required">*</span></label>
 				</td>
 				<td>
 					<input id="fQuantity" value="<?php
@@ -242,14 +242,14 @@
 					<input id="status" name="vStatus" type="text" value="RECEIVED" DISABLED/>
 				</td>
 			</tr>
-			<tr>
-				<td>
-					<label>Cast No.</label>
-				</td>
-				<td>
-					<input id="cast" name="vCast" type="text" value="<?php echo !empty($pcoildetails) ? $pcoildetails->vCast : '';?>"/>
-				</td>
-			</tr>
+<!--			<tr>-->
+<!--				<td>-->
+<!--					<label>Cast No.</label>-->
+<!--				</td>-->
+<!--				<td>-->
+<!--					<input id="cast" name="vCast" type="text" value="--><?php //echo !empty($pcoildetails) ? $pcoildetails->vCast : '';?><!--"/>-->
+<!--				</td>-->
+<!--			</tr>-->
 			<tr>
 				<td>
 					<label>Grade</label>
@@ -266,14 +266,14 @@
 					<input id="hno"  type="text" />
 				</td>
 			</tr>
-				<tr>
-				<td>
-					<label>Plant Name</label>
-				</td>
-				<td>
-					<input id="pna"  type="text" />
-				</td>
-			</tr>
+<!--            <tr>-->
+<!--				<td>-->
+<!--					<label>Plant Name</label>-->
+<!--				</td>-->
+<!--				<td>-->
+<!--					<input id="pna"  type="text" />-->
+<!--				</td>-->
+<!--			</tr>-->
 		</table>
 	</div>
 </fieldset>
