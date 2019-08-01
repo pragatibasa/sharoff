@@ -1,6 +1,9 @@
 <?php
-
+require 'vendor/autoload.php';
 require_once(FUEL_PATH.'/libraries/Fuel_base_controller.php');
+
+use PhpOffice\PhpSpreadsheet\Spreadsheet;
+use PhpOffice\PhpSpreadsheet\IOFactory;
 
 class inward extends Fuel_base_controller {
 	private $data;
@@ -96,6 +99,157 @@ class inward extends Fuel_base_controller {
 		$pnamelists = $this->inward_model->list_pnamelists($pname);
 		return $pnamelists;
 	}
+
+    function exportExcel() {
+        $spreadsheet = new Spreadsheet();
+
+// Set workbook properties
+        $spreadsheet->getProperties()->setCreator('Pragati')
+            ->setLastModifiedBy('Pragati')
+            ->setTitle('Inward Register Report')
+            ->setSubject('InwardRegisterReport')
+            ->setDescription('Inward register report for date'.date('d/m/YYYY'))
+            ->setKeywords('Microsoft office 2013 php inward register report')
+            ->setCategory('Inward Register Report');
+
+        $activeSheet = $spreadsheet->getActiveSheet();
+
+        $spreadsheet->setActiveSheetIndex(0)->setCellValue('A1', 'Inward Register Report');
+
+        $activeSheet->getStyle('A1')->applyFromArray(
+            array(
+                'font'  => array(
+                    'size'  =>  '25',
+                    'bold' => true,
+                )
+            )
+        );
+        $spreadsheet->setActiveSheetIndex(0)->setCellValue('A2', 'Created On:');
+        $spreadsheet->setActiveSheetIndex(0)->setCellValue('B2', date('d/m/Y'));
+
+
+        $spreadsheet->setActiveSheetIndex(0)
+            ->setCellValue('A4', 'Party Name')
+            ->setCellValue('B4', 'Coil Number')
+            ->setCellValue('C4', 'Inward Date')
+            ->setCellValue('D4', 'Jsw Coil id')
+            ->setCellValue('E4', 'SST id')
+            ->setCellValue('F4', 'Vehicle Number')
+            ->setCellValue('G4', 'Invoice Number')
+            ->setCellValue('H4', 'Invoice Date')
+            ->setCellValue('I4', 'Material Description')
+            ->setCellValue('J4', 'Width')
+            ->setCellValue('K4', 'Thickness')
+            ->setCellValue('L4', 'Length')
+            ->setCellValue('M4', 'Weight')
+            ->setCellValue('N4', 'Status')
+            ->setCellValue('O4', 'Grade')
+            ->setCellValue('P4', 'Heat Number');
+
+
+        //getStyle accepts a range of cells as well!
+        $activeSheet->getStyle('A4:P4')->applyFromArray(
+            array(
+                'font'  => array(
+                    'bold'  =>  true
+                )
+            )
+        );
+        $arrHeading = array('Party Name' => 'nPartyName','Coil Number' => 'vIRnumber','Inward Date' => 'dReceivedDate','Jsw Coil id' => 'jid','SST id' => 'ssid', 'Vehicle Number' => 'vLorryNo','Invoice Number' => 'vInvoiceNo', 'Invoice Date' => 'dInvoiceDate','Material Description' => 'vDescription','Width' => 'fWidth','Thickness' => 'fThickness', 'Length' => 'fLength','Weight' => 'fQuantity','Status' => 'vStatus','Grade' => 'vGrade','Heat Number' => 'vHeatnumber');
+
+        $records = $this->inward_model->exportInwardData();
+        if($records->num_rows() > 0) {
+            $i = 5;
+            foreach ($records->result() as $row) {
+                $arr = get_object_vars($row);
+                $spreadsheet->getActiveSheet()->setCellValue('A' . $i, $arr[$arrHeading['Party Name']])
+                    ->setCellValue('B' . $i, $arr[$arrHeading['Coil Number']])
+                    ->setCellValue('C' . $i, $arr[$arrHeading['Inward Date']])
+                    ->setCellValue('D' . $i, $arr[$arrHeading['Jsw Coil id']])
+                    ->setCellValue('E' . $i, $arr[$arrHeading['SST id']])
+                    ->setCellValue('F' . $i, $arr[$arrHeading['Vehicle Number']])
+                    ->setCellValue('G' . $i, $arr[$arrHeading['Invoice Number']])
+                    ->setCellValue('H' . $i, $arr[$arrHeading['Invoice Date']])
+                    ->setCellValue('I' . $i, $arr[$arrHeading['Material Description']])
+                    ->setCellValue('J' . $i, $arr[$arrHeading['Width']])
+                    ->setCellValue('K' . $i, $arr[$arrHeading['Thickness']])
+                    ->setCellValue('P' . $i, $arr[$arrHeading['Length']])
+                    ->setCellValue('L' . $i, $arr[$arrHeading['Weight']])
+                    ->setCellValue('M' . $i, $arr[$arrHeading['Status']])
+                    ->setCellValue('N' . $i, $arr[$arrHeading['Grade']])
+                    ->setCellValue('O' . $i, $arr[$arrHeading['Heat Number']]);;
+                $i++;
+            }
+        }
+
+
+// Set worksheet title
+        $spreadsheet->getActiveSheet()->setTitle('Inward Register Report');
+
+// Set active sheet index to the first sheet, so Excel opens this as the first sheet
+        $spreadsheet->setActiveSheetIndex(0);
+
+// Redirect output to a client's web browser (Xlsx)
+        header('Content-Type: application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
+        header('Content-Disposition: attachment;filename="Inward_Register_Report"'.date('d/m/YYYY').'".xlsx"');
+        header('Cache-Control: max-age=0');
+// If you're serving to IE 9, then the following may be needed
+        header('Cache-Control: max-age=1');
+
+// If you're serving to IE over SSL, then the following may be needed
+        header('Expires: Mon, 26 Jul 1997 05:00:00 GMT'); // Date in the past
+        header('Last-Modified: ' . gmdate('D, d M Y H:i:s') . ' GMT'); // always modified
+        header('Cache-Control: cache, must-revalidate'); // HTTP/1.1
+        header('Pragma: public'); // HTTP/1.0
+
+
+//old PhpExcel code:
+//$writer = PHPExcel_IOFactory::createWriter($spreadsheet, 'Excel2007');
+//$writer->save('php://output');
+
+//new code:
+        $writer = IOFactory::createWriter($spreadsheet, 'Xlsx');
+        $writer->save('php://output');
+        exit;
+
+
+//        header("Content-Type: application/vnd.ms-excel");
+//        header("Content-Disposition: attachment; filename=inward_register".date('d/M/Y').'.xls');
+//        $heading = false;
+//
+//
+//        $records = $this->inward_model->exportInwardData();
+//        if($records->num_rows() > 0) {
+//            foreach($records->result() as $row) {
+//                $arr = get_object_vars($row);
+//                $arr_values = array();
+//                $arr_values[] = $arr[$arrHeading['Party Name']];
+//                $arr_values[] =  $arr[$arrHeading['Coil Number']];
+//                $arr_values[] =  $arr[$arrHeading['Inward Date']];
+//                $arr_values[] =  $arr[$arrHeading['Jsw Coil id']];
+//                $arr_values[] =  $arr[$arrHeading['SST id']];
+//                $arr_values[] =  $arr[$arrHeading['Vehicle Number']];
+//                $arr_values[] =  $arr[$arrHeading['Invoice Number']];
+//                $arr_values[] =  $arr[$arrHeading['Invoice Date']];
+//                $arr_values[] =  $arr[$arrHeading['Material Description']];
+//                $arr_values[] =  $arr[$arrHeading['Width']];
+//                $arr_values[] =  $arr[$arrHeading['Thickness']];
+//                $arr_values[] =  $arr[$arrHeading['Length']];
+//                $arr_values[] =  $arr[$arrHeading['Weight']];
+//                $arr_values[] =  $arr[$arrHeading['Status']];
+//                $arr_values[] =  $arr[$arrHeading['Grade']];
+//                $arr_values[] =  $arr[$arrHeading['Heat Number']];
+//
+//                if(!$heading) {
+//                    print implode("</b>\t<b>", array_keys($arrHeading)) . "\n";
+//                    $heading = true;
+//                }
+//                echo implode("\t", array_values($arr_values)) . "\n";
+//            }
+//        }
+
+//        exit;
+    }
 }
 /* End of file */
 /* Location: ./fuel/modules/controllers*/

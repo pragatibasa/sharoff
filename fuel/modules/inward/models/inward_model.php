@@ -220,6 +220,18 @@ class inward_model extends Base_module_model {
 		return $query->result()[0];
 	}
 
+    function exportInwardData() {
+	    $strSql = "SELECT 
+                        ai.*, ap.*, am.*
+                    FROM
+                        sharoff.aspen_tblinwardentry ai
+                            LEFT JOIN
+                        aspen_tblpartydetails ap ON ap.nPartyId = ai.nPartyId
+                            LEFT JOIN
+                        aspen_tblmatdescription am ON am.nMatId = ai.nMatId";
+
+        return $this->db->query($strSql);
+    }
 }
 
 class inwardmodel extends Base_module_record {
