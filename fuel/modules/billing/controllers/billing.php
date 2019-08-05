@@ -691,8 +691,6 @@ class Billing extends Fuel_base_controller {
 				$obj = new stdClass();
 				$obj->noofpcs = $cl->noofpcs;
 				$obj->weight = $cl->weight;
-				$obj->rate = $cl->rate;
-				$obj->amount = $cl->amount;
 				$files[] = $obj;
 			}
 			echo json_encode($files);exit;

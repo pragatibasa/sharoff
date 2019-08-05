@@ -632,11 +632,20 @@ left join aspen_tblbillingstatus on aspen_tblinwardentry.vIRnumber=aspen_tblbill
 
 }
 else{
-$sql = "select nAmount as rate,aspen_tblbillingstatus.nActualNo as noofpcs,
-aspen_tblbillingstatus.fbilledWeight as weight,round(nAmount * fbilledWeight) as amount from aspen_tblpricetype1
-left join aspen_tblmatdescription on aspen_tblmatdescription.nMatId=aspen_tblpricetype1.nMatId
-left join aspen_tblinwardentry on aspen_tblinwardentry.nMatId=aspen_tblmatdescription.nMatId
-left join aspen_tblbillingstatus on aspen_tblinwardentry.vIRnumber=aspen_tblbillingstatus.vIRnumber where '".$thic."' between nMinThickness and nMaxThickness and aspen_tblmatdescription.vDescription= '".$mat_desc."' and aspen_tblinwardentry.vIRnumber='".$partyid."' and aspen_tblbillingstatus.nSno IN( ".$actualnumberbundle.") order by aspen_tblbillingstatus.nActualNo asc";
+$sql = "SELECT 
+                aspen_tblbillingstatus.nActualNo AS noofpcs,
+                aspen_tblbillingstatus.fbilledWeight AS weight
+            FROM
+                aspen_tblinwardentry
+                    LEFT JOIN
+                aspen_tblmatdescription ON aspen_tblmatdescription.nMatId = aspen_tblinwardentry.nMatId
+                    LEFT JOIN
+                aspen_tblbillingstatus ON aspen_tblinwardentry.vIRnumber = aspen_tblbillingstatus.vIRnumber
+            WHERE
+                     aspen_tblmatdescription.vDescription = '".$mat_desc."'
+                    AND aspen_tblinwardentry.vIRnumber = '".$partyid."'
+                    AND aspen_tblbillingstatus.nSno IN (".$actualnumberbundle.")
+            ORDER BY aspen_tblbillingstatus.nActualNo ASC";
 }
 
 		$query = $this->db->query($sql);
@@ -1562,11 +1571,7 @@ function billgeneratemodelslit($coilno='',$partyname='',$description='',$lorryno
 
 		$sql = "Insert into aspen_tblbilldetails (
 		   nBillNo,dBillDate, vIRnumber, fTotalWeight, fWeightAmount, fServiceTax, fEduTax, fSHEduTax, fGrantTotal, nScrapSent, vOutLorryNo, nPartyId, vBillType, BillStatus, ntotalpcs, ntotalamount, ocwtamount, ocwidthamount, oclengthamount,vAdditionalChargeType,fAmount,nsubtotal,grandtot_words,nServiceTaxPercent,tBillingAddress,dFinalRate,vDriverContact)
-		  VALUES('". $billid. "', '".$newDate."','". $partyid. "','". $txttotalweight. "',(select DISTINCT nAmount as rate from aspen_tblpricetype1
-		left join aspen_tblmatdescription on aspen_tblmatdescription.nMatId=aspen_tblpricetype1.nMatId
-		left join aspen_tblinwardentry on aspen_tblinwardentry.nMatId=aspen_tblmatdescription.nMatId
-		left join aspen_tblbillingstatus on aspen_tblinwardentry.vIRnumber=aspen_tblbillingstatus.vIRnumber
-		where '".$thic."' between nMinThickness and nMaxThickness and aspen_tblmatdescription.vDescription= '".$mat_desc."' and aspen_tblinwardentry.vIRnumber='".$partyid."' and aspen_tblbillingstatus.nSno IN( ".$actualnumberbundle.") order by aspen_tblbillingstatus.nActualNo asc),'". $txtservicetax. "','". $txteductax. "','". $txtsecedutax. "','". $txtgrandtotal. "','". $txtscrap. "','". $txtoutward_num. "',(SELECT aspen_tblpartydetails.nPartyId  FROM aspen_tblpartydetails where aspen_tblpartydetails.nPartyName = '". $pname. "'),'Cutting','Billing','".$txttotalpcs."' ,'".$txtamount."','". $txtweighttotal. "','". $txtwidthtotal. "','". $txttotallength. "','". $txtadditional_type. "','". $txtamount_mt. "','". $txtnsubtotal. "','". $container. "',".$serviceTaxPercent.",'".$strBillingAddress."',".$txtRateTotal.",'".$driverContact."')";
+		  VALUES('". $billid. "', '".$newDate."','". $partyid. "','". $txttotalweight. "',0,'". $txtservicetax. "','". $txteductax. "','". $txtsecedutax. "','". $txtgrandtotal. "','". $txtscrap. "','". $txtoutward_num. "',(SELECT aspen_tblpartydetails.nPartyId  FROM aspen_tblpartydetails where aspen_tblpartydetails.nPartyName = '". $pname. "'),'Cutting','Billing','".$txttotalpcs."' ,'".$txtamount."','". $txtweighttotal. "','". $txtwidthtotal. "','". $txttotallength. "','". $txtadditional_type. "','". $txtamount_mt. "','". $txtnsubtotal. "','". $container. "',".$serviceTaxPercent.",'".$strBillingAddress."',0,'".$driverContact."')";
 
 		$sql54 = "Insert into aspen_hist_tbl_billdetails (
 		 nBillNo,dBillDate, vIRnumber, fTotalWeight, fWeightAmount, fServiceTax, fEduTax, fSHEduTax, fGrantTotal, nScrapSent, vOutLorryNo, nPartyId, vBillType, BillStatus, ntotalpcs, ntotalamount, ocwtamount, ocwidthamount, oclengthamount,vAdditionalChargeType,fAmount,nsubtotal,grandtot_words,fStatus)
