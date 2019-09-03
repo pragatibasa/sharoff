@@ -266,14 +266,14 @@
 					<input id="hno"  type="text" />
 				</td>
 			</tr>
-<!--            <tr>-->
-<!--				<td>-->
-<!--					<label>Plant Name</label>-->
-<!--				</td>-->
-<!--				<td>-->
-<!--					<input id="pna"  type="text" />-->
-<!--				</td>-->
-<!--			</tr>-->
+          <tr>
+				<td>
+					<label>Remark</label>
+				</td>
+				<td> 
+				<textarea name="remark" id="remark"></textarea>
+				</td>
+			</tr>
 		</table>
 	</div>
 </fieldset>
@@ -339,6 +339,7 @@ function functionsave()
 	var cast = $('#cast').val();
 	var jid = $('#jid').val();
 	var ssid = $('#ssid').val();
+	var remark =$('#remark').val();
 
 	if(pid == '' || pname == ''  || coil == '' || fWidth == '' || fThickness == '' || fQuantity == '') {
 		alert("Please Enter the required fields")
@@ -347,7 +348,7 @@ function functionsave()
 	} else if(coil  == 'Select') {
 	  	alert("Please Enter the Mat Description")
 	} else {
-		var dataString = 'pid='+pid+'&date3='+date3+'&pname='+pname+'&lno='+lno+'&icno='+icno+'&date4='+date4+'&coil='+coil+'&fWidth='+fWidth+'&fThickness='+fThickness+'&fLength='+fLength+'&fQuantity='+fQuantity+'&status='+status+'&hno='+hno+'&pna='+pna+'&ppartyid='+ppartyid+'&parentBundleNumber='+parentBundleNumber+'&grade='+grade+'&cast='+cast+'&date5='+date5+'&jid='+jid+'&ssid='+ssid;
+		var dataString = 'pid='+pid+'&date3='+date3+'&pname='+pname+'&lno='+lno+'&icno='+icno+'&date4='+date4+'&coil='+coil+'&fWidth='+fWidth+'&fThickness='+fThickness+'&fLength='+fLength+'&fQuantity='+fQuantity+'&status='+status+'&hno='+hno+'&pna='+pna+'&ppartyid='+ppartyid+'&parentBundleNumber='+parentBundleNumber+'&grade='+grade+'&cast='+cast+'&date5='+date5+'&jid='+jid+'&ssid='+ssid+'&remark='+remark;
 
 		$.ajax({
 		   type: "POST",
@@ -375,6 +376,8 @@ function functionsave()
 		//	$('#hno').val('');
 		//	$('#picker').val('');
 		//	$('#pna').val('');
+		    $('#remark').val('');
+
 			}
 		});
 		}
