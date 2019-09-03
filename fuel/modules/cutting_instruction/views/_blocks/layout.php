@@ -80,7 +80,11 @@
 		<div class="pad-10">
 			<div id="date_text_label"> Date </div>
 			<input type="text" id="date1" value="<?php echo date("Y-m-d"); ?>" />
-		</div>								
+		</div>	
+		<div class="pad-10">
+			<div id="cutting_reference_no_text_label"> Cutting Reference No </div>
+			<input id= "cuttingreferenceno" type="text"  name="cuttingreferenceno" /> 
+		</div>							
 		<div class="pad-10">
 			<div id="length_text_label"> Length </div>
 			<input id= "length" type="text"  name="Length" /> (in mm)
