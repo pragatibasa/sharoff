@@ -187,7 +187,7 @@ where aspen_tblinwardentry.vStatus = 'Work In Progress' or aspen_tblslittinginst
                 $slipSerialNumber = $querymain->row(0)->slipSerial;
                 $slipDate = $querymain->row(0)->slipDate;
 
-                $sqlitem ="select aspen_tblcuttinginstruction.nSno as bundlenumber, DATE_FORMAT(aspen_tblcuttinginstruction.dDate, '%d-%m-%Y') AS processdate, aspen_tblcuttinginstruction.nLength as length, aspen_tblcuttinginstruction.nNoOfPieces as noofsheets, aspen_tblcuttinginstruction.nBundleweight as bundleweight from aspen_tblcuttinginstruction where aspen_tblcuttinginstruction.vIRnumber='".$partyid."' and aspen_tblcuttinginstruction.vStatus='WIP-Cutting'";
+                $sqlitem ="select aspen_tblcuttinginstruction.nSno as bundlenumber,aspen_tblcuttinginstruction.CuttingReferenceNo as cuttingreferenceno, DATE_FORMAT(aspen_tblcuttinginstruction.dDate, '%d-%m-%Y') AS processdate, aspen_tblcuttinginstruction.nLength as length, aspen_tblcuttinginstruction.nNoOfPieces as noofsheets, aspen_tblcuttinginstruction.nBundleweight as bundleweight from aspen_tblcuttinginstruction where aspen_tblcuttinginstruction.vIRnumber='".$partyid."' and aspen_tblcuttinginstruction.vStatus='WIP-Cutting'";
 
                 $queryitem = $this->db->query($sqlitem);
 
@@ -290,7 +290,8 @@ where aspen_tblinwardentry.vStatus = 'Work In Progress' or aspen_tblslittinginst
                 $html .= '
 		<table cellspacing="0" cellpadding="5" border="1px">
 			<tr>
-				<th align="center"><h1><b>S.No.</b></h1></th>
+                <th align="center"><h1><b>S.No.</b></h1></th>
+                <th align="center"><h1><b>Cutting Reference No.</b></h1></th>
 				<th align="center"><h1><b>Length(mm)</b></h1></th>
 				<th align="center"><h1><b>Number of Pieces</b></h1></th>
 				<th align="center"><h1><b>Bundle Weight (Kgs)</b></h1></th>
@@ -315,6 +316,7 @@ where aspen_tblinwardentry.vStatus = 'Work In Progress' or aspen_tblslittinginst
                         $html .= '
                             <tr>
                                 <td align="center"><h1>'.$rowitem->bundlenumber.'</h1></td>
+                                <td align="right"><h1>'.$rowitem->cuttingreferenceno.'</h1></td>
                                 <td align="center"><h1>'.$rowitem->length.'</h1></td>
                                 <td align="center"><h1>'.$rowitem->noofsheets.'</h1></td>
                                 <td align="right"><h1>'.$rowitem->bundleweight.'(Approx)</h1></td>
