@@ -30,15 +30,16 @@
   	} else { ?>
   <thead>
     <tr>
-        <th>Coilnumber</th>
-        <th>Received Date</th>
         <th>Size Given Date</th>
         <th>Partyname</th>
-        <th>Material Desc</th>
+        <th>Coilnumber</th>
+        <th>Inward Date</th>
+        
+        <th>Material Description</th>
         <th>Grade</th>
         <th>Thickness</th>
         <th>Width</th>
-	    <th>Weight</th>
+	      <th>Weight</th>
         <th>Process</th>
         <th>Action</th>
     </tr>
@@ -51,10 +52,11 @@
       <?php } else { ?>
         <tr class="even">
       <?php } ?>
+      <td><?php echo $workinprogress_lists[$i]->receiveddate?></td>
+      <td><?php echo $workinprogress_lists[$i]->partyname?></td>
      <td><?php echo $workinprogress_lists[$i]->coilnumber?></td>
-	  <td><?php echo $workinprogress_lists[$i]->receiveddate?></td>
 	   <td><?php if( $workinprogress_lists[$i]->process == 'Cutting' ) echo $workinprogress_lists[$i]->sizegivendate; else if( $workinprogress_lists[$i]->process == 'Slitting' ) echo $workinprogress_lists[$i]->slittingdate; else echo $workinprogress_lists[$i]->recoilingdate;?></td>
-	   <td><?php echo $workinprogress_lists[$i]->partyname?></td>
+	   
         <td><?php echo $workinprogress_lists[$i]->materialdescription?></td>
         <td><?php echo $workinprogress_lists[$i]->grade?></td>
 	  <td><?php echo $workinprogress_lists[$i]->thickness?></td>

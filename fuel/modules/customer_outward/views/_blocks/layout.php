@@ -233,9 +233,6 @@ tab_text = tab_text + '<head><xml><x:ExcelWorkbook><x:ExcelWorksheets><x:ExcelWo
 
 tab_text = tab_text + '<x:WorksheetOptions><x:Panes></x:Panes></x:WorksheetOptions></x:ExcelWorksheet>';
 tab_text = tab_text + '</x:ExcelWorksheets></x:ExcelWorkbook></xml></head><body>';
-
-tab_text = tab_text + '<table><tr><td style="font-size:60px; font-style:italic; font-family: fantasy;"><h1>SHAROFF STEEL TRADERS</h1></td></tr><tr><td><h4>Branch At: Plot No 29-A, Bidadi Industrial Area Abbanakuppe, Bidadi Hobli, Ramanagar Dist-562109<b>Email: sharoffsteel@gmail.com</b></h4></td></tr><tr><td><h4>Head Office At: #67/B, Timber Yard Lay Out, Mysore Road Bangalore – 560026</h4></td></tr><tr><td></td></tr></table>';
-
 tab_text = tab_text + "<table border='1px'>";
 tab_text = tab_text + $('#myTabels').html();
 tab_text = tab_text + '</table>';

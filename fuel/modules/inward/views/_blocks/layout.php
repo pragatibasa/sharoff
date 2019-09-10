@@ -83,7 +83,7 @@
 				<td><input id="jid" type="text"/></td>
 			</tr>
 			<tr>
-				<td><label>SST id</label></td>
+				<td><label>SST Coil id</label></td>
 				<td><input id="ssid" type="text"/></td>
 			</tr>
 			<tr>

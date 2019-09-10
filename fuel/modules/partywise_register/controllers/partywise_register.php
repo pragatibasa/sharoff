@@ -71,6 +71,7 @@ class Partywise_register extends Fuel_base_controller {
 		foreach($containers as $container) {
 			$obj = new stdClass();
 			$obj->coilnumber = $container->coilnumber;
+		    $obj->receiveddate = $container->receiveddate;
 			$obj->description = $container->description;
 			$obj->grade = $container->grade;
 			$obj->thickness = $container->thickness;
