@@ -16,7 +16,7 @@ class Inward_entry_model extends Base_module_model {
     }
 
  function list_items($limit = NULL, $offset = NULL, $col = 'vIRnumber', $order = 'asc') {
-   $this->db->select('aspen_tblpartydetails.nPartyName as party_name,aspen_tblinwardentry.vIRnumber,aspen_tblinwardentry.vIRnumber as coil_number, aspen_tblinwardentry.dReceivedDate as inward_date,aspen_tblmatdescription.vDescription as material_desc, aspen_tblinwardentry.fThickness as Thickness, aspen_tblinwardentry.fWidth as Width,aspen_tblinwardentry.fQuantity as Weight_in_MT, aspen_tblinwardentry.vStatus as Status');
+   $this->db->select('aspen_tblpartydetails.nPartyName as party_name,aspen_tblinwardentry.vIRnumber,aspen_tblinwardentry.vIRnumber as coil_number, aspen_tblinwardentry.dReceivedDate as inward_date,aspen_tblmatdescription.vDescription as material_description,aspen_tblinwardentry.vGrade as Grade, aspen_tblinwardentry.fThickness as Thickness, aspen_tblinwardentry.fWidth as Width,aspen_tblinwardentry.fQuantity as Weight_in_MT, aspen_tblinwardentry.vStatus as Status');
    $this->db->join('aspen_tblowner', 'aspen_tblowner.vIRnumber = aspen_tblinwardentry.vIRnumber', 'left');
    $this->db->join('aspen_tblpartydetails', 'aspen_tblpartydetails.nPartyId = aspen_tblinwardentry.nPartyId', 'left');
    $this->db->join('aspen_tblmatdescription', 'aspen_tblmatdescription.nMatId = aspen_tblinwardentry.nMatId', 'left');

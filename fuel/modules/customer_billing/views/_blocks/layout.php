@@ -90,9 +90,8 @@
 <div class="pad-10">
 
 			<input class="btn btn-success"  type="button" value="Click Here" id="save_id" onClick="functionpdf();"/> &nbsp; &nbsp; &nbsp; 
-				<input class="btn btn-success"  type="button" value="Export to Excel" id="export" onclick="tableToExcel('DynamicGridp_2', 'Customer Billing Report')" hidden/>  &nbsp; &nbsp; &nbsp; 
+			<a style="border:none;padding:0px;" href="#" id="export" onclick="tableToExcel('DynamicGridp_2', 'Customer Inward Report')"><input class="btn btn-success"  type="button" value="Export to Excel" hidden/> </a> &nbsp; &nbsp; &nbsp; 
 			<div id="check_bar" style="padding-top:10px;">&nbsp;</div>
-
 		</div>
 
 
@@ -267,6 +266,7 @@ function loadfolderlist(account, accname) {
             thisdata["billno"] = item.billno;
             thisdata["coilnumber"] = item.coilnumber;
             thisdata["Type of Material"] = item.description;
+			thisdata["grade"] = item.grade;
             thisdata["Inward weight in (M.T)"] = item.weight;
 			 thisdata["Outward weight"] = item.oweight;
             thisdata["Basic Amount"] = item.totalamt;
@@ -391,12 +391,13 @@ function functionpdf() {
 			mediaClass += '<table id="myTabels" class="tablesorter tablesorter-blue">';
 			mediaClass +='<thead>';
 			mediaClass +='<tr>';
-			mediaClass += '  <th>Coilnumber</th>';
-			mediaClass += '  <th>Bill Date</th>';
-			mediaClass += '  <th>Bill Number </th>';
-			mediaClass += '  <th>Type of Material</th>';
+			mediaClass += '  <th>Coil Number</th>';
+			mediaClass += '  <th>Invoice Date</th>';
+			mediaClass += '  <th>Invoice Number </th>';
+			mediaClass += '  <th>Material Description</th>';
+			mediaClass += '  <th>Grade</th>';
 			mediaClass += '  <th>Weight</th>';
-			mediaClass += '  <th>Outward Weight</th>';
+			mediaClass += '  <th>Invoice Weight</th>';
 			mediaClass += '  <th>Basic Amount</th>';
 			mediaClass += '  <th>Service Tax</th>';
 			mediaClass += '  <th>Education Tax</th>';
@@ -413,6 +414,7 @@ function functionpdf() {
 				mediaClass += '<td>' + item.billdate + '</td>';
 				mediaClass += '<td>' + item.billno + '</td>';
 				mediaClass += '<td>' + item.description + '</td>';
+				mediaClass += '<td>' + item.grade + '</td>';
 				mediaClass += '<td>' + item.weight + '</td>';
 				mediaClass += '<td>' + item.oweight + '</td>';
 				mediaClass += '<td>' + item.totalamt + '</td>';
@@ -439,17 +441,49 @@ function functionpdf() {
 }
 
 
-var tableToExcel = (function() {
-  var uri = 'data:application/vnd.ms-excel;base64,'
-    , template = '<html xmlns:o="urn:schemas-microsoft-com:office:office" xmlns:x="urn:schemas-microsoft-com:office:excel" xmlns="http://www.w3.org/TR/REC-html40"><head><!--[if gte mso 9]><xml><x:ExcelWorkbook><x:ExcelWorksheets><x:ExcelWorksheet><x:Name>{worksheet}</x:Name><x:WorksheetOptions><x:DisplayGridlines/></x:WorksheetOptions></x:ExcelWorksheet></x:ExcelWorksheets></x:ExcelWorkbook></xml><![endif]--></head><body><table>{table}</table></body></html>'
-    , base64 = function(s) { return window.btoa(unescape(encodeURIComponent(s))) }
-    , format = function(s, c) { return s.replace(/{(\w+)}/g, function(m, p) { return c[p]; }) }
-	return function(table, name) {
-    if (!table.nodeType) table = document.getElementById(table)
-    var ctx = {worksheet: name || 'Worksheet', table: table.innerHTML}
-		window.location.href = uri + base64(format(template, ctx))
-	}
-})()
+function tableToExcel(){ 
+  	var tab_text = '<html xmlns:x="urn:schemas-microsoft-com:office:excel">';
+tab_text = tab_text + '<head><xml><x:ExcelWorkbook><x:ExcelWorksheets><x:ExcelWorksheet>';
+
+tab_text = tab_text + '<x:WorksheetOptions><x:Panes></x:Panes></x:WorksheetOptions></x:ExcelWorksheet>';
+tab_text = tab_text + '</x:ExcelWorksheets></x:ExcelWorkbook></xml></head><body>';
+
+tab_text = tab_text + '<table><tr><td style="font-size:60px; font-style:italic; font-family:fantasy;" colspan="7" align="center"><h1>CUSTOMERS MATERIAL BILLING REPORT BETWEEN DATES</h1></td></tr>';
+
+tab_text = tab_text + '<tr></tr><tr><td><b>Party Name : </b>'+$('#party_account_name').val()+'</td><td><b>From Date : </b>'+$('#selector').val()+'</td><td><b>To Date : </b>'+$('#selector1').val()+'</td></tr><tr><td></td></tr></table>';
+
+var table = document.getElementById('myTabels'),
+    tableClone = table.cloneNode(true),
+    elementsToRemove = tableClone.querySelectorAll('.partyname');
+
+for (var i = elementsToRemove.length; i--;) {
+    elementsToRemove[i].remove();
+}
+
+
+tab_text = tab_text + "<table border='1px'>";
+tab_text = tab_text + tableClone.innerHTML;
+tab_text = tab_text + '</table>';
+
+tab_text = tab_text + '<table border="1px"><tr></tr><tr><td></td><td></td><td></td><td></td><td><h3>Total Weight : </td><td>'+$('#totalweight_calcualation').val()+' ( in kgs )</h3></td><td></td></tr></table></body></html>';
+
+var data_type = 'data:application/vnd.ms-excel';
+
+var ua = window.navigator.userAgent;
+var msie = ua.indexOf("MSIE ");
+
+if (msie > 0 || !!navigator.userAgent.match(/Trident.*rv\:11\./)) {
+    if (window.navigator.msSaveBlob) {
+        var blob = new Blob([tab_text], {
+            type: "application/csv;charset=utf-8;"
+        });
+        navigator.msSaveBlob(blob, $('#party_account_name').val()+'_Inward_Report.xls');
+    }
+} else {
+	$('#export').attr('href', data_type + ', ' + encodeURIComponent(tab_text));
+    $('#export').attr('download', $('#party_account_name').val()+'_Inward_Report.xls');
+}
+}
 
 
 </script>  

@@ -72,6 +72,7 @@ class stock_report extends Fuel_base_controller {
 			$obj->coilnumber = $container->coilnumber;
 			$obj->receiveddate = $container->receiveddate;
 			$obj->description = $container->description;
+			$obj->grade = $container->grade;
 			$obj->thickness = $container->thickness;
 			$obj->width = $container->width;
 			$obj->pweight = $container->pweight;
