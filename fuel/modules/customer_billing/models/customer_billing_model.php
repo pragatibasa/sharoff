@@ -140,11 +140,12 @@ $querymain7 = $this->db->query($sql1234);
 		<table cellspacing="0" cellpadding="5" border="0.5px">
 			<tr>
 			<th align="center"><b>Coil Number</b></th>
-				<th align="center"><b>Bill Date</b></th>
-				<th align="center"><b>Bill Number</b></th>
-				<th align="center"><b>Type of Material</b></th>
+				<th align="center"><b>Invoice Date</b></th>
+				<th align="center"><b>Invoice Number</b></th>
+				<th align="left"><b>Material Description </b></th>
+				<th align="center"><b>Grade</b></th>
 				<th align="center"><b>Inward Weight in (Tonnes)</b></th>
-				<th align="center"><b>Outward Weight in (M.T)</b></th>
+				<th align="center"><b>Invoice Weight in (M.T)</b></th>
 				<th align="center"><b>Basic Amount</b></th>
 				<th align="center"><b>Service Tax</b></th>
 				<th align="center"><b>Education Tax</b></th>
@@ -166,6 +167,7 @@ $querymain7 = $this->db->query($sql1234);
 				<td align="center">'.$rowitem->billdate.'</td>
 				<td align="center">'.$rowitem->billno.'</td>
 				<td align="right">'.$rowitem->description.'</td>
+				<td align="right">'.$rowitem->grade.'</td>
 				<td align="right">'.$rowitem->weight.'</td>
 				<td align="right">'.$rowitem->oweight.'</td>
 				<td align="right">'.$rowitem->totalamt.'</td>
@@ -473,7 +475,8 @@ LEFT JOIN aspen_tblpartydetails ON aspen_tblpartydetails.nPartyId = aspen_tblinw
 				<th align="center"><b>Bill Date</b></th>
 				<th align="center"><b>Bill Number</b></th>
 				<th align="center"><b>Coil Number</b></th>
-				<th align="center"><b>Type of Material</b></th>
+				<th align="center"><b>Material Description</b></th>
+				<th align="center"><b>Grade</b></th>
 				<th align="center"><b>Weight in (Tonnes)</b></th>
 				<th align="center"><b>Basic Amount</b></th>
 				<th align="center"><b>Service Tax</b></th>
@@ -493,6 +496,7 @@ LEFT JOIN aspen_tblpartydetails ON aspen_tblpartydetails.nPartyId = aspen_tblinw
 				<td align="center">'.$rowitem->billno.'</td>
 				<td align="center" >'.$rowitem->coilnumber.'</td>
 				<td align="right">'.$rowitem->description.'</td>
+				<td align="right">'.$rowitem->grade.'</td>
 				<td align="right">'.$rowitem->weight.'</td>
 				<td align="right">'.$rowitem->totalamt.'</td>			
 				<td align="right">'.$rowitem->Sertax.'</td>
@@ -554,7 +558,7 @@ aspen_tblbilldetails.fEduTax as educationtax,  aspen_tblbilldetails.ntotalamount
 	}
 	
 	function list_individualparty($partyname = '') {	
-		$sql ="SELECT aspen_tblmatdescription.vDescription as description,aspen_tblinwardentry.fQuantity as weight, aspen_tblinwardentry.vIRnumber as coilnumber, aspen_tblbilldetails.nBillNo as billno, aspen_tblbilldetails.dBillDate  as billdate,aspen_tblbilldetails.fServiceTax as tax, aspen_tblbilldetails.ntotalamount as totalamt, aspen_tblbilldetails.fGrantTotal as totalbillamount 
+		$sql ="SELECT aspen_tblmatdescription.vDescription as description,aspen_tblinwardentry.vGrade as grade,aspen_tblinwardentry.fQuantity as weight, aspen_tblinwardentry.vIRnumber as coilnumber, aspen_tblbilldetails.nBillNo as billno, aspen_tblbilldetails.dBillDate  as billdate,aspen_tblbilldetails.fServiceTax as tax, aspen_tblbilldetails.ntotalamount as totalamt, aspen_tblbilldetails.fGrantTotal as totalbillamount 
 		FROM aspen_tblbilldetails
 		LEFT JOIN aspen_tblinwardentry ON aspen_tblinwardentry.vIRnumber = aspen_tblbilldetails.vIRnumber 
 		LEFT JOIN aspen_tblmatdescription ON aspen_tblmatdescription.nMatId = aspen_tblinwardentry.nMatId 

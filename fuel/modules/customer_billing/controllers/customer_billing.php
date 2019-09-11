@@ -159,6 +159,7 @@ class customer_billing extends Fuel_base_controller {
 			$obj->coilnumber = $container->coilnumber;
 			$obj->SHEdutax = $container->SHEdutax;
 			$obj->description = $container->description;
+			$obj->grade = $container->grade;
 			$obj->educationtax = $container->educationtax;
 			$obj->Sertax = $container->Sertax;
 			$obj->weight = $container->weight;
@@ -206,6 +207,7 @@ class customer_billing extends Fuel_base_controller {
 			$obj->billno = $container->billno;
 			$obj->coilnumber = $container->coilnumber;
 			$obj->description = $container->description;
+			$obj->grade = $container->grade;
 			$obj->totalamt = $container->totalamt;
 			$obj->weight = $container->weight;
 			$obj->Sertax = $container->Sertax;
@@ -235,6 +237,7 @@ class customer_billing extends Fuel_base_controller {
 			$obj->billno = $container->billno;
 			$obj->coilnumber = $container->coilnumber;
 			$obj->description = $container->description;
+			$obj->grade = $container->grade;
 			$obj->totalamt = $container->totalamt;
 			$obj->weight = $container->weight;
 			//$obj->basic = $container->basic;
