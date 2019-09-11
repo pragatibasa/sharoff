@@ -78,8 +78,9 @@ class customer_outward extends Fuel_base_controller {
 			$obj->billdate = $container->billdate;
 			$obj->billno = $container->billno;
 			$obj->coilnumber = $container->coilnumber;
-				$obj->billtype = $container->billtype;
+			
 			$obj->description = $container->description;
+			$obj->grade = $container->grade;
 			$obj->thickness = $container->thickness;
 			$obj->width = $container->width;
 			$obj->bweight = $container->bweight;
@@ -107,6 +108,7 @@ class customer_outward extends Fuel_base_controller {
 			$obj->billno = $container->billno;
 			$obj->coilnumber = $container->coilnumber;
 			$obj->description = $container->description;
+			$obj->grade = $container->grade;
 			$obj->thickness = $container->thickness;
 			$obj->width = $container->width;
 			$obj->weight = $container->weight;

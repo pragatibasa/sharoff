@@ -42,8 +42,9 @@ class customer_outward_model extends Base_module_model {
 			aspen_tblinwardentry.fWidth as width, 
 			aspen_tblbilldetails.vOutLorryNo as vehicleno,
 			aspen_tblbilldetails.dBillDate  as billdate,
-			aspen_tblbilldetails.vBillType  as billtype,
-			aspen_tblbilldetails.nBillNo  as billno
+			
+			aspen_tblbilldetails.nBillNo  as billno,
+			aspen_tblinwardentry.vGrade as grade
 		FROM aspen_tblbilldetails
 			LEFT JOIN aspen_tblinwardentry ON aspen_tblinwardentry.vIRnumber = aspen_tblbilldetails.vIRnumber 
 			LEFT JOIN aspen_tblmatdescription ON aspen_tblmatdescription.nMatId = aspen_tblinwardentry.nMatId 
@@ -75,7 +76,7 @@ class customer_outward_model extends Base_module_model {
 	aspen_tblinwardentry.fWidth as width, 
 	aspen_tblbilldetails.vOutLorryNo as vehicleno,
 	aspen_tblbilldetails.dBillDate  as billdate,
-		aspen_tblbilldetails.vBillType  as billtype,
+		
 	aspen_tblbilldetails.nBillNo  as billno
 		FROM aspen_tblbilldetails
 		LEFT JOIN aspen_tblinwardentry ON aspen_tblinwardentry.vIRnumber = aspen_tblbilldetails.vIRnumber 
@@ -139,14 +140,15 @@ class customer_outward_model extends Base_module_model {
 		<table cellspacing="0" cellpadding="5" border="0.5px">
 			<tr>
 			
-			<th align="center"><b>Bill Number</b></th>
-			<th align="center"><b>Bill Date</b></th>
-			<th align="center"><b>Bill Type</b></th>
+			<th align="center"><b>Invoice Number</b></th>
+			<th align="center"><b>Invoice Date</b></th>
+			
 			<th align="center"><b>Coil Number</b></th>
-			<th align="center"><b>Type of Material</b></th>
+			<th align="center"><b>Material Description</b></th>
+			<th align="center"><b>Grade</b></th>
 			<th align="center"><b>Thickness</b></th>
 			<th align="center"><b>Width</b></th>
-			<th align="center"><b>Billed Weight</b></th>
+			<th align="center"><b>Invoice Weight</b></th>
 			<th align="center"><b>Vehicle Number</b></th>
 			</tr>';
 			
@@ -159,9 +161,10 @@ class customer_outward_model extends Base_module_model {
 			<tr>
 			 	<td align="center">'.$rowitem->billno.'</td>	
 				<td align="center">'.$rowitem->billdate.'</td>		
-				<td align="center">'.$rowitem->billtype.'</td>				
+								
 				<td align="center" >'.$rowitem->coilnumber.'</td>
 				<td align="center">'.$rowitem->description.'</td>
+				<td align="center" >'.$rowitem->grade.'</td>
 				<td align="center">'.$rowitem->thickness.'</td>
 				<td align="center">'.$rowitem->width.'</td>
 				<td align="center">'.$rowitem->weight.'</td>
@@ -195,7 +198,7 @@ class customer_outward_model extends Base_module_model {
 	$html .= '
 				<table cellspacing="0" cellpadding="5" border="0.5">
 			<tr>
-				<td><h3>Total Billed Weight</h3></td>';
+				<td><h3>Total Weight</h3></td>';
 			
 		if ($querymain112->num_rows() > 0)
 		{
