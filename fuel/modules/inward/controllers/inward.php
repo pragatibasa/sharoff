@@ -45,7 +45,9 @@ class inward extends Fuel_base_controller {
 			}
 			if(!empty($bundleNumber)) {
 				$vars['bundledetails'] = $this->inward_model->getParentBundleDetails($this->ppartyid,$bundleNumber);
-			}
+            }
+
+            $split = preg_split("/(,?\s+)|((?<=[a-z])(?=\d))|((?<=\d)(?=[a-z]))/i",$this->inward_model->getNextCoilNumber()->max_coil_number);
 
 			$vars['bundleNumber'] = $bundleNumber;
 			$vars['data']= $this->data;
@@ -54,7 +56,7 @@ class inward extends Fuel_base_controller {
 			$vars['datam'] = $this->datam;
 			$vars['fdata'] = $this->fdata;
 			$vars['pcoildetails'] = $this->pcoildetails;
-			$vars['max_coil_number'] = $this->inward_model->getNextCoilNumber()->max_coil_number;
+			$vars['max_coil_number'] = $split[0].''.($split[1]+1);
             $this->_render('inward', $vars);
 		} else {
 			redirect(fuel_url('#'));
@@ -144,18 +146,19 @@ class inward extends Fuel_base_controller {
             ->setCellValue('M4', 'Weight')
             ->setCellValue('N4', 'Status')
             ->setCellValue('O4', 'Grade')
-            ->setCellValue('P4', 'Heat Number');
+            ->setCellValue('P4', 'Heat Number')
+            ->setCellValue('Q4', 'Remark');
 
 
         //getStyle accepts a range of cells as well!
-        $activeSheet->getStyle('A4:P4')->applyFromArray(
+        $activeSheet->getStyle('A4:Q4')->applyFromArray(
             array(
                 'font'  => array(
                     'bold'  =>  true
                 )
             )
         );
-        $arrHeading = array('Party Name' => 'nPartyName','Coil Number' => 'vIRnumber','Inward Date' => 'dReceivedDate','Jsw Coil id' => 'jid','SST id' => 'ssid', 'Vehicle Number' => 'vLorryNo','Invoice Number' => 'vInvoiceNo', 'Invoice Date' => 'dInvoiceDate','Material Description' => 'vDescription','Width' => 'fWidth','Thickness' => 'fThickness', 'Length' => 'fLength','Weight' => 'fQuantity','Status' => 'vStatus','Grade' => 'vGrade','Heat Number' => 'vHeatnumber');
+        $arrHeading = array('Party Name' => 'nPartyName','Coil Number' => 'vIRnumber','Inward Date' => 'dReceivedDate','Jsw Coil id' => 'jid','SST id' => 'ssid', 'Vehicle Number' => 'vLorryNo','Invoice Number' => 'vInvoiceNo', 'Invoice Date' => 'dInvoiceDate','Material Description' => 'vDescription','Width' => 'fWidth','Thickness' => 'fThickness', 'Length' => 'fLength','Weight' => 'fQuantity','Status' => 'vStatus','Grade' => 'vGrade','Heat Number' => 'vHeatnumber', 'Remark' => 'vRemark');
 
         $records = $this->inward_model->exportInwardData();
         if($records->num_rows() > 0) {
@@ -177,7 +180,8 @@ class inward extends Fuel_base_controller {
                     ->setCellValue('L' . $i, $arr[$arrHeading['Weight']])
                     ->setCellValue('M' . $i, $arr[$arrHeading['Status']])
                     ->setCellValue('N' . $i, $arr[$arrHeading['Grade']])
-                    ->setCellValue('O' . $i, $arr[$arrHeading['Heat Number']]);;
+                    ->setCellValue('O' . $i, $arr[$arrHeading['Heat Number']])
+                    ->setCellValue('Q' . $i, $arr[$arrHeading['Remark']]);;
                 $i++;
             }
         }
@@ -238,7 +242,8 @@ class inward extends Fuel_base_controller {
 //                $arr_values[] =  $arr[$arrHeading['Weight']];
 //                $arr_values[] =  $arr[$arrHeading['Status']];
 //                $arr_values[] =  $arr[$arrHeading['Grade']];
-//                $arr_values[] =  $arr[$arrHeading['Heat Number']];
+//                $arr_values[] =  $arr[$arrHeading['Heat Number']]
+//                $arr_values[] =  $arr[$arrHeading['Remark']];
 //
 //                if(!$heading) {
 //                    print implode("</b>\t<b>", array_keys($arrHeading)) . "\n";
