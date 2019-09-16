@@ -38,7 +38,7 @@
 				<label><?=lang('weight')?></label>
 				</td> 
 				<td>
-				<input id="wei" name="fQuantity" type="text" DISABLED /> (in Kgs)
+				<input id="wei" name="fQuantity" type="text" DISABLED /> (in tons)
 				</td>
 			</tr>
 			<tr>

@@ -683,7 +683,7 @@ class Billing extends Fuel_base_controller {
 			$cust_rm = $_POST['cust_rm'];
 	   }
 	  $this->load->module_model(BILLING_FOLDER, 'billing_model');
-	  $coillists = $this->billing_model->finalbillingmodel($partyid,$mat_desc,$thic,$actualnumberbundle,$cust_add,$cust_rm);
+	  $coillists = $this->billing_model->finalbillingmodel($partyid,$mat_desc,$thic,$_POST['actualnumberbundle'],$cust_add,$cust_rm);
 	   
 	   if(!empty($coillists)){
 			$files = array();

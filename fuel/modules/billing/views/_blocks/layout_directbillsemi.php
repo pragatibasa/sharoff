@@ -114,7 +114,7 @@
 		*
 		&nbsp;
 		<!--<input type="text" id="txtamount_mt" name="txtamount_mt" value="0"/> -->
-		<input id="wei" type="text" value = <?php echo $weight;?> DISABLED /> Kgs
+		<input id="wei" type="text" value = <?php echo $weight;?> DISABLED /> tons
 		<input class="btn btn-success" id="done"  type="button" value="For Billing" onClick="directbilling(); "/>
 	</div>
 	</fieldset>
