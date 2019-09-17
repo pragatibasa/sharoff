@@ -696,9 +696,9 @@ class bill_details_model extends Base_module_model {
 						aspen_tblinwardentry.fThickness,
 						aspen_tblmatdescription.vDescription as description,
 						aspen_tblslittinginstruction.nWidth as width,
-						round((aspen_tblslittinginstruction.nWeight/1000),3) as weight,
+						round((aspen_tblslittinginstruction.nWeight),3) as weight,
 						$weihtamount as rate,
-						round(( $weihtamount * (aspen_tblslittinginstruction.nWeight/1000) ),2) as amount
+						round(( $weihtamount * (aspen_tblslittinginstruction.nWeight) ),2) as amount
 						from aspen_tblinwardentry
 						left join aspen_tblslittinginstruction on  aspen_tblslittinginstruction.vIRnumber = aspen_tblinwardentry.vIRnumber
 						left join aspen_tblBillBundleAssociation on aspen_tblslittinginstruction.nSno = aspen_tblBillBundleAssociation.nBundleNumber
@@ -824,7 +824,7 @@ class bill_details_model extends Base_module_model {
 				<td width="300px" align="left"><b>TOTAL: </b></td>
 				<td width="105px" align="center"><b></b></td>
 				<td width="110px" align="center"><b></b></td>
-				<td width="95px" align="center"><b>'.round(($totalweight/1000),3).'</b></td>
+				<td width="95px" align="center"><b>'.round(($totalweight),3).'</b></td>
 			</tr>
 			<tr><td>&nbsp;&nbsp;</td><td>&nbsp;&nbsp;</td></tr>
 			<tr>
@@ -837,7 +837,7 @@ class bill_details_model extends Base_module_model {
 			</tr>
 			<tr>
 				<td width="550px" border="0" align="left"><b>Grand Total</b></td>
-				<td><b>'.round(($totalweight/1000),3).'</b>&nbsp;&nbsp;</td>
+				<td><b>'.round(($totalweight),3).'</b>&nbsp;&nbsp;</td>
 			</tr>
 			<tr>
 				<td width="65%">

@@ -38,7 +38,7 @@
 				<label><?=lang('weight')?></label>
 				</td> 
 				<td>
-				<input id="wei" name="wei" type="text"  value="<?php echo $weight; ?>"DISABLED />(in Kgs)
+				<input id="wei" name="wei" type="text"  value="<?php echo $weight; ?>"DISABLED />(in tons)
 				</td>
 			</tr>
 			<tr>

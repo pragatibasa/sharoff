@@ -65,7 +65,7 @@
 			</tr>	
 			<tr>
 				<td>
-					<label><?=lang('weight_txt')?> (in Kgs)</label>
+					<label><?=lang('weight_txt')?> (in tons)</label>
 				</td>
 				<td> 
 					<input id="wei" name="fQuantity" type="text" DISABLED/>
@@ -128,7 +128,7 @@
 		<input id= "txtWidth" type="text"/> 
 	</div>
 	<div class="pad-10">
-		<div id="weight"> Weight (in Kgs)</div>
+		<div id="weight"> Weight (in tons)</div>
 		<input id= "txtSlittingWeight" type="text" />
 	</div>
 	<div class="pad-10">
@@ -158,7 +158,7 @@
 <tr>
 <td align="left" colspan="2">
 	<div class="pad-10">
-		<label>Total Weight in Kg</label>
+		<label>Total Weight in Tons</label>
 		<input id="txtboxweight" type="text"  /> &nbsp; &nbsp; &nbsp;
 	<!--	<label>Scrap</label>
 		<input id="txtboxscrap" type="text" />(No of pcs) &nbsp; &nbsp; &nbsp;
