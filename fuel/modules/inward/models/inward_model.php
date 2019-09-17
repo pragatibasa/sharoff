@@ -61,7 +61,7 @@ class inward_model extends Base_module_model {
 	}
 
 	function inwardbillgeneratemodel($pname='',$pid='') {
-	$sqlinward = "select aspen_tblpartydetails.nPartyName as partyname ,aspen_tblinwardentry.vIRnumber as coilnumber, DATE_FORMAT(dReceivedDate, '%d-%m-%Y')  as receiveddate ,aspen_tblmatdescription.vDescription as matdescription, aspen_tblinwardentry.fThickness as thickness, aspen_tblinwardentry.fWidth as width,aspen_tblinwardentry.fQuantity as Weight, aspen_tblinwardentry.vLorryNo AS Lorryno,aspen_tblinwardentry.vInvoiceNo as invoiceno, DATE_FORMAT(dInvoiceDate, '%d-%m-%Y') as invoicedate,aspen_tblinwardentry.vStatus as status,aspen_tblinwardentry.vRemark as remark from aspen_tblinwardentry left join aspen_tblpartydetails on aspen_tblpartydetails.nPartyId = aspen_tblinwardentry.nPartyId left join aspen_tblmatdescription on aspen_tblmatdescription.nMatId = aspen_tblinwardentry.nMatId  where aspen_tblinwardentry.vIRnumber ='".$pid."'";
+	$sqlinward = "select aspen_tblpartydetails.nPartyName as partyname ,aspen_tblinwardentry.vIRnumber as coilnumber, DATE_FORMAT(dReceivedDate, '%d-%m-%Y')  as receiveddate ,aspen_tblmatdescription.vDescription as matdescription, aspen_tblinwardentry.fThickness as thickness, aspen_tblinwardentry.fWidth as width,aspen_tblinwardentry.fQuantity as Weight,aspen_tblinwardentry.vPhysicalWeight as PhysicalWeight,aspen_tblinwardentry.vDifferenceweight as DifferenceWeight, aspen_tblinwardentry.vLorryNo AS Lorryno,aspen_tblinwardentry.vInvoiceNo as invoiceno, DATE_FORMAT(dInvoiceDate, '%d-%m-%Y') as invoicedate,aspen_tblinwardentry.vStatus as status,aspen_tblinwardentry.vRemark as remark from aspen_tblinwardentry left join aspen_tblpartydetails on aspen_tblpartydetails.nPartyId = aspen_tblinwardentry.nPartyId left join aspen_tblmatdescription on aspen_tblmatdescription.nMatId = aspen_tblinwardentry.nMatId  where aspen_tblinwardentry.vIRnumber ='".$pid."'";
 		$querymain = $this->db->query($sqlinward);
 
 		//$invoice = 'CoilNumber_'.$pid;
@@ -72,6 +72,8 @@ class inward_model extends Base_module_model {
 		$thickness = $querymain->row(0)->thickness;
 		$width = $querymain->row(0)->width;
 		$Weight = $querymain->row(0)->Weight;
+		$PhysicalWeight = $querymain->row(0)->PhysicalWeight;
+		$DifferenceWeight = $querymain->row(0)->DifferenceWeight;
 		$remark = $querymain->row(0)->remark;
 		$Lorryno = $querymain->row(0)->Lorryno;
 		$invoicedate = $querymain->row(0)->invoicedate;
@@ -97,54 +99,57 @@ class inward_model extends Base_module_model {
 					<h1><b>INWARD SLIP</b></h1>
 				</td>
 			</tr>
-				<tr>
-				<td ></td>
-
-		</tr>
+				
 			<tr>
 				<td align="left">
 				<h2><b>Party Name: </b> '.$party_name.'</h2></td>
 
-			</tr><tr><td></td></tr>
+			</tr>
 			<tr>
 				<td align="left">
 				<h2><b>Coil Number: </b> '.$coil_number.'</h2></td>
 			</tr>
-			<tr><td></td></tr>
+			
 			<tr>
 				<td align="left">
 				<h2><b>Received Date: </b> '.$received_date.'</h2></td>
-			</tr><tr><td></td></tr>
+			</tr>
 			<tr>
 				<td align="left">
 				<h2><b>Invoice Number: </b> '.$invoiceno.'</h2></td>
-			</tr><tr><td></td></tr>
+			</tr>
 			<tr>
 				<td align="left">
 				<h2><b>Invoice Date: </b> '.$invoicedate.'</h2></td>
-			</tr><tr><td></td></tr>
+			</tr>
 			<tr>
 				<td align="left">
 					<h2><b>Material Description: </b> '.$mat_description.'</h2></td>
-			</tr><tr><td></td></tr>
+			</tr>
 			<tr>
 				<td align="left">
 					<h2><b>Lorry Number: </b> '.$Lorryno.'</h2></td>
 			</tr>
-<tr><td></td></tr>
 			<tr>
 				<td align="left">
 					<h2><b>Thickness(mm) :</b> '.$thickness.'</h2></td>
-			</tr><tr><td></td></tr>
+			</tr>
 			<tr>
 				<td align="left">
 					<h2><b>Width(mm) :</b> '.$width.'</h2></td>
-			</tr><tr><td></td></tr>
+			</tr>
 			<tr>
 				<td align="left">
 					<h2><b>Weight(Kgs) :</b> '.$Weight.'</h2></td>
 			</tr>
-
+			<tr>
+			<td align="left">
+				<h2><b>PhysicalWeight :</b> '.$PhysicalWeight.'</h2></td>
+		   </tr>
+			<tr>
+			<td align="left">
+				<h2><b>DifferenceWeight :</b> '.$DifferenceWeight.'</h2></td>
+		   </tr>
 			<tr>
 			<td align="left">
 				<h2><b>Remark :</b> '.$remark.'</h2></td>
@@ -159,7 +164,7 @@ class inward_model extends Base_module_model {
 
 
 		function saveinwardentry($pid,$pname, $date3,$lno,$icno,$date4,$coil,$fWidth,
-							$fThickness,$fLength,$fQuantity,$status,$hno,$pna,$ppartyId,$parentBundleNumber,$grade,$cast,$date5,$jid,$ssid,$remark)
+							$fThickness,$fLength,$fQuantity,$pwid,$did,$status,$hno,$pna,$ppartyId,$parentBundleNumber,$grade,$cast,$date5,$jid,$ssid,$remark)
 	{
 		$updateSql = '';
 		if(!empty($ppartyId)) {
@@ -175,9 +180,9 @@ class inward_model extends Base_module_model {
 		}
 
 		$sql = "Insert into aspen_tblinwardentry (
-		nPartyId,vIRnumber,dReceivedDate,dBillDate,vLorryNo,vInvoiceNo,dInvoiceDate,nMatId,fWidth,fThickness,fLength,fQuantity,vStatus,
+		nPartyId,vIRnumber,dReceivedDate,dBillDate,vLorryNo,vInvoiceNo,dInvoiceDate,nMatId,fWidth,fThickness,fLength,fQuantity,vPhysicalWeight,vDifferenceweight, vStatus,
 		vHeatnumber,vPlantname,fpresent,billedweight,dSysDate,vprocess,vParentIRNumber,vParentBundleNumber,vGrade,vCast,jid,ssid,vRemark)
-		VALUES((SELECT aspen_tblpartydetails.nPartyId FROM aspen_tblpartydetails where aspen_tblpartydetails.nPartyName = '". $pname. "'),  '". $pid. "','". $date3. "', CURDATE(),'". $lno. "','". $icno. "','". $date5. "',(SELECT aspen_tblmatdescription.nMatId  FROM aspen_tblmatdescription where aspen_tblmatdescription.vDescription = '". $coil. "'),'". $fWidth. "','". $fThickness. "','". $fLength. "','". $fQuantity. "','". $status. "','". $hno. "','". $pna. "','". $fQuantity. "',0,now(),'','".$ppartyId."','".$parentBundleNumber."','".$grade."','".$cast."', '". $jid. "', '". $ssid. "','".$remark."' )";
+		VALUES((SELECT aspen_tblpartydetails.nPartyId FROM aspen_tblpartydetails where aspen_tblpartydetails.nPartyName = '". $pname. "'),  '". $pid. "','". $date3. "', CURDATE(),'". $lno. "','". $icno. "','". $date5. "',(SELECT aspen_tblmatdescription.nMatId  FROM aspen_tblmatdescription where aspen_tblmatdescription.vDescription = '". $coil. "'),'". $fWidth. "','". $fThickness. "','". $fLength. "','". $fQuantity. "','". $pwid. "','". $did. "','". $status. "','". $hno. "','". $pna. "','". $fQuantity. "',0,now(),'','".$ppartyId."','".$parentBundleNumber."','".$grade."','".$cast."', '". $jid. "', '". $ssid. "','".$remark."' )";
 
 		$sql1 = "Insert into aspen_hist_tblinwardentry (
 		nPartyId,vIRnumber,dReceivedDate,dBillDate,vLorryNo,vInvoiceNo,dInvoiceDate,nMatId,fWidth,fThickness,fLength,fQuantity,vStatus,

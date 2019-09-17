@@ -236,6 +236,22 @@
 			</tr>
 			<tr>
 				<td>
+					<label>Physical Weight</label>
+				</td>
+				<td>
+					<input id="pwid"  type="text" />
+				</td>
+			</tr>
+			<tr>
+				<td>
+					<label>Difference Weight</label>
+				</td>
+				<td>
+					<input id="did"  type="text" name="Difference" onfocus="diff();"/>
+				</td>
+			</tr>
+			<tr> 
+				<td>
 					<label>Status</label>
 				</td>
 				<td>
@@ -332,7 +348,9 @@ function functionsave()
 	var fThickness = $('#fThickness').val();
 	var fLength = $('#fLength').val();
 	var fQuantity = $('#fQuantity').val();
-	var status = $('#status').val();
+	var pwid = $('#pwid').val();
+	var did = $('#did').val();
+    var status = $('#status').val();
 	var hno = $('#hno').val();
 	var pna = $('#pna').val();
 	var grade = $('#grade').val();
@@ -348,7 +366,7 @@ function functionsave()
 	} else if(coil  == 'Select') {
 	  	alert("Please Enter the Mat Description")
 	} else {
-		var dataString = 'pid='+pid+'&date3='+date3+'&pname='+pname+'&lno='+lno+'&icno='+icno+'&date4='+date4+'&coil='+coil+'&fWidth='+fWidth+'&fThickness='+fThickness+'&fLength='+fLength+'&fQuantity='+fQuantity+'&status='+status+'&hno='+hno+'&pna='+pna+'&ppartyid='+ppartyid+'&parentBundleNumber='+parentBundleNumber+'&grade='+grade+'&cast='+cast+'&date5='+date5+'&jid='+jid+'&ssid='+ssid+'&remark='+remark;
+		var dataString = 'pid='+pid+'&date3='+date3+'&pname='+pname+'&lno='+lno+'&icno='+icno+'&date4='+date4+'&coil='+coil+'&fWidth='+fWidth+'&fThickness='+fThickness+'&fLength='+fLength+'&fQuantity='+fQuantity+'&pwid='+pwid+'&did='+did+'&status='+status+'&hno='+hno+'&pna='+pna+'&ppartyid='+ppartyid+'&parentBundleNumber='+parentBundleNumber+'&grade='+grade+'&cast='+cast+'&date5='+date5+'&jid='+jid+'&ssid='+ssid+'&remark='+remark;
 
 		$.ajax({
 		   type: "POST",
@@ -372,10 +390,12 @@ function functionsave()
 		//	$('#fWidth').val('');
 			$('#fThickness').val('');
 			$('#fQuantity').val('');
+			$('#pwid').val('');
+			$('#did').val('');
 			$('#fLength').val('');
-		//	$('#hno').val('');
-		//	$('#picker').val('');
-		//	$('#pna').val('');
+			$('#hno').val('');
+			$('#picker').val('');
+			$('#pna').val('');
 		    $('#remark').val('');
 
 			}
@@ -390,6 +410,15 @@ function preview()
 	var dataString = '&pname='+pname+'&pid='+pid;
     setTimeout("location.href='<?= site_url('inward/inwardbillgenerate'); ?>/?"+ dataString+"'", 3000);
 }
+function diff()
+{
+	var fQuantity = $('#fQuantity').val();
+	var pwid = $('#pwid').val();
+    var Difference = (fQuantity-pwid);
+    document.getElementById('did').value = Difference;
+}
+//print_r(diff);*/
+
 
 var section = "demos/picker";
 	$(function() {

@@ -85,7 +85,7 @@ class inward extends Fuel_base_controller {
 	function savedetails(){
 		if (!empty($_POST)){
 		$this->load->module_model(INWARD_FOLDER, 'inward_model');
-			$arr = $this->inward_model->saveinwardentry($_POST['pid'],$_POST['pname'], $_POST['date3'],$_POST['lno'],$_POST['icno'],$_POST['date4'], $_POST['coil'],$_POST['fWidth'], $_POST['fThickness'],$_POST['fLength'],$_POST['fQuantity'],$_POST['status'],$_POST['hno'],$_POST['pna'],$_POST['ppartyid'],$_POST['parentBundleNumber'],$_POST['grade'],$_POST['cast'],$_POST['date5'],$_POST['jid'],$_POST['ssid'],$_POST['remark']);
+			$arr = $this->inward_model->saveinwardentry($_POST['pid'],$_POST['pname'], $_POST['date3'],$_POST['lno'],$_POST['icno'],$_POST['date4'], $_POST['coil'],$_POST['fWidth'], $_POST['fThickness'],$_POST['fLength'],$_POST['fQuantity'],$_POST['pwid'],$_POST['did'],$_POST['status'],$_POST['hno'],$_POST['pna'],$_POST['ppartyid'],$_POST['parentBundleNumber'],$_POST['grade'],$_POST['cast'],$_POST['date5'],$_POST['jid'],$_POST['ssid'],$_POST['remark']);
 			if(empty($arr)) echo 'Success'; else echo 'Unable to save';
 
 		}
@@ -144,6 +144,8 @@ class inward extends Fuel_base_controller {
             ->setCellValue('K4', 'Thickness')
             ->setCellValue('L4', 'Length')
             ->setCellValue('M4', 'Weight')
+            ->setCellValue('R4', 'Physical Weight')
+            ->setCellValue('S4', 'Difference Weight')
             ->setCellValue('N4', 'Status')
             ->setCellValue('O4', 'Grade')
             ->setCellValue('P4', 'Heat Number')
@@ -158,7 +160,7 @@ class inward extends Fuel_base_controller {
                 )
             )
         );
-        $arrHeading = array('Party Name' => 'nPartyName','Coil Number' => 'vIRnumber','Inward Date' => 'dReceivedDate','Jsw Coil id' => 'jid','SST id' => 'ssid', 'Vehicle Number' => 'vLorryNo','Invoice Number' => 'vInvoiceNo', 'Invoice Date' => 'dInvoiceDate','Material Description' => 'vDescription','Width' => 'fWidth','Thickness' => 'fThickness', 'Length' => 'fLength','Weight' => 'fQuantity','Status' => 'vStatus','Grade' => 'vGrade','Heat Number' => 'vHeatnumber', 'Remark' => 'vRemark');
+        $arrHeading = array('Party Name' => 'nPartyName','Coil Number' => 'vIRnumber','Inward Date' => 'dReceivedDate','Jsw Coil id' => 'jid','SST id' => 'ssid', 'Vehicle Number' => 'vLorryNo','Invoice Number' => 'vInvoiceNo', 'Invoice Date' => 'dInvoiceDate','Material Description' => 'vDescription','Width' => 'fWidth','Thickness' => 'fThickness', 'Length' => 'fLength','Weight' => 'fQuantity','Physical Weight' => 'pwid','Difference Weight' => 'did','Status' => 'vStatus','Grade' => 'vGrade','Heat Number' => 'vHeatnumber', 'Remark' => 'vRemark');
 
         $records = $this->inward_model->exportInwardData();
         if($records->num_rows() > 0) {
@@ -178,6 +180,8 @@ class inward extends Fuel_base_controller {
                     ->setCellValue('K' . $i, $arr[$arrHeading['Thickness']])
                     ->setCellValue('P' . $i, $arr[$arrHeading['Length']])
                     ->setCellValue('L' . $i, $arr[$arrHeading['Weight']])
+                    ->setCellValue('R' . $i, $arr[$arrHeading['Physical Weight']])
+                    ->setCellValue('S' . $i, $arr[$arrHeading['Difference Weight']])
                     ->setCellValue('M' . $i, $arr[$arrHeading['Status']])
                     ->setCellValue('N' . $i, $arr[$arrHeading['Grade']])
                     ->setCellValue('O' . $i, $arr[$arrHeading['Heat Number']])
