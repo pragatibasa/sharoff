@@ -61,19 +61,25 @@ class inward_model extends Base_module_model {
 	}
 
 	function inwardbillgeneratemodel($pname='',$pid='') {
-	$sqlinward = "select aspen_tblpartydetails.nPartyName as partyname ,aspen_tblinwardentry.vIRnumber as coilnumber, DATE_FORMAT(dReceivedDate, '%d-%m-%Y')  as receiveddate ,aspen_tblmatdescription.vDescription as matdescription, aspen_tblinwardentry.fThickness as thickness, aspen_tblinwardentry.fWidth as width,aspen_tblinwardentry.fQuantity as Weight,aspen_tblinwardentry.vPhysicalWeight as PhysicalWeight,aspen_tblinwardentry.vDifferenceweight as DifferenceWeight, aspen_tblinwardentry.vLorryNo AS Lorryno,aspen_tblinwardentry.vInvoiceNo as invoiceno, DATE_FORMAT(dInvoiceDate, '%d-%m-%Y') as invoicedate,aspen_tblinwardentry.vStatus as status,aspen_tblinwardentry.vRemark as remark from aspen_tblinwardentry left join aspen_tblpartydetails on aspen_tblpartydetails.nPartyId = aspen_tblinwardentry.nPartyId left join aspen_tblmatdescription on aspen_tblmatdescription.nMatId = aspen_tblinwardentry.nMatId  where aspen_tblinwardentry.vIRnumber ='".$pid."'";
+	$sqlinward = "select aspen_tblpartydetails.nPartyName as partyname ,aspen_tblinwardentry.vIRnumber as coilnumber, DATE_FORMAT(dReceivedDate, '%d-%m-%Y')  as receiveddate ,aspen_tblinwardentry.jid as jid,aspen_tblinwardentry.ssid as ssid,aspen_tblinwardentry.fLength  as length,aspen_tblinwardentry.vStatus as status,aspen_tblinwardentry.vGrade as grade,aspen_tblinwardentry.vHeatnumber as heatnumber,aspen_tblmatdescription.vDescription as matdescription, aspen_tblinwardentry.fThickness as thickness, aspen_tblinwardentry.fWidth as width,aspen_tblinwardentry.fQuantity as Weight,aspen_tblinwardentry.vPhysicalWeight as PhysicalWeight,aspen_tblinwardentry.vDifferenceweight as DifferenceWeight, aspen_tblinwardentry.vLorryNo AS Lorryno,aspen_tblinwardentry.vInvoiceNo as invoiceno, DATE_FORMAT(dInvoiceDate, '%d-%m-%Y') as invoicedate,aspen_tblinwardentry.vStatus as status,aspen_tblinwardentry.vRemark as remark from aspen_tblinwardentry left join aspen_tblpartydetails on aspen_tblpartydetails.nPartyId = aspen_tblinwardentry.nPartyId left join aspen_tblmatdescription on aspen_tblmatdescription.nMatId = aspen_tblinwardentry.nMatId  where aspen_tblinwardentry.vIRnumber ='".$pid."'";
 		$querymain = $this->db->query($sqlinward);
 
 		//$invoice = 'CoilNumber_'.$pid;
 		$party_name = $querymain->row(0)->partyname;
 		$coil_number = $querymain->row(0)->coilnumber;
 		$received_date = $querymain->row(0)->receiveddate;
+		$jid= $querymain->row(0)->jid;
+		$ssid = $querymain->row(0)->ssid;
 		$mat_description = $querymain->row(0)->matdescription;
 		$thickness = $querymain->row(0)->thickness;
+		$length = $querymain->row(0)->length;
 		$width = $querymain->row(0)->width;
 		$Weight = $querymain->row(0)->Weight;
 		$PhysicalWeight = $querymain->row(0)->PhysicalWeight;
 		$DifferenceWeight = $querymain->row(0)->DifferenceWeight;
+		$status = $querymain->row(0)->status;
+		$grade = $querymain->row(0)->grade;
+		$heatnumber = $querymain->row(0)->heatnumber;
 		$remark = $querymain->row(0)->remark;
 		$Lorryno = $querymain->row(0)->Lorryno;
 		$invoicedate = $querymain->row(0)->invoicedate;
@@ -112,15 +118,27 @@ class inward_model extends Base_module_model {
 			
 			<tr>
 				<td align="left">
-				<h2><b>Received Date: </b> '.$received_date.'</h2></td>
+				<h2><b>Inward Date: </b> '.$received_date.'</h2></td>
 			</tr>
 			<tr>
 				<td align="left">
-				<h2><b>Invoice Number: </b> '.$invoiceno.'</h2></td>
+				<h2><b>Jsw Coil id: </b> '.$jid.'</h2></td>
 			</tr>
 			<tr>
 				<td align="left">
-				<h2><b>Invoice Date: </b> '.$invoicedate.'</h2></td>
+				<h2><b>SST Coil id: </b> '.$ssid.'</h2></td>
+			</tr>
+			<tr>
+				<td align="left">
+					<h2><b>Vehicle Number: </b> '.$Lorryno.'</h2></td>
+			</tr>
+			<tr>
+				<td align="left">
+				<h2><b>Invoice/Challan Number: </b> '.$invoiceno.'</h2></td>
+			</tr>
+			<tr>
+				<td align="left">
+				<h2><b>Invoice/Challan Date: </b> '.$invoicedate.'</h2></td>
 			</tr>
 			<tr>
 				<td align="left">
@@ -128,27 +146,41 @@ class inward_model extends Base_module_model {
 			</tr>
 			<tr>
 				<td align="left">
-					<h2><b>Lorry Number: </b> '.$Lorryno.'</h2></td>
+					<h2><b>Width in mm :</b> '.$width.'</h2></td>
 			</tr>
 			<tr>
 				<td align="left">
-					<h2><b>Thickness(mm) :</b> '.$thickness.'</h2></td>
+					<h2><b>Thickness in mm :</b> '.$thickness.'</h2></td>
 			</tr>
 			<tr>
 				<td align="left">
-					<h2><b>Width(mm) :</b> '.$width.'</h2></td>
+					<h2><b>Length in mm :</b> '.$length.'</h2></td>
 			</tr>
+			
+			
 			<tr>
 				<td align="left">
-					<h2><b>Weight(Kgs) :</b> '.$Weight.'</h2></td>
+					<h2><b>Weight in M/T :</b> '.$Weight.'</h2></td>
 			</tr>
 			<tr>
 			<td align="left">
-				<h2><b>PhysicalWeight :</b> '.$PhysicalWeight.'</h2></td>
+				<h2><b>Physical Weight :</b> '.$PhysicalWeight.'</h2></td>
 		   </tr>
 			<tr>
 			<td align="left">
-				<h2><b>DifferenceWeight :</b> '.$DifferenceWeight.'</h2></td>
+				<h2><b>Difference Weight :</b> '.$DifferenceWeight.'</h2></td>
+		   </tr>
+		   <tr>
+			<td align="left">
+				<h2><b>Status :</b> '.$status.'</h2></td>
+		   </tr>
+		   <tr>
+			<td align="left">
+				<h2><b>Grade :</b> '.$grade.'</h2></td>
+		   </tr>
+		   <tr>
+			<td align="left">
+				<h2><b>Heat Number :</b> '.$heatnumber.'</h2></td>
 		   </tr>
 			<tr>
 			<td align="left">
