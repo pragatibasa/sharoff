@@ -165,7 +165,7 @@ function functionpdf() {
 			mediaClass += '<table id="myTabels" class="tablesorter tablesorter-blue">';
 			mediaClass +='<thead>';
 			mediaClass +='<tr>';
-			mediaClass += '  <th>Coilnumber</th>';
+			mediaClass += '  <th>Coil Number</th>';
 			mediaClass += '  <th>Received Date</th>';
 			mediaClass += '  <th>Width</th>';
 			mediaClass += '  <th>Thickness</th>';

@@ -70,7 +70,7 @@ GROUP BY aspen_tblpartydetails.nPartyName order by aspen_tblpartydetails.nPartyN
 		$html .= '
 		<table cellspacing="0" cellpadding="5" border="0.5px">
 			<tr>
-				<th align="center"><h2>Partyname</h2></th>
+				<th align="center"><h2>Party Name</h2></th>
 				<th align="center"><h2>Total Billed Amount</h2></th>
 			</tr>';
 			

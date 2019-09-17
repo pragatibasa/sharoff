@@ -204,17 +204,10 @@ function totalweight_check(){
 			mediaClass += '<table id="myTabels" class="tablesorter tablesorter-blue">';
 			mediaClass +='<thead>';
 			mediaClass +='<tr>';
-<<<<<<< HEAD
 			
 			mediaClass += '  <th>Coil Number</th>';
 			mediaClass += '  <th>Inward Date</th>';
 			mediaClass += '  <th>Material Description</th>';
-=======
-			mediaClass += '  <th class="partyname">Partyname</th>';
-			mediaClass += '  <th>Coilnumber</th>';
-			mediaClass += '  <th>Received Date</th>';
-			mediaClass += '  <th>Description</th>';
->>>>>>> fd0f2a8158080cc792ce6dc1f05895440b812a4c
 			mediaClass += '  <th>Thickness</th>';
 			mediaClass += '  <th>Width</th>';
 			mediaClass += '  <th>Weight</th>';
@@ -249,11 +242,7 @@ function totalweight_check(){
 	}
 }
 
-<<<<<<< HEAD
 function tableToExcel() {
-=======
-function tableToExcel(){ 
->>>>>>> fd0f2a8158080cc792ce6dc1f05895440b812a4c
   	var tab_text = '<html xmlns:x="urn:schemas-microsoft-com:office:excel">';
 tab_text = tab_text + '<head><xml><x:ExcelWorkbook><x:ExcelWorksheets><x:ExcelWorksheet>';
 

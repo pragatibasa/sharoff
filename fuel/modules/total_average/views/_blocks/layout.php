@@ -172,8 +172,8 @@ $.ajax({
 			mediaClass += '<table id="myTabels" class="tablesorter tablesorter-blue">';
 			mediaClass +='<thead>';
 			mediaClass +='<tr>';
-			mediaClass += '  <th>Partyname</th>';
-			mediaClass += '  <th>Total</th>';
+			mediaClass += '  <th>Party Name</th>';
+			mediaClass += '  <th>Total Billed Amount</th>';
 			mediaClass +='</tr>';
 			mediaClass +='</thead>';
 			

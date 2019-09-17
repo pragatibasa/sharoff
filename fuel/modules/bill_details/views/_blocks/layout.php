@@ -15,7 +15,7 @@
                 <th>Bill Number</th>
                 <th>Coil Number</th>
                 <th>Bill Date</th>
-                <th>Partyname</th>
+                <th>Party Name</th>
                 <th>Bill Status</th>
                 <th>Action</th>
             </tr>
@@ -25,7 +25,7 @@
 				<th>Bill Number</th>
                 <th>Coil Number</th>
                 <th>Bill Date</th>
-                <th>Partyname</th>
+                <th>Party Name</th>
                 <th>Bill Status</th>
                 <th>Action</th>
             </tr>

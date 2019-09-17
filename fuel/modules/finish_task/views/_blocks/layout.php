@@ -87,7 +87,7 @@
 <td width="40%" align="left" valign="top">	
 <form id="cisave" method="post" action="" class="cutting hide">
 	<div class="pad-10">
-			<div id="bundlenumber"> Bundlenumber </div>
+			<div id="bundlenumber"> Bundle Number </div>
 			<input id= "txtbundlenumber" type="text"  name="bundlenumber" />
 		
 	</div>

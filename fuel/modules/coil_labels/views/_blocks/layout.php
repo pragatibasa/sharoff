@@ -15,7 +15,7 @@
                 <th>Coil Number</th>
                 <th>Received Date</th>
                 <th>Coil Status</th>
-                <th>Partyname</th>
+                <th>Party Name</th>
                 <th>Label</th>
             </tr>
         </thead>
@@ -24,7 +24,7 @@
                 <th>Coil Number</th>
                 <th>Received Date</th>
                 <th>Coil Status</th>
-                <th>Partyname</th>
+                <th>Party Name</th>
                 <th>Label</th>
             </tr>
         </tfoot>
