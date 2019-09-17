@@ -1600,20 +1600,20 @@ function billgeneratemodelslit($coilno='',$partyname='',$description='',$lorryno
 
 		$sql148="UPDATE aspen_hist_tblinwardentry
 		SET aspen_hist_tblinwardentry.fpresent=
-		aspen_hist_tblinwardentry.fQuantity-(select (SUM( aspen_tblbillingstatus.fbilledWeight ) *1000)
+		aspen_hist_tblinwardentry.fQuantity-(select (SUM( aspen_tblbillingstatus.fbilledWeight ) )
 		from aspen_tblbillingstatus
 		where aspen_tblbillingstatus.vIRnumber='".$partyid."'  group by aspen_tblbillingstatus.vIRnumber)
 		where aspen_hist_tblinwardentry.vIRnumber='".$partyid."' ";
 
 		$sql146="UPDATE aspen_tblinwardentry
-		SET aspen_tblinwardentry.billedweight=(select (SUM( aspen_tblbillingstatus.fbilledWeight ) *1000)
+		SET aspen_tblinwardentry.billedweight=(select (SUM( aspen_tblbillingstatus.fbilledWeight ) )
 		from aspen_tblbillingstatus
 		where aspen_tblbillingstatus.vIRnumber='".$partyid."'  group by aspen_tblbillingstatus.vIRnumber)
 		where aspen_tblinwardentry.vIRnumber='".$partyid."' ";
 
 
 		$sql179="UPDATE aspen_hist_tblinwardentry
-		SET aspen_hist_tblinwardentry.billedweight=(select (SUM( aspen_tblbillingstatus.fbilledWeight ) *1000)
+		SET aspen_hist_tblinwardentry.billedweight=(select (SUM( aspen_tblbillingstatus.fbilledWeight ) )
 		from aspen_tblbillingstatus
 		where aspen_tblbillingstatus.vIRnumber='".$partyid."'  group by aspen_tblbillingstatus.vIRnumber)
 		where aspen_hist_tblinwardentry.vIRnumber='".$partyid."' ";
@@ -3067,7 +3067,7 @@ $gstSection = '';
 			'.$gstSection.'
 			<tr>
 				<td width="550px" border="0" align="left"><b>Grand Total</b></td>
-				<td><b>'.round(($totalweight/1000),3).'</b>&nbsp;&nbsp;</td>
+				<td><b>'.round(($totalweight),3).'</b>&nbsp;&nbsp;</td>
 			</tr>
 			<tr>
 				<td width="65%">
