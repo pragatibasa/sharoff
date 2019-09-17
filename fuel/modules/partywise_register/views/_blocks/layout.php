@@ -70,7 +70,7 @@
 	
 <div align="right">
 <label>Total Weight</label>
-		<input id="totalweight_calcualation" type="text" DISABLED/>(in Kgs)  
+		<input id="totalweight_calcualation" type="text" DISABLED/>(in tons)  
 		&nbsp; &nbsp; &nbsp;
 </div>
 <script language="javascript" type="text/javascript">

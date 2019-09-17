@@ -111,7 +111,7 @@
 		*
 		&nbsp; -->
 		<!--<input type="text" id="txtamount_mt" name="txtamount_mt" value="0"/> -->
-		<input id="wei" name="fQuantity" type="text" DISABLED /> Kgs
+		<input id="wei" name="fQuantity" type="text" DISABLED /> tons
 		<input class="btn btn-success" id="done"  type="button" value="For Billing" onClick="directbilling(); "/>
 	</div>
 	</fieldset>
@@ -528,7 +528,7 @@ $.ajax({
 function totalweight_check(){
 	var partyid = $('#pid').val();
 	var wei = $('#wei').val();
-	var weight = wei/1000;
+	var weight = wei;
 	document.getElementById("totalweight_check").value = weight;
 }
 function totalamt(){

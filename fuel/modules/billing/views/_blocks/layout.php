@@ -487,7 +487,7 @@ function loadfolderlist(account, accname,bundlenumber) {
 			var selectbundle = '<input class="grand_total_check" name="chk[]" type="checkbox" id="radio_'+item.bundlenumber+'" name="list" value="'+item.bundlenumber+'" onClick=selectbundleid('+item.bundlenumber+','+item.weight+','+item.notobebilled+') /><input type="hidden" id="balance_'+item.bundlenumber+'" value="'+item.balance+'"/><input type="hidden" id="noToBeBilled_'+item.bundlenumber+'" value="'+item.notobebilled+'"/>';
 			thisdata["select"] = selectbundle;
 			thisdata["bundlenumber"] = item.bundlenumber;
-            thisdata["weight(inkgs)"] = item.weight;
+            thisdata["weight(in M/T)"] = item.weight;
             thisdata["actualnumber"] = item.actualnumber;
             thisdata["length(in mm)"] = item.length;
             thisdata["number to be billed"] = item.notobebilled;
@@ -1119,7 +1119,7 @@ function functioneditcoil(){
 		return false;
 	}
 	else{
-	   var bundleweightcalculate= (((bundleweightactual/actualnumberbundle)*billed)/1000);
+	   var bundleweightcalculate = ((bundleweightactual/actualnumberbundle)*billed);
 	   document.getElementById('billedweight').value = bundleweightcalculate;
 	   var dataString = 'bundlenumber='+bundlenumber+'&billed='+billed+'&pid='+pid+'&bundleweightcalculate='+bundleweightcalculate;
 	   $.ajax({

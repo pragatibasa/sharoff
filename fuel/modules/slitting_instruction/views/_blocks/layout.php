@@ -52,7 +52,7 @@
 					<label><?=lang('weight_txt')?></label>
 				</td>
 				<td> 
-					<input id="wei" name="fQuantity" type="text" DISABLED/> (in Kgs)
+					<input id="wei" name="fQuantity" type="text" DISABLED/> (in tons)
 				</td>
 			</tr>
 		</table>
@@ -122,7 +122,7 @@
 </td>
 <td align="right">
 	<label>Total Weight</label>
-		<input id="txttotalwidth" type="text" DISABLED/> (in kgs)  
+		<input id="txttotalwidth" type="text" DISABLED/> (in tons)  
 		<input id="txtHiddentotalwidth" type="hidden" /> 
 		&nbsp; &nbsp; &nbsp;
 		<input type="button" onclick="cancelcoil();" value="Cancel" id="cancelcoil" class="btn btn-danger">

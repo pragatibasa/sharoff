@@ -58,7 +58,7 @@
 					<label><?=lang('weight_txt')?></label>
 				</td>
 				<td> 
-					<input id="wei" name="fQuantity" type="text" DISABLED/> (in Kgs)
+					<input id="wei" name="fQuantity" type="text" DISABLED/> (in tons)
 				</td>
 			</tr>
 		</table>
@@ -98,7 +98,7 @@
 		</div>
 		<div class="pad-10">
 			<div id="bundle_weight_text_label"> Weight  </div>
-			<input id="bundleweight" type="text" name="bundle_weight" DISABLED />(in Kgs)
+			<input id="bundleweight" type="text" name="bundle_weight" DISABLED />(in tons)
 	<!--	<input type="button" value="Approximate Weight" id="weight_id" onclick="doweight();" />-->
 		</div>
 		<div class="pad-10">
@@ -126,7 +126,7 @@
 <td align="right">
 
 		<label>Total Weight</label>
-		<input id="totalweight_calcualation" type="text" DISABLED/>(in Kgs)  
+		<input id="totalweight_calcualation" type="text" DISABLED/>(in tons)  
 		&nbsp; &nbsp; &nbsp;
 		<input class="btn btn-danger" id="cancelcoil" type="button" value="Cancel" onClick="cancelcoil();"/> 
 		&nbsp; &nbsp; &nbsp;
