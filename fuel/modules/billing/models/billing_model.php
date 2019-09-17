@@ -632,11 +632,20 @@ left join aspen_tblbillingstatus on aspen_tblinwardentry.vIRnumber=aspen_tblbill
 
 }
 else{
-$sql = "select nAmount as rate,aspen_tblbillingstatus.nActualNo as noofpcs,
-aspen_tblbillingstatus.fbilledWeight as weight,round(nAmount * fbilledWeight) as amount from aspen_tblpricetype1
-left join aspen_tblmatdescription on aspen_tblmatdescription.nMatId=aspen_tblpricetype1.nMatId
-left join aspen_tblinwardentry on aspen_tblinwardentry.nMatId=aspen_tblmatdescription.nMatId
-left join aspen_tblbillingstatus on aspen_tblinwardentry.vIRnumber=aspen_tblbillingstatus.vIRnumber where aspen_tblmatdescription.vDescription= '".$mat_desc."' and aspen_tblinwardentry.vIRnumber='".$partyid."' and aspen_tblbillingstatus.nSno IN( ".$actualnumberbundle.") order by aspen_tblbillingstatus.nActualNo asc";
+$sql = "SELECT 
+                aspen_tblbillingstatus.nActualNo AS noofpcs,
+                aspen_tblbillingstatus.fbilledWeight AS weight
+            FROM
+                aspen_tblinwardentry
+                    LEFT JOIN
+                aspen_tblmatdescription ON aspen_tblmatdescription.nMatId = aspen_tblinwardentry.nMatId
+                    LEFT JOIN
+                aspen_tblbillingstatus ON aspen_tblinwardentry.vIRnumber = aspen_tblbillingstatus.vIRnumber
+            WHERE
+                     aspen_tblmatdescription.vDescription = '".$mat_desc."'
+                    AND aspen_tblinwardentry.vIRnumber = '".$partyid."'
+                    AND aspen_tblbillingstatus.nSno IN (".$actualnumberbundle.")
+            ORDER BY aspen_tblbillingstatus.nActualNo ASC";
 }
 
 		$query = $this->db->query($sql);
@@ -761,7 +770,7 @@ left join aspen_tblbillingstatus on aspen_tblinwardentry.vIRnumber=aspen_tblbill
 		left join aspen_tblinwardentry on aspen_tblinwardentry.nMatId=aspen_tblmatdescription.nMatId
 		left join aspen_tblbillingstatus on aspen_tblinwardentry.vIRnumber=aspen_tblbillingstatus.vIRnumber
 		 where aspen_tblmatdescription.vDescription= '".$mat_desc."' and aspen_tblinwardentry.vIRnumber='".$partyid."' order by aspen_tblbillingstatus.nActualNo asc";
-	}	
+	}
 		$query = $this->db->query($sql);
 		$arr='';
 		if ($query->num_rows() > 0) {
