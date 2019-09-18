@@ -83,13 +83,13 @@ class slitting_instruction_model extends Base_module_model {
 				$totalWeight = 0;
 				foreach($queryBundle->result() as $key => $row) {
 					if($row->nWidth !== NULL)
-						$strBundle .= '%n'.$index++.') '.$row->nWidth.'mm - '.$row->count.'Nos - '.$row->totalWeight.'kgs';
+						$strBundle .= '\n'.$index++.') '.$row->nWidth.'mm - '.$row->count.'Nos - '.$row->totalWeight.'M/T';
 					else 
 						$totalWeight = $row->totalWeight;
 				}
 			} 
 
-			sendSMS($query->result()[0]->nProcessUpdates,'Slitting instruction given for Coil '.$_POST['pid'].'%n'.$query->result()[0]->vDescription.' '.$query->result()[0]->fThickness.'mm x '.$query->result()[0]->fWidth.'mm%nProcess:Slitting'.$strBundle.'%nTotal weight '.$totalWeight.'kgs');
+			sendSMS($query->result()[0]->nProcessUpdates,'Slitting instruction given for Coil '.$_POST['pid'].'\n'.$query->result()[0]->vDescription.' '.$query->result()[0]->fThickness.'mm x '.$query->result()[0]->fWidth.'mm\nProcess:Slitting'.$strBundle.'\nTotal weight '.$totalWeight.'M/T');
 		}
 	}
 	

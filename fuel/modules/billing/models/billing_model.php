@@ -1657,11 +1657,11 @@ function billgeneratemodelslit($coilno='',$partyname='',$description='',$lorryno
 				if ($queryBundle->num_rows() > 0) {
 					$index = 1;
 					foreach($queryBundle->result() as $key => $row) {
-						$strBundle .= '%n'.$index++.') '.$row->nLength.'mm - '.$row->nNoOfPcs.'Nos - '.($row->fbilledWeight*1000).'kgs';
+						$strBundle .= "\n".$index++.') '.$row->nLength.'mm - '.$row->nNoOfPcs.'Nos - '.$row->fbilledWeight.'M/T';
 					}
 				} 
 	
-				sendSMS($strquery->result()[0]->nBillingUpdates,'Bill raised for coil no '.$partyid.'%n'.$strquery->result()[0]->vDescription.' '.$strquery->result()[0]->fThickness.'mm x '.$strquery->result()[0]->fWidth.'mm'.$strBundle.'%nAppx weight '.($txttotalweight*1000).'kgs%nLoaded in '.$txtoutward_num.'%nOn:'.date('d/m/Y').'%nInvoice no:'.$billid.'%nDriver no:'.$driverContact);
+				sendSMS($strquery->result()[0]->nBillingUpdates,'Bill raised for coil no '.$partyid."\n".$strquery->result()[0]->vDescription.' '.$strquery->result()[0]->fThickness.'mm x '.$strquery->result()[0]->fWidth.'mm'.$strBundle."\n".'Appx weight '.$txttotalweight.'M/T'."\n".'Loaded in '.$txtoutward_num."\n".'On:'.date('d/m/Y')."\n".'Invoice no:'.$billid."\n".'Driver no:'.$driverContact);
 			}
 		}
 		else{
@@ -1753,7 +1753,7 @@ function billgeneratemodelslit($coilno='',$partyname='',$description='',$lorryno
 		$strquery = $this->db->query($strSql);
 
 		if($strquery->result()[0]->nBillingUpdates) {
-			sendSMS($strquery->result()[0]->nBillingUpdates,'Bill raised for coil no '.$partyid.'%n'.$strquery->result()[0]->vDescription.' '.$strquery->result()[0]->fThickness.'mm x '.$strquery->result()[0]->fWidth.'mm%nAppx weight '.$totalweight_check.'kgs%nLoaded in '.$txtoutward_num.'%nOn:'.date('d/m/Y').'%nInvoice no:'.$billid.'%nDriver no:'.$driverContact);
+			sendSMS($strquery->result()[0]->nBillingUpdates,'Bill raised for coil no '.$partyid."\n".$strquery->result()[0]->vDescription.' '.$strquery->result()[0]->fThickness.'mm x '.$strquery->result()[0]->fWidth.'mm'."\n".'Appx weight '.$totalweight_check.'kgs'."\n".'Loaded in '.$txtoutward_num."\n".'On:'.date('d/m/Y')."\n".'Invoice no:'.$billid."\n".'.Driver no:'.$driverContact);
 		}
 
 	}
@@ -2088,11 +2088,11 @@ function billgeneratemodelslit($coilno='',$partyname='',$description='',$lorryno
 			if ($queryBundle->num_rows() > 0) {
 				$index = 1;
 				foreach($queryBundle->result() as $key => $row) {
-					$strBundle .= '%n'.$index++.') '.$row->nWidth.'mm - '.$row->count.'Nos - '.($row->sum).'kgs';
+					$strBundle .= "\n".$index++.') '.$row->nWidth.'mm - '.$row->count.'Nos - '.($row->sum).'kgs';
 				}
 			} 
 
-			sendSMS($strquery->result()[0]->nBillingUpdates,'Bill raised for coil no '.$partyid.'%n'.$strquery->result()[0]->vDescription.' '.$strquery->result()[0]->fThickness.'mm x '.$strquery->result()[0]->fWidth.'mm'.$strBundle.'%nAppx weight '.$totalweight_check.'kgs%nLoaded in '.$txtoutward_num.'%nOn:'.date('d/m/Y').'%nInvoice no:'.$billid.'%nDriver no:'.$driverContact);
+			sendSMS($strquery->result()[0]->nBillingUpdates,'Bill raised for coil no '.$partyid."\n".$strquery->result()[0]->vDescription.' '.$strquery->result()[0]->fThickness.'mm x '.$strquery->result()[0]->fWidth.'mm'.$strBundle."\n".'Appx weight '.$totalweight_check.'kgs'."\n".'Loaded in '.$txtoutward_num."\n".'On:'.date('d/m/Y')."\n".'Invoice no:'.$billid."\n".'Driver no:'.$driverContact);
 		}
 	}
 
@@ -2965,8 +2965,6 @@ $gstSection = '';
 						<td width="40%" align="center"><h3>Coilnumber : '.$partyid.'</h3></td>
 						<td width="33.33%" align:"right"><h3>Billdate : '.$billdate.' </h3></td>
 					</tr>
-				</table>
-				<table width="100%" cellspacing="0" cellpadding="0" >
 					<tr>
 						<td align="left"></td>
 						<td></td>
@@ -3728,13 +3726,7 @@ $html = '<table width="100%"  cellspacing="0" cellpadding="5" border="0">
 					<h3>Grand Total in Words :</h3>
 				</td> 	<td width="75%"><h3>'.$container.'</h3></td>
 		</tr>
-
-		<tr>
-			<td width="70%">
-				<h3><b>Received the above goods in good condition.</b></h3>
-				</td>
-				<td width="30%"><h3> For ASPEN STEEL (P) LTD.</h3></td>
-		</tr>
+        '.billingFooter().'
 		<tr>
 			<td>
 
@@ -4096,8 +4088,7 @@ $html = '
 		</tr>
 
 		<tr>
-				<td align="center" width="100%"><hr color=#00CC33 size=5 width=100></td>
-
+			<td align="center" width="100%"><hr color=#00CC33 size=5 width=100></td>
 		</tr>
 
 
@@ -4110,9 +4101,6 @@ $html = '
 				<td width="33.33%" align:"right"><h3>Billdate : '.$billdate.'</h3></td>
 
 			</tr>
-
-		</table>
-		<table width="100%" cellspacing="0" cellpadding="0" >
 			<tr>
 				<td align="left"></td>
 				<td></td>
@@ -4252,12 +4240,7 @@ $html = '
 				</td> 	<td width="75%"><h3>'.$container.'</h3></td>
 		</tr>
 
-		<tr>
-			<td width="70%">
-				<h3><b>Received the above goods in good condition.</b></h3>
-				</td>
-				<td width="30%"><h3> For ASPEN STEEL (P) LTD.</h3></td>
-		</tr>
+        '.billingFooter().'
 		<tr>
 			<td>
 

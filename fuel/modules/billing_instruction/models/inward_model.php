@@ -184,7 +184,7 @@ class inward_model extends Base_module_model {
 		$query = $this->db->query($strSql);
 
 		if($query->result()[0]->nInwardUpdates) {
-			sendSMS($query->result()[0]->nInwardUpdates,'Received Coil No '.$pid.'%n'.$coil.' '.$fThickness.'mm x '.$fWidth.'mm '.$fQuantity.'kgs%nOn '.date('d/m/Y').'%nVehicle no '.$lno.'%nRef:'.$icno);
+			sendSMS($query->result()[0]->nInwardUpdates,'Received Coil No '.$pid."\n".$coil.' '.$fThickness.'mm x '.$fWidth.'mm '.$fQuantity.'M/T'."\n".'On '.date('d/m/Y')."\n".'Vehicle no '.$lno."\n".'Ref:'.$icno);
 		}
 	}
 	
