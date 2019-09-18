@@ -89,7 +89,7 @@
 <input id="partnamecheck" type="hidden" value="" name="partnamecheck" />	
 <div align="right">
 <label>Total Weight</label>
-		<input id="totalweight_calcualation" type="text" DISABLED/>(in Kgs)  
+		<input id="totalweight_calcualation" type="text" DISABLED/>(in M/T)  
 		&nbsp; &nbsp; &nbsp;
 </div>
 
@@ -232,7 +232,7 @@ function functionpdf() {
 function tableToExcel() {
 	
 		var tab_text = '<html xmlns:x="urn:schemas-microsoft-com:office:excel">';
-		tab_text = tab_text + '<table><tr><td style="font-size:60px; font-style:italic; font-family:fantasy;" colspan="7" align="center"><h1>CUSTOMERS MATERIAL OUTWARD REPORT BETWEEN DATES</h1></td></tr>';
+		tab_text = tab_text + '<table><tr><td style="font-size:60px; font-style:italic; font-family:fantasy;" colspan="7" align="center"><h1>CUSTOMERS MATERIAL OUTWARD REPORT</h1></td></tr>';
 
 tab_text = tab_text + '<tr></tr><tr><td><b>Party Name : </b>'+$('#party_account_name').val()+'</td><td><b>From Date : </b>'+$('#selector').val()+'</td><td><b>To Date : </b>'+$('#selector1').val()+'</td></tr><tr><td></td></tr></table>';
 tab_text = tab_text + '<head><xml><x:ExcelWorkbook><x:ExcelWorksheets><x:ExcelWorksheet>';
@@ -242,7 +242,7 @@ tab_text = tab_text + "<table border='1px'>";
 tab_text = tab_text + $('#myTabels').html();
 tab_text = tab_text + '</table>';
 
-tab_text = tab_text + '<table border="1px"><tr></tr><tr><td></td><td></td><td></td><td></td><td></td><td></td><td><h3>Total Weight : </td><td>'+$('#totalweight_calcualation').val()+' ( in kgs )</h3></td><td></td></tr></table></body></html>';
+tab_text = tab_text + '<table border="1px"><tr></tr><tr><td></td><td></td><td></td><td></td><td></td><td></td><td><h3>Total Weight : </td><td>'+$('#totalweight_calcualation').val()+' ( in M/T )</h3></td><td></td></tr></table></body></html>';
 
 
 var data_type = 'data:application/vnd.ms-excel';

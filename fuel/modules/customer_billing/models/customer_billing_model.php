@@ -148,8 +148,6 @@ $querymain7 = $this->db->query($sql1234);
 				<th align="center"><b>Invoice Weight in (M.T)</b></th>
 				<th align="center"><b>Basic Amount</b></th>
 				<th align="center"><b>Service Tax</b></th>
-				<th align="center"><b>Education Tax</b></th>
-				<th align="center"><b>SHEdutax</b></th>
 				<th align="center"><b>Total Bill Amount</b></th>
 			</tr>';
 			
@@ -172,8 +170,8 @@ $querymain7 = $this->db->query($sql1234);
 				<td align="right">'.$rowitem->oweight.'</td>
 				<td align="right">'.$rowitem->totalamt.'</td>
 				<td align="right">'.$rowitem->Sertax.'</td>
-				<td align="right">'.$rowitem->educationtax.'</td>
-				<td align="right">'.$rowitem->SHEdutax.'</td>
+				
+				
 				<td align="right">'.$rowitem->totalbillamount.'</td>
 			</tr>';
 			}
@@ -480,8 +478,8 @@ LEFT JOIN aspen_tblpartydetails ON aspen_tblpartydetails.nPartyId = aspen_tblinw
 				<th align="center"><b>Weight in (Tonnes)</b></th>
 				<th align="center"><b>Basic Amount</b></th>
 				<th align="center"><b>Service Tax</b></th>
-				<th align="center"><b>Education Tax</b></th>
-					<th align="center"><b>SHEdu Tax</b></th>
+				
+					
 				<th align="center"><b>Total Bill Amount</b></th>
 			</tr>';
 			
@@ -500,8 +498,8 @@ LEFT JOIN aspen_tblpartydetails ON aspen_tblpartydetails.nPartyId = aspen_tblinw
 				<td align="right">'.$rowitem->weight.'</td>
 				<td align="right">'.$rowitem->totalamt.'</td>			
 				<td align="right">'.$rowitem->Sertax.'</td>
-				<td align="right">'.$rowitem->educationtax.'</td>
-				<td align="right">'.$rowitem->SHEdutax.'</td>
+ 				
+				
 				<td align="right">'.$rowitem->totalbillamount.'</td>
 			</tr>';
 			}

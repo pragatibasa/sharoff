@@ -271,8 +271,8 @@ function loadfolderlist(account, accname) {
 			 thisdata["Outward weight"] = item.oweight;
             thisdata["Basic Amount"] = item.totalamt;
             thisdata["Service Tax"] = item.Sertax;
-			thisdata["Education Tax"] = item.educationtax;
-			thisdata["SHEdutax"] = item.SHEdutax;
+			//thisdata["Education Tax"] = item.educationtax;
+			//thisdata["SHEdutax"] = item.SHEdutax;
 			 thisdata["Total Bill Amount"] = item.totalbillamount;
 			totalweight_check();	
 			totalbasic_check();	
@@ -400,8 +400,8 @@ function functionpdf() {
 			mediaClass += '  <th>Invoice Weight</th>';
 			mediaClass += '  <th>Basic Amount</th>';
 			mediaClass += '  <th>Service Tax</th>';
-			mediaClass += '  <th>Education Tax</th>';
-			mediaClass += '  <th>SHEdu Tax</th>';
+			//mediaClass += '  <th>Education Tax</th>';
+			//mediaClass += '  <th>SHEdu Tax</th>';
 			mediaClass += '  <th>Total bill amount</th>';
 			mediaClass +='</tr>';
 			mediaClass +='</thead>';
@@ -419,8 +419,8 @@ function functionpdf() {
 				mediaClass += '<td>' + item.oweight + '</td>';
 				mediaClass += '<td>' + item.totalamt + '</td>';
 				mediaClass += '<td>' + item.Sertax + '</td>';
-				mediaClass += '<td>' + item.SHEdutax + '</td>';  
-				mediaClass += '<td>' + item.educationtax + '</td>';
+				//mediaClass += '<td>' + item.SHEdutax + '</td>';  
+				//mediaClass += '<td>' + item.educationtax + '</td>';
 				mediaClass += '<td>' + item.totalbillamount + '</td>';
 				mediaClass += '</tr>';			
 				
@@ -448,7 +448,7 @@ tab_text = tab_text + '<head><xml><x:ExcelWorkbook><x:ExcelWorksheets><x:ExcelWo
 tab_text = tab_text + '<x:WorksheetOptions><x:Panes></x:Panes></x:WorksheetOptions></x:ExcelWorksheet>';
 tab_text = tab_text + '</x:ExcelWorksheets></x:ExcelWorkbook></xml></head><body>';
 
-tab_text = tab_text + '<table><tr><td style="font-size:60px; font-style:italic; font-family:fantasy;" colspan="7" align="center"><h1>CUSTOMERS MATERIAL BILLING REPORT BETWEEN DATES</h1></td></tr>';
+tab_text = tab_text + '<table><tr><td style="font-size:60px; font-style:italic; font-family:fantasy;" colspan="7" align="center"><h1>CUSTOMERS MATERIAL BILLING REPORT</h1></td></tr>';
 
 tab_text = tab_text + '<tr></tr><tr><td><b>Party Name : </b>'+$('#party_account_name').val()+'</td><td><b>From Date : </b>'+$('#selector').val()+'</td><td><b>To Date : </b>'+$('#selector1').val()+'</td></tr><tr><td></td></tr></table>';
 

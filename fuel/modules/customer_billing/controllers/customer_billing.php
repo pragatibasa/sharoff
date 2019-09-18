@@ -54,7 +54,7 @@ class customer_billing extends Fuel_base_controller {
 		$frmdate = $args["frmdate"];
         $todate = $args["todate"];
 		$this->load->module_model(CUSTOMER_BILLING_FOLDER, 'customer_billing_model');
-	$billgenerateb = $this->customer_billing_model->billgeneratemodel($partyname,$frmdate,$todate);
+		$billgenerateb = $this->customer_billing_model->billgeneratemodel($partyname,$frmdate,$todate);
 	
 	}
 		
