@@ -2,14 +2,9 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="7e6474ed-f4a1-4994-94dd-8b76376fc79f" name="Default Changelist" comment="">
-      <change beforePath="$PROJECT_DIR$/.gitignore" beforeDir="false" afterPath="$PROJECT_DIR$/.gitignore" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/fuel/modules/billing/models/billing_model.php" beforeDir="false" afterPath="$PROJECT_DIR$/fuel/modules/billing/models/billing_model.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/fuel/modules/billing_instruction/models/inward_model.php" beforeDir="false" afterPath="$PROJECT_DIR$/fuel/modules/billing_instruction/models/inward_model.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/fuel/modules/inward/models/inward_model.php" beforeDir="false" afterPath="$PROJECT_DIR$/fuel/modules/inward/models/inward_model.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/fuel/modules/slitting_instruction/models/slitting_instruction_model.php" beforeDir="false" afterPath="$PROJECT_DIR$/fuel/modules/slitting_instruction/models/slitting_instruction_model.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/fuel/modules/billing_instruction/controllers/inward.php" beforeDir="false" afterPath="$PROJECT_DIR$/fuel/modules/billing_instruction/controllers/inward.php" afterDir="false" />
     </list>
-    <list id="2e3f635a-c2ab-4237-82b5-7dd13bcaf537" name="shelving major chaneges" comment="" />
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -76,7 +71,7 @@
   <component name="TaskManager">
     <task active="true" id="Default" summary="Default task">
       <changelist id="7e6474ed-f4a1-4994-94dd-8b76376fc79f" name="Default Changelist" comment="" />
-      <changelist id="2e3f635a-c2ab-4237-82b5-7dd13bcaf537" name="shelving major chaneges" comment="" />
+      <changelist id="" name="shelving major chaneges" comment="" />
       <created>1562257229766</created>
       <option name="number" value="Default" />
       <option name="presentableId" value="Default" />
@@ -89,7 +84,7 @@
       <workItem from="1564137616115" duration="1122000" />
       <workItem from="1564148869969" duration="38813000" />
       <workItem from="1568797500819" duration="2000" />
-      <workItem from="1568801048362" duration="610000" />
+      <workItem from="1568801048362" duration="3963000" />
     </task>
     <task id="LOCAL-00001" summary="Cutting Slip changes for sharoff as per new format, added new columns and cosmetic changes.">
       <created>1563522649923</created>
@@ -140,7 +135,21 @@
       <option name="project" value="LOCAL" />
       <updated>1568795953745</updated>
     </task>
-    <option name="localTasksCounter" value="8" />
+    <task id="LOCAL-00008" summary="Sms changes for metric tons, \n, and number">
+      <created>1568801760342</created>
+      <option name="number" value="00008" />
+      <option name="presentableId" value="LOCAL-00008" />
+      <option name="project" value="LOCAL" />
+      <updated>1568801760342</updated>
+    </task>
+    <task id="LOCAL-00009" summary="Database changes for error on downloading excel file">
+      <created>1568825002373</created>
+      <option name="number" value="00009" />
+      <option name="presentableId" value="LOCAL-00009" />
+      <option name="project" value="LOCAL" />
+      <updated>1568825002373</updated>
+    </task>
+    <option name="localTasksCounter" value="10" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -181,7 +190,9 @@
     <MESSAGE value="Changes to weighment updation" />
     <MESSAGE value="Consistency changes for fields and column names" />
     <MESSAGE value="Inward Report export option and weighment updation changes" />
-    <option name="LAST_COMMIT_MESSAGE" value="Inward Report export option and weighment updation changes" />
+    <MESSAGE value="Sms changes for metric tons, \n, and number" />
+    <MESSAGE value="Database changes for error on downloading excel file" />
+    <option name="LAST_COMMIT_MESSAGE" value="Database changes for error on downloading excel file" />
   </component>
   <component name="masterDetails">
     <states>
