@@ -168,7 +168,7 @@
 						$("#fWidth").keyup(function() {
 							if(parseInt($(this).val()) > 2000) {
 								alert("Please enter the value below 2000mm.");
-								$("#fWidth").val('');
+								$("#fWidth").val('').toFixed(3);
 							}
 						});
 					</script>
