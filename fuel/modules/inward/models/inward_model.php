@@ -270,7 +270,7 @@ class inward_model extends Base_module_model {
 	    $strSql = "SELECT 
                         ai.*, ap.*, am.*
                     FROM
-                        sharoff.aspen_tblinwardentry ai
+                        aspen_tblinwardentry ai
                             LEFT JOIN
                         aspen_tblpartydetails ap ON ap.nPartyId = ai.nPartyId
                             LEFT JOIN
