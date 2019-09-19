@@ -141,6 +141,7 @@
                 mediaClass += '  <th>Party Name</th>';
                 mediaClass += '  <th>Inward Weight</th>';
                 mediaClass += '  <th>Outward Weight</th>';
+                mediaClass += '  <th>Balance</th>';
                 mediaClass += '</tr>';
                 mediaClass += '</thead>';
                 for (var i = 0; i < msg.length; i++) {
@@ -149,6 +150,7 @@
                     mediaClass += '<td>' + item.partyname + '</td>';
                     mediaClass += '<td>' + item.inweight + '</td>';
                     mediaClass += '<td>' + item.outweight + '</td>';
+                    mediaClass += '<td>' + item.balance + '</td>';
                     mediaClass += '</tr>';
 
                 }

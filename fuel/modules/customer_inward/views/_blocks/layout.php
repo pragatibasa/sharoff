@@ -171,7 +171,7 @@ function totalweight_check(){
 		success: function(msg){
 		var msg3=eval(msg);
 		$.each(msg3, function(i, j){
-			 var weight = (j.weight/1000);
+			 var weight = (j.weight);
 			document.getElementById("totalweight_calcualation").value = weight;});
 	   }
 	});
@@ -219,13 +219,12 @@ function totalweight_check(){
 			{
 				var item = msg[i];
 				mediaClass += '<tr>';
-				mediaClass += '<td class="partyname">' + item.partyname + '</td>';
 				mediaClass += '<td align="left">' + item.coilnumber + '</td>';
 				mediaClass += '<td>' + item.receiveddate + '</td>';
 				mediaClass += '<td>' + item.description + '</td>';
 				mediaClass += '<td>' + item.thickness + '</td>';
 				mediaClass += '<td>' + item.width + '</td>';
-				mediaClass += '<td>' + (item.weight/1000) + '</td>';
+				mediaClass += '<td>' + (item.weight) + '</td>';
 				mediaClass += '<td>' + item.status + '</td>';
 				mediaClass += '</tr>';			
 				

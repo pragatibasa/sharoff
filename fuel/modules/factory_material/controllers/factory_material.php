@@ -40,12 +40,13 @@ class factory_material extends Fuel_base_controller
                 $obj->partyname = $container->partyname;
                 $obj->inweight = $container->inweight;
                 $obj->outweight = $container->outweight;
+                $obj->balance = $container->balance;
                 $folders[] = $obj;
             }
-            echo json_encode($folders);
+            echo json_encode($folders);exit;
         } else {
             $status = array("status" => "No Results!");
-            echo json_encode($status);
+            echo json_encode($status);exit;
         }
     }
 
