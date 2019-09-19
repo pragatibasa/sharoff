@@ -160,7 +160,7 @@ class inward extends Fuel_base_controller {
                 )
             )
         );
-        $arrHeading = array('Party Name' => 'nPartyName','Coil Number' => 'vIRnumber','Inward Date' => 'dReceivedDate','Jsw Coil id' => 'jid','SST id' => 'ssid', 'Vehicle Number' => 'vLorryNo','Invoice Number' => 'vInvoiceNo', 'Invoice Date' => 'dInvoiceDate','Material Description' => 'vDescription','Width' => 'fWidth','Thickness' => 'fThickness', 'Length' => 'fLength','Weight' => 'fQuantity','Physical Weight' => 'pwid','Difference Weight' => 'did','Status' => 'vStatus','Grade' => 'vGrade','Heat Number' => 'vHeatnumber', 'Remark' => 'vRemark');
+        $arrHeading = array('Party Name' => 'nPartyName','Coil Number' => 'vIRnumber','Inward Date' => 'dReceivedDate','Jsw Coil id' => 'jid','SST id' => 'ssid', 'Vehicle Number' => 'vLorryNo','Invoice Number' => 'vInvoiceNo', 'Invoice Date' => 'dInvoiceDate','Material Description' => 'vDescription','Width' => 'fWidth','Thickness' => 'fThickness', 'Length' => 'fLength','Weight' => 'fQuantity','Physical Weight' => 'vPhysicalWeight','Difference Weight' => 'vDifferenceweight','Status' => 'vStatus','Grade' => 'vGrade','Heat Number' => 'vHeatnumber', 'Remark' => 'vRemark');
 
         $records = $this->inward_model->exportInwardData();
         if($records->num_rows() > 0) {
