@@ -19,10 +19,10 @@ Please provide a [Minimal, Complete, and Verifiable example](https://stackoverfl
 ```php
 <?php
 
-require __DIR__ . '/vendor/autoload.php';
+use PhpOffice\PhpSpreadsheet\Spreadsheet;require __DIR__ . '/vendor/autoload.php';
 
 // Create new Spreadsheet object
-$spreadsheet = new \PhpOffice\PhpSpreadsheet\Spreadsheet();
+$spreadsheet = new Spreadsheet();
 
 // add code that show the issue here...
 ```

@@ -23,6 +23,9 @@ use PhpOffice\PhpSpreadsheet\Spreadsheet;
 use PhpOffice\PhpSpreadsheet\Worksheet\BaseDrawing;
 use PhpOffice\PhpSpreadsheet\Worksheet\Drawing;
 use PhpOffice\PhpSpreadsheet\Worksheet\MemoryDrawing;
+use PhpOffice\PhpSpreadsheet\Writer\Xls\Parser;
+use PhpOffice\PhpSpreadsheet\Writer\Xls\Workbook;
+use PhpOffice\PhpSpreadsheet\Writer\Xls\Worksheet;
 use RuntimeException;
 
 class Xls extends BaseWriter
@@ -65,7 +68,7 @@ class Xls extends BaseWriter
     /**
      * Formula parser.
      *
-     * @var \PhpOffice\PhpSpreadsheet\Writer\Xls\Parser
+     * @var Parser
      */
     private $parser;
 
@@ -91,12 +94,12 @@ class Xls extends BaseWriter
     private $documentSummaryInformation;
 
     /**
-     * @var \PhpOffice\PhpSpreadsheet\Writer\Xls\Workbook
+     * @var Workbook
      */
     private $writerWorkbook;
 
     /**
-     * @var \PhpOffice\PhpSpreadsheet\Writer\Xls\Worksheet[]
+     * @var Worksheet[]
      */
     private $writerWorksheets;
 
@@ -117,7 +120,7 @@ class Xls extends BaseWriter
      *
      * @param string $pFilename
      *
-     * @throws \PhpOffice\PhpSpreadsheet\Writer\Exception
+     * @throws Exception
      */
     public function save($pFilename)
     {

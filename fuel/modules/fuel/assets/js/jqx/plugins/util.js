@@ -15,7 +15,7 @@ jQuery.fn.isHidden = function() {
 
 // static function
 jQuery.include = function(file, type){
-	if (!type) type = 'script'
+	if (!type) type = 'script';
 	$.ajax({async:false, url: file, dataType: type, error: function(){
 		var msg = new jqx.lib.Message('There was an error in loading the file' + file, 'error');
 		msg.display();

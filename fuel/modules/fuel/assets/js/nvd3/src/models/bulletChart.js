@@ -113,7 +113,7 @@ nv.models.bulletChart = function() {
 
 
       // Compute the new x-scale.
-      var MaxX = Math.max(rangez[0] ? rangez[0]:0 , markerz[0] ? markerz[0] : 0 , measurez[0] ? measurez[0] : 0)
+      var MaxX = Math.max(rangez[0] ? rangez[0]:0 , markerz[0] ? markerz[0] : 0 , measurez[0] ? measurez[0] : 0);
       var x1 = d3.scale.linear()
           .domain([0, MaxX]).nice()  // TODO: need to allow forceX and forceY, and xDomain, yDomain
           .range(reverse ? [availableWidth, 0] : [0, availableWidth]);
@@ -165,7 +165,7 @@ nv.models.bulletChart = function() {
 
       bullet
         .width(availableWidth)
-        .height(availableHeight)
+        .height(availableHeight);
 
       var bulletWrap = g.select('.nv-bulletWrap');
 

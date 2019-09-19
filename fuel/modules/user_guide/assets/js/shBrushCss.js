@@ -32,14 +32,12 @@ SyntaxHighlighter.brushes.CSS = function()
 	function getKeywordsCSS(str)
 	{
 		return '\\b([a-z_]|)' + str.replace(/ /g, '(?=:)\\b|\\b([a-z_\\*]|\\*|)') + '(?=:)\\b';
-	};
-	
-	function getValuesCSS(str)
+    }
+    function getValuesCSS(str)
 	{
 		return '\\b' + str.replace(/ /g, '(?!-)(?!:)\\b|\\b()') + '\:\\b';
-	};
-
-	var keywords =	'ascent azimuth background-attachment background-color background-image background-position ' +
+    }
+    var keywords =	'ascent azimuth background-attachment background-color background-image background-position ' +
 					'background-repeat background baseline bbox border-collapse border-color border-spacing border-style border-top ' +
 					'border-right border-bottom border-left border-top-color border-right-color border-bottom-color border-left-color ' +
 					'border-top-style border-right-style border-bottom-style border-left-style border-top-width border-right-width ' +

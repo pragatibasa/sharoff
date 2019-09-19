@@ -8,7 +8,7 @@
         $(".tabLinkpr").removeClass("activeLinkpr");
         $(this).addClass("activeLinkpr");
         $(".tabcontentpr").addClass("hidepr");
-        $("#"+tabeId+"-1").removeClass("hidepr")   
+        $("#"+tabeId+"-1").removeClass("hidepr");
         return false;	  
       });
     });  

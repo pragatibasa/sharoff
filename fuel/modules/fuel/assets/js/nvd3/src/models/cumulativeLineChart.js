@@ -143,7 +143,7 @@ nv.models.cumulativeLineChart = function() {
         var completeDomain = [
           d3.min(seriesDomains, function(d) { return d[0] }),
           d3.max(seriesDomains, function(d) { return d[1] })
-        ]
+        ];
 
         lines.yDomain(completeDomain);
       } else {
@@ -236,7 +236,7 @@ nv.models.cumulativeLineChart = function() {
 
 
       var linesWrap = g.select('.nv-linesWrap')
-          .datum(data.filter(function(d) { return !d.disabled }))
+          .datum(data.filter(function(d) { return !d.disabled }));
 
       d3.transition(linesWrap).call(lines);
 
@@ -248,11 +248,11 @@ nv.models.cumulativeLineChart = function() {
           .attr('x', -2)
           .attr('fill', 'red')
           .attr('fill-opacity', .5)
-          .call(indexDrag)
+          .call(indexDrag);
 
       indexLine
           .attr('transform', function(d) { return 'translate(' + dx(d.i) + ',0)' })
-          .attr('height', availableHeight)
+          .attr('height', availableHeight);
 
       //------------------------------------------------------------
 
@@ -439,7 +439,7 @@ nv.models.cumulativeLineChart = function() {
       line.values = line.values.map(function(point, pointIndex) {
         point.display = {'y': (lines.y()(point, pointIndex) - v) / (1 + v) };
         return point;
-      })
+      });
       /*
       TODO: implement check below, and disable series if series loses 100% or more cause divide by 0 issue
       if (v < -.9) {
@@ -454,4 +454,4 @@ nv.models.cumulativeLineChart = function() {
 
 
   return chart;
-}
+};

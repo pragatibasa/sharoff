@@ -73,6 +73,6 @@
 
 	function mousePosition(e) {
 		return { x: e.clientX + document.documentElement.scrollLeft, y: e.clientY + document.documentElement.scrollTop };
-	};
+    }
 })(jQuery);
 

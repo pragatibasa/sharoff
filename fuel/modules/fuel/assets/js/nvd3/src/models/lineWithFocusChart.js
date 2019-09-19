@@ -207,10 +207,10 @@ nv.models.lineWithFocusChart = function() {
         );
 
       g.select('.nv-context')
-          .attr('transform', 'translate(0,' + ( availableHeight1 + margin.bottom + margin2.top) + ')')
+          .attr('transform', 'translate(0,' + ( availableHeight1 + margin.bottom + margin2.top) + ')');
 
       var contextLinesWrap = g.select('.nv-context .nv-linesWrap')
-          .datum(data.filter(function(d) { return !d.disabled }))
+          .datum(data.filter(function(d) { return !d.disabled }));
 
       d3.transition(contextLinesWrap).call(lines2);
 
@@ -254,7 +254,7 @@ nv.models.lineWithFocusChart = function() {
       if (brushExtent) brush.extent(brushExtent);
 
       var brushBG = g.select('.nv-brushBackground').selectAll('g')
-          .data([brushExtent || brush.extent()])
+          .data([brushExtent || brush.extent()]);
 
       var brushBGenter = brushBG.enter()
           .append('g');
@@ -551,4 +551,4 @@ nv.models.lineWithFocusChart = function() {
 
 
   return chart;
-}
+};

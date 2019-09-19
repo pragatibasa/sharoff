@@ -2,6 +2,7 @@
 
 namespace PhpOffice\PhpSpreadsheet\Collection;
 
+use Generator;
 use PhpOffice\PhpSpreadsheet\Cell\Cell;
 use PhpOffice\PhpSpreadsheet\Cell\Coordinate;
 use PhpOffice\PhpSpreadsheet\Exception as PhpSpreadsheetException;
@@ -11,7 +12,7 @@ use Psr\SimpleCache\CacheInterface;
 class Cells
 {
     /**
-     * @var \Psr\SimpleCache\CacheInterface
+     * @var CacheInterface
      */
     private $cache;
 
@@ -409,9 +410,9 @@ class Cells
      * @param string $pCoord Coordinate of the cell to update
      * @param Cell $cell Cell to update
      *
-     * @throws PhpSpreadsheetException
+     * @return Cell
+     *@throws PhpSpreadsheetException
      *
-     * @return \PhpOffice\PhpSpreadsheet\Cell\Cell
      */
     public function add($pCoord, Cell $cell)
     {
@@ -432,9 +433,9 @@ class Cells
      *
      * @param string $pCoord Coordinate of the cell
      *
-     * @throws PhpSpreadsheetException
+     * @return Cell Cell that was found, or null if not found
+     *@throws PhpSpreadsheetException
      *
-     * @return \PhpOffice\PhpSpreadsheet\Cell\Cell Cell that was found, or null if not found
      */
     public function get($pCoord)
     {
@@ -495,7 +496,7 @@ class Cells
     /**
      * Returns all known cache keys.
      *
-     * @return \Generator|string[]
+     * @return Generator|string[]
      */
     private function getAllCacheKeys()
     {

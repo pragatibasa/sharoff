@@ -9,13 +9,15 @@
  */
 namespace Complex;
 
+use InvalidArgumentException;
+
 /**
  * Returns the hyperbolic tangent of a complex number.
  *
  * @param     Complex|mixed    $complex    Complex number or a numeric value.
  * @return    Complex          The hyperbolic tangent of the complex argument.
  * @throws    Exception        If argument isn't a valid real or complex number.
- * @throws    \InvalidArgumentException    If function would result in a division by zero
+ * @throws    InvalidArgumentException    If function would result in a division by zero
  */
 function tanh($complex)
 {
@@ -24,7 +26,7 @@ function tanh($complex)
     $imaginary = $complex->getImaginary();
     $divisor = \cos($imaginary) * \cos($imaginary) + \sinh($real) * \sinh($real);
     if ($divisor == 0.0) {
-        throw new \InvalidArgumentException('Division by zero');
+        throw new InvalidArgumentException('Division by zero');
     }
 
     return new Complex(

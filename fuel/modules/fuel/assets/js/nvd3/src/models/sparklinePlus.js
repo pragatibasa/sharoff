@@ -147,7 +147,7 @@ nv.models.sparklinePlus = function() {
       function updateValueLine() { //index is currently global (within the chart), may or may not keep it that way
         if (paused) return;
 
-        hoverValue.data([index])
+        hoverValue.data([index]);
 
         //d3.transition(hoverValue)
         hoverValue
@@ -158,7 +158,7 @@ nv.models.sparklinePlus = function() {
         if (index == null) return;
 
         hoverValue
-            .attr('transform', function(d) { return 'translate(' + x(sparkline.x()(data[d],d)) + ',0)' })
+            .attr('transform', function(d) { return 'translate(' + x(sparkline.x()(data[d],d)) + ',0)' });
 
         hoverValue.select('.nv-xValue')
             .text(xTickFormat(sparkline.x()(data[index], index)));
@@ -248,4 +248,4 @@ nv.models.sparklinePlus = function() {
 
 
   return chart;
-}
+};

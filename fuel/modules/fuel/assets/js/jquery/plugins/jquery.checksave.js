@@ -45,7 +45,7 @@ jQuery.checkSaveChange = function(){
 		var fieldName = $(this).attr('name');
 		if (window._pageVals){
 			if (typeof(window._pageVals[fieldName]) != 'string'){
-				var cmp = new Array();
+				var cmp = [];
 				var selector = 'input:text[name="' + fieldName + '"],input:checked[name="' + fieldName + '"],textarea[name="' + fieldName + '"],select[name="' + fieldName + '"]';
 				$(selector).each(function(i){
 					var val = $(this).val();

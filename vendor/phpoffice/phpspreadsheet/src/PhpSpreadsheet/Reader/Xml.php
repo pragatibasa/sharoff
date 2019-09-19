@@ -105,7 +105,7 @@ class Xml extends BaseReader
      *
      * @throws Exception
      *
-     * @return false|\SimpleXMLElement
+     * @return false|SimpleXMLElement
      */
     public function trySimpleXMLLoadString($pFilename)
     {

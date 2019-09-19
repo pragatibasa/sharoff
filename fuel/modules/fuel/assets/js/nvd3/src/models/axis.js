@@ -43,7 +43,7 @@ nv.models.axis = function() {
       var wrap = container.selectAll('g.nv-wrap.nv-axis').data([data]);
       var wrapEnter = wrap.enter().append('g').attr('class', 'nvd3 nv-wrap nv-axis');
       var gEnter = wrapEnter.append('g');
-      var g = wrap.select('g')
+      var g = wrap.select('g');
 
       //------------------------------------------------------------
 
@@ -230,7 +230,7 @@ nv.models.axis = function() {
         wrap.selectAll('g.nv-axisMaxMin')
             .each(function(d,i) {
               if (i) // i== 1, max position
-                maxMinRange.push(scale(d) - this.getBBox().width - 4)  //assuming the max and min labels are as wide as the next tick (with an extra 4 pixels just in case)
+                maxMinRange.push(scale(d) - this.getBBox().width - 4);  //assuming the max and min labels are as wide as the next tick (with an extra 4 pixels just in case)
               else // i==0, min position
                 maxMinRange.push(scale(d) + this.getBBox().width + 4)
             });
@@ -275,7 +275,7 @@ nv.models.axis = function() {
     margin.bottom = typeof _.bottom != 'undefined' ? _.bottom : margin.bottom;
     margin.left   = typeof _.left   != 'undefined' ? _.left   : margin.left;
     return chart;
-  }
+  };
 
   chart.width = function(_) {
     if (!arguments.length) return width;
@@ -299,19 +299,19 @@ nv.models.axis = function() {
     if (!arguments.length) return axisLabelText;
     axisLabelText = _;
     return chart;
-  }
+  };
 
   chart.showMaxMin = function(_) {
     if (!arguments.length) return showMaxMin;
     showMaxMin = _;
     return chart;
-  }
+  };
 
   chart.highlightZero = function(_) {
     if (!arguments.length) return highlightZero;
     highlightZero = _;
     return chart;
-  }
+  };
 
   chart.scale = function(_) {
     if (!arguments.length) return scale;
@@ -319,22 +319,22 @@ nv.models.axis = function() {
     axis.scale(scale);
     d3.rebind(chart, scale, 'domain', 'range', 'rangeBand', 'rangeBands');
     return chart;
-  }
+  };
 
   chart.rotateYLabel = function(_) {
     if(!arguments.length) return rotateYLabel;
     rotateYLabel = _;
     return chart;
-  }
+  };
 
   chart.rotateLabels = function(_) {
     if(!arguments.length) return rotateLabels;
     rotateLabels = _;
     return chart;
-  }
+  };
 
   //============================================================
 
 
   return chart;
-}
+};

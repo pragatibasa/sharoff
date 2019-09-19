@@ -87,7 +87,7 @@ jqx.init = function(ctrlName, initObj, path){
 			jqx.execStopTime = new Date().getTime();
 			jqx.debug(jqx.execStopTime - jqx.execStartTime);
 			
-		}
+		};
 		if (jqx.config.defaultIncludeMethod == 'default'){
 			jQuery(jqx_global).load(function(){
 				readyCallback();
@@ -152,7 +152,7 @@ jqx._include = function(file, method, callback){
 				jqx.filesLoaded.push(file);
 				if (callback) callback();
 				//console.log(jqx.filesToLoad.length + ' ' + jqx.filesLoaded.length)
-			}
+			};
 			head.appendChild(script);
 		} else {
 			return false;
@@ -223,7 +223,7 @@ jqx.createObjectFromString = function(str, delimiter){
 	jQuery.each(strs, function(i, n){
 		currentObj = objectCreator(currentObj, n);
 	});
-}
+};
 
 jqx.Cache = function(){
 	this._cache = {};

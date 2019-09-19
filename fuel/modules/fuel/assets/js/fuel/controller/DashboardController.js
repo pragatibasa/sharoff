@@ -12,7 +12,7 @@ fuel.controller.DashboardController = jqx.createController(fuel.controller.BaseF
 					// console.log('loaded module ' + module);
 				});
 			});
-		}
+		};
 
 		loadModules();
 		var interval = setInterval(loadModules, refreshInterval);

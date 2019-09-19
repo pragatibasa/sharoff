@@ -183,7 +183,7 @@
 function numbertowords() {
  var junkVal=document.getElementById('txtgrandtotal').value;
  junkVal=Math.floor(junkVal);
- var obStr=new String(junkVal);
+ var obStr=String(junkVal);
  numReversed=obStr.split("");
  actnumber=numReversed.reverse();
  if(Number(junkVal) >=0){
@@ -206,7 +206,7 @@ function numbertowords() {
  var tensPlace=['dummy', ' Ten', ' Twenty', ' Thirty', ' Forty', ' Fifty', ' Sixty', ' Seventy', ' Eighty', ' Ninety' ];
  var iWordsLength=numReversed.length;
  var totalWords="";
- var inWords=new Array();
+ var inWords=[];
  var finalWord="";
  j=0;
  for(i=0; i<iWordsLength; i++){
@@ -300,8 +300,8 @@ function numbertowords() {
 //	
 //simple function to convert from numbers to words from 1 to 999
 function triConvert(num){
-    var Ones = new Array('', ' One', ' Two', ' Three', ' Four', ' Five', ' Six', ' Seven', ' Eight', ' Nine', ' Ten', ' eleven', ' twelve', ' thirteen', ' fourteen', ' fifteen', ' sixteen', ' seventeen', ' eighteen', ' nineteen');
-    var tens = new Array('', '', ' twenty', ' thirty', ' forty', ' fifty', ' sixty', ' seventy', ' eighty', ' ninety');
+    var Ones = ['', ' One', ' Two', ' Three', ' Four', ' Five', ' Six', ' Seven', ' Eight', ' Nine', ' Ten', ' eleven', ' twelve', ' thirteen', ' fourteen', ' fifteen', ' sixteen', ' seventeen', ' eighteen', ' nineteen'];
+    var tens = ['', '', ' twenty', ' thirty', ' forty', ' fifty', ' sixty', ' seventy', ' eighty', ' ninety'];
     var hundred = ' hundred';
     var output = '';
     var numString = num.toString();

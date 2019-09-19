@@ -64,7 +64,7 @@
         $(".tabLink").removeClass("activeLink");
         $(this).addClass("activeLink");
         $(".tabcontent").addClass("hide");
-        $("#"+tabeId+"-1").removeClass("hide")   
+        $("#"+tabeId+"-1").removeClass("hide");
         return false;	  
       });
     });  

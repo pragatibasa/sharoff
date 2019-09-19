@@ -5,6 +5,7 @@ namespace PhpOffice\PhpSpreadsheet\Reader\Xlsx;
 use PhpOffice\PhpSpreadsheet\Cell\Coordinate;
 use PhpOffice\PhpSpreadsheet\Reader\IReadFilter;
 use PhpOffice\PhpSpreadsheet\Worksheet\Worksheet;
+use SimpleXMLElement;
 
 class ColumnAndRowAttributes extends BaseParserClass
 {
@@ -12,7 +13,7 @@ class ColumnAndRowAttributes extends BaseParserClass
 
     private $worksheetXml;
 
-    public function __construct(Worksheet $workSheet, \SimpleXMLElement $worksheetXml = null)
+    public function __construct(Worksheet $workSheet, SimpleXMLElement $worksheetXml = null)
     {
         $this->worksheet = $workSheet;
         $this->worksheetXml = $worksheetXml;
@@ -125,7 +126,7 @@ class ColumnAndRowAttributes extends BaseParserClass
         return false;
     }
 
-    private function readColumnAttributes(\SimpleXMLElement $worksheetCols, $readDataOnly)
+    private function readColumnAttributes(SimpleXMLElement $worksheetCols, $readDataOnly)
     {
         $columnAttributes = [];
 
@@ -145,7 +146,7 @@ class ColumnAndRowAttributes extends BaseParserClass
         return $columnAttributes;
     }
 
-    private function readColumnRangeAttributes(\SimpleXMLElement $column, $readDataOnly)
+    private function readColumnRangeAttributes(SimpleXMLElement $column, $readDataOnly)
     {
         $columnAttributes = [];
 
@@ -177,7 +178,7 @@ class ColumnAndRowAttributes extends BaseParserClass
         return false;
     }
 
-    private function readRowAttributes(\SimpleXMLElement $worksheetRow, $readDataOnly)
+    private function readRowAttributes(SimpleXMLElement $worksheetRow, $readDataOnly)
     {
         $rowAttributes = [];
 

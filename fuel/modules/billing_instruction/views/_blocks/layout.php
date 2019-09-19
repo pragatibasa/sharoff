@@ -124,7 +124,7 @@ function loadfolderlist(account, accname){
             var partydata = [];
             for (var i = 0; i < msg.length; i++) {
             var item = msg[i];
-            var thisdata = {}
+            var thisdata = {};
 			var disabled = "";
 			if(item.balance <= 0)
 				disabled = "disabled=true";
@@ -208,7 +208,7 @@ function billingbutton(){
 	var dataString = 'partyid='+partyid+'&partyname='+partyname+'&nsno='+nsno+'&processchk='+processchk;
     $.ajax({
         type: 'POST',
-        success: function(){  alert('Preview Selected')
+        success: function(){  alert('Preview Selected');
 		setTimeout("location.href='<?= site_url('fuel/billing'); ?>/?"+ dataString+"'", 1000);
 		}
     });

@@ -14,7 +14,7 @@
         $(".tabLinkpr").removeClass("activeLinkpr");
         $(this).addClass("activeLinkpr");
         $(".tabcontentpr").addClass("hidepr");
-        $("#"+tabeId+"-1").removeClass("hidepr")   
+        $("#"+tabeId+"-1").removeClass("hidepr");
         return false;	  
       });
     });  
@@ -100,7 +100,7 @@
 
 <div class="tab-boxpr"> 
 	<div style="width:640px;">
-    <a href="javascript:;"><div class="tabLinkpr activeLinkpr" id="contpr-1" style="float:left;"><h1>Billing Report</h1></div></a> 
+    <a href="javascript:"><div class="tabLinkpr activeLinkpr" id="contpr-1" style="float:left;"><h1>Billing Report</h1></div></a>
     </div>
 </div>
 

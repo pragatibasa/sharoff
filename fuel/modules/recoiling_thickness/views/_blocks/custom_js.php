@@ -1,5 +1,5 @@
 <script type="text/javascript">
-functionsave()
+functionsave();
 {
 
 	var minthickness = $('input[name=Minimum_Thickness]');

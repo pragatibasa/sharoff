@@ -4,6 +4,7 @@ namespace PhpOffice\PhpSpreadsheet\Writer\Ods;
 
 use PhpOffice\PhpSpreadsheet\Shared\XMLWriter;
 use PhpOffice\PhpSpreadsheet\Spreadsheet;
+use PhpOffice\PhpSpreadsheet\Writer\Exception;
 
 class Settings extends WriterPart
 {
@@ -12,7 +13,7 @@ class Settings extends WriterPart
      *
      * @param Spreadsheet $spreadsheet
      *
-     * @throws \PhpOffice\PhpSpreadsheet\Writer\Exception
+     * @throws Exception
      *
      * @return string XML Output
      */

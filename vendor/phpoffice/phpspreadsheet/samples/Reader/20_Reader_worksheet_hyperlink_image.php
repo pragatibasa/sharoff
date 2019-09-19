@@ -1,6 +1,10 @@
 <?php
 
+use PhpOffice\PhpSpreadsheet\Cell\Hyperlink;
+use PhpOffice\PhpSpreadsheet\IOFactory;
+use PhpOffice\PhpSpreadsheet\Shared\File;
 use PhpOffice\PhpSpreadsheet\Spreadsheet;
+use PhpOffice\PhpSpreadsheet\Worksheet\MemoryDrawing;
 
 require __DIR__ . '/../Header.php';
 $inputFileType = 'Xlsx';
@@ -17,30 +21,30 @@ imagestring($gdImage, 1, 5, 5, 'Created with PhpSpreadsheet', $textColor);
 
 $baseUrl = 'https://phpspreadsheet.readthedocs.io';
 
-$drawing = new \PhpOffice\PhpSpreadsheet\Worksheet\MemoryDrawing();
+$drawing = new MemoryDrawing();
 $drawing->setName('In-Memory image 1');
 $drawing->setDescription('In-Memory image 1');
 $drawing->setCoordinates('A1');
 $drawing->setImageResource($gdImage);
 $drawing->setRenderingFunction(
-    \PhpOffice\PhpSpreadsheet\Worksheet\MemoryDrawing::RENDERING_JPEG
+    MemoryDrawing::RENDERING_JPEG
 );
-$drawing->setMimeType(\PhpOffice\PhpSpreadsheet\Worksheet\MemoryDrawing::MIMETYPE_DEFAULT);
+$drawing->setMimeType(MemoryDrawing::MIMETYPE_DEFAULT);
 $drawing->setHeight(36);
 $helper->log('Write image');
 
-$hyperLink = new \PhpOffice\PhpSpreadsheet\Cell\Hyperlink($baseUrl, 'test image');
+$hyperLink = new Hyperlink($baseUrl, 'test image');
 $drawing->setHyperlink($hyperLink);
 $helper->log('Write link: ' . $baseUrl);
 
 $drawing->setWorksheet($aSheet);
 
-$filename = tempnam(\PhpOffice\PhpSpreadsheet\Shared\File::sysGetTempDir(), 'phpspreadsheet-test');
+$filename = tempnam(File::sysGetTempDir(), 'phpspreadsheet-test');
 
-$writer = \PhpOffice\PhpSpreadsheet\IOFactory::createWriter($spreadsheet, $inputFileType);
+$writer = IOFactory::createWriter($spreadsheet, $inputFileType);
 $writer->save($filename);
 
-$reader = \PhpOffice\PhpSpreadsheet\IOFactory::createReader($inputFileType);
+$reader = IOFactory::createReader($inputFileType);
 
 $reloadedSpreadsheet = $reader->load($filename);
 unlink($filename);

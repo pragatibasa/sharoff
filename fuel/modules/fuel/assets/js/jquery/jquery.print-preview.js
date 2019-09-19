@@ -109,7 +109,7 @@
                     overflowY:   'auto',
                     zIndex:      10000,
                     display:     'block'
-                }
+                };
             print_modal
                 .css(css)
                 .animate({ top: $(window).scrollTop()}, 400, 'linear', function() {

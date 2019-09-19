@@ -131,7 +131,7 @@ nv.models.discreteBarChart = function() {
 
 
       var barsWrap = g.select('.nv-barsWrap')
-          .datum(data.filter(function(d) { return !d.disabled }))
+          .datum(data.filter(function(d) { return !d.disabled }));
 
       d3.transition(barsWrap).call(discretebar);
 
@@ -169,7 +169,7 @@ nv.models.discreteBarChart = function() {
       if (staggerLabels)
         xTicks
             .selectAll('text')
-            .attr('transform', function(d,i,j) { return 'translate(0,' + (j % 2 == 0 ? '0' : '12') + ')' })
+            .attr('transform', function(d,i,j) { return 'translate(0,' + (j % 2 == 0 ? '0' : '12') + ')' });
 
       yAxis
         .scale(y)
@@ -286,4 +286,4 @@ nv.models.discreteBarChart = function() {
 
 
   return chart;
-}
+};

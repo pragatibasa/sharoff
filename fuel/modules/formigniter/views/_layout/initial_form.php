@@ -93,7 +93,7 @@
 				if (c == '325') {NewTextTemp += 'nj'; continue;}
 				if (c == '352') {NewTextTemp += 'sh'; continue;}
 				if (c == '362') {NewTextTemp += 'uu'; continue;}
-				if (c == '381') {NewTextTemp += 'zh'; continue;}
+				if (c == '381') {NewTextTemp += 'zh'; }
 				
 				}
 			}

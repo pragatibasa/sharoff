@@ -4,6 +4,7 @@ namespace PhpOffice\PhpSpreadsheet\Writer\Xlsx;
 
 use PhpOffice\PhpSpreadsheet\Shared\XMLWriter;
 use PhpOffice\PhpSpreadsheet\Spreadsheet;
+use PhpOffice\PhpSpreadsheet\Writer\Exception;
 
 class RelsVBA extends WriterPart
 {
@@ -12,7 +13,7 @@ class RelsVBA extends WriterPart
      *
      * @param Spreadsheet $spreadsheet
      *
-     * @throws \PhpOffice\PhpSpreadsheet\Writer\Exception
+     * @throws Exception
      *
      * @return string XML Output
      */

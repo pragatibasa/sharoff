@@ -9,6 +9,9 @@
  */
 namespace Matrix;
 
+use Generator;
+use InvalidArgumentException;
+
 /**
  * Matrix object.
  *
@@ -272,7 +275,7 @@ class Matrix
      * Returns a Generator that will yield each row of the matrix in turn as a vector matrix
      *     or the value of each cell if the matrix is a vector
      *
-     * @return \Generator|Matrix[]|mixed[]
+     * @return Generator|Matrix[]|mixed[]
      */
     public function rows()
     {
@@ -287,7 +290,7 @@ class Matrix
      * Returns a Generator that will yield each column of the matrix in turn as a vector matrix
      *     or the value of each cell if the matrix is a vector
      *
-     * @return \Generator|Matrix[]|mixed[]
+     * @return Generator|Matrix[]|mixed[]
      */
     public function columns()
     {
@@ -382,7 +385,7 @@ class Matrix
      * @param     string $functionName
      * @param     mixed[] $arguments
      * @return    Matrix|float
-     * @throws    Exception|\InvalidArgumentException
+     * @throws    Exception|InvalidArgumentException
      */
     public function __call($functionName, $arguments)
     {

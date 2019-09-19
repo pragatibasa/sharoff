@@ -2,8 +2,24 @@
 
 namespace PhpOffice\PhpSpreadsheet\Chart\Renderer;
 
+use AccBarPlot;
+use AccLinePlot;
+use BarPlot;
+use ContourPlot;
+use Graph;
+use GroupBarPlot;
+use LinePlot;
 use PhpOffice\PhpSpreadsheet\Chart\Chart;
 use PhpOffice\PhpSpreadsheet\Style\NumberFormat;
+use PieGraph;
+use PiePlot;
+use PiePlot3D;
+use PiePlotC;
+use RadarGraph;
+use RadarPlot;
+use ScatterPlot;
+use Spline;
+use StockPlot;
 
 require_once __DIR__ . '/Polyfill.php';
 
@@ -222,7 +238,7 @@ class JpGraph implements IRenderer
 
     private function renderCartesianPlotArea($type = 'textlin')
     {
-        $this->graph = new \Graph(self::$width, self::$height);
+        $this->graph = new Graph(self::$width, self::$height);
         $this->graph->SetScale($type);
 
         $this->renderTitle();
@@ -259,14 +275,14 @@ class JpGraph implements IRenderer
 
     private function renderPiePlotArea()
     {
-        $this->graph = new \PieGraph(self::$width, self::$height);
+        $this->graph = new PieGraph(self::$width, self::$height);
 
         $this->renderTitle();
     }
 
     private function renderRadarPlotArea()
     {
-        $this->graph = new \RadarGraph(self::$width, self::$height);
+        $this->graph = new RadarGraph(self::$width, self::$height);
         $this->graph->SetScale('lin');
 
         $this->renderTitle();
@@ -308,7 +324,7 @@ class JpGraph implements IRenderer
                 ++$testCurrentIndex;
             }
 
-            $seriesPlot = new \LinePlot($dataValues);
+            $seriesPlot = new LinePlot($dataValues);
             if ($combination) {
                 $seriesPlot->SetBarCenter();
             }
@@ -330,7 +346,7 @@ class JpGraph implements IRenderer
         if ($grouping == 'standard') {
             $groupPlot = $seriesPlots;
         } else {
-            $groupPlot = new \AccLinePlot($seriesPlots);
+            $groupPlot = new AccLinePlot($seriesPlots);
         }
         $this->graph->Add($groupPlot);
     }
@@ -385,7 +401,7 @@ class JpGraph implements IRenderer
             if ($rotation == 'bar') {
                 $dataValues = array_reverse($dataValues);
             }
-            $seriesPlot = new \BarPlot($dataValues);
+            $seriesPlot = new BarPlot($dataValues);
             $seriesPlot->SetColor('black');
             $seriesPlot->SetFillColor(self::$colourSet[self::$plotColour++]);
             if ($dimensions == '3d') {
@@ -406,11 +422,11 @@ class JpGraph implements IRenderer
         }
 
         if ($grouping == 'clustered') {
-            $groupPlot = new \GroupBarPlot($seriesPlots);
+            $groupPlot = new GroupBarPlot($seriesPlots);
         } elseif ($grouping == 'standard') {
-            $groupPlot = new \GroupBarPlot($seriesPlots);
+            $groupPlot = new GroupBarPlot($seriesPlots);
         } else {
-            $groupPlot = new \AccBarPlot($seriesPlots);
+            $groupPlot = new AccBarPlot($seriesPlots);
             if ($dimensions == '3d') {
                 $groupPlot->SetShadow();
             }
@@ -436,14 +452,14 @@ class JpGraph implements IRenderer
                 $dataValuesY[$k] = $k;
             }
 
-            $seriesPlot = new \ScatterPlot($dataValuesX, $dataValuesY);
+            $seriesPlot = new ScatterPlot($dataValuesX, $dataValuesY);
             if ($scatterStyle == 'lineMarker') {
                 $seriesPlot->SetLinkPoints();
                 $seriesPlot->link->SetColor(self::$colourSet[self::$plotColour]);
             } elseif ($scatterStyle == 'smoothMarker') {
-                $spline = new \Spline($dataValuesY, $dataValuesX);
+                $spline = new Spline($dataValuesY, $dataValuesX);
                 list($splineDataY, $splineDataX) = $spline->Get(count($dataValuesX) * self::$width / 20);
-                $lplot = new \LinePlot($splineDataX, $splineDataY);
+                $lplot = new LinePlot($splineDataX, $splineDataY);
                 $lplot->SetColor(self::$colourSet[self::$plotColour]);
 
                 $this->graph->Add($lplot);
@@ -488,7 +504,7 @@ class JpGraph implements IRenderer
 
             $this->graph->SetTitles(array_reverse($dataValues));
 
-            $seriesPlot = new \RadarPlot(array_reverse($dataValuesX));
+            $seriesPlot = new RadarPlot(array_reverse($dataValuesX));
 
             $dataLabel = $this->chart->getPlotArea()->getPlotGroupByIndex($groupID)->getPlotLabelByIndex($i)->getDataValue();
             $seriesPlot->SetColor(self::$colourSet[self::$plotColour++]);
@@ -517,7 +533,7 @@ class JpGraph implements IRenderer
 
             $dataValues[$i] = $dataValuesX;
         }
-        $seriesPlot = new \ContourPlot($dataValues);
+        $seriesPlot = new ContourPlot($dataValues);
 
         $this->graph->Add($seriesPlot);
     }
@@ -556,7 +572,7 @@ class JpGraph implements IRenderer
             $this->graph->xaxis->SetTickLabels($datasetLabels);
         }
 
-        $seriesPlot = new \StockPlot($dataValuesPlot);
+        $seriesPlot = new StockPlot($dataValuesPlot);
         $seriesPlot->SetWidth(20);
 
         $this->graph->Add($seriesPlot);
@@ -643,12 +659,12 @@ class JpGraph implements IRenderer
                 }
 
                 if ($dimensions == '3d') {
-                    $seriesPlot = new \PiePlot3D($dataValues);
+                    $seriesPlot = new PiePlot3D($dataValues);
                 } else {
                     if ($doughnut) {
-                        $seriesPlot = new \PiePlotC($dataValues);
+                        $seriesPlot = new PiePlotC($dataValues);
                     } else {
-                        $seriesPlot = new \PiePlot($dataValues);
+                        $seriesPlot = new PiePlot($dataValues);
                     }
                 }
 

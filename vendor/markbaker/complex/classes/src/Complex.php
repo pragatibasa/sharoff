@@ -9,6 +9,8 @@
  */
 namespace Complex;
 
+use InvalidArgumentException;
+
 /**
  * Complex Number object.
  *
@@ -366,7 +368,7 @@ class Complex
      * Returns the result of the function call or operation
      *
      * @return    Complex|float
-     * @throws    Exception|\InvalidArgumentException
+     * @throws    Exception|InvalidArgumentException
      */
     public function __call($functionName, $arguments)
     {

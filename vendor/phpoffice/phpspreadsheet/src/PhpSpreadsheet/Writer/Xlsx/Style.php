@@ -12,6 +12,7 @@ use PhpOffice\PhpSpreadsheet\Style\Fill;
 use PhpOffice\PhpSpreadsheet\Style\Font;
 use PhpOffice\PhpSpreadsheet\Style\NumberFormat;
 use PhpOffice\PhpSpreadsheet\Style\Protection;
+use PhpOffice\PhpSpreadsheet\Writer\Exception;
 
 class Style extends WriterPart
 {
@@ -20,7 +21,7 @@ class Style extends WriterPart
      *
      * @param Spreadsheet $spreadsheet
      *
-     * @throws \PhpOffice\PhpSpreadsheet\Writer\Exception
+     * @throws Exception
      *
      * @return string XML Output
      */
@@ -370,7 +371,7 @@ class Style extends WriterPart
      * @param \PhpOffice\PhpSpreadsheet\Style\Style $pStyle Style
      * @param Spreadsheet $spreadsheet Workbook
      *
-     * @throws \PhpOffice\PhpSpreadsheet\Writer\Exception
+     * @throws Exception
      */
     private function writeCellStyleXf(XMLWriter $objWriter, \PhpOffice\PhpSpreadsheet\Style\Style $pStyle, Spreadsheet $spreadsheet)
     {

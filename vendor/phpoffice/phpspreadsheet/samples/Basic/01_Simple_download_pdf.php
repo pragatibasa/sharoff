@@ -3,6 +3,7 @@
 use PhpOffice\PhpSpreadsheet\Helper\Sample;
 use PhpOffice\PhpSpreadsheet\IOFactory;
 use PhpOffice\PhpSpreadsheet\Spreadsheet;
+use PhpOffice\PhpSpreadsheet\Writer\Pdf\Mpdf;
 
 require_once __DIR__ . '/../../src/Bootstrap.php';
 
@@ -44,7 +45,7 @@ $spreadsheet->getActiveSheet()->setShowGridLines(false);
 // Set active sheet index to the first sheet, so Excel opens this as the first sheet
 $spreadsheet->setActiveSheetIndex(0);
 
-IOFactory::registerWriter('Pdf', \PhpOffice\PhpSpreadsheet\Writer\Pdf\Mpdf::class);
+IOFactory::registerWriter('Pdf', Mpdf::class);
 
 // Redirect output to a client’s web browser (PDF)
 header('Content-Type: application/pdf');

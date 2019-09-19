@@ -146,10 +146,10 @@ nv.models.scatterChart = function() {
       var wrap = container.selectAll('g.nv-wrap.nv-scatterChart').data([data]);
       var wrapEnter = wrap.enter().append('g').attr('class', 'nvd3 nv-wrap nv-scatterChart nv-chart-' + scatter.id());
       var gEnter = wrapEnter.append('g');
-      var g = wrap.select('g')
+      var g = wrap.select('g');
 
       // background for pointer events
-      gEnter.append('rect').attr('class', 'nvd3 nv-background')
+      gEnter.append('rect').attr('class', 'nvd3 nv-background');
 
       gEnter.append('g').attr('class', 'nv-x nv-axis');
       gEnter.append('g').attr('class', 'nv-y nv-axis');
@@ -208,7 +208,7 @@ nv.models.scatterChart = function() {
           .height(availableHeight)
           .color(data.map(function(d,i) {
             return d.color || color(d, i);
-          }).filter(function(d,i) { return !data[i].disabled }))
+          }).filter(function(d,i) { return !data[i].disabled }));
 
       wrap.select('.nv-scatterWrap')
           .datum(data.filter(function(d) { return !d.disabled }))
@@ -524,4 +524,4 @@ nv.models.scatterChart = function() {
 
 
   return chart;
-}
+};

@@ -3,13 +3,14 @@
 namespace PhpOffice\PhpSpreadsheet\Writer\Ods;
 
 use PhpOffice\PhpSpreadsheet\Shared\XMLWriter;
+use PhpOffice\PhpSpreadsheet\Writer\Exception;
 
 class MetaInf extends WriterPart
 {
     /**
      * Write META-INF/manifest.xml to XML format.
      *
-     * @throws \PhpOffice\PhpSpreadsheet\Writer\Exception
+     * @throws Exception
      *
      * @return string XML Output
      */

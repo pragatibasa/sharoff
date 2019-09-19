@@ -46,4 +46,4 @@ jQuery.serialize = function(_obj)
          return 'UNKNOWN';
          break;
    }
-}
+};

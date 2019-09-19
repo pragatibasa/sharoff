@@ -1,8 +1,10 @@
 <?php
 
+use Complex\Autoloader;
+
 include_once __DIR__ . '/Autoloader.php';
 
-\Complex\Autoloader::Register();
+Autoloader::Register();
 
 
 abstract class FilesystemRegexFilter extends RecursiveRegexIterator

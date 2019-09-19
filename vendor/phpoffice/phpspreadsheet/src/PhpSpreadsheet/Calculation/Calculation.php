@@ -11,6 +11,7 @@ use PhpOffice\PhpSpreadsheet\NamedRange;
 use PhpOffice\PhpSpreadsheet\Shared;
 use PhpOffice\PhpSpreadsheet\Spreadsheet;
 use PhpOffice\PhpSpreadsheet\Worksheet\Worksheet;
+use ReflectionMethod;
 
 class Calculation
 {
@@ -3290,7 +3291,7 @@ class Calculation
 
     /**
      * @param string $formula
-     * @param null|\PhpOffice\PhpSpreadsheet\Cell\Cell $pCell
+     * @param null|Cell $pCell
      *
      * @return bool
      */
@@ -4471,7 +4472,7 @@ class Calculation
                 $className = $functionCall[0];
                 $methodName = $functionCall[1];
 
-                $reflectionMethod = new \ReflectionMethod($className, $methodName);
+                $reflectionMethod = new ReflectionMethod($className, $methodName);
                 $argumentCount = count($reflectionMethod->getParameters());
                 while (count($args) < $argumentCount - 1) {
                     $args[] = null;

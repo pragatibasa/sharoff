@@ -2,9 +2,12 @@ jqx.lib.BaseController = Class.extend({
 	initObj : null,
 	
 	init : function(initObj) {
-		try { document.execCommand('BackgroundImageCache', false, true); } catch(e) {};
-		this.initObj = initObj || {};
-		this.errors = new Array();
+        try {
+            document.execCommand('BackgroundImageCache', false, true);
+        } catch (e) {
+        }
+        this.initObj = initObj || {};
+		this.errors = [];
 		this.callMethod(initObj.method);
 	},
 	
@@ -44,7 +47,7 @@ jqx.lib.BaseController = Class.extend({
 	},
 	
 	resetErrors : function(){
-		this.errors = new Array();
+		this.errors = [];
 	}
 	
 });

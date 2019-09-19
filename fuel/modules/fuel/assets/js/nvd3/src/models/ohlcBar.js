@@ -192,7 +192,7 @@ nv.models.ohlcBar = function() {
           });
 
       ticks
-          .attr('class', function(d,i,j) { return (getOpen(d,i) > getClose(d,i) ? 'nv-tick negative' : 'nv-tick positive') + ' nv-tick-' + j + '-' + i })
+          .attr('class', function(d,i,j) { return (getOpen(d,i) > getClose(d,i) ? 'nv-tick negative' : 'nv-tick positive') + ' nv-tick-' + j + '-' + i });
       d3.transition(ticks)
           .attr('transform', function(d,i) { return 'translate(' + x(getX(d,i)) + ',' + y(getHigh(d,i)) + ')'; })
           .attr('d', function(d,i) {
@@ -351,4 +351,4 @@ nv.models.ohlcBar = function() {
 
 
   return chart;
-}
+};

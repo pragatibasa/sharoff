@@ -35,6 +35,8 @@ use PhpOffice\PhpSpreadsheet\Style\Style;
 use PhpOffice\PhpSpreadsheet\Worksheet\HeaderFooterDrawing;
 use PhpOffice\PhpSpreadsheet\Worksheet\Worksheet;
 use SimpleXMLElement;
+use stdClass;
+use Throwable;
 use XMLReader;
 use ZipArchive;
 
@@ -922,7 +924,7 @@ class Xlsx extends BaseReader
                                             Settings::getLibXmlLoaderOptions()
                                         );
                                         $vmlCommentsFile->registerXPathNamespace('v', 'urn:schemas-microsoft-com:vml');
-                                    } catch (\Throwable $ex) {
+                                    } catch (Throwable $ex) {
                                         //Ignore unparsable vmlDrawings. Later they will be moved from $unparsedVmlDrawings to $unparsedLoadedData
                                         continue;
                                     }
@@ -1146,7 +1148,7 @@ class Xlsx extends BaseReader
                                                     $xfrm = $oneCellAnchor->pic->spPr->children('http://schemas.openxmlformats.org/drawingml/2006/main')->xfrm;
                                                     /** @var SimpleXMLElement $outerShdw */
                                                     $outerShdw = $oneCellAnchor->pic->spPr->children('http://schemas.openxmlformats.org/drawingml/2006/main')->effectLst->outerShdw;
-                                                    /** @var \SimpleXMLElement $hlinkClick */
+                                                    /** @var SimpleXMLElement $hlinkClick */
                                                     $hlinkClick = $oneCellAnchor->pic->nvPicPr->cNvPr->children('http://schemas.openxmlformats.org/drawingml/2006/main')->hlinkClick;
 
                                                     $objDrawing = new \PhpOffice\PhpSpreadsheet\Worksheet\Drawing();
@@ -1588,7 +1590,7 @@ class Xlsx extends BaseReader
 
     /**
      * @param Style $docStyle
-     * @param SimpleXMLElement|\stdClass $style
+     * @param SimpleXMLElement|stdClass $style
      */
     private static function readStyle(Style $docStyle, $style)
     {
@@ -1894,7 +1896,7 @@ class Xlsx extends BaseReader
 
     /**
      * @param \PhpOffice\PhpSpreadsheet\Worksheet\Drawing $objDrawing
-     * @param \SimpleXMLElement $cellAnchor
+     * @param SimpleXMLElement $cellAnchor
      * @param array $hyperlinks
      */
     private function readHyperLinkDrawing($objDrawing, $cellAnchor, $hyperlinks)

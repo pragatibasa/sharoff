@@ -165,7 +165,7 @@ if (fuel == undefined) var fuel = {};
 					activeEditor.find('.__fuel_edit_marker_inner__, .__fuel_edit_form__').stop().css(resetCss).hide();
 					activeEditor = null;
 				}
-			}
+			};
 			
 			var ajaxSubmit = function($form){
 				
@@ -193,7 +193,7 @@ if (fuel == undefined) var fuel = {};
 						return false;
 					}
 				});
-			}
+			};
 			
 			// set up cancel button
 			$('.__fuel_edit__ .ico_cancel').live('click', function(){
@@ -230,7 +230,7 @@ if (fuel == undefined) var fuel = {};
 
 				_anchor.mouseout(function(){
 					if ((activeEditor && activeEditor.attr('title') == $this.attr('title'))){
-						return;
+
 					} else {
 						$('.__fuel_edit_marker_inner__', this).stop().css(resetCss).hide();
 					}
@@ -266,7 +266,7 @@ if (fuel == undefined) var fuel = {};
 								$('.datepicker_hh', context).fillin('hh');
 								$('.datepicker_mm', context).fillin('mm');
 								//$('.datepicker').datePicker();
-								var dpOptions = {startDate: '01/01/2000', endDate: '12/31/2100'}
+								var dpOptions = {startDate: '01/01/2000', endDate: '12/31/2100'};
 
 								$('.datepicker', context).filter(":not('.dp-applied')").each(function(i){
 									if (!$(this).attr('disabled') && !$(this).attr('readonly')){
@@ -310,7 +310,7 @@ if (fuel == undefined) var fuel = {};
 									}
 									myMarkItUpSettings.previewParserPath = myMarkItUpSettings.previewParserPath + '?' + q;
 									$(elem).markItUp(myMarkItUpSettings);
-								}
+								};
 								
 								// fix ">" within template syntax
 								var fixCKEditorOutput = function(elem){
@@ -318,7 +318,7 @@ if (fuel == undefined) var fuel = {};
 									var re = new RegExp('([=|-])&gt;', 'g');
 									var newVal = elemVal.replace(re, '$1>');
 									$(elem).val(newVal);
-								}
+								};
 								
 								var createCKEditor = function(elem){
 									var ckId = $(elem).attr('id');
@@ -345,7 +345,7 @@ if (fuel == undefined) var fuel = {};
 											breakBeforeClose : false,
 											breakAfterClose : true
 										});
-									})
+									});
 									CKEDITOR.instances[ckId].resetDirty();
 
 									// needed so it doesn't update the content before submission which we need to clean up... 
@@ -381,7 +381,7 @@ if (fuel == undefined) var fuel = {};
 
 											$elem.closest('.html').css({position: 'absolute', 'left': '-100000px', overflow: 'hidden'}); // used instead of show/hide because of issue with it not showing textarea
 											//$elem.show().closest('.html').hide();
-											$('#' + ckId + '_viewsource').text(lang('btn_view_source'))
+											$('#' + ckId + '_viewsource').text(lang('btn_view_source'));
 
 											ckInstance.setData($elem.val());
 										}
@@ -392,7 +392,7 @@ if (fuel == undefined) var fuel = {};
 									})
 
 
-								}
+								};
 
 
 								$editors = $ckEditor = $('textarea:not(textarea[class=no_editor])', context);
@@ -451,7 +451,7 @@ if (fuel == undefined) var fuel = {};
 										});
 									}
 
-								}
+								};
 
 								// needed for enclosure
 								var bindLinked = function(slave, master, func){
@@ -479,7 +479,7 @@ if (fuel == undefined) var fuel = {};
 											}
 										}
 									}
-								}
+								};
 
 								if (__FUEL_LINKED_FIELDS){
 									var linked = __FUEL_LINKED_FIELDS;
@@ -554,7 +554,7 @@ if (fuel == undefined) var fuel = {};
 											if (isImg){
 												$('#asset_select').change(function(e){
 													$('#asset_preview').html('<img src="' + assetsPath + assetFolder + '/' + $('#asset_select').val() + '" />');
-												})
+												});
 												$('#asset_select').change();
 											} else {
 												$('#asset_preview').hide();
@@ -604,7 +604,7 @@ if (fuel == undefined) var fuel = {};
 										var refreshUrl = __FUEL_PATH__ + '/' + _this.module + '/refresh_field';
 										var params = { field:fieldId, field_id: fieldId, values: $field.val(), selected:html};
 										$.post(refreshUrl, params, function(html){
-											$('#notification').html('<ul class="success ico_success"><li>Successfully added to module ' + module + '</li></ul>')
+											$('#notification').html('<ul class="success ico_success"><li>Successfully added to module ' + module + '</li></ul>');
 											_this._notifications();
 											$modalContext.jqmHide();
 											$('#' + fieldId).replaceWith(html);
@@ -617,11 +617,11 @@ if (fuel == undefined) var fuel = {};
 											changeField($(this));
 										});
 										changeField($('#' + fieldId));
-									}
+									};
 									
 									var displayError = function($form, html){
 										$form.find('.inline_errors').html(html).animate( { backgroundColor: '#ee6060'}, 1500);
-									}
+									};
 									
 									var changeField = function($this){
 										if (($this.val() == '' || $this.attr('multiple')) || $this.find('option').size() == 0){
@@ -632,7 +632,7 @@ if (fuel == undefined) var fuel = {};
 										} else {
 											$this.next().show();
 										}	
-									}
+									};
 									
 									var editModule = function(url){
 									//	var $modalContext =$('#__FUEL__add_edit_modal');
@@ -651,7 +651,7 @@ if (fuel == undefined) var fuel = {};
 												$('.modal_cancel', $modalContext).click(function(){
 													$modalContext.jqmHide();
 													return false;
-												})
+												});
 												$('.ico_save', $modalContext).click(function(){
 													$form.ajaxSubmit({
 														success: function(html){
@@ -684,7 +684,7 @@ if (fuel == undefined) var fuel = {};
 												});
 											}
 										}).jqmShow();
-									}
+									};
 
 									var $modalContext = $('#__FUEL__add_edit_modal');
 
@@ -759,7 +759,7 @@ if (fuel == undefined) var fuel = {};
 				//elem.text('Show Editable Areas');
 				elem.parent('li').removeClass('active');
 				$.supercookie('fuel_bar', 'show_editable_areas', '0', {path: basePath});
-			}
+			};
 
 			var showEditors = function(){
 				// use the great resize plugin to accomplish this... 
@@ -772,7 +772,7 @@ if (fuel == undefined) var fuel = {};
 				//elem.text('Hide Editable Areas');
 				elem.parent('li').addClass('active');
 				$.supercookie('fuel_bar', 'show_editable_areas', '1', {path: basePath});
-			}
+			};
 			
 			var toggleEditors = function(shown){
 				if (shown){
@@ -780,7 +780,7 @@ if (fuel == undefined) var fuel = {};
 				} else {
 					showEditors();
 				}
-			}
+			};
 			
 			$('#__fuel_page_edit_toggle__').click(
 				function(){
@@ -798,7 +798,7 @@ if (fuel == undefined) var fuel = {};
 
 			$('#__fuel_page_publish_toggle__').click(function(e){
 				var $this = this;
-				var elem = $('#__fuel_page_published__')
+				var elem = $('#__fuel_page_published__');
 				var val = (elem.val() == 'yes') ? 'no' : 'yes';
 				elem.val(val);
 				$('#__fuel_edit_bar_form__').ajaxSubmit(function(){
@@ -808,7 +808,7 @@ if (fuel == undefined) var fuel = {};
 			});
 
 			$('#__fuel_page_cache_toggle__').click(function(e){
-				var elem = $('#__fuel_page_cached__')
+				var elem = $('#__fuel_page_cached__');
 				var val = (elem.val() == 'yes') ? 'no' : 'yes';
 				elem.val(val);
 				$('#__fuel_edit_bar_form__').ajaxSubmit(function(){
@@ -837,7 +837,7 @@ if (fuel == undefined) var fuel = {};
 				fuelBarOn = false;
 				elem.parent('li').removeClass('active');
 				$.supercookie('fuel_bar', 'show_fuel_bar', '0', {path: basePath});
-			}
+			};
 
 			var showFuelBar = function(animate){
 				var elem = $('#__fuel_page_toolbar_toggle__');
@@ -850,7 +850,7 @@ if (fuel == undefined) var fuel = {};
 				fuelBarOn = true;
 				elem.parent('li').addClass('active');
 				$.supercookie('fuel_bar', 'show_fuel_bar', '1', {path: basePath});
-			}
+			};
 			$('#__fuel_page_toolbar_toggle__').click(
 				function(){
 					toggleFuelBar(fuelBarOn, true);
@@ -864,7 +864,7 @@ if (fuel == undefined) var fuel = {};
 				} else {
 					showFuelBar(animate);
 				}
-			}
+			};
 			 // change to negative so it will toggle correctly
 			$("#__fuel_edit_bar__").show();
 			toggleFuelBar(!fuelBarOn, false);

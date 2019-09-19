@@ -173,11 +173,11 @@ nv.models.discreteBar = function() {
 
       barsEnter.append('rect')
           .attr('height', 0)
-          .attr('width', x.rangeBand() / data.length )
+          .attr('width', x.rangeBand() / data.length );
 
       if (showValues) {
         barsEnter.append('text')
-          .attr('text-anchor', 'middle')
+          .attr('text-anchor', 'middle');
         bars.select('text')
           .attr('x', x.rangeBand() / 2)
           .attr('y', function(d,i) { return getY(d,i) < 0 ? y(getY(d,i)) - y(0) + 12 : -4 })
@@ -310,4 +310,4 @@ nv.models.discreteBar = function() {
 
 
   return chart;
-}
+};

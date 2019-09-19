@@ -9,6 +9,8 @@
  */
 namespace Complex;
 
+use InvalidArgumentException;
+
 /**
  * Divides two or more complex numbers
  *
@@ -32,7 +34,7 @@ function divideby(...$complexValues)
             throw new Exception('Suffix Mismatch');
         }
         if ($complex->getReal() == 0.0 && $complex->getImaginary() == 0.0) {
-            throw new \InvalidArgumentException('Division by zero');
+            throw new InvalidArgumentException('Division by zero');
         }
 
         $delta1 = ($result->getReal() * $complex->getReal()) +

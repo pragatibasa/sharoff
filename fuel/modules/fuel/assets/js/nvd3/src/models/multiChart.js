@@ -60,26 +60,26 @@ nv.models.multiChart = function() {
           availableHeight = (height || parseInt(container.style('height')) || 400)
                              - margin.top - margin.bottom;
 
-      var dataLines1 = data.filter(function(d) {return !d.disabled && d.type == 'line' && d.yAxis == 1})
-      var dataLines2 = data.filter(function(d) {return !d.disabled && d.type == 'line' && d.yAxis == 2})
-      var dataBars1 = data.filter(function(d) {return !d.disabled && d.type == 'bar' && d.yAxis == 1})
-      var dataBars2 = data.filter(function(d) {return !d.disabled && d.type == 'bar' && d.yAxis == 2})
-      var dataStack1 = data.filter(function(d) {return !d.disabled && d.type == 'area' && d.yAxis == 1})
-      var dataStack2 = data.filter(function(d) {return !d.disabled && d.type == 'area' && d.yAxis == 2})
+      var dataLines1 = data.filter(function(d) {return !d.disabled && d.type == 'line' && d.yAxis == 1});
+      var dataLines2 = data.filter(function(d) {return !d.disabled && d.type == 'line' && d.yAxis == 2});
+      var dataBars1 = data.filter(function(d) {return !d.disabled && d.type == 'bar' && d.yAxis == 1});
+      var dataBars2 = data.filter(function(d) {return !d.disabled && d.type == 'bar' && d.yAxis == 2});
+      var dataStack1 = data.filter(function(d) {return !d.disabled && d.type == 'area' && d.yAxis == 1});
+      var dataStack2 = data.filter(function(d) {return !d.disabled && d.type == 'area' && d.yAxis == 2});
 
       var series1 = data.filter(function(d) {return !d.disabled && d.yAxis == 1})
             .map(function(d) {
               return d.values.map(function(d,i) {
                 return { x: d.x, y: d.y }
               })
-            })
+            });
 
       var series2 = data.filter(function(d) {return !d.disabled && d.yAxis == 2})
             .map(function(d) {
               return d.values.map(function(d,i) {
                 return { x: d.x, y: d.y }
               })
-            })
+            });
 
       x   .domain(d3.extent(d3.merge(series1.concat(series2)), function(d) { return d.x } ))
           .range([0, availableWidth]);
@@ -170,39 +170,39 @@ nv.models.multiChart = function() {
 
 
       var lines1Wrap = g.select('.lines1Wrap')
-          .datum(dataLines1)
+          .datum(dataLines1);
       var bars1Wrap = g.select('.bars1Wrap')
-          .datum(dataBars1)
+          .datum(dataBars1);
       var stack1Wrap = g.select('.stack1Wrap')
-          .datum(dataStack1)
+          .datum(dataStack1);
 
       var lines2Wrap = g.select('.lines2Wrap')
-          .datum(dataLines2)
+          .datum(dataLines2);
       var bars2Wrap = g.select('.bars2Wrap')
-          .datum(dataBars2)
+          .datum(dataBars2);
       var stack2Wrap = g.select('.stack2Wrap')
-          .datum(dataStack2)
+          .datum(dataStack2);
 
       var extraValue1 = dataStack1.length ? dataStack1.map(function(a){return a.values}).reduce(function(a,b){
         return a.map(function(aVal,i){return {x: aVal.x, y: aVal.y + b[i].y}})
-      }).concat([{x:0, y:0}]) : []
+      }).concat([{x:0, y:0}]) : [];
       var extraValue2 = dataStack2.length ? dataStack2.map(function(a){return a.values}).reduce(function(a,b){
         return a.map(function(aVal,i){return {x: aVal.x, y: aVal.y + b[i].y}})
-      }).concat([{x:0, y:0}]) : []
+      }).concat([{x:0, y:0}]) : [];
 
       yScale1 .domain(d3.extent(d3.merge(series1).concat(extraValue1), function(d) { return d.y } ))
-              .range([0, availableHeight])
+              .range([0, availableHeight]);
 
       yScale2 .domain(d3.extent(d3.merge(series2).concat(extraValue2), function(d) { return d.y } ))
-              .range([0, availableHeight])
+              .range([0, availableHeight]);
 
-      lines1.yDomain(yScale1.domain())
-      bars1.yDomain(yScale1.domain())
-      stack1.yDomain(yScale1.domain())
+      lines1.yDomain(yScale1.domain());
+      bars1.yDomain(yScale1.domain());
+      stack1.yDomain(yScale1.domain());
 
-      lines2.yDomain(yScale2.domain())
-      bars2.yDomain(yScale2.domain())
-      stack2.yDomain(yScale2.domain())
+      lines2.yDomain(yScale2.domain());
+      bars2.yDomain(yScale2.domain());
+      stack2.yDomain(yScale2.domain());
 
       if(dataStack1.length){d3.transition(stack1Wrap).call(stack1);}
       if(dataStack2.length){d3.transition(stack2Wrap).call(stack2);}
@@ -440,5 +440,5 @@ nv.models.multiChart = function() {
   };
 
   return chart;
-}
+};
 

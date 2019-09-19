@@ -255,7 +255,7 @@
             $('.total-allocated-weight.'+billNumber).text(totAllocatedWeight).val(totAllocatedWeight);
             $('.difference-weight.'+billNumber).text(differenceWeight).val(differenceWeight);
 
-            var sum = 0
+            var sum = 0;
             $('input[name="totAllocatedWeight[]"]').each(function(index) {
                 if($(this).val()) {
                     sum += parseFloat($(this).val());

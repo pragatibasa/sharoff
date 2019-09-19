@@ -11,6 +11,7 @@ namespace Complex;
 
 //include_once 'Math/Complex.php';
 //include_once 'Math/ComplexOp.php';
+use InvalidArgumentException;
 
 /**
  * Returns the inverse tangent of a complex number.
@@ -18,7 +19,7 @@ namespace Complex;
  * @param     Complex|mixed    $complex    Complex number or a numeric value.
  * @return    Complex          The inverse tangent of the complex argument.
  * @throws    Exception        If argument isn't a valid real or complex number.
- * @throws    \InvalidArgumentException    If function would result in a division by zero
+ * @throws    InvalidArgumentException    If function would result in a division by zero
  */
 function atan($complex)
 {

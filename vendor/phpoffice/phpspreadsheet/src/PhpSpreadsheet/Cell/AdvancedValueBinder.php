@@ -3,6 +3,7 @@
 namespace PhpOffice\PhpSpreadsheet\Cell;
 
 use PhpOffice\PhpSpreadsheet\Calculation\Calculation;
+use PhpOffice\PhpSpreadsheet\Exception;
 use PhpOffice\PhpSpreadsheet\RichText\RichText;
 use PhpOffice\PhpSpreadsheet\Shared\Date;
 use PhpOffice\PhpSpreadsheet\Shared\StringHelper;
@@ -16,7 +17,7 @@ class AdvancedValueBinder extends DefaultValueBinder implements IValueBinder
      * @param Cell $cell Cell to bind value to
      * @param mixed $value Value to bind in cell
      *
-     * @throws \PhpOffice\PhpSpreadsheet\Exception
+     * @throws Exception
      *
      * @return bool
      */

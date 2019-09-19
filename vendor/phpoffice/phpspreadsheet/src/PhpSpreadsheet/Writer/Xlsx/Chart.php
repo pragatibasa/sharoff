@@ -342,7 +342,7 @@ class Chart extends WriterPart
      * Write Data Labels.
      *
      * @param XMLWriter $objWriter XML Writer
-     * @param \PhpOffice\PhpSpreadsheet\Chart\Layout $chartLayout Chart layout
+     * @param Layout $chartLayout Chart layout
      */
     private function writeDataLabels(XMLWriter $objWriter, Layout $chartLayout = null)
     {

@@ -4,6 +4,7 @@ namespace PhpOffice\PhpSpreadsheet\Reader\Xlsx;
 
 use PhpOffice\PhpSpreadsheet\Cell\Coordinate;
 use PhpOffice\PhpSpreadsheet\Worksheet\Worksheet;
+use SimpleXMLElement;
 
 class SheetViews extends BaseParserClass
 {
@@ -11,7 +12,7 @@ class SheetViews extends BaseParserClass
 
     private $worksheet;
 
-    public function __construct(\SimpleXMLElement $sheetViewXml, Worksheet $workSheet)
+    public function __construct(SimpleXMLElement $sheetViewXml, Worksheet $workSheet)
     {
         $this->sheetViewXml = $sheetViewXml;
         $this->worksheet = $workSheet;

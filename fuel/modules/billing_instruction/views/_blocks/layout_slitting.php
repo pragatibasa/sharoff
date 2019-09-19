@@ -188,7 +188,7 @@ function billingbuttonslit(){
 	var dataString = 'partyid='+partyid+'&partyname='+partyname+'&slno='+slno+'&processchk='+processchk;
     $.ajax({
         type: 'POST',
-        success: function(){  alert('Preview Selected')
+        success: function(){  alert('Preview Selected');
 		setTimeout("location.href='<?= site_url('fuel/billing'); ?>/?"+ dataString+"'", 1000);
 		}
     });

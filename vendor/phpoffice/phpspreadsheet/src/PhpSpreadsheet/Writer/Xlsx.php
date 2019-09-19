@@ -23,6 +23,7 @@ use PhpOffice\PhpSpreadsheet\Writer\Xlsx\Style;
 use PhpOffice\PhpSpreadsheet\Writer\Xlsx\Theme;
 use PhpOffice\PhpSpreadsheet\Writer\Xlsx\Workbook;
 use PhpOffice\PhpSpreadsheet\Writer\Xlsx\Worksheet;
+use PhpOffice\PhpSpreadsheet\Writer\Xlsx\WriterPart;
 use ZipArchive;
 
 class Xlsx extends BaseWriter
@@ -152,7 +153,7 @@ class Xlsx extends BaseWriter
      *
      * @param string $pPartName Writer part name
      *
-     * @return \PhpOffice\PhpSpreadsheet\Writer\Xlsx\WriterPart
+     * @return WriterPart
      */
     public function getWriterPart($pPartName)
     {

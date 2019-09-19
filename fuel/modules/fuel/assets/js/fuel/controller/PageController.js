@@ -47,7 +47,7 @@ fuel.controller.PageController = jqx.createController(fuel.controller.BaseFuelCo
 					$('#vars--page_title').val($('#navigation_label').val());
 				});
 			}
-		}
+		};
 		
 		var _this = this;
 		$('#layout').change(function(e){

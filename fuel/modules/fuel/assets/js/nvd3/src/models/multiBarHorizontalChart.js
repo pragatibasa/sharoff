@@ -181,11 +181,11 @@ nv.models.multiBarHorizontalChart = function() {
         .height(availableHeight)
         .color(data.map(function(d,i) {
           return d.color || color(d, i);
-        }).filter(function(d,i) { return !data[i].disabled }))
+        }).filter(function(d,i) { return !data[i].disabled }));
 
 
       var barsWrap = g.select('.nv-barsWrap')
-          .datum(data.filter(function(d) { return !d.disabled }))
+          .datum(data.filter(function(d) { return !d.disabled }));
 
       d3.transition(barsWrap).call(multibar);
 
@@ -207,7 +207,7 @@ nv.models.multiBarHorizontalChart = function() {
 
       xTicks
           .selectAll('line, text')
-          .style('opacity', 1)
+          .style('opacity', 1);
 
 
       yAxis
@@ -375,4 +375,4 @@ nv.models.multiBarHorizontalChart = function() {
 
 
   return chart;
-}
+};
