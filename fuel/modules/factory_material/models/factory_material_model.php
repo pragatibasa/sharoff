@@ -31,7 +31,8 @@ class factory_material_model extends Base_module_model
         $sql = "SELECT 
                     aspen_tblpartydetails.nPartyName as partyname,
                     SUM(aspen_tblinwardentry.fQuantity) AS inweight,
-                    SUM(aspen_tblinwardentry.fpresent) AS outweight
+                    SUM(aspen_tblinwardentry.fpresent) AS outweight,
+                    SUM(aspen_tblinwardentry.fQuantity) - SUM(aspen_tblinwardentry.fpresent) as balance 
                 FROM
                     aspen_tblinwardentry
                         LEFT JOIN
@@ -58,7 +59,8 @@ class factory_material_model extends Base_module_model
         $sqlrpt = "SELECT 
                     aspen_tblpartydetails.nPartyName as partyname,
                     SUM(aspen_tblinwardentry.fQuantity) AS inweight,
-                    SUM(aspen_tblinwardentry.fpresent) AS outweight
+                    SUM(aspen_tblinwardentry.fpresent) AS outweight,
+                    SUM(aspen_tblinwardentry.fQuantity) - SUM(aspen_tblinwardentry.fpresent) as balance 
                 FROM
                     aspen_tblinwardentry
                         LEFT JOIN
@@ -68,6 +70,7 @@ class factory_material_model extends Base_module_model
                         AND aspen_tblinwardentry.dReceivedDate BETWEEN '".$frmdate."' AND '".$todate."'
                 GROUP BY aspen_tblpartydetails.nPartyName";
 
+//print_r($sqlrpt);exit;
 
         $querymain = $this->db->query($sqlrpt);
 
@@ -110,7 +113,9 @@ class factory_material_model extends Base_module_model
 			<tr>
 				<th align="center"><h2>Party Name</h2></th>		
 				<th align="center"><h2>Total Inward Weight</h2></th>					
-				<th align="center"><h2>Total Outward Weight</h2></th>
+                <th align="center"><h2>Total Outward Weight</h2></th>
+                <th align="center"><h2>Balance</h2></th>
+               
 			</tr>';
 
         if ($querymain->num_rows() > 0) {
@@ -119,7 +124,8 @@ class factory_material_model extends Base_module_model
                          <tr>
                          <td align="center"><h2>' . $rowitem->partyname . '</h2></td>			
                          <td align="center"><h2>' . $rowitem->inweight . '</h2></td>			
-                         <td align="center" ><h2>' . $rowitem->outweight . '</h2></td>		
+                         <td align="center" ><h2>' . $rowitem->outweight . '</h2></td>
+                         <td align="center" ><h2>' . $rowitem->balance . '</h2></td>		
                          </tr>';
             }
         } else {
