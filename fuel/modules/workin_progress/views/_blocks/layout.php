@@ -79,13 +79,8 @@
 </div>
 <input id="txtcoilids" type="hidden" hidden/>
 <div align="right">
-<<<<<<< HEAD
 <label>Total Weight: in (Tons)</label>
 <input id="txtboxweight" type="text" value="<?php echo(round($tweight,3)); ?>" DISABLED/> &nbsp; &nbsp; &nbsp;
-=======
-    <label>Total Weight: in (Kgs)</label>
-    <input id="txtboxweight" type="text" value="<?php echo $tweight; ?>" DISABLED/> &nbsp; &nbsp; &nbsp;
->>>>>>> 0ec591ddf0a94eebf8f3f014f03d7b68d2ba887e
 </div>
 
 <input id="coilid" type="hidden" value="" name="coilid">
