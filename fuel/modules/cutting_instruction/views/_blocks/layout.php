@@ -39,6 +39,7 @@
 				</td> 
 				<td>
 					<input id="wid" name="fWidth" type="text" DISABLED/> (in mm)
+					
 				</td>
 				<td>
 					<label><?=lang('length_txt')?></label>
@@ -59,6 +60,7 @@
 				</td>
 				<td> 
 					<input id="wei" name="fQuantity" type="text" DISABLED/> (in tons)
+					
 				</td>
 			</tr>
 		</table>
@@ -155,7 +157,7 @@ $.ajax({
 		var msg3=eval(msg);
 		$.each(msg3, function(i, j){
 			 var weight = j.weight;
-			document.getElementById("totalweight_calcualation").value = weight;});
+			document.getElementById("totalweight_calcualation").value = parseFloat(weight).toFixed(3);});
 	   }  
 	}); 
 }
@@ -187,9 +189,9 @@ function loadfolderlist(account, accname) {
             var thisdata = {};
             thisdata["bundlenumber"] = item.bundlenumber;
 			thisdata["processdate"] = item.processdate;
-            thisdata["length(in mm)"] = item.length;
-            thisdata["No of sheets"] = item.noofsheets;
-            thisdata["weight(in Kgs)"] = item.weight;
+            thisdata["length(in mm)"] = parseFloat(item.length).toFixed(3);
+            thisdata["No of sheets"] = parseFloat(item.noofsheets).toFixed(3);
+            thisdata["weight(in Tons)"] = parseFloat(item.weight).toFixed(3);
             
             if( item.status !== 'Billed' && item.status !== 'Ready To Bill') {
 				var dl = '<a class="ico_coil_delete" title="Delete" href="'+item.dl+'" onClick=deleteItem('+item.bundlenumber+')><img src="<?php echo img_path('iconset/ico_cancel.png'); ?>" /></a>';
@@ -396,7 +398,7 @@ if(bal_radio.checked) {
 				var rate = (msg)/(0.00000785 *width*thickness*length);
 				var rate = Math.floor(rate);
 				document.getElementById('bundleweight').value=msg;
-				document.getElementById('rate').value=rate;
+				document.getElementById('rate').value=rate.toFixed(3);
 				}
             });
 	}
@@ -405,7 +407,7 @@ function functionedit(){
 	var bundlenumber = $('#bundlenumber').val();
 	var length = $('#length').val();
 	var rate = $('#rate').val();
-	var bundleweight = $('#bundleweight').val();
+	var bundleweight = parseFloat($('#bundleweight').val()).toFixed(3);
 	totalweight_check();	
 	if(bundlenumber == '' || length =='' || rate =='')
 	{

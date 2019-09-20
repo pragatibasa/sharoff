@@ -153,7 +153,7 @@ class inward extends Fuel_base_controller {
 
 
         //getStyle accepts a range of cells as well!
-        $activeSheet->getStyle('A4:Q4')->applyFromArray(
+        $activeSheet->getStyle('A4:S4')->applyFromArray(
             array(
                 'font'  => array(
                     'bold'  =>  true

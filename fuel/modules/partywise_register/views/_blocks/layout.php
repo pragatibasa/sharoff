@@ -70,7 +70,7 @@
 	
 <div align="right">
 <label>Total Weight</label>
-		<input id="totalweight_calcualation" type="text" DISABLED/>(in tons)  
+       <input id="totalweight_calcualation" type="text" DISABLED/>(in tons)  
 		&nbsp; &nbsp; &nbsp;
 </div>
 <script language="javascript" type="text/javascript">
@@ -86,7 +86,8 @@ $.ajax({
 		var msg3=eval(msg);
 		$.each(msg3, function(i, j){
 			 var weight = j.weight;
-			document.getElementById("totalweight_calcualation").value = weight;});
+
+			 document.getElementById("totalweight_calcualation").value = parseFloat(weight).toFixed(3);});
 	   }  
 	}); 
 }
@@ -135,10 +136,10 @@ $.ajax({
 				mediaClass += '<td>' + item.receiveddate + '</td>';
 				mediaClass += '<td>' + item.description + '</td>';
 				mediaClass += '<td>' + item.grade + '</td>';
-				mediaClass += '<td>' + item.thickness + '</td>';
-				mediaClass += '<td>' + item.width + '</td>';
-				mediaClass += '<td>' + item.weight + '</td>';
-				mediaClass += '<td>' + item.pweight + '</td>';
+				mediaClass += '<td>' + parseFloat(item.thickness).toFixed(3) + '</td>';
+				mediaClass += '<td>' + parseFloat(item.width).toFixed(3) + '</td>';
+				mediaClass += '<td>' + parseFloat(item.weight).toFixed(3) + '</td>';
+				mediaClass += '<td>' + parseFloat(item.pweight).toFixed(3) + '</td>';
 				mediaClass += '<td>' + item.status + '</td>';
 				mediaClass += '<td>' + item.process + '</td>';
 					
@@ -187,7 +188,7 @@ function showchild(parentid) {
                             thisdata["Length in (mm)"] = item.length;
                             thisdata["BundleNumber"] = item.bundlenumber;
                             thisdata["No of sheets"] = item.bundles;
-                            thisdata["Weight in (Kgs)"] = item.weight;
+                            thisdata["Weight in (Tons)"] = item.weight;
                             thisdata["Balance"] = item.balance;
                             thisdata["Balance Weight"] = item.balanceWeight;
                             thisdata["Status"] = item.status;
@@ -204,7 +205,7 @@ function showchild(parentid) {
 								thisdata["Date"] = item.date;
 								thisdata["Width in(mm)"] = item.width;
 								thisdata["Length in(mm)"] = item.length;
-								thisdata["Weight in(kgs)"] = item.weight;
+								thisdata["Weight in(Tons)"] = item.weight;
 								thisdata["Status"] = item.status;
 							}
 							else if(item.process=='NULL'){

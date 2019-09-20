@@ -168,7 +168,7 @@
 						$("#fWidth").keyup(function() {
 							if(parseInt($(this).val()) > 2000) {
 								alert("Please enter the value below 2000mm.");
-								$("#fWidth").val('').toFixed(3);
+								$("#fWidth").val('')s;
 							}
 						});
 					</script>
@@ -359,6 +359,9 @@ function functionsave()
 	var ssid = $('#ssid').val();
 	var remark =$('#remark').val();
 
+	//var fQuantity = fQuantity
+	//document.getElementById('fQuantity').value = fQuantity.toFixed(3);
+
 	if(pid == '' || pname == ''  || coil == '' || fWidth == '' || fThickness == '' || fQuantity == '') {
 		alert("Please Enter the required fields")
 	} else if(pname == 'undefined') {
@@ -381,23 +384,6 @@ function functionsave()
 			var dataStringone = '&pname='+pname+'&pid='+pid;
 			var url = "<?php echo site_url('inward/inwardbillgenerate');?>/?"+dataStringone;
 		    window.open(url);
-		//	$('#pname').val('');
-			$('#pid').val('');
-		//	$('#lno').val('');
-		//	$('#icno').val('');
-		//	$('#coil').val('');
-		//	$('#icno').val('');
-		//	$('#fWidth').val('');
-			$('#fThickness').val('');
-			$('#fQuantity').val('');
-			$('#pwid').val('');
-			$('#did').val('');
-			$('#fLength').val('');
-			$('#hno').val('');
-			$('#picker').val('');
-			$('#pna').val('');
-		    $('#remark').val('');
-
 			}
 		});
 		}

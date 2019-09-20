@@ -69,8 +69,9 @@
 <input id="partnamecheck" type="hidden" value="" name="partnamecheck" />
 	
 <div align="right">
+<?php //echo (round($totalweight,3)); ?>
 <label>Total Weight</label>
-		<input id="totalweight_calcualation" type="text" DISABLED/>(in Kgs)  
+		<input id="totalweight_calcualation" type="text" DISABLED/>(in Tons)  
 		&nbsp; &nbsp; &nbsp;
 </div>
 
@@ -92,7 +93,7 @@ $.ajax({
 		var msg3=eval(msg);
 		$.each(msg3, function(i, j){
 			 var weight = j.weight;
-			document.getElementById("totalweight_calcualation").value = weight;});
+			document.getElementById("totalweight_calcualation").value = weight.toFixed(3);});
 	   }  
 	}); 
 }
@@ -194,10 +195,10 @@ function showchild(parentid) {
                             var thisdata = {};
 							if(item.process=='Cutting'){
 							thisdata["Processdate"] = item.processdate;
-                            thisdata["Length in (mm)"] = item.length;
+                            thisdata["Length in (mm)"] = item.length.toFixed(3);
                             thisdata["BundleNumber"] = item.bundlenumber;
                             thisdata["No of sheets"] = item.bundles;
-                            thisdata["Weight in (Kgs)"] = item.weight;
+                            thisdata["Weight in (Tons)"] = item.weight.toFixed(3);
                             thisdata["Status"] = item.status;
 							}
 							else if(item.process=='Recoiling'){
@@ -210,7 +211,7 @@ function showchild(parentid) {
 							else if(item.process=='Slitting'){
 							thisdata["SlittNumber"] = item.slittnumber;
 							thisdata["Date"] = item.date;
-							thisdata["Width in(mm)"] = item.width;
+							thisdata["Width in(mm)"] = item.width.toFixed(3);
 							thisdata["Status"] = item.status;
 							}
 							else if(item.process=='NULL'){

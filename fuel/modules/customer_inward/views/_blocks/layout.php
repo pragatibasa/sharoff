@@ -142,7 +142,7 @@
 
 <label>Total Weight</label>
 
-		<input id="totalweight_calcualation" type="text" DISABLED/>(in Kgs)
+		<input id="totalweight_calcualation" type="text" DISABLED/>(in Tons)
 		&nbsp; &nbsp; &nbsp;
 </div>
 
@@ -171,7 +171,7 @@ function totalweight_check(){
 		success: function(msg){
 		var msg3=eval(msg);
 		$.each(msg3, function(i, j){
-			 var weight = (j.weight/1000);
+			 var weight = (j.weight);
 			document.getElementById("totalweight_calcualation").value = weight;});
 	   }
 	});
