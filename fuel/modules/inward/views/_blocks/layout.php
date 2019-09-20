@@ -400,12 +400,10 @@ function diff()
 {
 	var fQuantity = $('#fQuantity').val();
 	var pwid = $('#pwid').val();
-    var Difference = (fQuantity-pwid);
+    var Difference = (pwid-fQuantity);
     document.getElementById('did').value = Difference.toFixed(3);
 
 }
-//print_r(diff);*/
-
 
 var section = "demos/picker";
 	$(function() {
