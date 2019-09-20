@@ -366,8 +366,8 @@ function doweight() {
 		alert("All fields are mandatory");
 	}
 	else{
-	var result= weight-(0.00000785 *width*thickness*length*rate);
-	var resultbundle= (0.00000785 *width*thickness*length*rate);
+	var result= weight-(0.00000000785*width*thickness*length*rate);
+	var resultbundle= (0.00000000785*width*thickness*length*rate);
 	var resultbundle = Math.round(resultbundle).toFixed(3);
 	document.getElementById('bundleweight').value = resultbundle;
 	}
