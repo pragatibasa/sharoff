@@ -292,16 +292,16 @@ nv.models.indentedTree = function() {
      if (!arguments.length) return iconOpen;
     iconOpen = _;
     return chart;
-  }
+  };
 
   chart.iconClose = function(_){
      if (!arguments.length) return iconClose;
     iconClose = _;
     return chart;
-  }
+  };
 
   //============================================================
 
 
   return chart;
-}
+};

@@ -65,7 +65,7 @@ nv.models.line = function() {
       var wrapEnter = wrap.enter().append('g').attr('class', 'nvd3 nv-wrap nv-line');
       var defsEnter = wrapEnter.append('defs');
       var gEnter = wrapEnter.append('g');
-      var g = wrap.select('g')
+      var g = wrap.select('g');
 
       gEnter.append('g').attr('class', 'nv-groups');
       gEnter.append('g').attr('class', 'nv-scatterWrap');
@@ -79,7 +79,7 @@ nv.models.line = function() {
 
       scatter
         .width(availableWidth)
-        .height(availableHeight)
+        .height(availableHeight);
 
       var scatterWrap = wrap.select('.nv-scatterWrap');
           //.datum(data); // Data automatically trickles down from the wrap
@@ -287,4 +287,4 @@ nv.models.line = function() {
 
 
   return chart;
-}
+};

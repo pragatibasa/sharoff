@@ -36,7 +36,7 @@ nv.utils.windowResize = function(fun){
     if (typeof oldresize == 'function') oldresize(e);
     fun(e);
   }
-}
+};
 
 // Backwards compatible way to implement more d3-like coloring of graphs.
 // If passed an array, wrap it in a function which implements the old default
@@ -49,13 +49,13 @@ nv.utils.getColor = function(color) {
     else
         return color;
         //can't really help it if someone passes rubish as color
-}
+};
 
 // Default color chooser uses the index of an object as before.
 nv.utils.defaultColor = function() {
     var colors = d3.scale.category20().range();
     return function(d, i) { return d.color || colors[i % colors.length] };
-}
+};
 
 
 
@@ -80,5 +80,5 @@ nv.utils.pjax = function(links, content) {
   d3.select(window).on("popstate", function() {
     if (d3.event.state) load(d3.event.state);
   });
-}
+};
 

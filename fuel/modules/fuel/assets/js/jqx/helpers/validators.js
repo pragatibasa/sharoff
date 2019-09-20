@@ -1,6 +1,6 @@
 function validDate(sDate){
 	if (sDate.constructor == String){
-	    var re = /^\d{1,2}\/\d{1,2}\/\d{4}$/
+	    var re = /^\d{1,2}\/\d{1,2}\/\d{4}$/;
 		if (!re.test(sDate)) return false;
 	}
 	var fields = sDate.split("/");

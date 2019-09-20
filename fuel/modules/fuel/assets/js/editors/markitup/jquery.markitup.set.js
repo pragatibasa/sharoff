@@ -67,7 +67,7 @@ myMarkItUpSettings = {
 			}
 		},
 	]
-}
+};
 
 myMarkItUpSettings.markItUpFullScreen = function (markItUp){
 	
@@ -84,7 +84,7 @@ myMarkItUpSettings.markItUpFullScreen = function (markItUp){
 		container.jqmHide();
 		container.parent().remove();
 
-	}
+	};
 
 	if (textarea.size() == 0){
 		jQuery('body').append('<textarea id="fullscreen"></textarea>');
@@ -102,11 +102,11 @@ myMarkItUpSettings.markItUpFullScreen = function (markItUp){
 		var container = textarea.parents('.markItUp');
 		jQuery(container).jqm({toTop:true}).jqmShow();
 
-		var textareaCSS = { width: '98%', height: '98%', margin: 'auto' }
-		var containerCSS = { position: 'absolute', backgroundColor: '#ffffff', width: '98%', height: '98%', marginLeft: '1%', zIndex: 2999 }
-		var headerCSS = { width: '98%', margin: 'auto'}
-		var innerContainerCSS = { height: '90%' }
-		var previewFrameCSS = { width: '98%', display: 'block', height: '98%', margin: 'auto'}
+		var textareaCSS = { width: '98%', height: '98%', margin: 'auto' };
+		var containerCSS = { position: 'absolute', backgroundColor: '#ffffff', width: '98%', height: '98%', marginLeft: '1%', zIndex: 2999 };
+		var headerCSS = { width: '98%', margin: 'auto'};
+		var innerContainerCSS = { height: '90%' };
+		var previewFrameCSS = { width: '98%', display: 'block', height: '98%', margin: 'auto'};
 
 		textarea.css(textareaCSS);
 		container.css(containerCSS);
@@ -138,7 +138,7 @@ myMarkItUpSettings.markItUpFullScreen = function (markItUp){
 		jQuery('.minimize', container).click(function(){
 			minimize();
 			return false;
-		})
+		});
 
 		jQuery('.full_screen_close', container).click(function(){
 			minimize();
@@ -151,7 +151,7 @@ myMarkItUpSettings.markItUpFullScreen = function (markItUp){
 
 
 	
-}
+};
 myMarkItUpSettings.markItUpImageInsert = function (markItUp){
 	var isInline = (jQuery('#__FUEL__asset_modal').size());
 	var path = (isInline) ? __FUEL_PATH__ + '/assets/select_ajax/images' : jqx.config.fuelPath + '/assets/select_ajax/images';
@@ -162,7 +162,7 @@ myMarkItUpSettings.markItUpImageInsert = function (markItUp){
 
 			jQuery('#asset_select').change(function(e){
 				jQuery('#asset_preview').html('<img src="' + imgPath + jQuery('#asset_select').val() + '" />');
-			})
+			});
 			jQuery('#asset_select').change();
 			
 			jQuery('.ico_yes').click(function(){
@@ -170,7 +170,7 @@ myMarkItUpSettings.markItUpImageInsert = function (markItUp){
 				var replace = '<img src="{img_path(\'' + jQuery('#asset_select').val() + '\')}" alt="" />';
 				jQuery(markItUp.textarea).trigger('insertion', [{replaceWith: replace}]);
 				return false;
-			})
+			});
 
 			jQuery('.ico_no').click(function(){
 				jQuery('#asset_modal,#__FUEL__asset_modal').jqmHide();
@@ -180,4 +180,4 @@ myMarkItUpSettings.markItUpImageInsert = function (markItUp){
 			
 		}
 	}).jqmShow();
-}
+};

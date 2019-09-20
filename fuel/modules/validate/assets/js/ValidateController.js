@@ -14,7 +14,7 @@ var ValidateController = {
 			$('.csadd').click();
 			$('#form').submit();
 			return false;
-		})
+		});
 
 		$('#submit_links').click(function(){
 			$('.csadd').click();
@@ -26,7 +26,7 @@ var ValidateController = {
 			$('.csadd').click();
 			$('#form').attr('action', _this.modulePath + '/validate/size_report').submit();
 			return false;
-		})
+		});
 		var comboOpts = this._comboOps('#pages');
 		$('#pages').supercomboselect(comboOpts);
 	},
@@ -64,7 +64,7 @@ var ValidateController = {
 						
 						(function (num, uri) {
 							$('#results_refresh_' + num).click(function(e){
-								var $this = $(this)
+								var $this = $(this);
 								$this.addClass('loader_sm');
 								$.post(_this.modulePath + '/validate/html', { uri : uri }, 
 									function(html){
@@ -72,7 +72,7 @@ var ValidateController = {
 										$this.removeClass('loader_sm');
 									});
 							})
-						})(i, u)
+						})(i, u);
 						
 						i++;
 					});
@@ -139,7 +139,7 @@ var ValidateController = {
 						
 						(function (num, uri) {
 							$('#results_refresh_' + num).click(function(e){
-								var $this = $(this)
+								var $this = $(this);
 								$this.addClass('loader_sm');
 								$.post(_this.modulePath + '/validate/links', { uri : uri }, 
 									function(html){
@@ -147,7 +147,7 @@ var ValidateController = {
 										$this.removeClass('loader_sm');
 									});
 							})
-						})(i, u)
+						})(i, u);
 						
 						i++;
 					});
@@ -210,7 +210,7 @@ var ValidateController = {
 						
 						(function (num, uri) {
 							$('#results_refresh_' + num).click(function(e){
-								var $this = $(this)
+								var $this = $(this);
 								$this.addClass('loader_sm');
 								$.post(_this.modulePath + '/validate/size_report', { uri : uri }, 
 									function(html){
@@ -218,7 +218,7 @@ var ValidateController = {
 										$this.removeClass('loader_sm');
 									});
 							})
-						})(i, u)
+						})(i, u);
 						
 						i++;
 					});
@@ -279,7 +279,7 @@ var ValidateController = {
 				var doc = _this.createResultsIframe(i, html);
 				var summary = '<span class="uri">' + u + '</span> &nbsp; ';
 				var invalid_text = $('#total_invalid', doc).text();
-				console.log(invalid_text)
+				console.log(invalid_text);
 				var invalid_num = parseInt($('#total_invalid_num', doc).text());
 
 				if (invalid_num > 0){

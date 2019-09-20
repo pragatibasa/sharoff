@@ -61,7 +61,7 @@ interface IWriter
      *
      * @param string $pFilename Name of the file to save
      *
-     * @throws \PhpOffice\PhpSpreadsheet\Writer\Exception
+     * @throws Exception
      */
     public function save($pFilename);
 

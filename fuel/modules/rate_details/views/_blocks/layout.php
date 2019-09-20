@@ -68,11 +68,11 @@
     echo '
       <tr>
 	  <td align="center" valign="top">  
-		<input type="radio" id="radio_'.$i.'" name="list" value="'.$i.'"  onclick="radioload('.$i.')" />
+		<input type="radio" id="radio_'.$i.'" name="list" value="'.$i.'"  onclick="radioload('.$i. ';)" />
 	  </td> 
      
 	  <td align="center" valign="top">  
-		<input id="mint'.$i.'" value="'.$folder->nMinThickness .'"  />   
+		<input id="mint' .$i.'" value="'.$folder->nMinThickness .'"  />   
 	</td>   
 		
 	  <td align="center" valign="top"> 

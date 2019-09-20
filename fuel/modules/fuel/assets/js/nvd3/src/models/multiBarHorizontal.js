@@ -77,7 +77,7 @@ nv.models.multiBarHorizontal = function() {
       x   .domain(xDomain || d3.merge(seriesData).map(function(d) { return d.x }))
           .rangeBands([0, availableHeight], .1);
 
-      y   .domain(yDomain || d3.extent(d3.merge(seriesData).map(function(d) { return d.y + (stacked ? d.y0 : 0) }).concat(forceY)))
+      y   .domain(yDomain || d3.extent(d3.merge(seriesData).map(function(d) { return d.y + (stacked ? d.y0 : 0) }).concat(forceY)));
 
       if (showValues && !stacked)
         y.range([(y.domain()[0] < 0 ? valuePadding : 0), availableWidth - (y.domain()[1] > 0 ? valuePadding : 0) ]);
@@ -139,7 +139,7 @@ nv.models.multiBarHorizontal = function() {
 
       barsEnter.append('rect')
           .attr('width', 0)
-          .attr('height', x.rangeBand() / (stacked ? 1 : data.length) )
+          .attr('height', x.rangeBand() / (stacked ? 1 : data.length) );
 
       bars
           .on('mouseover', function(d,i) { //TODO: figure out why j works above, but not here
@@ -192,11 +192,11 @@ nv.models.multiBarHorizontal = function() {
 
       if (showValues && !stacked) {
         barsEnter.append('text')
-            .attr('text-anchor', function(d,i) { return getY(d,i) < 0 ? 'end' : 'start' })
+            .attr('text-anchor', function(d,i) { return getY(d,i) < 0 ? 'end' : 'start' });
         bars.select('text')
             .attr('y', x.rangeBand() / 2)
             .attr('dy', '-.32em')
-            .text(function(d,i) { return valueFormat(getY(d,i)) })
+            .text(function(d,i) { return valueFormat(getY(d,i)) });
         d3.transition(bars)
             //.delay(function(d,i) { return i * delay / data[0].values.length })
           .select('text')
@@ -206,7 +206,7 @@ nv.models.multiBarHorizontal = function() {
       }
 
       bars
-          .attr('class', function(d,i) { return getY(d,i) < 0 ? 'nv-bar negative' : 'nv-bar positive'})
+          .attr('class', function(d,i) { return getY(d,i) < 0 ? 'nv-bar negative' : 'nv-bar positive'});
           //.attr('transform', function(d,i,j) {
               //return 'translate(' + y0(stacked ? d.y0 : 0) + ',' + x(getX(d,i)) + ')'
           //})
@@ -367,4 +367,4 @@ nv.models.multiBarHorizontal = function() {
 
 
   return chart;
-}
+};

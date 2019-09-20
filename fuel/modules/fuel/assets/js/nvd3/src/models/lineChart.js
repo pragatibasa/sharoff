@@ -168,7 +168,7 @@ nv.models.lineChart = function() {
 
 
       var linesWrap = g.select('.nv-linesWrap')
-          .datum(data.filter(function(d) { return !d.disabled }))
+          .datum(data.filter(function(d) { return !d.disabled }));
 
       d3.transition(linesWrap).call(lines);
 
@@ -331,4 +331,4 @@ nv.models.lineChart = function() {
 
 
   return chart;
-}
+};

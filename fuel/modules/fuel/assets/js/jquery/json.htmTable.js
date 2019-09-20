@@ -106,7 +106,7 @@ function CreateTableViewX(objArray, theme, enableHeader) {
         }
         str += '</tr>';
     }
-    str += '</tbody>'
+    str += '</tbody>';
     str += '</table>';
     return str;
 }
@@ -145,7 +145,7 @@ function CreateDetailView(objArray, theme, enableHeader) {
             row++;
         }
     }
-    str += '</tbody>'
+    str += '</tbody>';
     str += '</table>';
     return str;
 }
@@ -183,7 +183,7 @@ function createtableviewdiv(objArray, theme, enableHeader) {
         }
         str += '</div>';
     }
-    str += '</div>'
+    str += '</div>';
     str += '</div>';
     return str;
 }

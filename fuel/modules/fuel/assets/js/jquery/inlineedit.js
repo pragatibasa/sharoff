@@ -51,7 +51,7 @@ $.fn.inlineEdit = function( options ) {
             }
 
         });
-}
+};
 
 // plugin constructor
 $.inlineEdit = function( elem, options ) {
@@ -62,20 +62,20 @@ $.inlineEdit = function( elem, options ) {
     // the original element
     this.element = $( elem );
 
-}
+};
 
 // plugin instance
 $.inlineEdit.getInstance = function( elem, options ) {
     return ( $.inlineEdit.initialised( elem ) ) 
     ? $( elem ).data( 'widget' + namespace )
     : new $.inlineEdit( elem, options );
-}
+};
 
 // check if plugin initialised
 $.inlineEdit.initialised = function( elem ) {
     var init = $( elem ).data( 'init' + namespace );
     return init !== undefined && init !== null ? true : false;
-}
+};
 
 // plugin defaults
 $.inlineEdit.defaults = {

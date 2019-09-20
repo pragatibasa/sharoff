@@ -101,9 +101,8 @@ Date.format = 'dd/mm/yyyy';
 		if( !Date.prototype[name] ) {
 			Date.prototype[name] = method;
 		}
-	};
-	
-	/**
+    }
+    /**
 	 * Checks if the year is a leap year.
 	 *
 	 * @example var dtm = new Date("01/12/2008");

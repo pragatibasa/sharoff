@@ -89,7 +89,7 @@ function billingbuttondirect(){
 	var dataString = 'partyid='+partyid+'&partyname='+partyname+'&processchk=sf'+'&weight='+weight;
     $.ajax({
         type: 'POST',
-        success: function(){  alert('Preview Selected')
+        success: function(){  alert('Preview Selected');
 		setTimeout("location.href='<?= site_url('fuel/billing'); ?>/?"+ dataString+"'", 1000);
 		}
     });

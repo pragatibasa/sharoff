@@ -2060,12 +2060,11 @@ function extendRemove(target, props) {
 		if (props[name] == null || props[name] == undefined)
 			target[name] = props[name];
 	return target;
-};
-
-/* Attach the datepicker functionality to a jQuery selection.
-   @param  command  (string) the command to run (optional, default 'attach')
-   @param  options  (object) the new settings to use for these instances (optional)
-   @return  (jQuery) for chaining further calls */
+}
+    /* Attach the datepicker functionality to a jQuery selection.
+       @param  command  (string) the command to run (optional, default 'attach')
+       @param  options  (object) the new settings to use for these instances (optional)
+       @return  (jQuery) for chaining further calls */
 $.fn.datepick = function(options) {
 	var otherArgs = Array.prototype.slice.call(arguments, 1);
 	if ($.inArray(options, ['getDate', 'isDisabled', 'isSelectable', 'options', 'retrieveDate']) > -1) {

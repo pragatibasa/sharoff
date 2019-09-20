@@ -65,7 +65,7 @@ nv.models.stackedArea = function() {
                  d.index = j;
                  d.stackedY = aseries.disabled ? 0 : getY(d,j);
                  return d;
-               })
+               });
                return aseries;
              });
 
@@ -114,7 +114,7 @@ nv.models.stackedArea = function() {
 
 
       var scatterWrap = g.select('.nv-scatterWrap')
-          .datum(data.filter(function(d) { return !d.disabled }))
+          .datum(data.filter(function(d) { return !d.disabled }));
 
       d3.transition(scatterWrap).call(scatter);
 
@@ -177,7 +177,7 @@ nv.models.stackedArea = function() {
               pos: [d3.event.pageX, d3.event.pageY],
               seriesIndex: i
             });
-          })
+          });
       d3.transition(path.exit())
           .attr('d', function(d,i) { return zeroArea(d.values,i) })
           .remove();
@@ -185,7 +185,7 @@ nv.models.stackedArea = function() {
           .style('fill', function(d,i){ return d.color || color(d, i) })
           .style('stroke', function(d,i){ return d.color || color(d, i) });
       d3.transition(path)
-          .attr('d', function(d,i) { return area(d.values,i) })
+          .attr('d', function(d,i) { return area(d.values,i) });
 
 
       //============================================================
@@ -214,7 +214,7 @@ nv.models.stackedArea = function() {
 
   scatter.dispatch.on('elementClick.area', function(e) {
     dispatch.areaClick(e);
-  })
+  });
   scatter.dispatch.on('elementMouseover.tooltip', function(e) {
         e.pos = [e.pos[0] + margin.left, e.pos[1] + margin.top],
         dispatch.tooltipShow(e);
@@ -245,7 +245,7 @@ nv.models.stackedArea = function() {
     if (!arguments.length) return getY;
     getY = d3.functor(_);
     return chart;
-  }
+  };
 
   chart.margin = function(_) {
     if (!arguments.length) return margin;
@@ -330,4 +330,4 @@ nv.models.stackedArea = function() {
 
 
   return chart;
-}
+};

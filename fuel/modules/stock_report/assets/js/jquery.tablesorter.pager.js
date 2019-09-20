@@ -174,7 +174,7 @@
 				});
 			};
 			
-		}
+		};
 	});
 	// extend plugin scope
 	$.fn.extend({

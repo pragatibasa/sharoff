@@ -255,7 +255,7 @@ function quicksort_by(f) {
               great--;
               // This is the only location in the while-loop where a new
               // iteration is started.
-              continue;
+
             } else if (greatValue < pivotValue1) {
               // Triple exchange.
               a[k] = a[less];
@@ -308,7 +308,7 @@ function quicksort_by(f) {
                 if (great < k) break;
                 // This is the only location inside the loop where a new
                 // iteration is started.
-                continue;
+
               } else {
                 // a[great] <= pivot2.
                 if (greatValue < pivotValue1) {
@@ -396,7 +396,7 @@ function quicksort_by(f) {
                 if (great < k) break;
                 // This is the only location inside the loop where a new
                 // iteration is started.
-                continue;
+
               } else {
                 // a[great] < pivot2.
                 if (greatValue < pivotValue1) {

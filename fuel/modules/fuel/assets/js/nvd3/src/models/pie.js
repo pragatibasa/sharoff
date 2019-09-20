@@ -313,4 +313,4 @@ nv.models.pie = function() {
 
 
   return chart;
-}
+};

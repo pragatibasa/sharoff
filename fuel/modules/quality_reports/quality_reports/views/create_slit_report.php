@@ -307,7 +307,7 @@ $(document).ready(function(){
   $('.back').click(function() {
     var url = '<?php echo fuel_url('workin_progress');?>';
     window.location.replace(url);
-  })
+  });
   $('#saveSlitReport').click(function() {
       var myForm = document.getElementById('slittingReportForm');
       var formData = new FormData(myForm);

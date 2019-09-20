@@ -41,7 +41,7 @@
 $('document').ready(function() {
     $('.print-all-labels').click(function() {
         
-    })
+    });
 
     $('.print_single').click(function() {
         $.ajax({  

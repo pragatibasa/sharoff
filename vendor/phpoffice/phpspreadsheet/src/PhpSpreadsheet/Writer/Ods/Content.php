@@ -32,7 +32,7 @@ class Content extends WriterPart
     /**
      * Write content.xml to XML format.
      *
-     * @throws \PhpOffice\PhpSpreadsheet\Writer\Exception
+     * @throws Exception
      *
      * @return string XML Output
      */
@@ -178,7 +178,7 @@ class Content extends WriterPart
         $prevColumn = -1;
         $cells = $row->getCellIterator();
         while ($cells->valid()) {
-            /** @var \PhpOffice\PhpSpreadsheet\Cell\Cell $cell */
+            /** @var Cell $cell */
             $cell = $cells->current();
             $column = Coordinate::columnIndexFromString($cell->getColumn()) - 1;
 

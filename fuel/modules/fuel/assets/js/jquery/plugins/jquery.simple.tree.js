@@ -448,4 +448,4 @@ $.fn.simpleTree = function(opt){
 		};
 		TREE.init(ROOT);
 	});
-}
+};

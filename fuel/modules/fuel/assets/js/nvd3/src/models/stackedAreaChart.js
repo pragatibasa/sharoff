@@ -172,7 +172,7 @@ nv.models.stackedAreaChart = function() {
 
       stacked
         .width(availableWidth)
-        .height(availableHeight)
+        .height(availableHeight);
 
       var stackedWrap = g.select('.nv-stackedWrap')
           .datum(data);
@@ -389,4 +389,4 @@ nv.models.stackedAreaChart = function() {
   //============================================================
 
   return chart;
-}
+};

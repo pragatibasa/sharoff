@@ -77,7 +77,7 @@ class Partywise_register extends Fuel_base_controller {
 			$obj->thickness = $container->thickness;
 			$obj->width = $container->width;
 			$obj->weight = $container->weight;
-			$obj->pweight = round( $container->pweight );
+			$obj->pweight = round( $container->pweight,3 );
 			$obj->status = $container->status;
 			$obj->process = $container->process;
 			$obj->ci = site_url('fuel/cutting_instruction').'/?partyid='.$container->coilnumber.'&partyname='.$partyname;

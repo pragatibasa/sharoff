@@ -14,13 +14,13 @@
 </script>
 <div class="tab-boxpr"> 
 	<div style="width:1100px;">
-    <a href="javascript:;"><div class="tabLinkpr activeLinkpr" id="contpr-1" style="float:left;"><h1>Bill Book</h1></div></a>
-    <a href="javascript:;"><div class="tabLinkpr" id="contpr-2" style="float:left;"><h1>Partywise Billing Summary</h1></div></a>
-    <a href="javascript:;"><div class="tabLinkpr" id="contpr-3" style="float:left;"><h1>Process Register</h1></div></a> 
-    <a href="javascript:;"><div class="tabLinkpr" id="contpr-4" style="float:left;"><h1>Master And Stock Report</h1></div></a>
-    <a href="javascript:;"><div class="tabLinkpr" id="contpr-5" style="float:left;"><h1>ManagmentReport</h1></div></a>
-    <a href="javascript:;"><div class="tabLinkpr" id="contpr-6" style="float:left;"><h1>Transfer Stock</h1></div></a>
-    <a href="javascript:;"><div class="tabLinkpr" id="contpr-7" style="float:left;"><h1>Transfer</h1></div></a>	
+    <a href="javascript:"><div class="tabLinkpr activeLinkpr" id="contpr-1" style="float:left;"><h1>Bill Book</h1></div></a>
+    <a href="javascript:"><div class="tabLinkpr" id="contpr-2" style="float:left;"><h1>Partywise Billing Summary</h1></div></a>
+    <a href="javascript:"><div class="tabLinkpr" id="contpr-3" style="float:left;"><h1>Process Register</h1></div></a>
+    <a href="javascript:"><div class="tabLinkpr" id="contpr-4" style="float:left;"><h1>Master And Stock Report</h1></div></a>
+    <a href="javascript:"><div class="tabLinkpr" id="contpr-5" style="float:left;"><h1>ManagmentReport</h1></div></a>
+    <a href="javascript:"><div class="tabLinkpr" id="contpr-6" style="float:left;"><h1>Transfer Stock</h1></div></a>
+    <a href="javascript:"><div class="tabLinkpr" id="contpr-7" style="float:left;"><h1>Transfer</h1></div></a>
     </div>
 </div>
 

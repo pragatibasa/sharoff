@@ -1,6 +1,9 @@
 <?php
 
 use Complex\Complex as Complex;
+use function Complex\add;
+use function Complex\multiply;
+use function Complex\subtract;
 
 include('../classes/Bootstrap.php');
 
@@ -16,19 +19,19 @@ foreach ($values as $value) {
 
 echo 'Addition', PHP_EOL;
 
-$result = \Complex\add(...$values);
+$result = add(...$values);
 echo '=> ', $result, PHP_EOL;
 
 echo PHP_EOL;
 
 echo 'Subtraction', PHP_EOL;
 
-$result = \Complex\subtract(...$values);
+$result = subtract(...$values);
 echo '=> ', $result, PHP_EOL;
 
 echo PHP_EOL;
 
 echo 'Multiplication', PHP_EOL;
 
-$result = \Complex\multiply(...$values);
+$result = multiply(...$values);
 echo '=> ', $result, PHP_EOL;

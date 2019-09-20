@@ -5,6 +5,7 @@ namespace PhpOffice\PhpSpreadsheet\Reader\Xlsx;
 use PhpOffice\PhpSpreadsheet\Worksheet\AutoFilter\Column;
 use PhpOffice\PhpSpreadsheet\Worksheet\AutoFilter\Column\Rule;
 use PhpOffice\PhpSpreadsheet\Worksheet\Worksheet;
+use SimpleXMLElement;
 
 class AutoFilter
 {
@@ -12,7 +13,7 @@ class AutoFilter
 
     private $worksheetXml;
 
-    public function __construct(Worksheet $workSheet, \SimpleXMLElement $worksheetXml)
+    public function __construct(Worksheet $workSheet, SimpleXMLElement $worksheetXml)
     {
         $this->worksheet = $workSheet;
         $this->worksheetXml = $worksheetXml;
@@ -61,7 +62,7 @@ class AutoFilter
         }
     }
 
-    private function readDateRangeAutoFilter(\SimpleXMLElement $filters, Column $column)
+    private function readDateRangeAutoFilter(SimpleXMLElement $filters, Column $column)
     {
         foreach ($filters->dateGroupItem as $dateGroupItem) {
             //    Operator is undefined, but always treated as EQUAL
@@ -80,7 +81,7 @@ class AutoFilter
         }
     }
 
-    private function readCustomAutoFilter(\SimpleXMLElement $filterColumn, Column $column)
+    private function readCustomAutoFilter(SimpleXMLElement $filterColumn, Column $column)
     {
         if ($filterColumn->customFilters) {
             $column->setFilterType(Column::AUTOFILTER_FILTERTYPE_CUSTOMFILTER);
@@ -99,7 +100,7 @@ class AutoFilter
         }
     }
 
-    private function readDynamicAutoFilter(\SimpleXMLElement $filterColumn, Column $column)
+    private function readDynamicAutoFilter(SimpleXMLElement $filterColumn, Column $column)
     {
         if ($filterColumn->dynamicFilter) {
             $column->setFilterType(Column::AUTOFILTER_FILTERTYPE_DYNAMICFILTER);
@@ -121,7 +122,7 @@ class AutoFilter
         }
     }
 
-    private function readTopTenAutoFilter(\SimpleXMLElement $filterColumn, Column $column)
+    private function readTopTenAutoFilter(SimpleXMLElement $filterColumn, Column $column)
     {
         if ($filterColumn->top10) {
             $column->setFilterType(Column::AUTOFILTER_FILTERTYPE_TOPTENFILTER);

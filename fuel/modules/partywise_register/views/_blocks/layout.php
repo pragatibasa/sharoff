@@ -14,7 +14,7 @@
         $(".tabLinkpr").removeClass("activeLinkpr");
         $(this).addClass("activeLinkpr");
         $(".tabcontentpr").addClass("hidepr");
-        $("#"+tabeId+"-1").removeClass("hidepr")   
+        $("#"+tabeId+"-1").removeClass("hidepr");
         return false;	  
       });
     });  
@@ -23,8 +23,8 @@
 <div id="main_content" style="overflow:hidden;"> 
 <div class="tab-boxpr"> 
 	<div style="width:640px;">
-    <a href="javascript:;"><div class="tabLinkpr activeL inkpr" id="contpr-1" style="float:left;"><h1>Main CoilDetails</h1></div></a> 
-    <a href="javascript:;"><div class="tabLinkpr " id="contpr-2" style="float:left;"><h1>ProcessedDetail</h1></div></a>
+    <a href="javascript:"><div class="tabLinkpr activeL inkpr" id="contpr-1" style="float:left;"><h1>Main CoilDetails</h1></div></a>
+    <a href="javascript:"><div class="tabLinkpr " id="contpr-2" style="float:left;"><h1>ProcessedDetail</h1></div></a>
 	</div>
 </div>
  

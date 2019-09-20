@@ -2,6 +2,7 @@
 
 namespace PhpOffice\PhpSpreadsheet\Worksheet;
 
+use PhpOffice\PhpSpreadsheet\Cell\Cell;
 use PhpOffice\PhpSpreadsheet\Cell\Coordinate;
 use PhpOffice\PhpSpreadsheet\Exception as PhpSpreadsheetException;
 
@@ -121,7 +122,7 @@ class RowCellIterator extends CellIterator
     /**
      * Return the current cell in this worksheet row.
      *
-     * @return \PhpOffice\PhpSpreadsheet\Cell\Cell
+     * @return Cell
      */
     public function current()
     {

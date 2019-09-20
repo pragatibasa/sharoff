@@ -4,6 +4,7 @@ namespace PhpOffice\PhpSpreadsheet\Reader\Ods;
 
 use PhpOffice\PhpSpreadsheet\Document\Properties as DocumentProperties;
 use PhpOffice\PhpSpreadsheet\Spreadsheet;
+use SimpleXMLElement;
 
 class Properties
 {
@@ -14,12 +15,12 @@ class Properties
         $this->spreadsheet = $spreadsheet;
     }
 
-    public function load(\SimpleXMLElement $xml, $namespacesMeta)
+    public function load(SimpleXMLElement $xml, $namespacesMeta)
     {
         $docProps = $this->spreadsheet->getProperties();
         $officeProperty = $xml->children($namespacesMeta['office']);
         foreach ($officeProperty as $officePropertyData) {
-            /** @var \SimpleXMLElement $officePropertyData */
+            /** @var SimpleXMLElement $officePropertyData */
             $officePropertiesDC = (object) [];
             if (isset($namespacesMeta['dc'])) {
                 $officePropertiesDC = $officePropertyData->children($namespacesMeta['dc']);
@@ -36,7 +37,7 @@ class Properties
         }
     }
 
-    private function setCoreProperties(DocumentProperties $docProps, \SimpleXMLElement $officePropertyDC)
+    private function setCoreProperties(DocumentProperties $docProps, SimpleXMLElement $officePropertyDC)
     {
         foreach ($officePropertyDC as $propertyName => $propertyValue) {
             $propertyValue = (string) $propertyValue;
@@ -74,7 +75,7 @@ class Properties
 
     private function setMetaProperties(
         $namespacesMeta,
-        \SimpleXMLElement $propertyValue,
+        SimpleXMLElement $propertyValue,
         $propertyName,
         DocumentProperties $docProps
     ) {

@@ -80,7 +80,7 @@ fuel.controller.BaseFuelController = jqx.lib.BaseController.extend({
 					return false;
 				}
 			);
-		}
+		};
 		
 		var ids = [];
 		$('#fuel_left_panel_inner h3').each(function(i){
@@ -434,7 +434,7 @@ fuel.controller.BaseFuelController = jqx.lib.BaseController.extend({
 				if (isImg){
 					$('#asset_select').change(function(e){
 						$('#asset_preview').html('<img src="' + jqx.config.assetsPath + _this.assetFolder + '/' + $('#asset_select').val() + '" />');
-					})
+					});
 					$('#asset_select').change();
 				} else {
 					$('#asset_preview').hide();
@@ -498,7 +498,7 @@ fuel.controller.BaseFuelController = jqx.lib.BaseController.extend({
 		$('.datepicker_hh', context).fillin('hh');
 		$('.datepicker_mm', context).fillin('mm');
 		//$('.datepicker').datePicker();
-		var dpOptions = {startDate: '01/01/2000', endDate: '12/31/2100'}
+		var dpOptions = {startDate: '01/01/2000', endDate: '12/31/2100'};
 		$('.datepicker', context).filter(":not('.dp-applied'),:not(input[disabled='disabled'])").each(function(i){
 			if (!$(this).attr('disabled') && !$(this).attr('readonly')){
 				if ($(this).val() != Date.format){
@@ -539,7 +539,7 @@ fuel.controller.BaseFuelController = jqx.lib.BaseController.extend({
 				var refreshUrl = jqx.config.fuelPath + '/' + _this.module + '/refresh_field';
 				var params = { field:fieldId, field_id: fieldId, values: $field.val(), selected:html};
 				$.post(refreshUrl, params, function(html){
-					$('#notification').html('<ul class="success ico_success"><li>Successfully added to module ' + module + '</li></ul>')
+					$('#notification').html('<ul class="success ico_success"><li>Successfully added to module ' + module + '</li></ul>');
 					_this._notifications();
 					$modalContext.jqmHide();
 					$('#' + fieldId).replaceWith(html);
@@ -552,7 +552,7 @@ fuel.controller.BaseFuelController = jqx.lib.BaseController.extend({
 					});
 					changeField($('#' + fieldId));
 				});
-			}
+			};
 			
 			var changeField = function($this){
 				if (($this.val() == '' || $this.attr('multiple')) || $this.find('option').size() == 0){
@@ -563,7 +563,7 @@ fuel.controller.BaseFuelController = jqx.lib.BaseController.extend({
 				} else {
 					$this.next('.btn_field').show();
 				}	
-			}
+			};
 			
 			
 			if ($('#add_edit_inline_modal').size() == 0){
@@ -604,7 +604,7 @@ fuel.controller.BaseFuelController = jqx.lib.BaseController.extend({
 			}
 			myMarkItUpSettings.previewParserPath = _this.previewPath + '?' + q;
 			$(elem).markItUp(myMarkItUpSettings);
-		}
+		};
 		
 		// fix ">" within template syntax
 		var fixCKEditorOutput = function(elem){
@@ -612,7 +612,7 @@ fuel.controller.BaseFuelController = jqx.lib.BaseController.extend({
 			var re = new RegExp('([=|-])&gt;', 'g');
 			var newVal = elemVal.replace(re, '$1>');
 			$(elem).val(newVal);
-		}
+		};
 		
 		var createCKEditor = function(elem){
 
@@ -640,7 +640,7 @@ fuel.controller.BaseFuelController = jqx.lib.BaseController.extend({
 					breakBeforeClose : false,
 					breakAfterClose : true
 				});
-			})
+			});
 			CKEDITOR.instances[ckId].resetDirty();
 			
 			// needed so it doesn't update the content before submission which we need to clean up... 
@@ -683,7 +683,7 @@ fuel.controller.BaseFuelController = jqx.lib.BaseController.extend({
 					
 					$elem.closest('.html').css({position: 'absolute', 'left': '-100000px', overflow: 'hidden'}); // used instead of show/hide because of issue with it not showing textarea
 					//$elem.show().closest('.html').hide();
-					$('#' + ckId + '_viewsource').text(_this.lang('btn_view_source'))
+					$('#' + ckId + '_viewsource').text(_this.lang('btn_view_source'));
 					
 					ckInstance.setData($elem.val());
 				}
@@ -693,7 +693,7 @@ fuel.controller.BaseFuelController = jqx.lib.BaseController.extend({
 			})
 
 			
-		}
+		};
 		
 		$editors.each(function(i) {
 			var ckId = $(this).attr('id');
@@ -748,7 +748,7 @@ fuel.controller.BaseFuelController = jqx.lib.BaseController.extend({
 				});
 			}
 			
-		}
+		};
 		
 		// needed for enclosure
 		var bindLinked = function(slave, master, func){
@@ -776,7 +776,7 @@ fuel.controller.BaseFuelController = jqx.lib.BaseController.extend({
 					}
 				}
 			}
-		}
+		};
 		if (this.initObj.linked_fields || window['__FUEL_LINKED_FIELDS'] != undefined){
 			var linked = (window['__FUEL_LINKED_FIELDS'] != undefined) ? window['__FUEL_LINKED_FIELDS'] : this.initObj.linked_fields;
 			for(var n in linked){
@@ -801,7 +801,7 @@ fuel.controller.BaseFuelController = jqx.lib.BaseController.extend({
 		var resizeViewPageModal = function(){
 			var half = Math.floor($('#viewpage_modal').width()/2);
 			$('#viewpage_modal').css('marginLeft', -half +'px');
-		}
+		};
 		if (!$('#viewpage_modal').size()){
 			$('body').append('<div id="viewpage_modal" class="jqmWindow"></div>');
 			$('#viewpage_modal').jqm({modal:false,toTop:true});
@@ -818,7 +818,7 @@ fuel.controller.BaseFuelController = jqx.lib.BaseController.extend({
 			});
 			resizeViewPageModal();
 			return false;
-		})
+		});
 		
 		$(window).resize(
 			function(e){
@@ -850,7 +850,7 @@ fuel.controller.BaseFuelController = jqx.lib.BaseController.extend({
 				$('.modal_cancel', $modalContext).click(function(){
 					$modalContext.jqmHide();
 					return false;
-				})
+				});
 				$('.ico_save', $modalContext).click(function(){
 					$.removeChecksave();
 					
@@ -923,12 +923,12 @@ fuel.controller.BaseFuelController = jqx.lib.BaseController.extend({
 			var $form = $(__this).closest('form');
 			var params = $form.formSerialize(true);
 			params['id'] = id;
-			params['published'] = ((publishOrUnpublish == 'publish') ? 'yes' : 'no')
+			params['published'] = ((publishOrUnpublish == 'publish') ? 'yes' : 'no');
 			$.post(_this.modulePath + '/' + publishOrUnpublish + '/' + id, params, function(html){
 				_this.redrawTable(true, false);
 			});
 			
-		}
+		};
 		
 		$('#data_table .publish_text').parent().addClass('publish_col');
 		
@@ -1020,7 +1020,7 @@ fuel.controller.BaseFuelController = jqx.lib.BaseController.extend({
 								_this.redrawTable(true, false);
 							}
 						
-						}
+						};
 						$.ajax(params);
 					}
 				}

@@ -1,8 +1,10 @@
 <?php
 
+use Matrix\Autoloader;
+
 include_once __DIR__ . '/Autoloader.php';
 
-\Matrix\Autoloader::Register();
+Autoloader::Register();
 
 
 abstract class FilesystemRegexFilter extends RecursiveRegexIterator

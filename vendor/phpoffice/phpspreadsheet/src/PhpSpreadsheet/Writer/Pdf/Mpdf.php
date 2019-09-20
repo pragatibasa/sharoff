@@ -4,7 +4,11 @@ namespace PhpOffice\PhpSpreadsheet\Writer\Pdf;
 
 use PhpOffice\PhpSpreadsheet\Exception as PhpSpreadsheetException;
 use PhpOffice\PhpSpreadsheet\Worksheet\PageSetup;
+use PhpOffice\PhpSpreadsheet\Writer\Exception;
 use PhpOffice\PhpSpreadsheet\Writer\Pdf;
+use function array_chunk;
+use function explode;
+use function implode;
 
 class Mpdf extends Pdf
 {
@@ -25,7 +29,7 @@ class Mpdf extends Pdf
      *
      * @param string $pFilename Name of the file to save as
      *
-     * @throws \PhpOffice\PhpSpreadsheet\Writer\Exception
+     * @throws Exception
      * @throws PhpSpreadsheetException
      */
     public function save($pFilename)
@@ -87,8 +91,8 @@ class Mpdf extends Pdf
 
         $pdf->WriteHTML($this->generateHTMLHeader(false));
         $html = $this->generateSheetData();
-        foreach (\array_chunk(\explode(PHP_EOL, $html), 1000) as $lines) {
-            $pdf->WriteHTML(\implode(PHP_EOL, $lines));
+        foreach (array_chunk(explode(PHP_EOL, $html), 1000) as $lines) {
+            $pdf->WriteHTML(implode(PHP_EOL, $lines));
         }
         $pdf->WriteHTML($this->generateHTMLFooter());
 

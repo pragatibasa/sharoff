@@ -13,7 +13,7 @@
         $(".tabLinkpr").removeClass("activeLinkpr");
         $(this).addClass("activeLinkpr");
         $(".tabcontentpr").addClass("hidepr");
-        $("#"+tabeId+"-1").removeClass("hidepr")
+        $("#"+tabeId+"-1").removeClass("hidepr");
         return false;
       });
     });
@@ -23,8 +23,8 @@
 <div id="main_content" style="overflow:hidden;">
 <div class="tab-boxpr">
 	<div style="width:640px;">
-    <a href="javascript:;"><div class="tabLinkpr activeLinkpr" id="contpr-1" style="float:left;"><h1>Main CoilDetails</h1></div></a>
-    <a href="javascript:;"><div class="tabLinkpr " id="contpr-2" style="float:left;"><h1>ProcessedDetail</h1></div></a>
+    <a href="javascript:"><div class="tabLinkpr activeLinkpr" id="contpr-1" style="float:left;"><h1>Main CoilDetails</h1></div></a>
+    <a href="javascript:"><div class="tabLinkpr " id="contpr-2" style="float:left;"><h1>ProcessedDetail</h1></div></a>
 	</div>
 </div>
 
@@ -72,7 +72,7 @@
 
 <div align="right">
 <label>Total Weight</label>
-		<input id="totalweight_calcualation" type="text" DISABLED/>(in Kgs)
+		<input id="totalweight_calcualation" type="text" DISABLED/>(in M/T)
 		&nbsp; &nbsp; &nbsp;
 </div>
 <script language="javascript" type="text/javascript">
@@ -126,6 +126,7 @@ $.ajax({
 			mediaClass += '  <th>Width</th>';
 			mediaClass += '  <th>Present Weight</th>';
 			mediaClass += '  <th>Status</th>';
+			
 			mediaClass +='</tr>';
 			mediaClass +='</thead>';
 
@@ -143,6 +144,7 @@ $.ajax({
 				mediaClass += '<td>' + item.width + '</td>';
 				mediaClass += '<td>' + item.pweight + '</td>';
 				mediaClass += '<td>' + item.status + '</td>';
+				
 
 				mediaClass += '</tr>';
 
@@ -174,8 +176,8 @@ function tableToExcel() {
 
     tab_text = tab_text + "<table border='1px'>";
     tab_text = tab_text + tableClone.innerHTML;
-    tab_text = tab_text + '</table></body></html>';
-
+    tab_text = tab_text + '</table>';
+	tab_text = tab_text + '<table border="1px"><tr></tr><tr><td></td><td></td><td></td><td></td><td><h3>Total Weight : </td><td>'+$('#totalweight_calcualation').val()+' ( in M/T )</h3></td><td></td></tr></table></body></html>';
     var data_type = 'data:application/vnd.ms-excel';
 
     var ua = window.navigator.userAgent;

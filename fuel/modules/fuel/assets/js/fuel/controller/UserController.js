@@ -41,11 +41,11 @@ fuel.controller.UserController = jqx.createController(fuel.controller.BaseFuelCo
 			} else {
 				$('#toggle_perms').attr('checked',true); 
 			}
-		}
+		};
 		
 		$perms.click(function(i){
 			togglePerms();
-		})
+		});
 		togglePerms();
 	}
 	

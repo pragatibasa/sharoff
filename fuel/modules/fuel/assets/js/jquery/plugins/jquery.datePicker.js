@@ -64,9 +64,8 @@
 						jQuery(dc('th')).attr({'scope':'col', 'abbr':day, 'title':day, 'class':(weekday == 0 || weekday == 6 ? 'weekend' : 'weekday')}).html(s.showHeader == $.dpConst.SHOW_HEADER_SHORT ? day.substr(0, 1) : day)
 					);
 				}
-			};
-			
-			var calendarTable = $(dc('table'))
+            }
+            var calendarTable = $(dc('table'))
 									.attr(
 										{
 											'cellspacing':2
@@ -568,8 +567,8 @@
 		this.inline				=	null;
 		this.context			=	'#dp-popup';
 		this.settings			=	{};
-	};
-	$.extend(
+    }
+    $.extend(
 		DatePicker.prototype,
 		{	
 			init : function(s)
@@ -996,7 +995,7 @@
 						}
 					}
 				);
-				return;
+
 			},
 			// ele is the clicked button - only proceed if it doesn't have the class disabled...
 			// m and y are -1, 0 or 1 depending which direction we want to go in...
@@ -1202,16 +1201,13 @@
 	{
 		if (ele._dpId) return $.event._dpCache[ele._dpId];
 		return false;
-	};
-	
-	// make it so that no error is thrown if bgIframe plugin isn't included (allows you to use conditional
+    }
+    // make it so that no error is thrown if bgIframe plugin isn't included (allows you to use conditional
 	// comments to only include bgIframe where it is needed in IE without breaking this plugin).
 	if ($.fn.bgIframe == undefined) {
 		$.fn.bgIframe = function() {return this; };
-	};
-
-
-	// clean-up
+    }
+    // clean-up
 	$(window)
 		.bind('unload', function() {
 			var els = $.event._dpCache || [];

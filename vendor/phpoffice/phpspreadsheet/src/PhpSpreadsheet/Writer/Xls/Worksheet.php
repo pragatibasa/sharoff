@@ -59,7 +59,7 @@ class Worksheet extends BIFFwriter
     /**
      * Formula parser.
      *
-     * @var \PhpOffice\PhpSpreadsheet\Writer\Xls\Parser
+     * @var Parser
      */
     private $parser;
 

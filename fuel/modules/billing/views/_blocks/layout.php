@@ -218,7 +218,7 @@ $('document').ready(function() {
     $('#txtbillpreview').click(function() {
 		savebill_details();
 	});
-})
+});
 
 function billexist(){
 	var billid = $('#billid').val();
@@ -254,7 +254,7 @@ function billexist(){
 function numbertowords() {
  var junkVal=document.getElementById('txtgrandtotal').value;
  junkVal=Math.floor(junkVal);
- var obStr=new String(junkVal);
+ var obStr=String(junkVal);
  numReversed=obStr.split("");
  actnumber=numReversed.reverse();
 
@@ -280,7 +280,7 @@ function numbertowords() {
 
  var iWordsLength=numReversed.length;
  var totalWords="";
- var inWords=new Array();
+ var inWords=[];
  var finalWord="";
  j=0;
  for(i=0; i<iWordsLength; i++){

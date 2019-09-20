@@ -5,16 +5,16 @@
  * http://www.opensource.org/licenses/mit-license.php
  *
  */
-if(typeof deconcept == "undefined") var deconcept = new Object();
-if(typeof deconcept.util == "undefined") deconcept.util = new Object();
-if(typeof deconcept.SWFObjectUtil == "undefined") deconcept.SWFObjectUtil = new Object();
+if(typeof deconcept == "undefined") var deconcept = {};
+if(typeof deconcept.util == "undefined") deconcept.util = {};
+if(typeof deconcept.SWFObjectUtil == "undefined") deconcept.SWFObjectUtil = {};
 deconcept.SWFObject = function(swf, id, w, h, ver, c, quality, xiRedirectUrl, redirectUrl, detectKey) {
 	if (!document.getElementById) { return; }
 	this.DETECT_KEY = detectKey ? detectKey : 'detectflash';
 	this.skipDetect = deconcept.util.getRequestParameter(this.DETECT_KEY);
-	this.params = new Object();
-	this.variables = new Object();
-	this.attributes = new Array();
+	this.params = {};
+	this.variables = {};
+	this.attributes = [];
 	if(swf) { this.setAttribute('swf', swf); }
 	if(id) { this.setAttribute('id', id); }
 	if(w) { this.setAttribute('width', w); }
@@ -34,7 +34,7 @@ deconcept.SWFObject = function(swf, id, w, h, ver, c, quality, xiRedirectUrl, re
 	this.setAttribute('xiRedirectUrl', xir);
 	this.setAttribute('redirectUrl', '');
 	if(redirectUrl) { this.setAttribute('redirectUrl', redirectUrl); }
-}
+};
 deconcept.SWFObject.prototype = {
 	useExpressInstall: function(path) {
 		this.xiSWFPath = !path ? "expressinstall.swf" : path;
@@ -62,7 +62,7 @@ deconcept.SWFObject.prototype = {
 		return this.variables;
 	},
 	getVariablePairs: function(){
-		var variablePairs = new Array();
+		var variablePairs = [];
 		var key;
 		var variables = this.getVariables();
 		for(key in variables){
@@ -123,7 +123,7 @@ deconcept.SWFObject.prototype = {
 		}
 		return false;
 	}
-}
+};
 
 /* ---- detection functions ---- */
 deconcept.SWFObjectUtil.getPlayerVersion = function(){
@@ -170,12 +170,12 @@ deconcept.SWFObjectUtil.getPlayerVersion = function(){
 		}
 	}
 	return PlayerVersion;
-}
+};
 deconcept.PlayerVersion = function(arrVersion){
 	this.major = arrVersion[0] != null ? parseInt(arrVersion[0]) : 0;
 	this.minor = arrVersion[1] != null ? parseInt(arrVersion[1]) : 0;
 	this.rev = arrVersion[2] != null ? parseInt(arrVersion[2]) : 0;
-}
+};
 deconcept.PlayerVersion.prototype.versionIsValid = function(fv){
 	if(this.major < fv.major) return false;
 	if(this.major > fv.major) return true;
@@ -183,7 +183,7 @@ deconcept.PlayerVersion.prototype.versionIsValid = function(fv){
 	if(this.minor > fv.minor) return true;
 	if(this.rev < fv.rev) return false;
 	return true;
-}
+};
 /* ---- get value of query string param ---- */
 deconcept.util = {
 	getRequestParameter: function(param) {
@@ -199,7 +199,7 @@ deconcept.util = {
 		}
 		return "";
 	}
-}
+};
 /* fix for video streaming bug */
 deconcept.SWFObjectUtil.cleanupSWFs = function() {
 	var objects = document.getElementsByTagName("OBJECT");
@@ -211,7 +211,7 @@ deconcept.SWFObjectUtil.cleanupSWFs = function() {
 			}
 		}
 	}
-}
+};
 // fixes bug in some fp9 versions see http://blog.deconcept.com/2006/07/28/swfobject-143-released/
 if (deconcept.SWFObject.doPrepUnload) {
 	if (!deconcept.unloadSet) {
@@ -219,7 +219,7 @@ if (deconcept.SWFObject.doPrepUnload) {
 			__flash_unloadHandler = function(){};
 			__flash_savedUnloadHandler = function(){};
 			window.attachEvent("onunload", deconcept.SWFObjectUtil.cleanupSWFs);
-		}
+		};
 		window.attachEvent("onbeforeunload", deconcept.SWFObjectUtil.prepUnload);
 		deconcept.unloadSet = true;
 	}

@@ -12,7 +12,7 @@ $('#cuttingInstruction').click(function(){
 	var source_provider =  document.getElementById('party').value;
 	if(containername == "") {
 		alert( "<?=lang('select_container_msg')?>");
-		return;
+
 	}  
 });
  </script> 

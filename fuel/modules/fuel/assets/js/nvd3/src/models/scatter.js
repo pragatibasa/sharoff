@@ -501,4 +501,4 @@ nv.models.scatter = function() {
 
 
   return chart;
-}
+};

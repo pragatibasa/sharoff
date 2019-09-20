@@ -3,6 +3,7 @@
 namespace PhpOffice\PhpSpreadsheet\Writer\Pdf;
 
 use PhpOffice\PhpSpreadsheet\Worksheet\PageSetup;
+use PhpOffice\PhpSpreadsheet\Writer\Exception;
 use PhpOffice\PhpSpreadsheet\Writer\Pdf;
 
 class Dompdf extends Pdf
@@ -22,7 +23,7 @@ class Dompdf extends Pdf
      *
      * @param string $pFilename Name of the file to save as
      *
-     * @throws \PhpOffice\PhpSpreadsheet\Writer\Exception
+     * @throws Exception
      */
     public function save($pFilename)
     {

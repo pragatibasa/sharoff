@@ -270,8 +270,7 @@ function beautifySelect(i, e) {
             select.find('.btn:eq(0)').find(".text").text($(this).text());
         });
     }
-};
-
+}
 $(window).load(function() {
     // Functions for beautifying the jTable modal select & other things
     $(".jtable-dropdown-input").find("select").chosen();

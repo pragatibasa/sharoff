@@ -209,11 +209,11 @@
 	<!--<input id="txtcancelbill" type="button" value="Cancel Bill" />	-->
 <script type="text/javascript">
 function update(){
-    var bigNumArry = new Array('', ' Thousand', ' million', ' billion', ' trillion', ' quadrillion', ' quintillion');
+    var bigNumArry = ['', ' Thousand', ' million', ' billion', ' trillion', ' quadrillion', ' quintillion'];
 
     var output = '';
     var numString =   document.getElementById('txtgrandtotal').value;
-    var finlOutPut = new Array();
+    var finlOutPut = [];
 
     if (numString == '0') {
         document.getElementById('container').value = 'Zero';
@@ -279,8 +279,8 @@ function update(){
 
 //simple function to convert from numbers to words from 1 to 999
 function triConvert(num){
-    var Ones = new Array('', ' One', ' Two', ' Three', ' Four', ' Five', ' Six', ' Seven', ' Eight', ' Nine', ' Ten', ' eleven', ' twelve', ' thirteen', ' fourteen', ' fifteen', ' sixteen', ' seventeen', ' eighteen', ' nineteen');
-    var tens = new Array('', '', ' twenty', ' thirty', ' forty', ' fifty', ' sixty', ' seventy', ' eighty', ' ninety');
+    var Ones = ['', ' One', ' Two', ' Three', ' Four', ' Five', ' Six', ' Seven', ' Eight', ' Nine', ' Ten', ' eleven', ' twelve', ' thirteen', ' fourteen', ' fifteen', ' sixteen', ' seventeen', ' eighteen', ' nineteen'];
+    var tens = ['', '', ' twenty', ' thirty', ' forty', ' fifty', ' sixty', ' seventy', ' eighty', ' ninety'];
     var hundred = ' hundred';
     var output = '';
     var numString = num.toString();
@@ -327,7 +327,7 @@ function triConvert(num){
 function numbertowords() {
  var junkVal=document.getElementById('txtgrandtotal').value;
  junkVal=Math.floor(junkVal);
- var obStr=new String(junkVal);
+ var obStr=String(junkVal);
  numReversed=obStr.split("");
  actnumber=numReversed.reverse();
 
@@ -353,7 +353,7 @@ function numbertowords() {
 
  var iWordsLength=numReversed.length;
  var totalWords="";
- var inWords=new Array();
+ var inWords=[];
  var finalWord="";
  j=0;
  for(i=0; i<iWordsLength; i++){
@@ -450,8 +450,8 @@ function numbertowords() {
 
 //simple function to convert from numbers to words from 1 to 999
 function triConvert(num){
-    var Ones = new Array('', ' One', ' Two', ' Three', ' Four', ' Five', ' Six', ' Seven', ' Eight', ' Nine', ' Ten', ' eleven', ' twelve', ' thirteen', ' fourteen', ' fifteen', ' sixteen', ' seventeen', ' eighteen', ' nineteen');
-    var tens = new Array('', '', ' twenty', ' thirty', ' forty', ' fifty', ' sixty', ' seventy', ' eighty', ' ninety');
+    var Ones = ['', ' One', ' Two', ' Three', ' Four', ' Five', ' Six', ' Seven', ' Eight', ' Nine', ' Ten', ' eleven', ' twelve', ' thirteen', ' fourteen', ' fifteen', ' sixteen', ' seventeen', ' eighteen', ' nineteen'];
+    var tens = ['', '', ' twenty', ' thirty', ' forty', ' fifty', ' sixty', ' seventy', ' eighty', ' ninety'];
     var hundred = ' hundred';
     var output = '';
     var numString = num.toString();
@@ -481,7 +481,7 @@ function triConvert(num){
 
 function cancelbill(){
 var partyid = $('#pid').val();
-var dataString =  'partyid='+partyid
+var dataString =  'partyid='+partyid;
 $.ajax({  
 	   type: "POST",  
 	   url : "<?php echo fuel_url('billing/recoilcancel');?>/",  

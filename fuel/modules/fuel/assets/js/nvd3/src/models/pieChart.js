@@ -254,4 +254,4 @@ nv.models.pieChart = function() {
 
 
   return chart;
-}
+};

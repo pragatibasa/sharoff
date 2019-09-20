@@ -2,6 +2,8 @@
 
 namespace PhpOffice\PhpSpreadsheet\Calculation;
 
+use DateTimeImmutable;
+use DateTimeInterface;
 use PhpOffice\PhpSpreadsheet\Shared\Date;
 use PhpOffice\PhpSpreadsheet\Shared\StringHelper;
 
@@ -70,7 +72,7 @@ class DateTime
                 (Functions::getCompatibilityMode() == Functions::COMPATIBILITY_GNUMERIC)) {
                 return Functions::VALUE();
             }
-            if ((is_object($dateValue)) && ($dateValue instanceof \DateTimeInterface)) {
+            if ((is_object($dateValue)) && ($dateValue instanceof DateTimeInterface)) {
                 $dateValue = Date::PHPToExcel($dateValue);
             } else {
                 $saveReturnDateType = Functions::getReturnDateType();
@@ -774,9 +776,9 @@ class DateTime
      *
      * @category Date/Time Functions
      *
-     * @param \DateTimeImmutable|float|int|string $endDate Excel date serial value (float),
+     * @param DateTimeImmutable|float|int|string $endDate Excel date serial value (float),
      * PHP date timestamp (integer), PHP DateTime object, or a standard date string
-     * @param \DateTimeImmutable|float|int|string $startDate Excel date serial value (float),
+     * @param DateTimeImmutable|float|int|string $startDate Excel date serial value (float),
      * PHP date timestamp (integer), PHP DateTime object, or a standard date string
      *
      * @return int|string Number of days between start date and end date or an error

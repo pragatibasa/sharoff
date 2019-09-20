@@ -103,7 +103,7 @@
 			combo += '</div>';
 			combo += '<div style="clear: both; height: 0px; line-height: 0px; font-size: 0px;"></div>'; // clears any floats
 			combo += '</div>';
-			combo += '</div>'
+			combo += '</div>';
 		
 			// hide the original element and 
 			// add the combo box after it
@@ -324,7 +324,7 @@
 			
 			function addSelectedToRight(highlight){
 				$selectedOpts = $('#' + leftID + ' li[class=' + settings.selectedClass + ']');
-				var selected = new Array();
+				var selected = [];
 				$selectedOpts.each(function(i){
 					if (customSelectedSorting) theForm.find('#' + rightID).append($(this).removeClass(settings.selectedClass).html($(this).html()));
 					var opt = $(getOptionSourceRef(getIdNum(this)));
@@ -343,8 +343,8 @@
 			}
 			
 			function removeSelectedFromRight(){
-				$selectedOpts = $('#' + rightID + ' li[class=' + settings.selectedClass + ']')
-				var selected = new Array();
+				$selectedOpts = $('#' + rightID + ' li[class=' + settings.selectedClass + ']');
+				var selected = [];
 				$selectedOpts.each(function(i){
 					if (customSelectedSorting) $(this).remove();
 					var opt = $(getOptionSourceRef(getIdNum(this)));

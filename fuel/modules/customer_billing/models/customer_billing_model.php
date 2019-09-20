@@ -34,7 +34,7 @@ class customer_billing_model extends Base_module_model {
 	}
 	
 	function export_partyname($partyname='',$frmdate='',$todate='') {	
-		$sql ="SELECT aspen_tblmatdescription.vDescription as description,aspen_tblinwardentry.fQuantity as weight, aspen_tblbilldetails.fTotalWeight as oweight,aspen_tblinwardentry.vIRnumber as coilnumber, aspen_tblbilldetails.nBillNo as billno, aspen_tblbilldetails.dBillDate  as billdate, aspen_tblbilldetails.fServiceTax as Sertax, 
+		$sql ="SELECT aspen_tblmatdescription.vDescription as description, aspen_tblinwardentry.vGrade as grade, aspen_tblinwardentry.fQuantity as weight, aspen_tblbilldetails.fTotalWeight as oweight,aspen_tblinwardentry.vIRnumber as coilnumber, aspen_tblbilldetails.nBillNo as billno, aspen_tblbilldetails.dBillDate  as billdate, aspen_tblbilldetails.fServiceTax as Sertax, 
 aspen_tblbilldetails.fSHEduTax as SHEdutax, aspen_tblbilldetails.fEduTax as educationtax, aspen_tblbilldetails.ntotalamount as totalamt, aspen_tblbilldetails.fGrantTotal as totalbillamount 
 		FROM aspen_tblbilldetails
 		LEFT JOIN aspen_tblinwardentry ON aspen_tblinwardentry.vIRnumber = aspen_tblbilldetails.vIRnumber 
@@ -65,7 +65,9 @@ aspen_tblbilldetails.fSHEduTax as SHEdutax, aspen_tblbilldetails.fEduTax as educ
 	
 	
 	function billgeneratemodel($partyname='',$frmdate='',$todate='')  {
-	$sqlrpt = "SELECT aspen_tblmatdescription.vDescription as description,aspen_tblinwardentry.fQuantity as weight, aspen_tblbilldetails.fTotalWeight as oweight, aspen_tblinwardentry.vIRnumber as coilnumber, aspen_tblbilldetails.nBillNo as billno, aspen_tblbilldetails.dBillDate  as billdate, aspen_tblbilldetails.fServiceTax as Sertax, 
+	$sqlrpt = "SELECT aspen_tblmatdescription.vDescription as description,
+aspen_tblinwardentry.vGrade as grade, 
+aspen_tblinwardentry.fQuantity as weight, aspen_tblbilldetails.fTotalWeight as oweight, aspen_tblinwardentry.vIRnumber as coilnumber, aspen_tblbilldetails.nBillNo as billno, aspen_tblbilldetails.dBillDate  as billdate, aspen_tblbilldetails.fServiceTax as Sertax, 
 aspen_tblbilldetails.fSHEduTax as SHEdutax, aspen_tblbilldetails.fEduTax as educationtax, aspen_tblbilldetails.ntotalamount as totalamt, aspen_tblbilldetails.fGrantTotal as totalbillamount 
 		FROM aspen_tblbilldetails
 		LEFT JOIN aspen_tblinwardentry ON aspen_tblinwardentry.vIRnumber = aspen_tblbilldetails.vIRnumber 
@@ -148,8 +150,6 @@ $querymain7 = $this->db->query($sql1234);
 				<th align="center"><b>Invoice Weight in (M.T)</b></th>
 				<th align="center"><b>Basic Amount</b></th>
 				<th align="center"><b>Service Tax</b></th>
-				<th align="center"><b>Education Tax</b></th>
-				<th align="center"><b>SHEdutax</b></th>
 				<th align="center"><b>Total Bill Amount</b></th>
 			</tr>';
 			
@@ -172,8 +172,8 @@ $querymain7 = $this->db->query($sql1234);
 				<td align="right">'.$rowitem->oweight.'</td>
 				<td align="right">'.$rowitem->totalamt.'</td>
 				<td align="right">'.$rowitem->Sertax.'</td>
-				<td align="right">'.$rowitem->educationtax.'</td>
-				<td align="right">'.$rowitem->SHEdutax.'</td>
+				
+				
 				<td align="right">'.$rowitem->totalbillamount.'</td>
 			</tr>';
 			}
@@ -480,8 +480,8 @@ LEFT JOIN aspen_tblpartydetails ON aspen_tblpartydetails.nPartyId = aspen_tblinw
 				<th align="center"><b>Weight in (Tonnes)</b></th>
 				<th align="center"><b>Basic Amount</b></th>
 				<th align="center"><b>Service Tax</b></th>
-				<th align="center"><b>Education Tax</b></th>
-					<th align="center"><b>SHEdu Tax</b></th>
+				
+					
 				<th align="center"><b>Total Bill Amount</b></th>
 			</tr>';
 			
@@ -500,8 +500,8 @@ LEFT JOIN aspen_tblpartydetails ON aspen_tblpartydetails.nPartyId = aspen_tblinw
 				<td align="right">'.$rowitem->weight.'</td>
 				<td align="right">'.$rowitem->totalamt.'</td>			
 				<td align="right">'.$rowitem->Sertax.'</td>
-				<td align="right">'.$rowitem->educationtax.'</td>
-				<td align="right">'.$rowitem->SHEdutax.'</td>
+ 				
+				
 				<td align="right">'.$rowitem->totalbillamount.'</td>
 			</tr>';
 			}

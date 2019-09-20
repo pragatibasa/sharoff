@@ -60,4 +60,4 @@ jqx.lib.Keys = {
 		return false;
 	}
 	
-}
+};
