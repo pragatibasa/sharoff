@@ -190,6 +190,8 @@ class inward extends Fuel_base_controller {
             }
         }
 
+        $lastColumn = $i+1;
+        $spreadsheet->getActiveSheet()->setCellValue('L' . $lastColumn, 'Total Weight')->setCellValue( 'M' .$lastColumn, number_format($this->inward_model->getTotalInwardWeight(), 3));
 
 // Set worksheet title
         $spreadsheet->getActiveSheet()->setTitle('Inward Register Report');
@@ -219,45 +221,10 @@ class inward extends Fuel_base_controller {
         $writer = IOFactory::createWriter($spreadsheet, 'Xlsx');
         $writer->save('php://output');
         exit;
+    }
 
-
-//        header("Content-Type: application/vnd.ms-excel");
-//        header("Content-Disposition: attachment; filename=inward_register".date('d/M/Y').'.xls');
-//        $heading = false;
-//
-//
-//        $records = $this->inward_model->exportInwardData();
-//        if($records->num_rows() > 0) {
-//            foreach($records->result() as $row) {
-//                $arr = get_object_vars($row);
-//                $arr_values = array();
-//                $arr_values[] = $arr[$arrHeading['Party Name']];
-//                $arr_values[] =  $arr[$arrHeading['Coil Number']];
-//                $arr_values[] =  $arr[$arrHeading['Inward Date']];
-//                $arr_values[] =  $arr[$arrHeading['Jsw Coil id']];
-//                $arr_values[] =  $arr[$arrHeading['SST id']];
-//                $arr_values[] =  $arr[$arrHeading['Vehicle Number']];
-//                $arr_values[] =  $arr[$arrHeading['Invoice Number']];
-//                $arr_values[] =  $arr[$arrHeading['Invoice Date']];
-//                $arr_values[] =  $arr[$arrHeading['Material Description']];
-//                $arr_values[] =  $arr[$arrHeading['Width']];
-//                $arr_values[] =  $arr[$arrHeading['Thickness']];
-//                $arr_values[] =  $arr[$arrHeading['Length']];
-//                $arr_values[] =  $arr[$arrHeading['Weight']];
-//                $arr_values[] =  $arr[$arrHeading['Status']];
-//                $arr_values[] =  $arr[$arrHeading['Grade']];
-//                $arr_values[] =  $arr[$arrHeading['Heat Number']]
-//                $arr_values[] =  $arr[$arrHeading['Remark']];
-//
-//                if(!$heading) {
-//                    print implode("</b>\t<b>", array_keys($arrHeading)) . "\n";
-//                    $heading = true;
-//                }
-//                echo implode("\t", array_values($arr_values)) . "\n";
-//            }
-//        }
-
-//        exit;
+    function totalInwardWeight() {
+        echo $this->inward_model->getTotalInwardWeight();exit;
     }
 }
 /* End of file */

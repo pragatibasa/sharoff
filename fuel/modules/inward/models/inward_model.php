@@ -278,6 +278,11 @@ class inward_model extends Base_module_model {
 
         return $this->db->query($strSql);
     }
+
+    function getTotalInwardWeight() {
+        $query = $this->db->query('select sum(fQuantity) as total_weight from aspen_tblinwardentry');
+        return $query->result()[0]->total_weight;
+    }
 }
 
 class inwardmodel extends Base_module_record {

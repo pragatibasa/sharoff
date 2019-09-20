@@ -53,8 +53,6 @@
 			<?php endforeach; ?>
 		<?php endif; ?>
 		</ul>
-		
-		
 	</div>
 	
 </div>
@@ -94,4 +92,29 @@
 </div>
 </div>
 <?=$this->form->hidden('view_type', $params['view_type'])?>
+<?php if($this->module_uri == 'inward_entry') {?>
+    <br>
+    <div align="right">
+        <label>Total Weight</label>
+        <input id="totalweight_calcualation" type="text" disabled="">(in tons)
+        &nbsp; &nbsp; &nbsp;
+    </div>
+<?php }?>
 <?=$this->form->close()?>
+
+<script>
+    var moduleUri = '<?=$this->module_uri?>';
+    $(document).ready(function() {
+        if(moduleUri == 'inward_entry') {
+            $.ajax({
+                type: "GET",
+                url	: "<?php echo fuel_url('inward/totalInwardWeight');?>/",
+                success: function(msg){
+                    if(msg){
+                        $('#totalweight_calcualation').val(parseFloat(msg).toFixed(3));
+                    }
+                }
+            });
+        }
+    })
+</script>
