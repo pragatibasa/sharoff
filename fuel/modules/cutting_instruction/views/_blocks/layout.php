@@ -368,7 +368,7 @@ function doweight() {
 	else{
 	var result= weight-(0.00000000785*width*thickness*length*rate);
 	var resultbundle= (0.00000000785*width*thickness*length*rate);
-	var resultbundle = Math.round(resultbundle).toFixed(3);
+	var resultbundle = resultbundle.toFixed(3);
 	document.getElementById('bundleweight').value = resultbundle;
 	}
 }
