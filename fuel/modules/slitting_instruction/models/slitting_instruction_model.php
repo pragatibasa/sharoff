@@ -102,7 +102,7 @@ class slitting_instruction_model extends Base_module_model {
 		  	aspen_tblmatdescription.vDescription,
 		   	aspen_tblinwardentry.fThickness,
 		    aspen_tblinwardentry.fWidth,
-		    ( aspen_tblinwardentry.fQuantity-COALESCE(sum(aspen_tblbillingstatus.fWeight),0)) as fQuantity,
+		    round(( aspen_tblinwardentry.fQuantity-COALESCE(sum(aspen_tblbillingstatus.fWeight),0)),3) as fQuantity,
 		    aspen_tblinwardentry.vStatus
 		FROM aspen_tblinwardentry 
 		LEFT JOIN aspen_tblmatdescription ON aspen_tblmatdescription.nMatId = aspen_tblinwardentry.nMatId

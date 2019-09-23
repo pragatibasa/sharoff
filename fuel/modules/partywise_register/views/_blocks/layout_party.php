@@ -143,8 +143,8 @@ $.ajax({
 				mediaClass += '<td>' + item.description + '</td>';
 				mediaClass += '<td>' + item.thickness + '</td>';
 				mediaClass += '<td>' + item.width + '</td>';
-				mediaClass += '<td>' + item.weight + '</td>';
-				mediaClass += '<td>' + item.pweight + '</td>';
+				mediaClass += '<td>' + parseFloat(item.weight).toFixed(3) + '</td>';
+				mediaClass += '<td>' + parseFloat(item.pweight).toFixed(3) + '</td>';
 				mediaClass += '<td>' + item.status + '</td>';
 				mediaClass += '<td>' + item.process + '</td>';
 					
@@ -195,10 +195,10 @@ function showchild(parentid) {
                             var thisdata = {};
 							if(item.process=='Cutting'){
 							thisdata["Processdate"] = item.processdate;
-                            thisdata["Length in (mm)"] = item.length.toFixed(3);
+                            thisdata["Length in (mm)"] = item.length;
                             thisdata["BundleNumber"] = item.bundlenumber;
                             thisdata["No of sheets"] = item.bundles;
-                            thisdata["Weight in (Tons)"] = item.weight.toFixed(3);
+                            thisdata["Weight in (Tons)"] = parseFloat(item.weight).toFixed(3);
                             thisdata["Status"] = item.status;
 							}
 							else if(item.process=='Recoiling'){
@@ -211,7 +211,7 @@ function showchild(parentid) {
 							else if(item.process=='Slitting'){
 							thisdata["SlittNumber"] = item.slittnumber;
 							thisdata["Date"] = item.date;
-							thisdata["Width in(mm)"] = item.width.toFixed(3);
+							thisdata["Width in(mm)"] = item.width;
 							thisdata["Status"] = item.status;
 							}
 							else if(item.process=='NULL'){

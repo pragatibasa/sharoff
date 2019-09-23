@@ -56,7 +56,7 @@
                                 <td><?php echo $workinprogress_lists[$i]->materialdescription ?></td>
                                 <td><?php echo $workinprogress_lists[$i]->thickness ?></td>
                                 <td><?php echo $workinprogress_lists[$i]->width ?></td>
-                                <td><?php echo $workinprogress_lists[$i]->weight ?></td>
+                                <td><?php echo number_format((float) $workinprogress_lists[$i]->weight,3) ?></td>
                                 <td><?php echo $workinprogress_lists[$i]->process ?></td>
                                 <td><?php echo $al = '<a title="Cutting Instruction" href="' . $workinprogress_lists[$i]->al . '"><span class="badge badge-success" style="color: #FFFFFF;">Cutting</span></a>';
                                     echo $as = '<a title="Slitting Instruction" href="' . $workinprogress_lists[$i]->slit . '"><span class="badge badge-success" style="color: #FFFFFF;">Slitting</span></a>';
@@ -79,8 +79,13 @@
 </div>
 <input id="txtcoilids" type="hidden" hidden/>
 <div align="right">
+<<<<<<< 91c75328ba9b9b49eaba742dabf6bd6e57daa40b
 <label>Total Weight: in (Tons)</label>
 <input id="txtboxweight" type="text" value="<?php echo(round($tweight,3)); ?>" DISABLED/> &nbsp; &nbsp; &nbsp;
+=======
+    <label>Total Weight: in (Tons)</label>
+    <input id="txtboxweight" type="text" value="<?php echo round($tweight,3); ?>" DISABLED/> &nbsp; &nbsp; &nbsp;
+>>>>>>> Label changes kgs into  tons and precision changes
 </div>
 
 <input id="coilid" type="hidden" value="" name="coilid">

@@ -76,8 +76,8 @@ class Partywise_register extends Fuel_base_controller {
 			$obj->grade = $container->grade;
 			$obj->thickness = $container->thickness;
 			$obj->width = $container->width;
-			$obj->weight = $container->weight;
-			$obj->pweight = round( $container->pweight,3 );
+			$obj->weight = number_format((float) ($container->weight),3);
+			$obj->pweight = number_format((float) ($container->pweight),3);
 			$obj->status = $container->status;
 			$obj->process = $container->process;
 			$obj->ci = site_url('fuel/cutting_instruction').'/?partyid='.$container->coilnumber.'&partyname='.$partyname;
@@ -110,8 +110,8 @@ class Partywise_register extends Fuel_base_controller {
 			$obj->description = $container->description;
 			$obj->thickness = $container->thickness;
 			$obj->width = $container->width;
-			$obj->weight = $container->weight;
-			$obj->pweight = $container->pweight;
+			$obj->weight = number_format((float) ($container->weight),3);
+			$obj->pweight = number_format((float) ($container->pweight),3);
 			$obj->status = $container->status;
 			$obj->process = $container->process;
 			$obj->ci = site_url('fuel/cutting_instruction').'/?partyid='.$container->coilnumber.'&partyname='.$partyname;
@@ -170,10 +170,10 @@ class Partywise_register extends Fuel_base_controller {
 					$obj->length = $child->length;
 					$obj->bundlenumber = $child->bundlenumber;
 					$obj->bundles = $child->bundles;
-					$obj->weight = $child->weight;
+					$obj->weight = number_format((float) ($child->weight),3);
 					$obj->status = $child->status;
-					$obj->balance = $child->balance;
-					$obj->balanceWeight = $child->balanceWeight;
+					$obj->balance = number_format((float) ($child->balance),3);
+					$obj->balanceWeight = number_format((float) ($child->balanceWeight),3);
 					$obj->process = $child->process;
 				} else if($child->process=='Recoiling'){
 					$obj->recoilnumber = $child->recoilnumber;
@@ -187,7 +187,7 @@ class Partywise_register extends Fuel_base_controller {
 					$obj->date = $child->date;
 					$obj->width = $child->width;
 					$obj->length = $child->length;
-					$obj->weight = $child->weight;
+					$obj->weight = number_format((float) ($child->weight),3);
 					$obj->status = $child->status;
 					$obj->process = $child->process;
 				}

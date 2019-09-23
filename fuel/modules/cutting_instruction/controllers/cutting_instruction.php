@@ -40,6 +40,7 @@ class cutting_instruction extends Fuel_base_controller {
 			$vars['rdata']= $this->weightcheck();
 			$vars['adata']= $this->cutting_instruction($this->partyid, $this->partyname);	
 			$vars['savevar']= $this->save_button($this->partyid);
+			
 			$this->_render('cutting_instruction', $vars);
 		} else {
 			redirect(fuel_url('#'));
@@ -143,7 +144,8 @@ function weightcheck()
  {
    if (!empty($_POST)) {
     $leftweight = $this->cutting_instruction_model->weightbundle();
-	echo $leftweight;
+	echo number_format((float) $leftweight,3);
+	
    }
    
 }

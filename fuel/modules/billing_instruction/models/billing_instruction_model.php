@@ -128,7 +128,7 @@ class Billing_instruction_model extends Base_module_model {
 		$checkInwardsStatusRow = $checkInwardsStatusQuery->result();
 		
 		if( $checkInwardsStatusRow[0]->vStatus == 'RECEIVED' || $process != '') {
-			$sql ="SELECT aspen_tblinwardentry.vIRnumber,aspen_tblmatdescription.vDescription,aspen_tblinwardentry.fThickness,aspen_tblinwardentry.fWidth,aspen_tblinwardentry.fQuantity,aspen_tblinwardentry.vInvoiceNo,aspen_tblinwardentry.vStatus,aspen_tblinwardentry.fpresent
+			$sql ="SELECT aspen_tblinwardentry.vIRnumber,aspen_tblmatdescription.vDescription,aspen_tblinwardentry.fThickness,aspen_tblinwardentry.fWidth,round(fQuantity,3) as fQuantity, aspen_tblinwardentry.vInvoiceNo,aspen_tblinwardentry.vStatus,aspen_tblinwardentry.fpresent
 			FROM aspen_tblinwardentry LEFT JOIN aspen_tblmatdescription ON aspen_tblmatdescription.nMatId = aspen_tblinwardentry.nMatId
 			LEFT JOIN aspen_tblpartydetails ON aspen_tblpartydetails.nPartyId = aspen_tblinwardentry.nPartyId ";
 			if(!empty($partyname) && !empty($partyid)) {
@@ -166,7 +166,7 @@ class Billing_instruction_model extends Base_module_model {
 			$partyname = $pname;
 			$partyid = $pid;
 		}
-		$sql ="SELECT aspen_tblinwardentry.vIRnumber,  aspen_tblmatdescription.vDescription, aspen_tblinwardentry.fThickness, aspen_tblinwardentry.fWidth, aspen_tblinwardentry.fQuantity,aspen_tblinwardentry.vInvoiceNo, aspen_tblinwardentry.vStatus
+		$sql ="SELECT aspen_tblinwardentry.vIRnumber,  aspen_tblmatdescription.vDescription, aspen_tblinwardentry.fThickness, aspen_tblinwardentry.fWidth, round(fQuantity,3) as fQuantity ,aspen_tblinwardentry.vInvoiceNo, aspen_tblinwardentry.vStatus
 		FROM aspen_tblinwardentry LEFT JOIN aspen_tblmatdescription ON aspen_tblmatdescription.nMatId = aspen_tblinwardentry.nMatId
 		LEFT JOIN aspen_tblpartydetails ON aspen_tblpartydetails.nPartyId = aspen_tblinwardentry.nPartyId ";
 		if(!empty($partyname) && !empty($partyid)) {

@@ -97,8 +97,9 @@ function getcoildetails() {
 		if(isset($pid) && isset($pname)) {
 			$partyname = $pname;
 			$partyid = $pid;
+			
 		}
-		$sql ="SELECT aspen_tblinwardentry.vIRnumber,aspen_tblinwardentry.fLength, aspen_tblinwardentry.dReceivedDate, aspen_tblmatdescription.vDescription, aspen_tblinwardentry.fThickness, aspen_tblinwardentry.fWidth, aspen_tblinwardentry.fQuantity, aspen_tblinwardentry.vStatus
+		$sql ="SELECT aspen_tblinwardentry.vIRnumber,aspen_tblinwardentry.fLength, aspen_tblinwardentry.dReceivedDate, aspen_tblmatdescription.vDescription, aspen_tblinwardentry.fThickness, aspen_tblinwardentry.fWidth, round(fQuantity,3) as fQuantity, aspen_tblinwardentry.vStatus
 		FROM aspen_tblinwardentry LEFT JOIN aspen_tblmatdescription ON aspen_tblmatdescription.nMatId = aspen_tblinwardentry.nMatId
 		LEFT JOIN aspen_tblpartydetails ON aspen_tblpartydetails.nPartyId = aspen_tblinwardentry.nPartyId ";
 		if(!empty($partyid)) {
@@ -174,6 +175,7 @@ function deleterow($deleteid)
     }
  
  $leftweight = $parentweight - $childweight;
+ number_format((float) $leftweight,3);
  
  return  $leftweight;
   }	

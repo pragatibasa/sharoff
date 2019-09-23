@@ -99,7 +99,7 @@
         </p>
         <p>
             <label for="card">
-                <span>Net weight in kgs:</span>
+                <span>Net weight in Tons:</span>
             </label>
             <input name="net-weight" class="net-weight" type="text" /> <span class="weight-info">Note : If weighed on weigh scale then key in weight directly here</span>
         </p>

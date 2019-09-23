@@ -136,8 +136,8 @@ $.ajax({
 				mediaClass += '<td>' + item.receiveddate + '</td>';
 				mediaClass += '<td>' + item.description + '</td>';
 				mediaClass += '<td>' + item.grade + '</td>';
-				mediaClass += '<td>' + parseFloat(item.thickness).toFixed(3) + '</td>';
-				mediaClass += '<td>' + parseFloat(item.width).toFixed(3) + '</td>';
+				mediaClass += '<td>' + item.thickness + '</td>';
+				mediaClass += '<td>' + item.width + '</td>';
 				mediaClass += '<td>' + parseFloat(item.weight).toFixed(3) + '</td>';
 				mediaClass += '<td>' + parseFloat(item.pweight).toFixed(3) + '</td>';
 				mediaClass += '<td>' + item.status + '</td>';
@@ -188,9 +188,9 @@ function showchild(parentid) {
                             thisdata["Length in (mm)"] = item.length;
                             thisdata["BundleNumber"] = item.bundlenumber;
                             thisdata["No of sheets"] = item.bundles;
-                            thisdata["Weight in (Tons)"] = item.weight;
-                            thisdata["Balance"] = item.balance;
-                            thisdata["Balance Weight"] = item.balanceWeight;
+                            thisdata["Weight in (Tons)"] = parseFloat(item.weight).toFixed(3);
+                            thisdata["Balance"] = parseFloat(item.balance).toFixed(3);
+                            thisdata["Balance Weight"] = parseFloat(item.balanceWeight).toFixed(3);
                             thisdata["Status"] = item.status;
 							}
 							else if(item.process=='Recoiling'){
@@ -205,7 +205,7 @@ function showchild(parentid) {
 								thisdata["Date"] = item.date;
 								thisdata["Width in(mm)"] = item.width;
 								thisdata["Length in(mm)"] = item.length;
-								thisdata["Weight in(Tons)"] = item.weight;
+								thisdata["Weight in(Tons)"] = parseFloat(item.weight).toFixed(3);
 								thisdata["Status"] = item.status;
 							}
 							else if(item.process=='NULL'){

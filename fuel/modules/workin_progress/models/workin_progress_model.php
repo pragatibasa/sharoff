@@ -257,13 +257,13 @@ where aspen_tblinwardentry.vStatus = 'Work In Progress' or aspen_tblslittinginst
 
 		</tr>
 		<tr>
-				<td align="left"><h1>	<b>Width (mm): </b> '.$Width.'</h1></td> </tr>	<tr>
+				<td align="left"><h1>	<b>Width (mm): </b> '.round($Width, 3).'</h1></td> </tr>	<tr>
 				<td align="center" width="100%"></td>
 
 		</tr>
 			<tr>
 
-				<td align="left"><h1><b>Thickness (mm): </b> '.$Thickness.'</h1></td>
+				<td align="left"><h1><b>Thickness (mm): </b> '.round($Thickness, 3).'</h1></td>
 		</tr><tr>
 				<td align="center" width="100%"></td>
 
@@ -271,7 +271,7 @@ where aspen_tblinwardentry.vStatus = 'Work In Progress' or aspen_tblslittinginst
 
 		<tr>
 
-				<td align="left"><h1><b>Weight (mm): </b> '.$Weight.'</h1></td>
+				<td align="left"><h1><b>Weight (mm): </b> '.round($Weight,2).'</h1></td>
 		</tr><tr>
 				<td align="center" width="100%"></td>
 
@@ -294,7 +294,7 @@ where aspen_tblinwardentry.vStatus = 'Work In Progress' or aspen_tblslittinginst
 				<th align="center"><h1><b>Cutting Date</b></h1></th>
 				<th align="center"><h1><b>Length(mm)</b></h1></th>
 				<th align="center"><h1><b>Number of Pieces</b></h1></th>
-				<th align="center"><h1><b>Bundle Weight (Kgs)</b></h1></th>
+				<th align="center"><h1><b>Bundle Weight (Tons)</b></h1></th>
 			</tr>';
                 if ($queryitem->num_rows() > 0)
                 {
@@ -414,13 +414,13 @@ where aspen_tblinwardentry.vStatus = 'Work In Progress' or aspen_tblslittinginst
 
 		</tr>
 		<tr>
-				<td align="left"><h1>	<b>Width (mm): </b> '.$Width.'</h1></td> </tr>	<tr>
+				<td align="left"><h1>	<b>Width (mm): </b> '.round($Width,3).'</h1></td> </tr>	<tr>
 				<td align="center" width="100%"></td>
 
 		</tr>
 			<tr>
 
-				<td align="left"><h1><b>Thickness (mm): </b> '.$Thickness.'</h1></td>
+				<td align="left"><h1><b>Thickness (mm): </b> '.round($Thickness,3).'</h1></td>
 		</tr><tr>
 				<td align="center" width="100%"></td>
 
@@ -569,15 +569,15 @@ where aspen_tblinwardentry.vStatus = 'Work In Progress' or aspen_tblslittinginst
 
 		</tr>
 		<tr>
-			<td align="left"><h1><b>Width (mm): </b>'.$Width.'</h1></td> </tr>	<tr>
+			<td align="left"><h1><b>Width (mm): </b>'.round($Width,3).'</h1></td> </tr>	<tr>
 			<td align="center" width="100%"></td>
 		</tr>
 		<tr>
-			<td align="left"><h1><b>Thickness (mm): </b> '.$Thickness.'</h1></td>
+			<td align="left"><h1><b>Thickness (mm): </b> '.round($Thickness,3).'</h1></td>
 		</tr>
 		<tr><td align="center" width="100%"></td></tr>
 		<tr>
-			<td align="left"><h1><b>Weight (kgs): </b> '.$Weight.'</h1></td>
+			<td align="left"><h1><b>Weight (Tons): </b> '.round($Weight,3).'</h1></td>
 		</tr>
 		<tr><td align="center" width="100%"></td></tr>
 		<tr>
@@ -613,7 +613,7 @@ where aspen_tblinwardentry.vStatus = 'Work In Progress' or aspen_tblslittinginst
 				<td align="center" ><h1>'.$rowitem->startdate.'</h1></td>
 				<td align="center"><h1>'.$rowitem->length.'</h1></td>
 				<td align="center"><h1>'.$rowitem->width.'</h1></td>
-				<td align="center"><h1>'.round($rowitem->weight).'</h1></td>
+				<td align="center"><h1>'.$rowitem->weight.'</h1></td>
 			</tr>';
                     }
                 }else{

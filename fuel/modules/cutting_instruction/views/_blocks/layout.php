@@ -30,7 +30,7 @@
 					<label><?=lang('Material_description')?></label>
 				</td> 
 				<td colspan="3">
-					<input id="mat_desc" name="vDescription" type="text" DISABLED/>
+					<input id="	" name="vDescription" type="text" DISABLED/>
 				</td>
 			</tr>
 			<tr>
@@ -58,9 +58,9 @@
 				<td>
 					<label><?=lang('weight_txt')?></label>
 				</td>
+				
 				<td> 
-					<input id="wei" name="fQuantity" type="text" DISABLED/> (in tons)
-					
+					<input id="wei" name="fQuantity" type="text" DISABLED/> (in tons)				
 				</td>
 			</tr>
 		</table>
@@ -99,6 +99,7 @@
 			<input id= "rate" type="text"  name="Rate" onkeyup="doweight();" />
 		</div>
 		<div class="pad-10">
+		
 			<div id="bundle_weight_text_label"> Weight  </div>
 			<input id="bundleweight" type="text" name="bundle_weight" DISABLED />(in tons)
 	<!--	<input type="button" value="Approximate Weight" id="weight_id" onclick="doweight();" />-->
@@ -264,13 +265,6 @@ function deleteItem(pd){
     }
   }
 
-
-
-
-
-
-
-
 function radioload(b, p, l,bn)
 {
 	$("#edit").show();
@@ -314,7 +308,6 @@ function dobalanceradio()
 	var bundleweight = $('#bundleweight').val();
 	//var result= weight-(0.00785 *width*thickness*length)
 	//var resultbundle= (0.00000785 *width*thickness*length);
-
 	
 	var dataString = 'pid='+pid+'&bundlenumber='+bundlenumber+'&date1='+date1+'&length='+length+'&bundleweight='+bundleweight+'&rate='+rate;
 $.ajax({  
@@ -358,6 +351,8 @@ function doweight() {
 	var length = $('#length').val();
 	var rate = $('#rate').val();
 	var weight = $('#wei').val();
+	
+
 	//alert(width + ' - ' + thickness + ' - ' + length + ' - ' + rate + ' - ' + weight);
 	if(width == '' || thickness == '' || length == '' ){
 		$('#width').val('');
@@ -389,6 +384,7 @@ function balance(){
 		//document.getElementById('length').value='';
     }
 	var dataString = 'weight='+weight+'&pid='+pid;
+<<<<<<< 91c75328ba9b9b49eaba742dabf6bd6e57daa40b
 	$.ajax({
         type: 'POST',
         url: "<?php echo fuel_url('cutting_instruction/weightcheck');?>",
@@ -402,12 +398,29 @@ function balance(){
     });
 }
 
+=======
+	
+	
+	$.ajax({
+                type: 'POST',
+                url: "<?php echo fuel_url('cutting_instruction/weightcheck');?>",
+				data: dataString,
+				success: function(msg){  
+				var rate = (msg)/(0.00000785 *width*thickness*length);
+				var rate = Math.floor(rate);
+				document.getElementById('bundleweight').value=msg;
+				document.getElementById('rate').value=rate;
+				}
+            });
+	}
+>>>>>>> Label changes kgs into  tons and precision changes
 function functionedit(){
 	var pid   =	$('#pid').val();
 	var bundlenumber = $('#bundlenumber').val();
 	var length = $('#length').val();
-	var rate = $('#rate').val();
+	var rate = parseFloat($('#rate').val()).toFixed(3);
 	var bundleweight = parseFloat($('#bundleweight').val()).toFixed(3);
+
 	totalweight_check();	
 	if(bundlenumber == '' || length =='' || rate =='')
 	{

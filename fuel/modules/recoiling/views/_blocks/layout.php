@@ -145,7 +145,7 @@ function loadfolderlist(account, accname) {
             thisdata["Startdate"] = item.startdate;
             thisdata["Enddate"] = item.enddate;
             thisdata["noofrecoil"] = item.nNoOfRecoils;
-            thisdata["weight"] = item.weight;
+            thisdata["weight"] = parseFloat(item.weight).toFixed(3);
 			
 			var dl = '<a class="ico_coil_delete" title="Delete" href="'+item.dl+'" onClick=deleteItem('+item.recoilno+','+item.coilno+')><img src="<?php echo img_path('iconset/ico_cancel.png'); ?>" /></a>';
             thisdata["action"] =  dl;

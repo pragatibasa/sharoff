@@ -146,29 +146,29 @@ class inward_model extends Base_module_model {
 			</tr>
 			<tr>
 				<td align="left">
-					<h2><b>Width in mm :</b> '.round($width, 3).'</h2></td>
+					<h2><b>Width in mm :</b> '.$width.'</h2></td>
 			</tr>
 			<tr>
 				<td align="left">
-					<h2><b>Thickness in mm :</b> '.round($thickness, 3).'</h2></td>
+					<h2><b>Thickness in mm :</b> '.$thickness.'</h2></td>
 			</tr>
 			<tr>
 				<td align="left">
-					<h2><b>Length in mm :</b> '.round($length, 3).'</h2></td>
+					<h2><b>Length in mm :</b> '.$length.'</h2></td>
 			</tr>
 			
 			
 			<tr>
 				<td align="left">
-					<h2><b>Weight in M/T :</b> '.round($Weight, 3).'</h2></td>
+					<h2><b>Weight in M/T :</b> '.number_format((float) $Weight, 3).'</h2></td>
 			</tr>
 			<tr>
 			<td align="left">
-				<h2><b>Physical Weight :</b> '.round($PhysicalWeight, 3).'</h2></td>
+				<h2><b>Physical Weight :</b> '.number_format((float) $PhysicalWeight, 3).'</h2></td>
 		   </tr>
 			<tr>
 			<td align="left">
-				<h2><b>Difference Weight :</b> '.round($DifferenceWeight, 3).'</h2></td>
+				<h2><b>Difference Weight :</b> '.number_format((float) $DifferenceWeight, 3).'</h2></td>
 		   </tr>
 		   <tr>
 			<td align="left">

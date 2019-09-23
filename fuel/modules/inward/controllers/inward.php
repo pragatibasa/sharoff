@@ -179,8 +179,13 @@ class inward extends Fuel_base_controller {
                     ->setCellValue('J' . $i, $arr[$arrHeading['Width']])
                     ->setCellValue('K' . $i, $arr[$arrHeading['Thickness']])
                     ->setCellValue('L' . $i, $arr[$arrHeading['Length']])
+<<<<<<< 91c75328ba9b9b49eaba742dabf6bd6e57daa40b
                     ->setCellValue('M' . $i, $arr[$arrHeading['Weight']])
                     ->setCellValue('N' . $i, $arr[$arrHeading['Physical Weight']])
+=======
+                    ->setCellValue('M' . $i, number_format((float) ($arr[$arrHeading['Weight']]),3))
+                    ->setCellValue('N' . $i, number_format((float) ($arr[$arrHeading['Physical Weight']]),3))
+>>>>>>> Label changes kgs into  tons and precision changes
                     ->setCellValue('O' . $i, $arr[$arrHeading['Difference Weight']])
                     ->setCellValue('P' . $i, $arr[$arrHeading['Status']])
                     ->setCellValue('Q' . $i, $arr[$arrHeading['Grade']])

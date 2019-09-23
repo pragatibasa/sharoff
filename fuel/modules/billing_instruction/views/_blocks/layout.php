@@ -60,7 +60,7 @@
 		</table>
 		<fieldset>
 			<legend>Cutting Details</legend>
-				<?=json_decode($sdata)->fpresent?> kgs <a href="<?php echo fuel_url('billing_instruction/?partyid='.$partyid.'&partyname='.$partyname.'&status');?>">Bill Residual Weight</a> / <a href="<?php echo fuel_url('inward/?ppartyid='.$partyid.'&pname='.$partyname)?>">Snip</a>
+				<?=json_decode($sdata)->fpresent?> Tons <a href="<?php echo fuel_url('billing_instruction/?partyid='.$partyid.'&partyname='.$partyname.'&status');?>">Bill Residual Weight</a> / <a href="<?php echo fuel_url('inward/?ppartyid='.$partyid.'&pname='.$partyname)?>">Snip</a>
 			<br>
 			<br>
 				<div>Or select a bundle to bill </div>

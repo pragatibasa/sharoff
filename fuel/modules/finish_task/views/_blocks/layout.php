@@ -405,7 +405,7 @@ function radioslitt(s,r,w){
 	$("#finishre").hide();}
 }
 
-var json =<?php echo($adata); ?>;
+var json =<?php echo ($adata); ?>;
 for(key in json){
 	if(json.hasOwnProperty(key))
     $('input[name='+key+']').val(json[key]);

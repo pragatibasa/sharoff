@@ -39,7 +39,7 @@ class transfer_instruction_model extends Base_module_model {
 			$partyid = $pid;
 		}
 
-		$sql ="SELECT aspen_tblinwardentry.vIRnumber, aspen_tblinwardentry.dReceivedDate, aspen_tblinwardentry.vLorryNo,aspen_tblinwardentry.vInvoiceNo, aspen_tblinwardentry.dInvoiceDate, aspen_tblmatdescription.vDescription, aspen_tblinwardentry.fThickness, aspen_tblinwardentry.fWidth, aspen_tblinwardentry.fLength,aspen_tblinwardentry.fQuantity, aspen_tblinwardentry.vStatus, 
+		$sql ="SELECT aspen_tblinwardentry.vIRnumber, aspen_tblinwardentry.dReceivedDate, aspen_tblinwardentry.vLorryNo,aspen_tblinwardentry.vInvoiceNo, aspen_tblinwardentry.dInvoiceDate, aspen_tblmatdescription.vDescription, aspen_tblinwardentry.fThickness, aspen_tblinwardentry.fWidth, aspen_tblinwardentry.fLength,round(fQuantity,3)as fQuantity, aspen_tblinwardentry.vStatus, 
 		aspen_tblinwardentry.vHeatnumber, aspen_tblinwardentry.vPlantname
 		FROM aspen_tblinwardentry LEFT JOIN aspen_tblmatdescription ON aspen_tblmatdescription.nMatId = aspen_tblinwardentry.nMatId
 		LEFT JOIN aspen_tblpartydetails ON aspen_tblpartydetails.nPartyId = aspen_tblinwardentry.nPartyId ";

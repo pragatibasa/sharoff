@@ -10,13 +10,13 @@
 			<tr>
 <input id="priceid" type="hidden" name="priceid"  /><br />
 				
-						    <td><span><label>Minimum Weight in (Kgs)</label></span></td>
+						    <td><span><label>Minimum Weight in (Tons)</label></span></td>
 							<td><input id="minweight" type="text" name="Minimum_Weight"  onchange="minweight_exist();"/><br /></td>
 				
 			</tr>
 			<tr>
 								
-							<td><span><label id= "max">Maximum Weight in (Kgs)</label></span></td>
+							<td><span><label id= "max">Maximum Weight in (Tons)</label></span></td>
 							<td><input id= "maxweight" type="text"  name="Maximum_Weight" onchange="maxweight_exist();" /><br /></td>
 				
 			</tr>

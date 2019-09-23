@@ -159,8 +159,8 @@ $(document).on( 'click', '.__fuel_edit_marker_new__',function() {
 	$(this).prev('span').remove();
 	var kgs = '';
 	if($(this).prev('.weight').val() !== '')
-		kgs = 'Kgs';
-	$(this).after('<span class="measure">'+kgs+'</span><span title="Delete" class="ico_delete" style="margin-top: 10px; height: 8px; margin-left: 5px; padding: 5px; position: absolute; width: 7px;cursor:pointer;"></span><input type="text" class="width" style="width:130px; margin-right: 4px;" name="width" id="width_v"><input class="count" style="width:60px;" type="text" name="count" value="1"/><input class="weight" type="text" name="weight" disabled style="width:130px;margin-left:4px;"/> <span class="measure"></span><span title="Click to add new width" style="position: absolute; padding: 8px; margin-left: 5px; margin-top: 7px;cursor: pointer;" class="__fuel_edit_marker_new__"></span>');
+		kgs = 'Tons';
+	$(this).after('<span class="measure">'+Tons+'</span><span title="Delete" class="ico_delete" style="margin-top: 10px; height: 8px; margin-left: 5px; padding: 5px; position: absolute; width: 7px;cursor:pointer;"></span><input type="text" class="width" style="width:130px; margin-right: 4px;" name="width" id="width_v"><input class="count" style="width:60px;" type="text" name="count" value="1"/><input class="weight" type="text" name="weight" disabled style="width:130px;margin-left:4px;"/> <span class="measure"></span><span title="Click to add new width" style="position: absolute; padding: 8px; margin-left: 5px; margin-top: 7px;cursor: pointer;" class="__fuel_edit_marker_new__"></span>');
 	$(this).next('.ico_delete').css('margin-left','4px');
 	$(this).remove();
 });
@@ -209,7 +209,7 @@ $(document).on( 'blur', '.width',function(event) {
 		$(this).next().next('.weight').val('0');
 		return false;
 	} else {
-		$(this).next().next('.weight').val(weight).next('.measure').text(' Kgs');
+		$(this).next().next('.weight').val(weight).next('.measure').text('Tons');
 	}
 });
 
@@ -224,7 +224,7 @@ $(document).on( 'blur', '.count',function(event) {
 		$(this).next('.weight').val('0');
 		return false;
 	} else {
-		$(this).next('.weight').val(weight).next('.measure').text(' Kgs');
+		$(this).next('.weight').val(weight).next('.measure').text(' Tons');
 	}
 });
 
@@ -308,9 +308,9 @@ function loadfolderlist(account, accname) {
             thisdata["Slitting date"] = item.Slittingdate;
             thisdata["length"] = item.length;
             thisdata["width"] = item.width;
-            thisdata["weight"] = item.weight;
+            thisdata["weight"] = parseFloat(item.weight).toFixed(3);
 
-			totalWeight += Number(item.weight);
+			totalWeight += Number(item.weight).toFixed(3);
 			totalwidth += Number(item.width);
 
 			var edit = '<a class="ico_coil_edit" title="Edit" href="#" onClick=radioload('+item.Sno+','+item.length+','+item.width+','+item.weight+')><img src="<?php echo img_path('iconset/ico_edit.png'); ?>" /></a>';

@@ -112,7 +112,7 @@ class Coil_details_model extends Base_module_model {
 				<th align="center"><b>Invoice Number</b></th>
 				<th align="center"><b>Width (in mm)</b></th>
 				<th align="center"><b>Thickness (in mm)</b></th>
-				<th align="center"><b>Weight (in Kgs)</b></th>
+				<th align="center"><b>Weight (in tons)</b></th>
 			</tr>';
 		if ($queryitem->num_rows() > 0)
 		{
