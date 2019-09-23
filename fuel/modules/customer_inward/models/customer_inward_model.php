@@ -139,7 +139,7 @@ class customer_inward_model extends Base_module_model {
 				<td align="center" >'.$rowitem->materialdescription.'</td>
 				<td align="right">'.$rowitem->Thickness.'</td>
 				<td align="right">'.$rowitem->Width.'</td>
-				<td align="right">'.$rowitem->Weight.'</td>
+				<td align="right">'.number_format((float)$rowitem->Weight,3).'</td>
 				<td align="right">'.$rowitem->Status.'</td>
 			</tr>';
 			}
@@ -160,7 +160,7 @@ class customer_inward_model extends Base_module_model {
 		$html .= '<table cellspacing="0" cellpadding="5" border="0.5">
 					<tr>
 						<td><h3>Total Weight</h3></td>
-						<td><h3>'.$queryTotalWeight->result()[0]->weight.' (in Kgs)</h3></td>
+						<td><h3>'.number_format((float)$queryTotalWeight->result()[0]->weight,3).' (in Tons)</h3></td>
 					</tr>
 				</table>';
 		

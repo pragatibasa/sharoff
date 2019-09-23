@@ -72,7 +72,7 @@
 
 <div align="right">
 <label>Total Weight</label>
-		<input id="totalweight_calcualation" type="text" DISABLED/>(in M/T)
+		<input id="totalweight_calcualation" type="text" DISABLED/>(in Tons)
 		&nbsp; &nbsp; &nbsp;
 </div>
 <script language="javascript" type="text/javascript">
@@ -93,7 +93,7 @@ $.ajax({
 		var msg3=eval(msg);
 		$.each(msg3, function(i, j){
 			 var weight = j.weight;
-			document.getElementById("totalweight_calcualation").value = weight;});
+			document.getElementById("totalweight_calcualation").value = parseFloat(weight).toFixed(3);});
 	   }
 	});
 }
@@ -142,7 +142,7 @@ $.ajax({
 				mediaClass += '<td>' + item.grade + '</td>';
 				mediaClass += '<td>' + item.thickness + '</td>';
 				mediaClass += '<td>' + item.width + '</td>';
-				mediaClass += '<td>' + item.pweight + '</td>';
+				mediaClass += '<td>' + parseFloat(item.pweight).toFixed(3)+ '</td>';
 				mediaClass += '<td>' + item.status + '</td>';
 				
 
@@ -177,7 +177,7 @@ function tableToExcel() {
     tab_text = tab_text + "<table border='1px'>";
     tab_text = tab_text + tableClone.innerHTML;
     tab_text = tab_text + '</table>';
-	tab_text = tab_text + '<table border="1px"><tr></tr><tr><td></td><td></td><td></td><td></td><td><h3>Total Weight : </td><td>'+$('#totalweight_calcualation').val()+' ( in M/T )</h3></td><td></td></tr></table></body></html>';
+	tab_text = tab_text + '<table border="1px"><tr></tr><tr><td></td><td></td><td></td><td></td><td></td><td><h3>Total Weight :'+$('#totalweight_calcualation').val()+'</h3></td><td></td><td></td></tr></table></body></html>';
     var data_type = 'data:application/vnd.ms-excel';
 
     var ua = window.navigator.userAgent;

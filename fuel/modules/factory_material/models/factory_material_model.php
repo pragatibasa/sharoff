@@ -123,9 +123,9 @@ class factory_material_model extends Base_module_model
                 $html .= '			
                          <tr>
                          <td align="center"><h2>' . $rowitem->partyname . '</h2></td>			
-                         <td align="center"><h2>' . $rowitem->inweight . '</h2></td>			
-                         <td align="center" ><h2>' . $rowitem->outweight . '</h2></td>
-                         <td align="center" ><h2>' . $rowitem->balance . '</h2></td>		
+                         <td align="center"><h2>' .number_format((float)$rowitem->inweight,3) . '</h2></td>			
+                         <td align="center" ><h2>' .number_format((float)$rowitem->outweight,3) . '</h2></td>
+                         <td align="center" ><h2>' .number_format((float)$rowitem->balance,3) . '</h2></td>		
                          </tr>';
             }
         } else {

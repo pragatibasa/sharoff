@@ -136,7 +136,7 @@
 
 	
 
-<label>Total Weight</label> &nbsp; <input id="totalweight_calcualation" type="text" DISABLED/>(in Kgs) &nbsp;&nbsp; &nbsp;  
+<label>Total Weight</label> &nbsp; <input id="totalweight_calcualation" type="text" DISABLED/>(in Tons) &nbsp;&nbsp; &nbsp;  
 <label>Basic Amount</label> &nbsp; <input id="totalbasic_calcualation" type="text" DISABLED/> &nbsp;&nbsp; &nbsp; 
 <label>Total Tax</label> &nbsp; <input id="totaltax_calcualation" type="text" DISABLED/>&nbsp;&nbsp; &nbsp; 
 <label>Total Bill Amount</label> &nbsp; <input id="totalbill_calcualation" type="text" DISABLED/> &nbsp;&nbsp; &nbsp; 		
@@ -177,7 +177,7 @@ $.ajax({
 		$.each(msg3, function(i, j){
 			 var wei = j.wei;
 	//		 alert(wei);
-			document.getElementById("totalweight_calcualation").value = wei;});
+			document.getElementById("totalweight_calcualation").value = parseFloat(wei).toFixed(3);});
 	   }  
 	}); 
 }
@@ -195,7 +195,7 @@ $.ajax({
 		var msg3=eval(msg);
 		$.each(msg3, function(l, k){
 			 var basic = k.basic;
-			document.getElementById("totalbasic_calcualation").value = basic;});
+			document.getElementById("totalbasic_calcualation").value = parseFloat(basic).toFixed(3);});
 	   }  
 	}); 
 }
@@ -213,7 +213,7 @@ $.ajax({
 		var msg3=eval(msg);
 		$.each(msg3, function(n, m){
 			 var tax = m.tax;
-			document.getElementById("totaltax_calcualation").value = tax;});
+			document.getElementById("totaltax_calcualation").value = parseFloat(tax).toFixed(3);});
 	   }  
 	}); 
 }
@@ -230,7 +230,7 @@ $.ajax({
 		var msg3=eval(msg);
 		$.each(msg3, function(o, p){
 			 var bill = p.bill;
-			document.getElementById("totalbill_calcualation").value = bill;});
+			document.getElementById("totalbill_calcualation").value =  parseFloat(bill).toFixed(3);});
 	   }  
 	}); 
 }
@@ -415,8 +415,8 @@ function functionpdf() {
 				mediaClass += '<td>' + item.billno + '</td>';
 				mediaClass += '<td>' + item.description + '</td>';
 				mediaClass += '<td>' + item.grade + '</td>';
-				mediaClass += '<td>' + item.weight + '</td>';
-				mediaClass += '<td>' + item.oweight + '</td>';
+				mediaClass += '<td>' + parseFloat(item.weight).toFixed(3) + '</td>';
+				mediaClass += '<td>' + parseFloat(item.oweight).toFixed(3) + '</td>';
 				mediaClass += '<td>' + item.totalamt + '</td>';
 				mediaClass += '<td>' + item.Sertax + '</td>';
 				//mediaClass += '<td>' + item.SHEdutax + '</td>';  
@@ -465,7 +465,7 @@ tab_text = tab_text + "<table border='1px'>";
 tab_text = tab_text + tableClone.innerHTML;
 tab_text = tab_text + '</table>';
 
-tab_text = tab_text + '<table border="1px"><tr></tr><tr><td></td><td></td><td></td><td></td><td><h3>Total Weight : </td><td>'+$('#totalweight_calcualation').val()+' ( in kgs )</h3></td><td></td></tr></table></body></html>';
+tab_text = tab_text + '<table border="1px"><tr></tr><tr><td></td><td></td><td></td><td></td><td><h3>Total Weight : </td><td>'+$('#totalweight_calcualation').val()+' </h3></td><td></td><td></td><td></td><td></td></tr></table></body></html>';
 
 var data_type = 'data:application/vnd.ms-excel';
 

@@ -89,7 +89,7 @@
 <input id="partnamecheck" type="hidden" value="" name="partnamecheck" />	
 <div align="right">
 <label>Total Weight</label>
-		<input id="totalweight_calcualation" type="text" DISABLED/>(in M/T)  
+		<input id="totalweight_calcualation" type="text" DISABLED/>(in Tons)  
 		&nbsp; &nbsp; &nbsp;
 </div>
 
@@ -119,7 +119,7 @@ $.ajax({
 		var msg3=eval(msg);
 		$.each(msg3, function(i, j){
 			 var bweight = j.bweight;
-		document.getElementById("totalweight_calcualation").value = bweight;});
+		document.getElementById("totalweight_calcualation").value = parseFloat(bweight).toFixed(3);});
 	   }  
 	}); 
 }
@@ -212,7 +212,7 @@ function functionpdf() {
 				mediaClass += '<td>' + item.grade + '</td>';
 				mediaClass += '<td>' + item.thickness + '</td>';
 				mediaClass += '<td>' + item.width + '</td>';
-				mediaClass += '<td>' + item.bweight + '</td>';
+				mediaClass += '<td>' + parseFloat(item.bweight).toFixed(3) + '</td>';
 				mediaClass += '<td>' + item.vehicleno + '</td>';
 				mediaClass += '</tr>';			
 				
@@ -242,7 +242,7 @@ tab_text = tab_text + "<table border='1px'>";
 tab_text = tab_text + $('#myTabels').html();
 tab_text = tab_text + '</table>';
 
-tab_text = tab_text + '<table border="1px"><tr></tr><tr><td></td><td></td><td></td><td></td><td></td><td></td><td><h3>Total Weight : </td><td>'+$('#totalweight_calcualation').val()+' ( in M/T )</h3></td><td></td></tr></table></body></html>';
+tab_text = tab_text + '<table border="1px"><tr></tr><tr><td></td><td></td><td></td><td></td><td></td><td></td><td><h3>Total Weight : </td><td>'+$('#totalweight_calcualation').val()+' </h3></td><td></td></tr></table></body></html>';
 
 
 var data_type = 'data:application/vnd.ms-excel';

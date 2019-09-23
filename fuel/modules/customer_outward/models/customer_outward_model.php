@@ -162,7 +162,7 @@ class customer_outward_model extends Base_module_model {
 				<td align="center" >' . $rowitem->grade . '</td>
 				<td align="center">' . $rowitem->thickness . '</td>
 				<td align="center">' . $rowitem->width . '</td>
-				<td align="center">' . $rowitem->weight . '</td>
+				<td align="center">' .number_format((float) $rowitem->weight,3). '</td>
 				<td align="center">' . $rowitem->vehicleno . '</td>
 			</tr>';
             }
@@ -191,7 +191,7 @@ class customer_outward_model extends Base_module_model {
         $html .= '
 				<table cellspacing="0" cellpadding="5" border="0.5">
 			<tr>
-				<td><h3>Total Weight</h3></td>';
+				<td><h3>Total Weight (in Tons) </h3></td>';
 
         if ($querymain112->num_rows() > 0) {
             foreach ($querymain112->result() as $rowitem) {

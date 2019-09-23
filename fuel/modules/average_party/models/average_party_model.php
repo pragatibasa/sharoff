@@ -102,7 +102,7 @@ where aspen_tblpartydetails.nPartyName='".$partyname."' and `fpresent` <= 1 ";
  <td align="center">'.$rowitem->indate.'</td>			
  <td align="center" >'.$rowitem->width.'</td>				
  <td align="center">'.$rowitem->thickness.'</td>			
- <td align="center">'.$rowitem->quantity.'</td>	
+ <td align="center">'.number_format((float)$rowitem->quantity,3).'</td>	
  <td align="center">'.$rowitem->bdate.'</td>	 
  <td align="center">'.$rowitem->noofdays.'</td>			
  </tr>';			
@@ -113,6 +113,7 @@ where aspen_tblpartydetails.nPartyName='".$partyname."' and `fpresent` <= 1 ";
  <td align="center">&nbsp;</td>		
  <td align="center" >&nbsp;</td>			
  <td align="center">&nbsp;</td>				
+ <td align="right">&nbsp;</td>
  <td align="right">&nbsp;</td>		
  </tr>';		
  }		
