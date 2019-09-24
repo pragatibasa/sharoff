@@ -156,7 +156,7 @@ function BundleTable($pid) {
 	function savebundleslitting( $pid, $date, $widths, $length, $thickness ) {
 		$arrWidths = explode(',', $widths);
 		foreach ($arrWidths as $key => $width) {
-			$weight = round((0.00000785*$width*$thickness*$length));
+			$weight = ((0.00000785*$width*$thickness*$length));
 			$sql = $this->db->query ("Insert into aspen_tblslittinginstruction(vIRnumber,dDate,nWidth,nWeight,nLength,vStatus) VALUES(  '". $pid. "','". $date. "','". $width. "','".$weight."','".$length."','WIP-Slitting')");
 		}
   	}

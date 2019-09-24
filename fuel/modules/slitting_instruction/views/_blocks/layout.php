@@ -244,7 +244,7 @@ function calculateWeights( currentWidth, currentCount ) {
 		return false;
 	}
 
-	var totalWeight	= Math.round(0.00000785*(currentWidth*currentCount)*thickness*parseFloat(length));
+	var totalWeight	= parseFloat(0.00000785*(currentWidth*currentCount)*thickness*parseFloat(length)).toFixed(3);
 	return totalWeight;
 }
 
@@ -310,14 +310,14 @@ function loadfolderlist(account, accname) {
             thisdata["width"] = item.width;
             thisdata["weight"] = parseFloat(item.weight).toFixed(3);
 
-			totalWeight += Number(item.weight).toFixed(3);
+			totalWeight += Number(item.weight);
 			totalwidth += Number(item.width);
 
 			var edit = '<a class="ico_coil_edit" title="Edit" href="#" onClick=radioload('+item.Sno+','+item.length+','+item.width+','+item.weight+')><img src="<?php echo img_path('iconset/ico_edit.png'); ?>" /></a>';
 			var dl = '<a class="ico_coil_delete" title="Delete" href="#" onClick=deleteItem('+item.Sno+')><img src="<?php echo img_path('iconset/ico_cancel.png'); ?>" /></a>';
             thisdata["action"] = edit+' '+dl;
 			partydata.push(thisdata);
-			$('#txttotalwidth').val(Math.round(totalWeight));
+			$('#txttotalwidth').val(parseFloat(totalWeight).toFixed(3));
 			$('#txtHiddentotalwidth').val(totalwidth);
 			}
 			if (partydata.length) {
