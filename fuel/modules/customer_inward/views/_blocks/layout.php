@@ -141,12 +141,7 @@
 <div align="right">
 
 <label>Total Weight</label>
-
-<<<<<<< HEAD
-		<input id="totalweight_calcualation" type="text" DISABLED/>(in Tons)
-=======
-		<input id="totalweight_calcualation" type="text" DISABLED/>(in tons)
->>>>>>> 54fe16036fa0add151c3ec70290c4788537de317
+<input id="totalweight_calcualation" type="text" DISABLED/>(in Tons)
 		&nbsp; &nbsp; &nbsp;
 </div>
 
@@ -269,11 +264,7 @@ tab_text = tab_text + "<table border='1px'>";
 tab_text = tab_text + tableClone.innerHTML;
 tab_text = tab_text + '</table>';
 
-<<<<<<< HEAD
 tab_text = tab_text + '<table border="1px"><tr></tr><tr><td></td><td></td><td></td><td></td><td><h3>Total Weight : </td><td>'+$('#totalweight_calcualation').val()+' </h3></td><td></td></tr></table></body></html>';
-=======
-tab_text = tab_text + '<table border="1px"><tr></tr><tr><td></td><td></td><td></td><td></td><td><h3>Total Weight : </td><td>'+$('#totalweight_calcualation').val()+' ( in tons )</h3></td><td></td></tr></table></body></html>';
->>>>>>> 54fe16036fa0add151c3ec70290c4788537de317
 
 var data_type = 'data:application/vnd.ms-excel';
 

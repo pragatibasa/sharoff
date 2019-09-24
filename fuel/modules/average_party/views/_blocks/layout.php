@@ -68,12 +68,6 @@
 
 
 
-
-
-
-
-
-
 </div>
 
 <script language="javascript" type="text/javascript">
@@ -225,7 +219,7 @@ tab_text = tab_text + "<table border='1px'>";
 tab_text = tab_text + tableClone.innerHTML;
 tab_text = tab_text + '</table>';
 
-tab_text = tab_text + '<table border="1px"><tr></tr><tr><td></td><td></td><td></td><td><h3>Total Weight : </td><td>'+$('#totalweight_calcualation').val()+' </h3></td><td></td><td></td><td></td><td></td></tr></table></body></html>';
+tab_text = tab_text + '<table border="1px"><tr></tr><tr><td></td><td></td><td></td><td><h3>Total Weight : </td><td>'+$('#totalweight_calcualation').val()+' </h3></td><td></td><td></td></tr></table></body></html>';
 
 var data_type = 'data:application/vnd.ms-excel';
 

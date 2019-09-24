@@ -81,7 +81,7 @@ class customer_outward_model extends Base_module_model {
                     aspen_tblpartydetails.nPartyName = '" . $partyname . "'
                         AND aspen_tblbilldetails.dBillDate BETWEEN '" . $frmdate . "' AND '" . $todate . "'
                 GROUP BY aspen_tblbilldetails.nBillNo
-                ORDER BY aspen_tblbilldetails.nBillNo ASC";
+                ORDER BY aspen_tblinwardentry.vIRnumber asc";
 
         $sqlrpt112 = "select round(sum(aspen_tblbilldetails.fTotalWeight),3) as bweight from aspen_tblinwardentry left join aspen_tblbilldetails on aspen_tblbilldetails.vIRnumber = aspen_tblinwardentry.vIRnumber LEFT JOIN aspen_tblpartydetails ON aspen_tblpartydetails.nPartyId = aspen_tblinwardentry.nPartyId where aspen_tblpartydetails.nPartyName='" . $partyname . "' and aspen_tblbilldetails.dBillDate  BETWEEN '" . $frmdate . "' AND '" . $todate . "'";
 
@@ -191,13 +191,13 @@ class customer_outward_model extends Base_module_model {
         $html .= '
 				<table cellspacing="0" cellpadding="5" border="0.5">
 			<tr>
-				<td><h3>Total Weight (in Tons) </h3></td>';
+				<td><h3>Total Weight </h3></td>';
 
         if ($querymain112->num_rows() > 0) {
             foreach ($querymain112->result() as $rowitem) {
 
                 $html .= '
-				<td><h3>' . $rowitem->bweight . '</h3></td>
+				<td><h3>' . $rowitem->bweight . ' (in Tons)</h3></td>
 			</tr>';
             }
         }

@@ -59,13 +59,9 @@ aspen_tblbilldetails.fSHEduTax as SHEdutax, aspen_tblbilldetails.fEduTax as educ
 	
 	
 	function billgeneratemodel($partyname='',$frmdate='',$todate='')  {
-<<<<<<< HEAD
-	$sqlrpt = "SELECT aspen_tblmatdescription.vDescription as description,aspen_tblinwardentry.vGrade as grade,aspen_tblinwardentry.fQuantity as weight, aspen_tblbilldetails.fTotalWeight as oweight, aspen_tblinwardentry.vIRnumber as coilnumber, aspen_tblbilldetails.nBillNo as billno, aspen_tblbilldetails.dBillDate  as billdate, aspen_tblbilldetails.fServiceTax as Sertax, 
-=======
 	$sqlrpt = "SELECT aspen_tblmatdescription.vDescription as description,
 aspen_tblinwardentry.vGrade as grade, 
 aspen_tblinwardentry.fQuantity as weight, aspen_tblbilldetails.fTotalWeight as oweight, aspen_tblinwardentry.vIRnumber as coilnumber, aspen_tblbilldetails.nBillNo as billno, aspen_tblbilldetails.dBillDate  as billdate, aspen_tblbilldetails.fServiceTax as Sertax, 
->>>>>>> 54fe16036fa0add151c3ec70290c4788537de317
 aspen_tblbilldetails.fSHEduTax as SHEdutax, aspen_tblbilldetails.fEduTax as educationtax, aspen_tblbilldetails.ntotalamount as totalamt, aspen_tblbilldetails.fGrantTotal as totalbillamount 
 		FROM aspen_tblbilldetails
 		LEFT JOIN aspen_tblinwardentry ON aspen_tblinwardentry.vIRnumber = aspen_tblbilldetails.vIRnumber 
@@ -101,6 +97,7 @@ $querymain4 = $this->db->query($sql4);
 $querymain5 = $this->db->query($sql121);	
 $querymain6 = $this->db->query($sql122);	
 $querymain7 = $this->db->query($sql1234);	
+//$queryTotalWeight = $this->db->query($sqlTotalWeight);
 	
 		$pdf = new TCPDF(PDF_PAGE_ORIENTATION, PDF_UNIT, PDF_PAGE_FORMAT, true, 'UTF-8', false);
 		$pdfname= 'billsummary_'.$partyname.'.pdf';
@@ -146,9 +143,7 @@ $querymain7 = $this->db->query($sql1234);
 				<th align="center"><b>Grade</b></th>
 				<th align="center"><b>Inward Weight in (Tonnes)</b></th>
 				<th align="center"><b>Invoice Weight in (M.T)</b></th>
-				<th align="center"><b>Basic Amount</b></th>
-				<th align="center"><b>Service Tax</b></th>
-				<th align="center"><b>Total Bill Amount</b></th>
+				
 			</tr>';
 			
 			
@@ -168,9 +163,7 @@ $querymain7 = $this->db->query($sql1234);
 				<td align="right">'.$rowitem->grade.'</td>
 				<td align="right">'.number_format((float)$rowitem->weight,3).'</td>
 				<td align="right">'.number_format((float)$rowitem->oweight,3).'</td>
-				<td align="right">'.$rowitem->totalamt.'</td>
-				<td align="right">'.$rowitem->Sertax.'</td>
-				<td align="right">'.$rowitem->totalbillamount.'</td>
+				
 			</tr>';
 			}
 		}else{
@@ -207,48 +200,13 @@ $querymain7 = $this->db->query($sql1234);
 	$html .= '
 				<table cellspacing="0" cellpadding="5" border="0.5px">
 			<tr>
-			    <th align="center"><b>Total Weight </b></th>
-				<th align="center"><b>Total Basic Amount</b></th>
-				<th align="center"><b>Total Tax</b></th>
-				<th align="center"><b>Total Bill Amount</b></th>
-				
-			</tr>';
+				<th><h3> Total Weight </h3></th>
+				<td><h3>'.number_format((float)$querymain3->result()[0]->weight,3).' (in Tons)</h3></td>
+			</tr>
 			
-		if ($querymain1->num_rows() > 0)
-		{
-			foreach($querymain1->result() as $rowitem)
-			{
-			
-		$html .= '
-			<tr>
-				<td align="center">'.$rowitem->basic.'</td>';
-			}
-		}
-	
-	foreach($querymain7->result() as $rowitem)
-			{
-			
-		$html .= '
-	
-				<td align="center">'.$rowitem->total.'</td>';
-			}
-	
+			</table>';
 		
-		if ($querymain4->num_rows() > 0)
-		{
-			foreach($querymain4->result() as $rowitem)
-			{
-			
-		$html .= '
 		
-				<td align="center">'.$rowitem->bill.'</td></tr>';
-			}
-		}
-		$html .= '
-			
-		</table>';
-		
-		;	
 		
 		
 		$pdf->writeHTML($html, true, 0, true, true);

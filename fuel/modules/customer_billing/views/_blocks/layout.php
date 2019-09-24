@@ -136,12 +136,7 @@
 
 	
 
-<label>Total Weight</label> &nbsp; <input id="totalweight_calcualation" type="text" DISABLED/>(in Tons) &nbsp;&nbsp; &nbsp;  
-<label>Basic Amount</label> &nbsp; <input id="totalbasic_calcualation" type="text" DISABLED/> &nbsp;&nbsp; &nbsp; 
-<label>Total Tax</label> &nbsp; <input id="totaltax_calcualation" type="text" DISABLED/>&nbsp;&nbsp; &nbsp; 
-<label>Total Bill Amount</label> &nbsp; <input id="totalbill_calcualation" type="text" DISABLED/> &nbsp;&nbsp; &nbsp; 		
-
-
+<label>Total Weight</label> &nbsp; <input id="totalweight_calcualation" type="text" DISABLED/>(in Tons) &nbsp;&nbsp; &nbsp;   		
 
 
 <script language="javascript" type="text/javascript">
@@ -268,7 +263,7 @@ function loadfolderlist(account, accname) {
             thisdata["Type of Material"] = item.description;
 			thisdata["grade"] = item.grade;
             thisdata["Inward weight in (M.T)"] = item.weight;
-			 thisdata["Outward weight"] = item.oweight;
+			thisdata["Outward weight"] = item.oweight;
             thisdata["Basic Amount"] = item.totalamt;
             thisdata["Service Tax"] = item.Sertax;
 			//thisdata["Education Tax"] = item.educationtax;
@@ -398,11 +393,11 @@ function functionpdf() {
 			mediaClass += '  <th>Grade</th>';
 			mediaClass += '  <th>Weight</th>';
 			mediaClass += '  <th>Invoice Weight</th>';
-			mediaClass += '  <th>Basic Amount</th>';
-			mediaClass += '  <th>Service Tax</th>';
+			//mediaClass += '  <th>Basic Amount</th>';
+			//mediaClass += '  <th>Service Tax</th>';
 			//mediaClass += '  <th>Education Tax</th>';
 			//mediaClass += '  <th>SHEdu Tax</th>';
-			mediaClass += '  <th>Total bill amount</th>';
+			//mediaClass += '  <th>Total bill amount</th>';
 			mediaClass +='</tr>';
 			mediaClass +='</thead>';
 			
@@ -417,11 +412,11 @@ function functionpdf() {
 				mediaClass += '<td>' + item.grade + '</td>';
 				mediaClass += '<td>' + parseFloat(item.weight).toFixed(3) + '</td>';
 				mediaClass += '<td>' + parseFloat(item.oweight).toFixed(3) + '</td>';
-				mediaClass += '<td>' + item.totalamt + '</td>';
-				mediaClass += '<td>' + item.Sertax + '</td>';
+				//mediaClass += '<td>' + item.totalamt + '</td>';
+				//mediaClass += '<td>' + item.Sertax + '</td>';
 				//mediaClass += '<td>' + item.SHEdutax + '</td>';  
 				//mediaClass += '<td>' + item.educationtax + '</td>';
-				mediaClass += '<td>' + item.totalbillamount + '</td>';
+				//mediaClass += '<td>' + item.totalbillamount + '</td>';
 				mediaClass += '</tr>';			
 				
 			}
@@ -465,7 +460,7 @@ tab_text = tab_text + "<table border='1px'>";
 tab_text = tab_text + tableClone.innerHTML;
 tab_text = tab_text + '</table>';
 
-tab_text = tab_text + '<table border="1px"><tr></tr><tr><td></td><td></td><td></td><td></td><td><h3>Total Weight : </td><td>'+$('#totalweight_calcualation').val()+' </h3></td><td></td><td></td><td></td><td></td></tr></table></body></html>';
+tab_text = tab_text + '<table border="1px"><tr></tr><tr><td></td><td></td><td></td><td></td><td><h3>Total Weight : </td><td>'+$('#totalweight_calcualation').val()+' </h3></td><td></td></tr></table></body></html>';
 
 var data_type = 'data:application/vnd.ms-excel';
 
