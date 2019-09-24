@@ -189,8 +189,8 @@ function loadfolderlist(account, accname) {
             var thisdata = {};
             thisdata["bundlenumber"] = item.bundlenumber;
 			thisdata["processdate"] = item.processdate;
-            thisdata["length(in mm)"] = parseFloat(item.length).toFixed(3);
-            thisdata["No of sheets"] = parseFloat(item.noofsheets).toFixed(3);
+            thisdata["length(in mm)"] = item.length;
+            thisdata["No of sheets"] = item.noofsheets;
             thisdata["weight(in Tons)"] = parseFloat(item.weight).toFixed(3);
             
             if( item.status !== 'Billed' && item.status !== 'Ready To Bill') {
@@ -384,24 +384,24 @@ function balance(){
 	var length = $('#length').val();
 	//var resultbundle= (0.00000785 *width*thickness*length*rate);
 	
-if(bal_radio.checked) {
+    if(bal_radio.checked) {
        // document.getElementById('rate').value = 'rate';
 		//document.getElementById('length').value='';
     }
 	var dataString = 'weight='+weight+'&pid='+pid;
-	
 	$.ajax({
-                type: 'POST',
-                url: "<?php echo fuel_url('cutting_instruction/weightcheck');?>",
-				data: dataString,
-				success: function(msg){  
-				var rate = (msg)/(0.00000785 *width*thickness*length);
-				var rate = Math.floor(rate);
-				document.getElementById('bundleweight').value=msg;
-				document.getElementById('rate').value=rate.toFixed(3);
-				}
-            });
-	}
+        type: 'POST',
+        url: "<?php echo fuel_url('cutting_instruction/weightcheck');?>",
+        data: dataString,
+        success: function(msg){
+        var rate = Math.floor(parseFloat(msg)/(0.00000000785 *width*thickness*length));
+        console.log(rate);
+        document.getElementById('bundleweight').value = parseFloat(msg).toFixed(3);
+        document.getElementById('rate').value=rate;
+        }
+    });
+}
+
 function functionedit(){
 	var pid   =	$('#pid').val();
 	var bundlenumber = $('#bundlenumber').val();
