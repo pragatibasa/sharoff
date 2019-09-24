@@ -42,7 +42,7 @@ $active_group = 'default';
 $active_record = TRUE;
 
 $db['default']['hostname'] = 'localhost';
-$db['default']['username'] = 'hp';
+$db['default']['username'] = 'lenovo';
 $db['default']['password'] = '';
 $db['default']['database'] = 'sharoff';
 $db['default']['dbdriver'] = 'mysql';

@@ -80,7 +80,7 @@ function getcoildetails() {
 	
 	function totalweight_checkmodel($partyid){
 	$sqlfb = "select 
-	round(sum(nBundleweight),0)as weight from aspen_tblcuttinginstruction
+	sum(nBundleweight)as weight from aspen_tblcuttinginstruction
 	left join aspen_tblinwardentry on aspen_tblcuttinginstruction.vIRnumber=aspen_tblinwardentry.vIRnumber where aspen_tblinwardentry.vIRnumber='".$partyid."'";
 		$query = $this->db->query($sqlfb);
 		$arr='';

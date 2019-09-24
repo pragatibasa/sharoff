@@ -885,11 +885,11 @@ class bill_details_model extends Base_module_model {
 					from aspen_tblinwardentry
 					left join aspen_tblslittinginstruction on aspen_tblinwardentry.vIRnumber = aspen_tblslittinginstruction.vIRnumber
 					where
-					aspen_tblslittinginstruction.vIRnumber= $intCoilNumber and
+					aspen_tblslittinginstruction.vIRnumber='$intCoilNumber' and
 					aspen_tblslittinginstruction.nSno IN ($strBundleNos)
 				) p1
 			SET p.fpresent = p1.present,p.billedweight = p1.billed
-			where p.vIRnumber=$intCoilNumber";
+			where p.vIRnumber='$intCoilNumber'";
 
 			//updating inward entry status
 			$strSqlUpdateInwardEntryStatus = "UPDATE aspen_tblinwardentry set vStatus = case when (fpresent =fQuantity or billedweight = 0) then 'Ready to Bill' else 'Billed' end

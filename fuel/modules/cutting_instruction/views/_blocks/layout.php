@@ -39,6 +39,7 @@
 				</td> 
 				<td>
 					<input id="wid" name="fWidth" type="text" DISABLED/> (in mm)
+					
 				</td>
 				<td>
 					<label><?=lang('length_txt')?></label>
@@ -59,6 +60,7 @@
 				</td>
 				<td> 
 					<input id="wei" name="fQuantity" type="text" DISABLED/> (in tons)
+					
 				</td>
 			</tr>
 		</table>
@@ -155,7 +157,7 @@ $.ajax({
 		var msg3=eval(msg);
 		$.each(msg3, function(i, j){
 			 var weight = j.weight;
-			document.getElementById("totalweight_calcualation").value = weight;});
+			document.getElementById("totalweight_calcualation").value = parseFloat(weight).toFixed(3);});
 	   }  
 	}); 
 }
@@ -189,7 +191,7 @@ function loadfolderlist(account, accname) {
 			thisdata["processdate"] = item.processdate;
             thisdata["length(in mm)"] = item.length;
             thisdata["No of sheets"] = item.noofsheets;
-            thisdata["weight(in Kgs)"] = item.weight;
+            thisdata["weight(in Tons)"] = parseFloat(item.weight).toFixed(3);
             
             if( item.status !== 'Billed' && item.status !== 'Ready To Bill') {
 				var dl = '<a class="ico_coil_delete" title="Delete" href="'+item.dl+'" onClick=deleteItem('+item.bundlenumber+')><img src="<?php echo img_path('iconset/ico_cancel.png'); ?>" /></a>';
@@ -364,9 +366,9 @@ function doweight() {
 		alert("All fields are mandatory");
 	}
 	else{
-	var result= weight-(0.00000785 *width*thickness*length*rate);
-	var resultbundle= (0.00000785 *width*thickness*length*rate);
-	var resultbundle = Math.round(resultbundle).toFixed(3);
+	var result= weight-(0.00000000785*width*thickness*length*rate);
+	var resultbundle= (0.00000000785*width*thickness*length*rate);
+	var resultbundle = resultbundle.toFixed(3);
 	document.getElementById('bundleweight').value = resultbundle;
 	}
 }
@@ -382,30 +384,30 @@ function balance(){
 	var length = $('#length').val();
 	//var resultbundle= (0.00000785 *width*thickness*length*rate);
 	
-if(bal_radio.checked) {
+    if(bal_radio.checked) {
        // document.getElementById('rate').value = 'rate';
 		//document.getElementById('length').value='';
     }
 	var dataString = 'weight='+weight+'&pid='+pid;
-	
 	$.ajax({
-                type: 'POST',
-                url: "<?php echo fuel_url('cutting_instruction/weightcheck');?>",
-				data: dataString,
-				success: function(msg){  
-				var rate = (msg)/(0.00000785 *width*thickness*length);
-				var rate = Math.floor(rate);
-				document.getElementById('bundleweight').value=msg;
-				document.getElementById('rate').value=rate;
-				}
-            });
-	}
+        type: 'POST',
+        url: "<?php echo fuel_url('cutting_instruction/weightcheck');?>",
+        data: dataString,
+        success: function(msg){
+        var rate = Math.floor(parseFloat(msg)/(0.00000000785 *width*thickness*length));
+        console.log(rate);
+        document.getElementById('bundleweight').value = parseFloat(msg).toFixed(3);
+        document.getElementById('rate').value=rate;
+        }
+    });
+}
+
 function functionedit(){
 	var pid   =	$('#pid').val();
 	var bundlenumber = $('#bundlenumber').val();
 	var length = $('#length').val();
 	var rate = $('#rate').val();
-	var bundleweight = $('#bundleweight').val();
+	var bundleweight = parseFloat($('#bundleweight').val()).toFixed(3);
 	totalweight_check();	
 	if(bundlenumber == '' || length =='' || rate =='')
 	{

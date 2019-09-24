@@ -97,7 +97,7 @@
 		<input id="coilname" type="hidden" value="" name="coilname" />
 	</div>
 	<div class="pad-10">
-		<div id="weight"> Weight  (in Kgs)</div>
+		<div id="weight"> Weight  (in Tons)</div>
 		<input id= "txtweight" type="text" />
 	</div>
 	<div class="pad-10">
@@ -234,7 +234,7 @@ function loadfolderlist(account, accname) {
 	            thisdata["date"] = item.date;
 	            thisdata["length(in mm)"] = item.length;
 	            thisdata["actualnumber"] = item.actualnumber;
-	            thisdata["bundleweight(in Kgs)"] = item.bundleweight;
+	            thisdata["bundleweight(in Tons)"] = item.bundleweight;
 	            thisdata["status"] = item.status;
 	            var edit = '<a class="ico_coil_edit" title="Edit" href="#" onClick=radioload('+item.bundlenumber+','+item.actualnumber+','+item.weight+')><img src="<?php echo img_path('iconset/ico_edit.png'); ?>" /></a>';
 	            thisdata["action"] =  edit;

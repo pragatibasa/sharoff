@@ -135,7 +135,7 @@ class inward extends Fuel_base_controller {
             ->setCellValue('B4', 'Coil Number')
             ->setCellValue('C4', 'Inward Date')
             ->setCellValue('D4', 'Jsw Coil id')
-            ->setCellValue('E4', 'SST id')
+            ->setCellValue('E4', 'SST Coil id')
             ->setCellValue('F4', 'Vehicle Number')
             ->setCellValue('G4', 'Invoice Number')
             ->setCellValue('H4', 'Invoice Date')
@@ -144,16 +144,16 @@ class inward extends Fuel_base_controller {
             ->setCellValue('K4', 'Thickness')
             ->setCellValue('L4', 'Length')
             ->setCellValue('M4', 'Weight')
-            ->setCellValue('R4', 'Physical Weight')
-            ->setCellValue('S4', 'Difference Weight')
-            ->setCellValue('N4', 'Status')
-            ->setCellValue('O4', 'Grade')
-            ->setCellValue('P4', 'Heat Number')
-            ->setCellValue('Q4', 'Remark');
+            ->setCellValue('N4', 'Physical Weight')
+            ->setCellValue('O4', 'Difference Weight')
+            ->setCellValue('P4', 'Status')
+            ->setCellValue('Q4', 'Grade')
+            ->setCellValue('R4', 'Heat Number')
+            ->setCellValue('S4', 'Remark');
 
 
         //getStyle accepts a range of cells as well!
-        $activeSheet->getStyle('A4:Q4')->applyFromArray(
+        $activeSheet->getStyle('A4:S4')->applyFromArray(
             array(
                 'font'  => array(
                     'bold'  =>  true
@@ -178,18 +178,20 @@ class inward extends Fuel_base_controller {
                     ->setCellValue('I' . $i, $arr[$arrHeading['Material Description']])
                     ->setCellValue('J' . $i, $arr[$arrHeading['Width']])
                     ->setCellValue('K' . $i, $arr[$arrHeading['Thickness']])
-                    ->setCellValue('P' . $i, $arr[$arrHeading['Length']])
-                    ->setCellValue('L' . $i, $arr[$arrHeading['Weight']])
-                    ->setCellValue('R' . $i, $arr[$arrHeading['Physical Weight']])
-                    ->setCellValue('S' . $i, $arr[$arrHeading['Difference Weight']])
-                    ->setCellValue('M' . $i, $arr[$arrHeading['Status']])
-                    ->setCellValue('N' . $i, $arr[$arrHeading['Grade']])
-                    ->setCellValue('O' . $i, $arr[$arrHeading['Heat Number']])
-                    ->setCellValue('Q' . $i, $arr[$arrHeading['Remark']]);;
+                    ->setCellValue('L' . $i, $arr[$arrHeading['Length']])
+                    ->setCellValue('M' . $i, $arr[$arrHeading['Weight']])
+                    ->setCellValue('N' . $i, $arr[$arrHeading['Physical Weight']])
+                    ->setCellValue('O' . $i, $arr[$arrHeading['Difference Weight']])
+                    ->setCellValue('P' . $i, $arr[$arrHeading['Status']])
+                    ->setCellValue('Q' . $i, $arr[$arrHeading['Grade']])
+                    ->setCellValue('R' . $i, $arr[$arrHeading['Heat Number']])
+                    ->setCellValue('S' . $i, $arr[$arrHeading['Remark']]);;
                 $i++;
             }
         }
 
+        $lastColumn = $i+1;
+        $spreadsheet->getActiveSheet()->setCellValue('L' . $lastColumn, 'Total Weight')->setCellValue( 'M' .$lastColumn, number_format($this->inward_model->getTotalInwardWeight(), 3));
 
 // Set worksheet title
         $spreadsheet->getActiveSheet()->setTitle('Inward Register Report');
@@ -219,45 +221,10 @@ class inward extends Fuel_base_controller {
         $writer = IOFactory::createWriter($spreadsheet, 'Xlsx');
         $writer->save('php://output');
         exit;
+    }
 
-
-//        header("Content-Type: application/vnd.ms-excel");
-//        header("Content-Disposition: attachment; filename=inward_register".date('d/M/Y').'.xls');
-//        $heading = false;
-//
-//
-//        $records = $this->inward_model->exportInwardData();
-//        if($records->num_rows() > 0) {
-//            foreach($records->result() as $row) {
-//                $arr = get_object_vars($row);
-//                $arr_values = array();
-//                $arr_values[] = $arr[$arrHeading['Party Name']];
-//                $arr_values[] =  $arr[$arrHeading['Coil Number']];
-//                $arr_values[] =  $arr[$arrHeading['Inward Date']];
-//                $arr_values[] =  $arr[$arrHeading['Jsw Coil id']];
-//                $arr_values[] =  $arr[$arrHeading['SST id']];
-//                $arr_values[] =  $arr[$arrHeading['Vehicle Number']];
-//                $arr_values[] =  $arr[$arrHeading['Invoice Number']];
-//                $arr_values[] =  $arr[$arrHeading['Invoice Date']];
-//                $arr_values[] =  $arr[$arrHeading['Material Description']];
-//                $arr_values[] =  $arr[$arrHeading['Width']];
-//                $arr_values[] =  $arr[$arrHeading['Thickness']];
-//                $arr_values[] =  $arr[$arrHeading['Length']];
-//                $arr_values[] =  $arr[$arrHeading['Weight']];
-//                $arr_values[] =  $arr[$arrHeading['Status']];
-//                $arr_values[] =  $arr[$arrHeading['Grade']];
-//                $arr_values[] =  $arr[$arrHeading['Heat Number']]
-//                $arr_values[] =  $arr[$arrHeading['Remark']];
-//
-//                if(!$heading) {
-//                    print implode("</b>\t<b>", array_keys($arrHeading)) . "\n";
-//                    $heading = true;
-//                }
-//                echo implode("\t", array_values($arr_values)) . "\n";
-//            }
-//        }
-
-//        exit;
+    function totalInwardWeight() {
+        echo $this->inward_model->getTotalInwardWeight();exit;
     }
 }
 /* End of file */
