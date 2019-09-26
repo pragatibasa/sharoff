@@ -59,7 +59,7 @@ class Billing extends Fuel_base_controller {
 			$vars['nsno']= $this->nsno;
 			$vars['slno']= $this->slno;
 			$vars['recno']= $this->recno;
-			$vars['weight']= round($this->weight);
+			$vars['weight']= $this->weight;
 			$vars['processchk']= $this->processchk;
 			$vars['servicetaxpercent'] = $this->billing_model->getServiceTaxPercent();
 

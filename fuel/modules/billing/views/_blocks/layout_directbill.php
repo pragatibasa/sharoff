@@ -624,7 +624,7 @@ handling();
 			var selectbundle = '<input class="grand_total_check" type="checkbox" id="radio_'+item.bundlenumber+'" name="list" value="'+item.bundlenumber+'" onClick=selectbundleid('+item.bundlenumber+','+item.weight+','+item.notobebilled+') />';
 			thisdata["select"] = selectbundle;
 			thisdata["bundlenumber"] = item.bundlenumber;
-            thisdata["weight(inkgs)"] = item.weight;
+            thisdata["weight(inTons)"] = number_Format((float) (item.weight),3);
             thisdata["actualnumber"] = item.actualnumber;
             thisdata["length(in mm)"] = item.length;
             thisdata["number to be billed"] = item.notobebilled;

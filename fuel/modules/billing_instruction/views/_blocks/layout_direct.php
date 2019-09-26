@@ -67,11 +67,13 @@
 </div> 
 <script>
 
-var json =<?php echo($sdata); ?>;
+var json =<?php echo($sdata);?>;
+
 for(key in json) {
 	if(json.hasOwnProperty(key))
     $('input[name='+key+']').val(json[key]);
 }
+
 
 function closebutton() {
 	window.location = "<?= site_url('fuel/partywise_register'); ?>";

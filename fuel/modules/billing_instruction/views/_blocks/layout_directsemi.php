@@ -38,7 +38,7 @@
 				<label><?=lang('weight')?></label>
 				</td> 
 				<td>
-				<input id="wei" name="wei" type="text"  value="<?php echo $weight; ?>"DISABLED />(in tons)
+				<input id="wei" name="fQuantity" type="text" DISABLED />(in tons)
 				</td>
 			</tr>
 			<tr>
@@ -68,6 +68,7 @@
 <script>
 
 var json =<?php echo($semidata); ?>;
+
 for(key in json){
 	if(json.hasOwnProperty(key))
     $('input[name='+key+']').val(json[key]);

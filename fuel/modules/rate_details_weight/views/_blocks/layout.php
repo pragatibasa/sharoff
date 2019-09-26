@@ -94,8 +94,8 @@ function loadfolderlist(account, accname) {
             var thisdata = {};
 			//var selectcoil = '<input type="radio" id="radio_'+item.coilnumber+'" name="list" value="'+item.coilnumber+'"   onClick=showchild("'+item.coilnumber+'") />';
 			//thisdata["priceid"] = item.priceid;
-            thisdata["minweight(in Kgs)"] = item.minweight;
-            thisdata["maxweight(in Kgs)"] = item.maxweight;
+            thisdata["minweight(in Tons)"] = item.minweight;
+            thisdata["maxweight(in Tons)"] = item.maxweight;
             thisdata["rate(in Rs)"] = item.rate;
 			 var edit = '<a class="ico_coil_edit" title="Edit" href="#" onClick=radioload('+item.minweight+','+item.maxweight+','+item.rate+','+item.priceid+')><img src="<?php echo img_path('iconset/ico_edit.png'); ?>" /></a>';
 			var dl = '<a class="ico_coil_delete" title="Delete" href="'+item.dl+'" onClick=deleteItem('+item.priceid+')><img src="<?php echo img_path('iconset/ico_cancel.png'); ?>" /></a>';

@@ -81,7 +81,7 @@ class Billing_model extends Base_module_model {
 	foreach ($arr as $row){
 	if( $row->vprocess =='Cutting')
 	{
-		$sql="SELECT aspen_tblinwardentry.vIRnumber,  aspen_tblmatdescription.vDescription, aspen_tblinwardentry.fThickness, aspen_tblinwardentry.fWidth, aspen_tblinwardentry.fQuantity,aspen_tblinwardentry.vInvoiceNo, aspen_tblinwardentry.fLength,aspen_tblcuttinginstruction.nSno,aspen_tblpartydetails.vCusrateadd,aspen_tblpartydetails.vCusraterm
+		$sql="SELECT aspen_tblinwardentry.vIRnumber,  aspen_tblmatdescription.vDescription, aspen_tblinwardentry.fThickness, aspen_tblinwardentry.fWidth, round(fQuantity,3),fQuantity,aspen_tblinwardentry.vInvoiceNo, aspen_tblinwardentry.fLength,aspen_tblcuttinginstruction.nSno,aspen_tblpartydetails.vCusrateadd,aspen_tblpartydetails.vCusraterm
 		FROM aspen_tblinwardentry LEFT JOIN aspen_tblmatdescription ON aspen_tblmatdescription.nMatId = aspen_tblinwardentry.nMatId
 		LEFT JOIN aspen_tblpartydetails ON aspen_tblpartydetails.nPartyId = aspen_tblinwardentry.nPartyId
 		LEFT JOIN aspen_tblcuttinginstruction ON aspen_tblcuttinginstruction.vIRnumber= aspen_tblinwardentry.vIRnumber ";
@@ -178,6 +178,7 @@ class Billing_model extends Base_module_model {
 		if(!empty($partyname) && !empty($partyid))
 		{
 		$sqldir.="WHERE aspen_tblpartydetails.nPartyName='".$partyname."' and aspen_tblinwardentry.vIRnumber='".$partyid."'";
+		
 		$query = $this->db->query($sqldir);
 		}
 		$arr='';
@@ -201,14 +202,14 @@ class Billing_model extends Base_module_model {
 		$checkInwardsStatusRow =  $checkInwardsStatusQuery->result();
 
 		if( $checkInwardsStatusRow[0]->vStatus == 'RECEIVED' ) {
-			$sqldir="SELECT aspen_tblinwardentry.vIRnumber,  aspen_tblmatdescription.vDescription, aspen_tblinwardentry.fThickness, aspen_tblinwardentry.fWidth, aspen_tblinwardentry.fpresent as fQuantity,aspen_tblinwardentry.vInvoiceNo, aspen_tblinwardentry.fLength,aspen_tblpartydetails.vCusrateadd,aspen_tblpartydetails.vCusraterm
+			$sqldir="SELECT aspen_tblinwardentry.vIRnumber,  aspen_tblmatdescription.vDescription, aspen_tblinwardentry.fThickness, aspen_tblinwardentry.fWidth, round(aspen_tblinwardentry.fpresent,3) as fQuantity,aspen_tblinwardentry.vInvoiceNo, aspen_tblinwardentry.fLength,aspen_tblpartydetails.vCusrateadd,aspen_tblpartydetails.vCusraterm
 			FROM aspen_tblinwardentry LEFT JOIN aspen_tblmatdescription ON aspen_tblmatdescription.nMatId = aspen_tblinwardentry.nMatId
 			LEFT JOIN aspen_tblpartydetails ON aspen_tblpartydetails.nPartyId = aspen_tblinwardentry.nPartyId ";
 			if(!empty($partyname) && !empty($partyid))
 				$sqldir.="WHERE aspen_tblpartydetails.nPartyName='".$partyname."' and aspen_tblinwardentry.vIRnumber='".$partyid."'";
 		} else {
 
-			$sqldir = "SELECT inw.vIRnumber,aspen_tblmatdescription.vDescription,inw.fThickness,inw.fWidth,abs(round((inw.fpresent - round((t.fQuantity+p.nWeight),2)))) as fQuantity,inw.vInvoiceNo,inw.vStatus FROM aspen_tblinwardentry inw LEFT JOIN aspen_tblmatdescription ON aspen_tblmatdescription.nMatId = inw.nMatId LEFT JOIN aspen_tblpartydetails ON aspen_tblpartydetails.nPartyId = inw.nPartyId left join (select coalesce(aspen_tblcuttinginstruction.vIRnumber,'$partyid') as vIRnumber,coalesce(round(sum(nBundleweight-(nBundleweight*nBilledNumber/nNoOfPieces)),2),0) as fQuantity from aspen_tblcuttinginstruction left join aspen_tblbillingstatus on aspen_tblcuttinginstruction.vIRnumber = aspen_tblbillingstatus.vIRnumber and aspen_tblcuttinginstruction.nSno = aspen_tblbillingstatus.nSno where aspen_tblcuttinginstruction.vIRnumber ='$partyid' ) t on t.vIRnumber = inw.vIRnumber left join (select coalesce(aspen_tblslittinginstruction.vIRnumber,'$partyid') as vIRnumber,coalesce(sum(nWeight),0) as nWeight from aspen_tblslittinginstruction LEFT JOIN aspen_tblbillingstatus ON aspen_tblslittinginstruction.vIRnumber=aspen_tblbillingstatus.vIRnumber WHERE aspen_tblslittinginstruction.nSno = aspen_tblbillingstatus.nSno and aspen_tblslittinginstruction.vIRnumber='$partyid' and aspen_tblbillingstatus.vBillingStatus != 'Billed') p on p.vIRnumber = inw.vIRnumber where inw.vIRnumber='$partyid'";
+			$sqldir = "SELECT inw.vIRnumber,aspen_tblmatdescription.vDescription,inw.fThickness,inw.fWidth,abs(round((inw.fpresent - round((t.fQuantity+p.nWeight),3)))) as fQuantity,inw.vInvoiceNo,inw.vStatus FROM aspen_tblinwardentry inw LEFT JOIN aspen_tblmatdescription ON aspen_tblmatdescription.nMatId = inw.nMatId LEFT JOIN aspen_tblpartydetails ON aspen_tblpartydetails.nPartyId = inw.nPartyId left join (select coalesce(aspen_tblcuttinginstruction.vIRnumber,'$partyid') as vIRnumber,coalesce(round(sum(nBundleweight-(nBundleweight*nBilledNumber/nNoOfPieces)),2),0) as fQuantity from aspen_tblcuttinginstruction left join aspen_tblbillingstatus on aspen_tblcuttinginstruction.vIRnumber = aspen_tblbillingstatus.vIRnumber and aspen_tblcuttinginstruction.nSno = aspen_tblbillingstatus.nSno where aspen_tblcuttinginstruction.vIRnumber ='$partyid' ) t on t.vIRnumber = inw.vIRnumber left join (select coalesce(aspen_tblslittinginstruction.vIRnumber,'$partyid') as vIRnumber,coalesce(sum(nWeight),0) as nWeight from aspen_tblslittinginstruction LEFT JOIN aspen_tblbillingstatus ON aspen_tblslittinginstruction.vIRnumber=aspen_tblbillingstatus.vIRnumber WHERE aspen_tblslittinginstruction.nSno = aspen_tblbillingstatus.nSno and aspen_tblslittinginstruction.vIRnumber='$partyid' and aspen_tblbillingstatus.vBillingStatus != 'Billed') p on p.vIRnumber = inw.vIRnumber where inw.vIRnumber='$partyid'";
 		}
 
 		$query = $this->db->query($sqldir);
@@ -350,6 +351,7 @@ left join aspen_tblbillingstatus on aspen_tblinwardentry.vIRnumber=aspen_tblbill
 		Left join aspen_tblinwardentry on aspen_tblinwardentry.nMatId  = aspen_tblmatdescription.nMatId
 		Left join aspen_tbl_directbill on aspen_tbl_directbill.nMatId  = aspen_tblmatdescription.nMatId
 		where aspen_tblmatdescription.vDescription='".$mat_desc."'  AND aspen_tblinwardentry.vIRnumber='".$pid."'";
+		
 		$query = $this->db->query($sqllv);
 		$arr='';
 		if ($query->num_rows() > 0) {
@@ -358,6 +360,7 @@ left join aspen_tblbillingstatus on aspen_tblinwardentry.vIRnumber=aspen_tblbill
 				$arr[] =$row;
 			}
 		}
+	
 		return $arr;
 
 	}
@@ -500,7 +503,7 @@ left join aspen_tblbillingstatus on aspen_tblinwardentry.vIRnumber=aspen_tblbill
 	}
 	function totalamtrecoil($partyid='',$cust_add='',$cust_rm='',$txthandling='',$mat_desc='',$txtrecoilweight='')
 	{
-	$sqlre = "select sum(round((nAmount+ '".$cust_add."'- '".$cust_rm."') * '".$txtrecoilweight."') ) as amtrec from aspen_tblrecoil_thicknessrate
+	$sqlre = "select sum(round((nAmount+ '".$cust_add."'- '".$cust_rm."') * '".$txtrecoilweight."'),3 ) as amtrec from aspen_tblrecoil_thicknessrate
 		left join aspen_tblmatdescription on aspen_tblmatdescription.nMatId=aspen_tblrecoil_thicknessrate.nMatId
 		left join aspen_tblinwardentry on aspen_tblinwardentry.nMatId=aspen_tblmatdescription.nMatId
 		left join aspen_tblrecoiling on aspen_tblrecoiling.vIRnumber=aspen_tblinwardentry.vIRnumber
@@ -518,7 +521,7 @@ left join aspen_tblbillingstatus on aspen_tblinwardentry.vIRnumber=aspen_tblbill
 	}
 
 	function totalamtslit($partyid='',$cust_add='',$cust_rm='',$txthandling='',$mat_desc='',$bundleIds = '' ) {
-		$sqlre = "select sum((round((nAmount + '".$cust_add."' - '".$cust_rm."') * (aspen_tblslittinginstruction.nWeight/1000),2))) as amtslit from aspen_tblslit_thicknessrate
+		$sqlre = "SELECT sum((round((nAmount + '".$cust_add."' - '".$cust_rm."') * (aspen_tblslittinginstruction.nWeight/1000),3))) as amtslit from aspen_tblslit_thicknessrate
 				  left join aspen_tblmatdescription on aspen_tblmatdescription.nMatId=aspen_tblslit_thicknessrate.nMatId
 				  left join aspen_tblinwardentry on aspen_tblinwardentry.nMatId=aspen_tblmatdescription.nMatId
 				  left join aspen_tblslittinginstruction on aspen_tblslittinginstruction.vIRnumber=aspen_tblinwardentry.vIRnumber
@@ -578,8 +581,8 @@ left join aspen_tblbillingstatus on aspen_tblinwardentry.vIRnumber=aspen_tblbill
 	function directbillingmodel($partyid='',$mat_desc='',$wei='',$txthandling='',$cust_add='',$cust_rm='')
 	{
 	if($cust_add!=0){
-	$sql = "select ('".$txthandling."'+ '".$cust_add."') as rate,
-'".$wei."' as weight,round(('".$wei."' * '".$txthandling."'+ '".$cust_add."')) as amount from aspen_tbl_directbill
+	$sql = "SELECT ('".$txthandling."'+ '".$cust_add."') as rate,
+'".$wei."' as weight,round(('".$wei."' * '".$txthandling."'+ '".$cust_add."'),3) as amount from aspen_tbl_directbill
 left join aspen_tblmatdescription on aspen_tblmatdescription.nMatId=aspen_tbl_directbill.nMatId
 left join aspen_tblinwardentry on aspen_tblinwardentry.nMatId=aspen_tblmatdescription.nMatId
 left join aspen_tblbillingstatus on aspen_tblinwardentry.vIRnumber=aspen_tblbillingstatus.vIRnumber
@@ -726,8 +729,8 @@ and aspen_tblinwardentry.vIRnumber='".$partyid."'
 	function directbilling($partyid='',$mat_desc='',$cust_add='',$cust_rm='',$txthandling='',$wei)
 	{
 	if($cust_add!=0){
-		$sql = "select distinct ('".$txthandling."'+ '".$cust_add."') as rate,
-		('".$wei."') as weight,round(('".$wei."' * ('".$txthandling."'+ '".$cust_add."'))) as amount from aspen_tbl_directbill
+		$sql = "SELECT distinct ('".$txthandling."'+ '".$cust_add."') as rate,
+		('".$wei."') as weight,round(('".$wei."' * ('".$txthandling."'+ '".$cust_add."')),3) as amount from aspen_tbl_directbill
 		left join aspen_tblmatdescription on aspen_tblmatdescription.nMatId=aspen_tbl_directbill.nMatId
 		left join aspen_tblinwardentry on aspen_tblinwardentry.nMatId=aspen_tblmatdescription.nMatId
 		left join aspen_tblbillingstatus on aspen_tblinwardentry.vIRnumber=aspen_tblbillingstatus.vIRnumber

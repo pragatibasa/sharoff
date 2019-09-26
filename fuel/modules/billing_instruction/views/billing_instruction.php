@@ -66,8 +66,7 @@ var pchk = getUrlVars()["process"];
 <?php 
 if($parentCount > 0) {
 ?><div class="alert alert-info" role="alert">This coil has been snipped.</div>
-<?php }
-?>
+<?php }?>
 <?php 
  if($process=='Cutting')
  {  

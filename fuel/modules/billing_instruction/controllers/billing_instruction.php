@@ -71,7 +71,7 @@ class Billing_instruction extends Fuel_base_controller {
 				$obj->noofsheetsbilled = $cl->noofsheetsbilled;
 				$obj->billingstatus = $cl->billingstatus;
 				$obj->balance = $cl->balance;
-				$obj->balanceWeight = round($cl->balanceWeight);
+				$obj->balanceWeight = $cl->balanceWeight;
 				$obj->dl = '/?bundlenumber='.$cl->bundlenumber;
 				$files[] = $obj;
 			}
@@ -168,7 +168,9 @@ class Billing_instruction extends Fuel_base_controller {
 	
 	function billingviewcntrlr($pid, $pname, $process) {
 		$ddata = $this->billing_instruction_model->billingviewmodel($pid, $pname, $process);
+		
 		return $ddata;
+		
 	}
 	function billingsemifinished($pid, $pname) {
 		$smdata = $this->billing_instruction_model->billingsemifinished($pid, $pname);

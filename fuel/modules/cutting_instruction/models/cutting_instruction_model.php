@@ -133,7 +133,7 @@ function deleterow($deleteid)
 		
  function coillistdetails($partyid = '') 
  {
-	$sqlci = "select nSno as bundlenumber, DATE_FORMAT(dDate, '%d-%m-%Y') AS processdate, nLength as length, nNoOfPieces as noofsheets, nBundleweight as weight, vStatus as status, vIRnumber as pnumber from aspen_tblcuttinginstruction WHERE aspen_tblcuttinginstruction.vIRnumber='".$partyid."' and aspen_tblcuttinginstruction.vStatus != 'Billed' and aspen_tblcuttinginstruction.vStatus != 'Ready To Bill' and aspen_tblcuttinginstruction.vStatus != ''";
+	$sqlci = "SELECT nSno as bundlenumber, DATE_FORMAT(dDate, '%d-%m-%Y') AS processdate, nLength as length, nNoOfPieces as noofsheets, round(nBundleweight,3) as weight, vStatus as status, vIRnumber as pnumber from aspen_tblcuttinginstruction WHERE aspen_tblcuttinginstruction.vIRnumber='".$partyid."' and aspen_tblcuttinginstruction.vStatus != 'Billed' and aspen_tblcuttinginstruction.vStatus != 'Ready To Bill' and aspen_tblcuttinginstruction.vStatus != ''";
 	//echo $sqlci;
 	$query = $this->db->query($sqlci);
 		$arr='';

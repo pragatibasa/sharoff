@@ -59,9 +59,7 @@ aspen_tblbilldetails.fSHEduTax as SHEdutax, aspen_tblbilldetails.fEduTax as educ
 	
 	
 	function billgeneratemodel($partyname='',$frmdate='',$todate='')  {
-	$sqlrpt = "SELECT aspen_tblmatdescription.vDescription as description,
-aspen_tblinwardentry.vGrade as grade, 
-aspen_tblinwardentry.fQuantity as weight, aspen_tblbilldetails.fTotalWeight as oweight, aspen_tblinwardentry.vIRnumber as coilnumber, aspen_tblbilldetails.nBillNo as billno, aspen_tblbilldetails.dBillDate  as billdate, aspen_tblbilldetails.fServiceTax as Sertax, 
+	$sqlrpt = "SELECT aspen_tblmatdescription.vDescription as description,aspen_tblinwardentry.vGrade as grade,aspen_tblinwardentry.fQuantity as weight, aspen_tblbilldetails.fTotalWeight as oweight, aspen_tblinwardentry.vIRnumber as coilnumber, aspen_tblbilldetails.nBillNo as billno, aspen_tblbilldetails.dBillDate  as billdate, aspen_tblbilldetails.fServiceTax as Sertax, 
 aspen_tblbilldetails.fSHEduTax as SHEdutax, aspen_tblbilldetails.fEduTax as educationtax, aspen_tblbilldetails.ntotalamount as totalamt, aspen_tblbilldetails.fGrantTotal as totalbillamount 
 		FROM aspen_tblbilldetails
 		LEFT JOIN aspen_tblinwardentry ON aspen_tblinwardentry.vIRnumber = aspen_tblbilldetails.vIRnumber 

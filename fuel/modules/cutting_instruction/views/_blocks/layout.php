@@ -384,7 +384,6 @@ function balance(){
 		//document.getElementById('length').value='';
     }
 	var dataString = 'weight='+weight+'&pid='+pid;
-<<<<<<< 91c75328ba9b9b49eaba742dabf6bd6e57daa40b
 	$.ajax({
         type: 'POST',
         url: "<?php echo fuel_url('cutting_instruction/weightcheck');?>",
@@ -398,22 +397,6 @@ function balance(){
     });
 }
 
-=======
-	
-	
-	$.ajax({
-                type: 'POST',
-                url: "<?php echo fuel_url('cutting_instruction/weightcheck');?>",
-				data: dataString,
-				success: function(msg){  
-				var rate = (msg)/(0.00000785 *width*thickness*length);
-				var rate = Math.floor(rate);
-				document.getElementById('bundleweight').value=msg;
-				document.getElementById('rate').value=rate;
-				}
-            });
-	}
->>>>>>> Label changes kgs into  tons and precision changes
 function functionedit(){
 	var pid   =	$('#pid').val();
 	var bundlenumber = $('#bundlenumber').val();

@@ -126,7 +126,7 @@ function loadfolderlist_slit(account, accname) {
 			thisdata["serialnumber"] = item.serialnumber;
             thisdata["length"] = item.length;
             thisdata["width"] = item.width;
-            thisdata["weight"] = item.weight;
+            thisdata["weight"] = parseFloat(item.weight).toFixed(3);
             thisdata["slitting date"] = item.sdate;
             thisdata["Billing status"] = item.billingstatus;
 			thisdata["upgrade"] = ( item.vParentBundleNumber == null ) ? '<a href="<?php echo fuel_url('inward/?ppartyid='.$partyid.'&pname='.$partyname.'&bundleNumber=');?>'+item.serialnumber+'">Upgrade</a>' : 'Upgraded';

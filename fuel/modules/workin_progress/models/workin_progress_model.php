@@ -281,25 +281,23 @@ where aspen_tblinwardentry.vStatus = 'Work In Progress' or aspen_tblslittinginst
 
 		</tr>
 		<tr>
-			<td align="center" width="100%"></td>
+				<td align="left"><h1>	<b>Width (mm): </b> '.$Width.'</h1></td> </tr>	<tr>
+				<td align="center" width="100%"></td>
+
+		</tr>
+			<tr>
+
+				<td align="left"><h1><b>Thickness (mm): </b> '.$Thickness.'</h1></td>
+		</tr><tr>
+				<td align="center" width="100%"></td>
+
 		</tr>
 		<tr>
-			<td width="50%" align="left"><h2>Width (mm): '.$Width.'</h2></td>
-			<td width="50%" align="left"><h2>Grade : '.$vGrade.'</h2></td>
-		</tr>
-		<tr>
-			<td align="center" width="100%"></td>
-		</tr>
-		<tr>
-			<td width="50%" align="left"><h2>Thickness (mm): '.$Thickness.'</h2></td>
-			<td width="50%" align="left"><h2>Heat No. : '.$vHeatnumber.'</h2></td>
-		</tr>
-		<tr>
-			<td align="center" width="100%"></td>
-		</tr>
-		<tr>
-				<td width="50%" align="left"><h2>Weight (mm): '.$Weight.'</h2></td>
-				<td width="50%" align="left"><h2>Cutting Date: </h2></td>
+
+				<td align="left"><h1><b>Weight (mm): </b> '.round($Weight,3).'</h1></td>
+		</tr><tr>
+				<td align="center" width="100%"></td>
+
 		</tr>
 
 		</table>';

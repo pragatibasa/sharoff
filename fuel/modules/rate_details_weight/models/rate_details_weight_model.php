@@ -104,7 +104,7 @@ class Rate_details_weight_model extends Base_module_model {
 	
 	
 	 function list_partyname($description = '') {	
-		$sql ="select nMinWeight as minweight,nMaxWeight as maxweight,nAmount as rate,nPriceId as priceid from aspen_tblweight ";
+		$sql ="SELECT round(nMinWeight,3) as minweight,round(nMaxWeight,3) as maxweight,nAmount as rate,nPriceId as priceid from aspen_tblweight ";
    		if(!empty($description)) { 
 		$sql .=" LEFT JOIN aspen_tblmatdescription ON aspen_tblmatdescription.nMatId = aspen_tblweight.nMatId WHERE aspen_tblmatdescription.vDescription='".$description."'";
 		}

@@ -40,10 +40,10 @@ class finish_task_model extends Base_module_model {
 		$arr = $query->result();
 
 		if($arr[0]->vprocess =='Cutting') {			
-			$sqlto =  "select round(sum(nBundleweight),3) as bundleweight from aspen_tblcuttinginstruction
+			$sqlto =  "SELECT round(sum(nBundleweight),3) as bundleweight from aspen_tblcuttinginstruction
 			left join aspen_tblinwardentry on aspen_tblcuttinginstruction.vIRnumber=aspen_tblinwardentry.vIRnumber where aspen_tblinwardentry.vIRnumber='".$pid."'";
 		} else if($arr[0]->vprocess =='Slitting') {
-			$sqlto =  "select round(sum(nWeight),3) as bundleweight from aspen_tblslittinginstruction
+			$sqlto =  "SELECT round(sum(nWeight),3) as bundleweight from aspen_tblslittinginstruction
 			left join aspen_tblinwardentry on aspen_tblslittinginstruction.vIRnumber=aspen_tblinwardentry.vIRnumber where aspen_tblinwardentry.vIRnumber='".$pid."'";
 		}
 
@@ -240,7 +240,7 @@ class finish_task_model extends Base_module_model {
 	json_encode($arr);
 	foreach ($arr as $row){
 		if($row->vprocess =='Cutting') {
-			$sqlfi = "select aspen_tblcuttinginstruction.nSno as bundlenumber,DATE_FORMAT(aspen_tblcuttinginstruction.dDate, '%d-%m-%Y') as date,aspen_tblcuttinginstruction.nLength as length,aspen_tblcuttinginstruction.nNoOfPieces as actualnumber,aspen_tblcuttinginstruction.nTotalWeight as totalweight,aspen_tblcuttinginstruction.nBundleweight as bundleweight,aspen_tblinwardentry.vprocess as process, CASE WHEN aspen_tblcuttinginstruction.nSno >  '0'
+			$sqlfi = "SELECT aspen_tblcuttinginstruction.nSno as bundlenumber,DATE_FORMAT(aspen_tblcuttinginstruction.dDate, '%d-%m-%Y') as date,aspen_tblcuttinginstruction.nLength as length,aspen_tblcuttinginstruction.nNoOfPieces as actualnumber,round(nTotalWeight,3) as totalweight,round(nBundleweight,3) as bundleweight,aspen_tblinwardentry.vprocess as process, CASE WHEN aspen_tblcuttinginstruction.nSno >  '0'
 				  THEN aspen_tblcuttinginstruction.nBundleweight
 	          		WHEN aspen_tblcuttinginstruction.nSno =  '0'
 			  	THEN aspen_tblcuttinginstruction.nTotalWeight
@@ -253,9 +253,9 @@ class finish_task_model extends Base_module_model {
 			  LEFT JOIN aspen_tblinwardentry ON aspen_tblinwardentry.vIRnumber = aspen_tblrecoiling.vIRnumber WHERE aspen_tblrecoiling.vIRnumber='".$partyid."'";
 			$query = $this->db->query($sqlre);
 		} else if($row->vprocess =='Slitting') {
-			$sqlsl = "select aspen_tblslittinginstruction.nSno as slittnumber,DATE_FORMAT(aspen_tblslittinginstruction.dDate, '%d-%m-%Y') as date,aspen_tblslittinginstruction.nLength as length,
+			$sqlsl = "SELECT aspen_tblslittinginstruction.nSno as slittnumber,DATE_FORMAT(aspen_tblslittinginstruction.dDate, '%d-%m-%Y') as date,aspen_tblslittinginstruction.nLength as length,
 						aspen_tblslittinginstruction.nWidth as width,
-						aspen_tblslittinginstruction.nWeight as weight, aspen_tblslittinginstruction.vStatus as status,aspen_tblinwardentry.vprocess as process from aspen_tblslittinginstruction  
+						round(nWeight,3) as weight, aspen_tblslittinginstruction.vStatus as status,aspen_tblinwardentry.vprocess as process from aspen_tblslittinginstruction  
 					LEFT JOIN aspen_tblinwardentry ON aspen_tblinwardentry.vIRnumber = aspen_tblslittinginstruction.vIRnumber WHERE aspen_tblslittinginstruction.vIRnumber='".$partyid."'";
 
 			$query = $this->db->query($sqlsl);

@@ -181,7 +181,7 @@ class inward extends Fuel_base_controller {
                     ->setCellValue('L' . $i, $arr[$arrHeading['Length']])
                     ->setCellValue('M' . $i, number_format((float) ($arr[$arrHeading['Weight']]),3))
                     ->setCellValue('N' . $i, number_format((float) ($arr[$arrHeading['Physical Weight']]),3))
-                    ->setCellValue('O' . $i, $arr[$arrHeading['Difference Weight']])
+                    ->setCellValue('O' . $i, number_format((float) ($arr[$arrHeading['Difference Weight']]),3))
                     ->setCellValue('P' . $i, $arr[$arrHeading['Status']])
                     ->setCellValue('Q' . $i, $arr[$arrHeading['Grade']])
                     ->setCellValue('R' . $i, $arr[$arrHeading['Heat Number']])
