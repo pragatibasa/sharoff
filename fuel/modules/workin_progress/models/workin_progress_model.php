@@ -151,7 +151,7 @@ where aspen_tblinwardentry.vStatus = 'Work In Progress' or aspen_tblslittinginst
                 $sql = ("Update aspen_tbl_cuttingslipgenerated set numTimesGenerated=numTimesGenerated+1 where nPartyId='".$partyid."'");
                 $query1=$this->db->query ($sql);
             }else{
-                $sql = "Insert into aspen_tbl_cuttingslipgenerated  (nPartyId,numTimesGenerated) VALUES('". $partyid. "',1)";
+                $sql = "Insert into aspen_tbl_cuttingslipgenerated (nPartyId,numTimesGenerated,slipDate) VALUES('". $partyid. "',1, now())";
                 $query = $this->db->query($sql);
             }
         }
@@ -177,7 +177,24 @@ where aspen_tblinwardentry.vStatus = 'Work In Progress' or aspen_tblslittinginst
         foreach ($arr as $row){
             if( $row->vprocess =='Cutting')
             {
-                $sqlcutting = "select aspen_tblpartydetails.nPartyName as partyname,aspen_tblmatdescription.vDescription as materialdescription,vInvoiceNo as Invoicenumber,fWidth as Width,fThickness as Thickness,fQuantity as Weight from aspen_tblinwardentry LEFT JOIN aspen_tblmatdescription  ON aspen_tblmatdescription.nMatId=aspen_tblinwardentry.nMatId LEFT JOIN aspen_tblpartydetails ON aspen_tblpartydetails .nPartyId=aspen_tblinwardentry.nPartyId where aspen_tblinwardentry.vIRnumber ='".$partyid."'";
+                $sqlcutting = "select aspen_tblpartydetails.nPartyName as partyname,
+                                    aspen_tblmatdescription.vDescription as materialdescription,
+                                    vInvoiceNo as Invoicenumber,
+                                    fWidth as Width,
+                                    fThickness as Thickness,
+                                    fQuantity as Weight, 
+                                    jid as jswid, 
+                                    ssid,
+                                    vGrade,
+                                    vHeatnumber,
+                                    aspen_tbl_cuttingslipgenerated.nId as slipSerial,
+                                    aspen_tbl_cuttingslipgenerated.slipDate as slipDate
+                                from 
+                                    aspen_tblinwardentry 
+                                    LEFT JOIN aspen_tblmatdescription  ON aspen_tblmatdescription.nMatId=aspen_tblinwardentry.nMatId 
+                                    LEFT JOIN aspen_tblpartydetails ON aspen_tblpartydetails.nPartyId=aspen_tblinwardentry.nPartyId
+                                    left join aspen_tbl_cuttingslipgenerated on aspen_tbl_cuttingslipgenerated.nPartyId = aspen_tblinwardentry.vIRnumber
+                                where aspen_tblinwardentry.vIRnumber ='".$partyid."'";
 
                 $querymain = $this->db->query($sqlcutting);
 
@@ -188,8 +205,14 @@ where aspen_tblinwardentry.vStatus = 'Work In Progress' or aspen_tblslittinginst
                 $Width = $querymain->row(0)->Width;
                 $Thickness = $querymain->row(0)->Thickness;
                 $Weight = $querymain->row(0)->Weight;
+                $jswid = $querymain->row(0)->jswid;
+                $ssid = $querymain->row(0)->ssid;
+                $vGrade = $querymain->row(0)->vGrade;
+                $vHeatnumber = $querymain->row(0)->vHeatnumber;
+                $slipSerialNumber = $querymain->row(0)->slipSerial;
+                $slipDate = $querymain->row(0)->slipDate;
 
-                $sqlitem ="select aspen_tblcuttinginstruction.nSno as bundlenumber, DATE_FORMAT(aspen_tblcuttinginstruction.dDate, '%d-%m-%Y') AS processdate, aspen_tblcuttinginstruction.nLength as length, aspen_tblcuttinginstruction.nNoOfPieces as noofsheets, aspen_tblcuttinginstruction.nBundleweight as bundleweight from aspen_tblcuttinginstruction where aspen_tblcuttinginstruction.vIRnumber='".$partyid."' and aspen_tblcuttinginstruction.vStatus='WIP-Cutting'";
+                $sqlitem ="select aspen_tblcuttinginstruction.nSno as bundlenumber,aspen_tblcuttinginstruction.CuttingReferenceNo as cuttingreferenceno, DATE_FORMAT(aspen_tblcuttinginstruction.dDate, '%d-%m-%Y') AS processdate, aspen_tblcuttinginstruction.nLength as length, aspen_tblcuttinginstruction.nNoOfPieces as noofsheets, aspen_tblcuttinginstruction.nBundleweight as bundleweight from aspen_tblcuttinginstruction where aspen_tblcuttinginstruction.vIRnumber='".$partyid."' and aspen_tblcuttinginstruction.vStatus='WIP-Cutting'";
 
                 $queryitem = $this->db->query($sqlitem);
 
@@ -231,50 +254,52 @@ where aspen_tblinwardentry.vStatus = 'Work In Progress' or aspen_tblslittinginst
 
 		</tr>
 			<tr>
-				<td align="left"><h1><b>Slip Date:</b> '.date("d-m-Y").'</h1></td>
+				<td width="50%" align="left"><h2>Slip Date: '.date("d-m-Y", strtotime($slipDate)).'</h2></td>
+				<td width="50%" align="left"><h2>Slip No: '.$slipSerialNumber.'</h2></td>
 			</tr>
 			<tr>
 				<td align="center" width="100%"></td>
 			</tr>
 			<tr>
-				<td align="left"><h1><b>Coil Number:</b> '.$invoice.'</h1></td>
-			</tr><tr>
-				<td align="center" width="100%"></td>
-
-		</tr>
-	<tr><td align="left">
-					<h1><b>Party Name: </b> '.$partyname.'</h1></td>
-
-		</tr>
+				<td width="50%" align="left"><h2>Coil Number: '.$invoice.'</h2></td>
+				<td width="50%" align="left"><h2>JSW Coil Id: '.$jswid.'</h2></td>
+			</tr>
 			<tr>
 				<td align="center" width="100%"></td>
-
-		</tr>
-
-			<tr>
-				<td align="left"><h1>	<b>Material Description: </b> '.$material_description.'</h1></td> </tr>	<tr>
-				<td align="center" width="100%"></td>
-
+    		</tr>
+	        <tr>
+	            <td width="50%" align="left"><h2>Party Name: '.$partyname.'</h2></td>
+                <td width="50%" align="left"><h2>For Party:</h2></td>
 		</tr>
 		<tr>
-				<td align="left"><h1>	<b>Width (mm): </b> '.round($Width, 3).'</h1></td> </tr>	<tr>
 				<td align="center" width="100%"></td>
-
-		</tr>
-			<tr>
-
-				<td align="left"><h1><b>Thickness (mm): </b> '.round($Thickness, 3).'</h1></td>
-		</tr><tr>
-				<td align="center" width="100%"></td>
-
 		</tr>
 
 		<tr>
+			<td width="50%" align="left"><h2>Material Description: '.$material_description.'</h2></td>
+			<td width="50%" align="left"><h2>SS Coil Id: '.$ssid.'</h2></td>
 
-				<td align="left"><h1><b>Weight (mm): </b> '.round($Weight,2).'</h1></td>
-		</tr><tr>
-				<td align="center" width="100%"></td>
-
+		</tr>
+		<tr>
+			<td align="center" width="100%"></td>
+		</tr>
+		<tr>
+			<td width="50%" align="left"><h2>Width (mm): '.$Width.'</h2></td>
+			<td width="50%" align="left"><h2>Grade : '.$vGrade.'</h2></td>
+		</tr>
+		<tr>
+			<td align="center" width="100%"></td>
+		</tr>
+		<tr>
+			<td width="50%" align="left"><h2>Thickness (mm): '.$Thickness.'</h2></td>
+			<td width="50%" align="left"><h2>Heat No. : '.$vHeatnumber.'</h2></td>
+		</tr>
+		<tr>
+			<td align="center" width="100%"></td>
+		</tr>
+		<tr>
+				<td width="50%" align="left"><h2>Weight (mm): '.$Weight.'</h2></td>
+				<td width="50%" align="left"><h2>Cutting Date: </h2></td>
 		</tr>
 
 		</table>';
@@ -290,24 +315,37 @@ where aspen_tblinwardentry.vStatus = 'Work In Progress' or aspen_tblslittinginst
                 $html .= '
 		<table cellspacing="0" cellpadding="5" border="1px">
 			<tr>
-				<th align="center"><h1><b>S.No.</b></h1></th>
-				<th align="center"><h1><b>Cutting Date</b></h1></th>
+                <th align="center"><h1><b>S.No.</b></h1></th>
+                <th align="center"><h1><b>Cutting Reference No.</b></h1></th>
 				<th align="center"><h1><b>Length(mm)</b></h1></th>
 				<th align="center"><h1><b>Number of Pieces</b></h1></th>
-				<th align="center"><h1><b>Bundle Weight (Tons)</b></h1></th>
+				<th align="center"><h1><b>Bundle Weight (Kgs)</b></h1></th>
 			</tr>';
+                $lowerTable = '';
+
                 if ($queryitem->num_rows() > 0)
                 {
+                    $i = 1;
                     foreach($queryitem->result() as $rowitem)
                     {
+                        $primeLength = ($i == 1) ? 'Prime Length': '';
+                        $i++;
+                        $lowerTable .= '<tr>
+                                            <td><b>'.$primeLength.'</b></td>
+                                            <td><b>'.$rowitem->length.'</b></td>
+                                            <td><b>Qty</b></td>
+                                            <td></td>
+                                            <td><b>SEC WT</b></td>
+                                            <td></td>
+                                        </tr>';
                         $html .= '
-			<tr>
-				<td align="center"><h1>'.$rowitem->bundlenumber.'</h1></td>
-				<td align="center" ><h1>'.$rowitem->processdate.'</h1></td>
-				<td align="center"><h1>'.$rowitem->length.'</h1></td>
-				<td align="center"><h1>'.$rowitem->noofsheets.'</h1></td>
-				<td align="right"><h1>'.$rowitem->bundleweight.'(Approx)</h1></td>
-			</tr>';
+                            <tr>
+                                <td align="center"><h1>'.$rowitem->bundlenumber.'</h1></td>
+                                <td align="right"><h1>'.$rowitem->cuttingreferenceno.'</h1></td>
+                                <td align="center"><h1>'.$rowitem->length.'</h1></td>
+                                <td align="center"><h1>'.$rowitem->noofsheets.'</h1></td>
+                                <td align="right"><h1>'.$rowitem->bundleweight.'(Approx)</h1></td>
+                            </tr>';
                     }
                 }else{
                     $html .= '
@@ -319,9 +357,21 @@ where aspen_tblinwardentry.vStatus = 'Work In Progress' or aspen_tblslittinginst
 				<td align="right">&nbsp;</td>
 			</tr>';
                 }
-                $html .= '
+                $html .= '</table>';
 
-		</table>';
+                $html .= '<table><tr><td></td></tr><tr><td></td></tr><tr><td></td></tr></table>';
+
+                $html .= '<table><tr><td><h1>Production Details</h1></td></tr><tr><td></td></tr></table>';
+                $html .= '<table border="1" cellpadding="5">';
+                $html .= $lowerTable;
+                $html .= '<tr><td><b>NON PRIME</b></td><td></td><td><b>QTY</b></td><td></td><td><b>SEC WT</b></td><td></td></tr>';
+                $html .= '<tr><td><b>SCRAP</b></td><td></td><td><b>QTY</b></td><td></td><td><b>SEC WT</b></td><td></td></tr>';
+                $html .= '<tr><td><b>CROP END</b></td><td></td><td><b>QTY</b></td><td></td><td><b>SEC WT</b></td><td></td></tr>';
+                $html .= '</table>';
+
+                $html .= '<table><tr><td></td></tr><tr><td></td></tr><tr><td></td></tr><tr><td></td></tr><tr><td></td></tr><tr><td></td></tr><tr><td></td></tr><tr><td></td></tr><tr><td></td></tr><tr><td></td></tr><tr><td></td></tr><tr><td></td></tr></table>';
+
+                $html .= '<table><tr><td width="30%" align="center"><b>Operator</b></td><td width="60%" align="right"><b>For Sharoff Steel Traders</b></td></tr></table>';
 
                 $html .= '
 		<table cellspacing="0" cellpadding="5" border="0">
@@ -330,7 +380,7 @@ where aspen_tblinwardentry.vStatus = 'Work In Progress' or aspen_tblslittinginst
 				<td align="right">&nbsp;</td>
 			</tr>
 			<tr>
-				<td colspan="2" align="center" style="font-size:45px; font-style:italic; font-family: fantasy;"><b>**ASPEN BANGALORE**</b></td>
+				<td colspan="2" align="center" style="font-size:45px; font-style:italic; font-family: fantasy;"><b>**Sharoff Steel Traders**</b></td>
 			</tr>
 		</table>';
 
@@ -414,13 +464,13 @@ where aspen_tblinwardentry.vStatus = 'Work In Progress' or aspen_tblslittinginst
 
 		</tr>
 		<tr>
-				<td align="left"><h1>	<b>Width (mm): </b> '.round($Width,3).'</h1></td> </tr>	<tr>
+				<td align="left"><h1>	<b>Width (mm): </b> '.$Width.'</h1></td> </tr>	<tr>
 				<td align="center" width="100%"></td>
 
 		</tr>
 			<tr>
 
-				<td align="left"><h1><b>Thickness (mm): </b> '.round($Thickness,3).'</h1></td>
+				<td align="left"><h1><b>Thickness (mm): </b> '.$Thickness.'</h1></td>
 		</tr><tr>
 				<td align="center" width="100%"></td>
 
@@ -569,11 +619,11 @@ where aspen_tblinwardentry.vStatus = 'Work In Progress' or aspen_tblslittinginst
 
 		</tr>
 		<tr>
-			<td align="left"><h1><b>Width (mm): </b>'.round($Width,3).'</h1></td> </tr>	<tr>
+			<td align="left"><h1><b>Width (mm): </b>'.$Width.'</h1></td> </tr>	<tr>
 			<td align="center" width="100%"></td>
 		</tr>
 		<tr>
-			<td align="left"><h1><b>Thickness (mm): </b> '.round($Thickness,3).'</h1></td>
+			<td align="left"><h1><b>Thickness (mm): </b> '.$Thickness.'</h1></td>
 		</tr>
 		<tr><td align="center" width="100%"></td></tr>
 		<tr>
@@ -613,7 +663,7 @@ where aspen_tblinwardentry.vStatus = 'Work In Progress' or aspen_tblslittinginst
 				<td align="center" ><h1>'.$rowitem->startdate.'</h1></td>
 				<td align="center"><h1>'.$rowitem->length.'</h1></td>
 				<td align="center"><h1>'.$rowitem->width.'</h1></td>
-				<td align="center"><h1>'.$rowitem->weight.'</h1></td>
+				<td align="center"><h1>'.round($rowitem->weight,3).'</h1></td>
 			</tr>';
                     }
                 }else{

@@ -513,12 +513,14 @@ function functionfinish() {
  var pname = $('#pname').val();
  var txtboxweight = $('#txtboxweight').val();
  var wei = $('#wei').val();
+ console.log(txtboxweight);
+ console.log(wei);
  if(!$("input[name='list']:checked").val())
  {
   alert('Please select the Radio button');
   return false;
  }
- else if(parseInt(txtboxweight) > parseInt(wei) ){
+ else if(parseFloat(txtboxweight) > parseFloat(wei) ){
 		alert('Sorry the Total weight of bundle is more then weight of coil pleae edit the weight to progress!!');
 	}
  else

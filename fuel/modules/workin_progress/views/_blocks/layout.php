@@ -79,13 +79,8 @@
 </div>
 <input id="txtcoilids" type="hidden" hidden/>
 <div align="right">
-<<<<<<< 91c75328ba9b9b49eaba742dabf6bd6e57daa40b
-<label>Total Weight: in (Tons)</label>
-<input id="txtboxweight" type="text" value="<?php echo(round($tweight,3)); ?>" DISABLED/> &nbsp; &nbsp; &nbsp;
-=======
     <label>Total Weight: in (Tons)</label>
     <input id="txtboxweight" type="text" value="<?php echo round($tweight,3); ?>" DISABLED/> &nbsp; &nbsp; &nbsp;
->>>>>>> Label changes kgs into  tons and precision changes
 </div>
 
 <input id="coilid" type="hidden" value="" name="coilid">

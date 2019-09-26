@@ -40,10 +40,10 @@ class finish_task_model extends Base_module_model {
 		$arr = $query->result();
 
 		if($arr[0]->vprocess =='Cutting') {			
-			$sqlto =  "select round(sum(nBundleweight),0) as bundleweight from aspen_tblcuttinginstruction
+			$sqlto =  "select round(sum(nBundleweight),3) as bundleweight from aspen_tblcuttinginstruction
 			left join aspen_tblinwardentry on aspen_tblcuttinginstruction.vIRnumber=aspen_tblinwardentry.vIRnumber where aspen_tblinwardentry.vIRnumber='".$pid."'";
 		} else if($arr[0]->vprocess =='Slitting') {
-			$sqlto =  "select round(sum(nWeight),0) as bundleweight from aspen_tblslittinginstruction
+			$sqlto =  "select round(sum(nWeight),3) as bundleweight from aspen_tblslittinginstruction
 			left join aspen_tblinwardentry on aspen_tblslittinginstruction.vIRnumber=aspen_tblinwardentry.vIRnumber where aspen_tblinwardentry.vIRnumber='".$pid."'";
 		}
 
