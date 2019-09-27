@@ -38,10 +38,10 @@ class factory_material_model extends Base_module_model
                         LEFT JOIN
                     aspen_tblpartydetails ON aspen_tblpartydetails.nPartyId = aspen_tblinwardentry.nPartyId
                 WHERE
-                    fpresent >= 1
+                    fpresent >= 0
                         AND aspen_tblinwardentry.dReceivedDate BETWEEN '".$frmdate."' AND '".$todate."'
                 GROUP BY aspen_tblpartydetails.nPartyName";
-
+  
         $query = $this->db->query($sql);
 
         $arr = '';
