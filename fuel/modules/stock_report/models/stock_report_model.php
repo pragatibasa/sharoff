@@ -46,7 +46,7 @@ class stock_report_model extends Base_module_model {
 	}
 	
 	function totalweight_check($partyname = ''){
-	$sql=  "SELECT SUM( fpresent) as weight FROM aspen_tblinwardentry LEFT JOIN aspen_tblpartydetails ON aspen_tblpartydetails.nPartyId = aspen_tblinwardentry.nPartyId  Where aspen_tblpartydetails.nPartyName='".$partyname."' AND aspen_tblinwardentry.fpresent >= 1";
+	$sql=  "SELECT SUM( fpresent) as weight FROM aspen_tblinwardentry LEFT JOIN aspen_tblpartydetails ON aspen_tblpartydetails.nPartyId = aspen_tblinwardentry.nPartyId  Where aspen_tblpartydetails.nPartyName='".$partyname."' AND aspen_tblinwardentry.fpresent >= 0";
 		$query = $this->db->query($sql);
 		$arr='';
 		if ($query->num_rows() > 0)
@@ -285,7 +285,7 @@ class stock_report_model extends Base_module_model {
 		LEFT JOIN aspen_tblslittinginstruction ON aspen_tblslittinginstruction.vIRnumber = aspen_tblinwardentry.vIRnumber 
 		LEFT JOIN aspen_tblrecoiling ON aspen_tblrecoiling.vIRnumber = aspen_tblinwardentry.vIRnumber"; 
    		if(!empty($partyname)) { 
-		$sql .=" Where aspen_tblpartydetails.nPartyName='".$partyname."' AND aspen_tblinwardentry.fpresent >= 1";
+		$sql .=" Where aspen_tblpartydetails.nPartyName='".$partyname."' AND aspen_tblinwardentry.fpresent >= 0";
 		}
 		$sql .="  group by aspen_tblinwardentry.vIRnumber order by aspen_tblinwardentry.dReceivedDate desc";
 		// echo $sql;die();
