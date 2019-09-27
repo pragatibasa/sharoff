@@ -59,9 +59,7 @@ class Partywise_register extends Fuel_base_controller {
 		return $chkuser;
 	}
 	
-	function list_party($partyname = '') {	
-		
-		
+	function list_party($partyname = '') {
 		if(empty($partyname)) { 
 			$partyname = $_POST['party_account_name'];
 		}
