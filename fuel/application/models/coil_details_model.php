@@ -22,7 +22,7 @@ class Coil_details_model extends Base_module_model {
 
 
 	function totalweight_check($partyname = '') {
-		$sql=  "SELECT round(SUM( fpresent )) as weight FROM aspen_tblinwardentry LEFT JOIN aspen_tblpartydetails ON aspen_tblpartydetails.nPartyId = aspen_tblinwardentry.nPartyId where aspen_tblpartydetails.nPartyName = '".$partyname."' AND aspen_tblinwardentry.fpresent >= 5";
+		$sql=  "SELECT round(SUM(fpresent),3) as weight FROM aspen_tblinwardentry LEFT JOIN aspen_tblpartydetails ON aspen_tblpartydetails.nPartyId = aspen_tblinwardentry.nPartyId where aspen_tblpartydetails.nPartyName = '".$partyname."' AND aspen_tblinwardentry.fpresent >= 0";
 	
 		$query = $this->db->query($sql);
 		$arr='';
