@@ -101,7 +101,8 @@ class workin_progress_model extends Base_module_model {
                 aspen_tblinwardentry.vStatus = 'Work In Progress'
                     OR aspen_tblslittinginstruction.vStatus = 'WIP-Slitting'
                     OR aspen_tblcuttinginstruction.vStatus = 'WIP-Cutting'
-            GROUP BY aspen_tblinwardentry.vIRnumber";
+            GROUP BY aspen_tblinwardentry.vIRnumber
+            ORDER BY aspen_tblinwardentry.dDate asc";
 
         $query = $this->db->query($strWorkingProgressList);
 
