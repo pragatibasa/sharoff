@@ -22,8 +22,8 @@ class Coil_details_model extends Base_module_model {
 
 
 	function totalweight_check($partyname = '') {
-		$sql=  "SELECT round(SUM(fpresent),3) as weight FROM aspen_tblinwardentry LEFT JOIN aspen_tblpartydetails ON aspen_tblpartydetails.nPartyId = aspen_tblinwardentry.nPartyId where aspen_tblpartydetails.nPartyName = '".$partyname."' AND aspen_tblinwardentry.fpresent >= 0";
-	
+		$sql=  "SELECT round(SUM(fpresent),3) as weight FROM aspen_tblinwardentry LEFT JOIN aspen_tblpartydetails ON aspen_tblpartydetails.nPartyId = aspen_tblinwardentry.nPartyId where aspen_tblpartydetails.nPartyName = '".$partyname."' AND aspen_tblinwardentry.fpresent > 0";
+
 		$query = $this->db->query($sql);
 		$arr='';
 		if ($query->num_rows() > 0) {
@@ -266,7 +266,7 @@ class Coil_details_model extends Base_module_model {
 		LEFT JOIN aspen_tblslittinginstruction ON aspen_tblslittinginstruction.vIRnumber = aspen_tblinwardentry.vIRnumber 
 		LEFT JOIN aspen_tblrecoiling ON aspen_tblrecoiling.vIRnumber = aspen_tblinwardentry.vIRnumber"; 
    		if(!empty($partyname)) { 
-			$sql .=" Where aspen_tblpartydetails.nPartyName='".$partyname."' AND aspen_tblinwardentry.fpresent >= 0";
+			$sql .=" Where aspen_tblpartydetails.nPartyName='".$partyname."' AND aspen_tblinwardentry.fpresent > 0";
 		}
 		$sql .="  group by aspen_tblinwardentry.vIRnumber order by aspen_tblinwardentry.dReceivedDate desc";
 
@@ -285,7 +285,7 @@ class Coil_details_model extends Base_module_model {
 	function list_individualparty($partyname = '') {	
 		$sql ="SELECT DATE_FORMAT(aspen_tblinwardentry.dReceivedDate, '%d-%m-%Y') as receiveddate, aspen_tblmatdescription.vDescription as description, aspen_tblinwardentry.fThickness as thickness, aspen_tblinwardentry.fWidth as width, aspen_tblinwardentry.fQuantity as weight,aspen_tblinwardentry.fpresent as pweight, aspen_tblinwardentry.vStatus as status , aspen_tblinwardentry.vIRnumber as coilnumber,aspen_tblinwardentry.vprocess as process FROM aspen_tblinwardentry LEFT JOIN aspen_tblmatdescription ON aspen_tblmatdescription.nMatId = aspen_tblinwardentry.nMatId LEFT JOIN aspen_tblpartydetails ON aspen_tblpartydetails.nPartyId = aspen_tblinwardentry.nPartyId LEFT JOIN aspen_tblcuttinginstruction ON aspen_tblcuttinginstruction.vIRnumber = aspen_tblinwardentry.vIRnumber ";
    		if(!empty($partyname)) { 
-		$sql .=" Where aspen_tblpartydetails.nPartyName='".$partyname."' AND aspen_tblinwardentry.fpresent >= 5";
+		$sql .=" Where aspen_tblpartydetails.nPartyName='".$partyname."' AND aspen_tblinwardentry.fpresent > 0";
 		}
 		$sql .="  group by aspen_tblinwardentry.vIRnumber order by aspen_tblinwardentry.dReceivedDate desc";
 		//echo $sql;

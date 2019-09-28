@@ -80,7 +80,7 @@
 <input id="txtcoilids" type="hidden" hidden/>
 <div align="right">
     <label>Total Weight: in (Tons)</label>
-    <input id="txtboxweight" type="text" value="<?php echo round($tweight,3); ?>" DISABLED/> &nbsp; &nbsp; &nbsp;
+    <input id="txtboxweight" type="text" value="<?php echo number_format($tweight,3); ?>" DISABLED/> &nbsp; &nbsp; &nbsp;
 </div>
 
 <input id="coilid" type="hidden" value="" name="coilid">
