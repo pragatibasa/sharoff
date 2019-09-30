@@ -36,7 +36,7 @@
                             <tr>
                                 <th>Coilnumber</th>
                                 <th>Received Date</th>
-                                <th>Size Given Date</th>
+                                <th data-date-format="ddmmyyyy">Size Given Date</th>
                                 <th>Partyname</th>
                                 <th>Material Description</th>
                                 <th>Thickness</th>
