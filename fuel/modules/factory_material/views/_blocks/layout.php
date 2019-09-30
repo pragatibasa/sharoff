@@ -11,7 +11,7 @@
                         <input id="selector" type="text"/>
                         <script>
                             $(function () {
-                                $("#selector").picker({dateFormat: 'yy-mm-dd'});
+                               $("#selector").picker({dateFormat: 'yy-mm-dd'});
                             });
                         </script>
                     </td>
@@ -25,7 +25,7 @@
                 </tr>
             </table>
             <div class="pad-10">
-                <input class="btn btn-success" type="button" value="Click Here" id="save_id" onClick="functionpdf();"/>
+                <input class="btn btn-success" type="button" value="Click Here" id="save_id" onClick="functionpdf(true);"/>
                 &nbsp; &nbsp; &nbsp;
                 <a style ="border:none;padding:0px;" href="#" id="export" onclick="tableToExcel('DynamicGridp_2', 'Factory Material Movement')"><input class ="btn btn-success" type="button" value="Export to Excel" hidden/></a> &nbsp; &nbsp;
                 &nbsp;
@@ -57,9 +57,26 @@
     </fieldset>
 </div>
 
+
+<div align="left">
+
+<label>Total Inward Weight</label>
+<input id="totalinwardweight_calcualation" type="text" DISABLED/>(in Tons)
+		&nbsp; &nbsp; &nbsp;
+        <label>Total Outward Weight</label>
+<input id="totaloutwardweight_calcualation" type="text" DISABLED/>(in Tons)
+		&nbsp; &nbsp; &nbsp;
+</div>
+<div>
+        <label>Total Balance</label>
+        <input id="totalbalanceweight_calcualation" type="text" DISABLED/>(in Tons)
+		&nbsp; &nbsp; &nbsp;
+</div>
+
 <script language="javascript" type="text/javascript">
     $(document).ready(function () {
         $("#export").hide();
+        functionpdf(false);
     });
 
     var section = "demos/datepicker";
@@ -67,23 +84,7 @@
         $("#datepicker").datepicker();
     });
 
-    function totalweight_check() {
-        var party_account_name = $('#party_account_name').val();
-        var dataString = '&party_account_name=' + party_account_name;
-        $.ajax({
-            type: "POST",
-            url: "<?php echo fuel_url('billing_statement/totalweight_check');?>/",
-            data: dataString,
-            datatype: "json",
-            success: function (msg) {
-                var msg3 = eval(msg);
-                $.each(msg3, function (i, j) {
-                    var weight = j.weight;
-                    document.getElementById("totalweight_calcualation").value = weight;
-                });
-            }
-        });
-    }
+   
 </script>
 
 <script>
@@ -114,23 +115,28 @@
 	}
 }*/
 
-    function functionpdf() {
-        var selector = $('#selector').val();
-        var selector1 = $('#selector1').val();
+    function functionpdf(withDates) {
+        var dataString = '';
+        if(withDates){
+            var selector = $('#selector').val();
+            var selector1 = $('#selector1').val();
+            dataString = 'frmdate=' + selector + '&todate=' + selector1;
+            if (selector == '' && selector1 == '') {
+                alert("Please select all the values");
+
+            }
+        } 
+       
 // document.getElementById("fromdate").value = document.getElementById("selector").value;
         $("#export").show();
-        if (selector == '' && selector1 == '') {
-            alert("Please select all the values");
-
-        } else {
+         
             $.ajax({
                 type: "POST",
                 url: "<?php echo fuel_url('factory_material/export_party');?>",
-                data: 'frmdate=' + selector + '&todate=' + selector1,
+                data: dataString,
                 dataType: "json"
             }).done(function (msg) {
                 $("#check_bar").html('');
-                var dataString = 'frmdate=' + selector + '&todate=' + selector1;
                 var url = "<?php echo fuel_url('factory_material/billing_pdf');?>/?" + dataString;
                 window.open(url);
                 var mediaClass = '';
@@ -143,7 +149,7 @@
                 mediaClass += '  <th>Balance</th>';
                 mediaClass += '</tr>';
                 mediaClass += '</thead>';
-                for (var i = 0; i < msg.length; i++) {
+                for (var i = 0; i < msg.length-1; i++) {
                     var item = msg[i];
                     mediaClass += '<tr>';
                     mediaClass += '<td>' + item.partyname + '</td>';
@@ -151,17 +157,21 @@
                     mediaClass += '<td>' + parseFloat(item.outweight).toFixed(3) + '</td>';
                     mediaClass += '<td>' + parseFloat(item.balance).toFixed(3) + '</td>';
                     mediaClass += '</tr>';
-
-                }
+                 }
+                 var total = msg[msg.length-1];
+                 console.log(total);
+                 document.getElementById("totalinwardweight_calcualation").value = parseFloat(total.inweight).toFixed(3);
+                 document.getElementById("totaloutwardweight_calcualation").value = parseFloat(total.outweight).toFixed(3);
+                 document.getElementById("totalbalanceweight_calcualation").value = parseFloat(total.balance).toFixed(3);
                 mediaClass += '</table>';
 
                 $('#DynamicGridp_2').html(mediaClass);
                 $("#myTabels").tablesorter();
-                totalweight_check();
+               // totalweight_check();
 
 
             });
-        }
+        
     }
 
     function tableToExcel() {
@@ -178,7 +188,9 @@ tab_text = tab_text + "<table border='1px'>";
 tab_text = tab_text + $('#myTabels').html();
 tab_text = tab_text + '</table>';
 
-//tab_text = tab_text + '<table border="1px"><tr></tr><tr><td></td><td></td><td></td><td></td><td></td><td></td><td><h3>Total Weight : </td><td>'+$('#totalweight_calcualation').val()+' </h3></td><td></td></tr></table></body></html>';
+tab_text = tab_text + '<table border="1px"><tr></tr><tr><td><h3>Total:</td><td>'+$('#totalinwardweight_calcualation').val()+'</td><td>+'+$('#totaloutwardweight_calcualation').val()+'</td><td>'+$('#totalbalanceweight_calcualation').val()+' </h3></td></tr></table></body></html>';
+//tab_text = tab_text + '<tr></tr><tr><td><h3>Total Outward Weight :'+$('#totaloutwardweight_calcualation').val()+' </h3></td><td></td><td></td><td></td></tr>';
+//tab_text = tab_text + '<tr></tr><tr><td><h3>Total Balance :'+$('#totalbalanceweight_calcualation').val()+' </h3></td><td></td><td></td></tr>';
 
 
 var data_type = 'data:application/vnd.ms-excel';

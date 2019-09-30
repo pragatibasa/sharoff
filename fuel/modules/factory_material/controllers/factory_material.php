@@ -30,17 +30,18 @@ class factory_material extends Fuel_base_controller
 
     function export_party($frmdate = '', $todate = '')
     {
-        $frmdate = $_POST['frmdate'];
-        $todate = $_POST['todate'];
         $this->load->model('factory_material_model');
-        $containers = $this->factory_material_model->export_partyname($frmdate, $todate);
+       $containers = $this->factory_material_model->export_partyname();
         if (!empty($containers)) {
             foreach ($containers as $container) {
                 $obj = new stdClass();
-                $obj->partyname = $container->partyname;
+               $obj->partyname = $container->partyname;
                 $obj->inweight = $container->inweight;
                 $obj->outweight = $container->outweight;
                 $obj->balance = $container->balance;
+                //$obj->totalinweight = $container->totalinweight;
+                //$obj->totaloutweight = $container->totaloutweight;
+               // $obj->totalbalweight = $container->totalbalweight;
                 $folders[] = $obj;
             }
             echo json_encode($folders);exit;
@@ -128,15 +129,20 @@ class factory_material extends Fuel_base_controller
 
     function billing_pdf()
     {
-        $queryStr = $_SERVER['QUERY_STRING'];
-        parse_str($queryStr, $args);
-        $frmdate = $args["frmdate"];
-        $todate = $args["todate"];
         $this->load->module_model(FACTORY_MATERIAL_FOLDER, 'factory_material_model');
-        $billgenerateb = $this->factory_material_model->billgeneratemodel($frmdate, $todate);
-
+        $billgenerateb = $this->factory_material_model->billgeneratemodel();
     }
-
+    /*function totalweight_check($partyname = '',$frmdate = '', $todate = '') {
+		if(empty($partyname)) { 
+			$frmdate = $_POST['frmdate'];	
+			$todate = $_POST['todate'];	
+		}
+		$wei = $this->factory_material_model->totalweight_check($partyname,$frmdate, $todate);
+		$weijson = json_encode($wei);
+		print $weijson;
+	
+	}*/
+	
 
 }
 /* End of file */

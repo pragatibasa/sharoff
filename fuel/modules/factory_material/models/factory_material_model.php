@@ -27,20 +27,25 @@ class factory_material_model extends Base_module_model
     }
 
 
-    function export_partyname($frmdate = '', $todate = '') {
+    function export_partyname() {
+        $condition = '';
+        if(isset($_POST['frmdate']) && isset($_POST['todate'])) {
+            $condition = "AND aspen_tblinwardentry.dReceivedDate BETWEEN '".$frmdate."' AND '".$todate."'";
+        }
+ 
         $sql = "SELECT 
                     aspen_tblpartydetails.nPartyName as partyname,
                     SUM(aspen_tblinwardentry.fQuantity) AS inweight,
-                    SUM(aspen_tblinwardentry.fpresent) AS outweight,
-                    SUM(aspen_tblinwardentry.fQuantity) - SUM(aspen_tblinwardentry.fpresent) as balance 
+                    SUM(aspen_tblinwardentry.billedweight) AS outweight,
+                    SUM(aspen_tblinwardentry.fQuantity) - SUM(aspen_tblinwardentry.billedweight) as balance 
                 FROM
                     aspen_tblinwardentry
                         LEFT JOIN
                     aspen_tblpartydetails ON aspen_tblpartydetails.nPartyId = aspen_tblinwardentry.nPartyId
                 WHERE
-                    fpresent >= 0
-                        AND aspen_tblinwardentry.dReceivedDate BETWEEN '".$frmdate."' AND '".$todate."'
-                GROUP BY aspen_tblpartydetails.nPartyName";
+                    fpresent > 0
+                    $condition
+                GROUP BY aspen_tblpartydetails.nPartyName with rollup";
   
         $query = $this->db->query($sql);
 
@@ -54,21 +59,26 @@ class factory_material_model extends Base_module_model
     }
 
 
-    function billgeneratemodel($frmdate = '', $todate = '')
+    function billgeneratemodel()
     {
+
+        $condition = '';
+        if(isset($_POST['frmdate']) && isset($_POST['todate'])) {
+            $condition = "AND aspen_tblinwardentry.dReceivedDate BETWEEN '".$frmdate."' AND '".$todate."'";
+        }
         $sqlrpt = "SELECT 
                     aspen_tblpartydetails.nPartyName as partyname,
                     SUM(aspen_tblinwardentry.fQuantity) AS inweight,
-                    SUM(aspen_tblinwardentry.fpresent) AS outweight,
-                    SUM(aspen_tblinwardentry.fQuantity) - SUM(aspen_tblinwardentry.fpresent) as balance 
+                    SUM(aspen_tblinwardentry.billedweight) AS outweight,
+                    SUM(aspen_tblinwardentry.fQuantity) - SUM(aspen_tblinwardentry.billedweight) as balance 
                 FROM
                     aspen_tblinwardentry
                         LEFT JOIN
                     aspen_tblpartydetails ON aspen_tblpartydetails.nPartyId = aspen_tblinwardentry.nPartyId
                 WHERE
-                    fpresent >= 1
-                        AND aspen_tblinwardentry.dReceivedDate BETWEEN '".$frmdate."' AND '".$todate."'
-                GROUP BY aspen_tblpartydetails.nPartyName";
+                    fpresent > 0
+                    $condition
+                GROUP BY aspen_tblpartydetails.nPartyName with rollup";
 
 //print_r($sqlrpt);exit;
 
@@ -95,13 +105,15 @@ class factory_material_model extends Base_module_model
 
         $html = '  
 					<div align="center"><h1>TOTAL FACTORY MATERIAL MOVEMENT</h1></div>
-				<table width="100%" cellspacing="0" cellpadding="5" border="0">
-			<tr>
+                <table width="100%" cellspacing="0" cellpadding="5" border="0">';
+        if($condition != '') {
+			$html .= '<tr>
 				
 				<td align="center"><h2>From Date:&nbsp;&nbsp;&nbsp;' . $frmdate . '</h2></td>
 				<td align="center"><h2>To Date:&nbsp;&nbsp;&nbsp;' . $todate . '</h2></td>
-			</tr>
-			<tr>
+            </tr>';
+                }
+			$html .= '<tr>
 				<td align="center">&nbsp;</td>
 				<td align="center">&nbsp;</td>
 		
@@ -112,22 +124,36 @@ class factory_material_model extends Base_module_model
 		<table cellspacing="0" cellpadding="5" border="0.5px">
 			<tr>
 				<th align="center"><h2>Party Name</h2></th>		
-				<th align="center"><h2>Total Inward Weight</h2></th>					
-                <th align="center"><h2>Total Outward Weight</h2></th>
+				<th align="center"><h2>Inward Weight</h2></th>					
+                <th align="center"><h2>Outward Weight</h2></th>
                 <th align="center"><h2>Balance</h2></th>
                
 			</tr>';
 
         if ($querymain->num_rows() > 0) {
-            foreach ($querymain->result() as $rowitem) {
+            $resultCount = count($querymain->result())-1;
+            for($i = 0; $i < $resultCount; $i++) {
                 $html .= '			
                          <tr>
-                         <td align="center"><h2>' . $rowitem->partyname . '</h2></td>			
-                         <td align="center"><h2>' .number_format((float)$rowitem->inweight,3) . '</h2></td>			
-                         <td align="center" ><h2>' .number_format((float)$rowitem->outweight,3) . '</h2></td>
-                         <td align="center" ><h2>' .number_format((float)$rowitem->balance,3) . '</h2></td>		
+                         <td align="center"><h2>' . $querymain->result()[$i]->partyname . '</h2></td>			
+                         <td align="center"><h2>' .number_format((float)$querymain->result()[$i]->inweight,3) . '</h2></td>			
+                         <td align="center" ><h2>' .number_format((float)$querymain->result()[$i]->outweight,3) . '</h2></td>
+                         <td align="center" ><h2>' .number_format((float)$querymain->result()[$i]->balance,3) . '</h2></td>		
                          </tr>';
             }
+            $html .= '                    
+            <tr>
+            <td align="center">&nbsp;</td>
+            <td align="center">&nbsp;</td>
+            <td align="center" >&nbsp;</td>
+        </tr>
+            <tr>
+            <th align="center"><h2>Total</h2></th>
+        			
+                 <td align="center"><h2>' .number_format((float)$querymain->result()[$resultCount]->inweight,3) . '</h2></td>			
+                 <td align="center" ><h2>' .number_format((float)$querymain->result()[$resultCount]->outweight,3) . '</h2></td>
+                 <td align="center" ><h2>' .number_format((float)$querymain->result()[$resultCount]->balance,3) . '</h2></td>		
+            </tr>';
         } else {
             $html .= '
                     <tr>
@@ -189,6 +215,20 @@ class factory_material_model extends Base_module_model
         }
         return $arr;
     }
+   /* function totalweight_check($partyname='',$frmdate='',$todate='') {
+		$sql=  "SELECT SUM( fQuantity ) as weight FROM aspen_tblinwardentry LEFT JOIN aspen_tblpartydetails ON aspen_tblpartydetails.nPartyId = aspen_tblinwardentry.nPartyId where aspen_tblpartydetails.nPartyName = '".$partyname."' and aspen_tblinwardentry.dReceivedDate BETWEEN '".$frmdate."' AND '".$todate."'";
+
+		$query = $this->db->query($sql);
+		$arr='';
+		if ($query->num_rows() > 0)
+		{
+		   foreach ($query->result() as $row)
+		   {
+		      $arr[] =$row;
+		   }
+		}
+		return $arr;
+	}*/
 
 
 }
