@@ -5,17 +5,14 @@ require_once(FUEL_PATH . 'models/base_module_model.php');
 require_once(APPPATH . 'helpers/tcpdf/config/lang/eng.php');
 require_once(APPPATH . 'helpers/tcpdf/tcpdf.php');
 
-class factory_material_model extends Base_module_model
-{
+class factory_material_model extends Base_module_model {
 
-    function __construct()
-    {
+    function __construct() {
         parent::__construct('aspen_tblmatdescription');
     }
 
 
-    function select_coilname()
-    {
+    function select_coilname() {
         $query = $this->db->query("select * from aspen_tblmatdescription order by vDescription ");
         $arr = '';
         if ($query->num_rows() > 0) {
@@ -30,7 +27,7 @@ class factory_material_model extends Base_module_model
     function export_partyname() {
         $condition = '';
         if(isset($_POST['frmdate']) && isset($_POST['todate'])) {
-            $condition = "AND aspen_tblinwardentry.dReceivedDate BETWEEN '".$frmdate."' AND '".$todate."'";
+            $condition = "AND aspen_tblinwardentry.dReceivedDate BETWEEN '".$_POST['frmdate']."' AND '".$_POST['todate']."'";
         }
  
         $sql = "SELECT 
@@ -59,12 +56,10 @@ class factory_material_model extends Base_module_model
     }
 
 
-    function billgeneratemodel()
-    {
-
+    function billgeneratemodel() {
         $condition = '';
-        if(isset($_POST['frmdate']) && isset($_POST['todate'])) {
-            $condition = "AND aspen_tblinwardentry.dReceivedDate BETWEEN '".$frmdate."' AND '".$todate."'";
+        if(isset($_REQUEST['frmdate']) && isset($_REQUEST['todate'])) {
+            $condition = "AND aspen_tblinwardentry.dReceivedDate BETWEEN '".$_REQUEST['frmdate']."' AND '".$_REQUEST['todate']."'";
         }
         $sqlrpt = "SELECT 
                     aspen_tblpartydetails.nPartyName as partyname,
@@ -79,8 +74,6 @@ class factory_material_model extends Base_module_model
                     fpresent > 0
                     $condition
                 GROUP BY aspen_tblpartydetails.nPartyName with rollup";
-
-//print_r($sqlrpt);exit;
 
         $querymain = $this->db->query($sqlrpt);
 
@@ -109,8 +102,8 @@ class factory_material_model extends Base_module_model
         if($condition != '') {
 			$html .= '<tr>
 				
-				<td align="center"><h2>From Date:&nbsp;&nbsp;&nbsp;' . $frmdate . '</h2></td>
-				<td align="center"><h2>To Date:&nbsp;&nbsp;&nbsp;' . $todate . '</h2></td>
+				<td align="center"><h2>From Date:&nbsp;&nbsp;&nbsp;' . $_REQUEST['frmdate'] . '</h2></td>
+				<td align="center"><h2>To Date:&nbsp;&nbsp;&nbsp;' . $_REQUEST['todate'] . '</h2></td>
             </tr>';
                 }
 			$html .= '<tr>
@@ -140,7 +133,7 @@ class factory_material_model extends Base_module_model
                          <td align="center" ><h2>' .number_format((float)$querymain->result()[$i]->outweight,3) . '</h2></td>
                          <td align="center" ><h2>' .number_format((float)$querymain->result()[$i]->balance,3) . '</h2></td>		
                          </tr>';
-            }
+            }x
             $html .= '                    
             <tr>
             <td align="center">&nbsp;</td>
