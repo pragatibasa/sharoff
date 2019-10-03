@@ -133,7 +133,7 @@ class factory_material_model extends Base_module_model {
                          <td align="center" ><h2>' .number_format((float)$querymain->result()[$i]->outweight,3) . '</h2></td>
                          <td align="center" ><h2>' .number_format((float)$querymain->result()[$i]->balance,3) . '</h2></td>		
                          </tr>';
-            }x
+            }
             $html .= '                    
             <tr>
             <td align="center">&nbsp;</td>
