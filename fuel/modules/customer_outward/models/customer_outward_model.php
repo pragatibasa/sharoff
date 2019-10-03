@@ -44,7 +44,7 @@ class customer_outward_model extends Base_module_model {
 			LEFT JOIN aspen_tblpartydetails ON aspen_tblpartydetails.nPartyId = aspen_tblinwardentry.nPartyId
 			LEFT JOIN aspen_tblbillingstatus ON aspen_tblbillingstatus.vIRnumber = aspen_tblinwardentry.vIRnumber
    		where
-    		aspen_tblpartydetails.nPartyName='" . $partyname . "' and aspen_tblbilldetails.dBillDate BETWEEN '" . $frmdate . "' AND '" . $todate . "' group by aspen_tblbilldetails.nBillNo order by aspen_tblinwardentry.vIRnumber asc";
+    		aspen_tblpartydetails.nPartyName='" . $partyname . "' and aspen_tblbilldetails.dBillDate BETWEEN '" . $frmdate . "' AND '" . $todate . "' group by aspen_tblbilldetails.nBillNo order by aspen_tblbilldetails.dBillDate desc";
 
         $query = $this->db->query($sql);
 
@@ -81,7 +81,7 @@ class customer_outward_model extends Base_module_model {
                     aspen_tblpartydetails.nPartyName = '" . $partyname . "'
                         AND aspen_tblbilldetails.dBillDate BETWEEN '" . $frmdate . "' AND '" . $todate . "'
                 GROUP BY aspen_tblbilldetails.nBillNo
-                ORDER BY aspen_tblinwardentry.vIRnumber asc";
+                ORDER BY aspen_tblbilldetails.dBillDate desc";
 
         $sqlrpt112 = "select round(sum(aspen_tblbilldetails.fTotalWeight),3) as bweight from aspen_tblinwardentry left join aspen_tblbilldetails on aspen_tblbilldetails.vIRnumber = aspen_tblinwardentry.vIRnumber LEFT JOIN aspen_tblpartydetails ON aspen_tblpartydetails.nPartyId = aspen_tblinwardentry.nPartyId where aspen_tblpartydetails.nPartyName='" . $partyname . "' and aspen_tblbilldetails.dBillDate  BETWEEN '" . $frmdate . "' AND '" . $todate . "'";
 
