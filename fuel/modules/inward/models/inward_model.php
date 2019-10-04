@@ -274,8 +274,8 @@ class inward_model extends Base_module_model {
                             LEFT JOIN
                         aspen_tblpartydetails ap ON ap.nPartyId = ai.nPartyId
                             LEFT JOIN
-                        aspen_tblmatdescription am ON am.nMatId = ai.nMatId";
-
+                        aspen_tblmatdescription am ON am.nMatId = ai.nMatId
+                       order by ai.vIRnumber desc, ai.dReceivedDate desc";
         return $this->db->query($strSql);
     }
 
