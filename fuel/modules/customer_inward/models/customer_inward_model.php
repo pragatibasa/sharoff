@@ -65,7 +65,7 @@ class customer_inward_model extends Base_module_model {
 		where
     aspen_tblpartydetails.nPartyName='".$partyname."' and aspen_tblinwardentry	.dReceivedDate BETWEEN '".$frmdate."' AND '".$todate."' and fpresent > 0 order by aspen_tblinwardentry.vIRnumber desc, aspen_tblinwardentry.dReceivedDate desc";
 		
-    	$sqlTotalWeight =  "SELECT SUM( fQuantity ) as weight FROM aspen_tblinwardentry LEFT JOIN aspen_tblpartydetails ON aspen_tblpartydetails.nPartyId = aspen_tblinwardentry.nPartyId where aspen_tblpartydetails.nPartyName = '".$partyname."' and aspen_tblinwardentry.dReceivedDate BETWEEN '".$frmdate."' AND '".$todate."' and fpresent > 0";
+    	$sqlTotalWeight =  "SELECT SUM( fQuantity ) as weight FROM aspen_tblinwardentry LEFT JOIN aspen_tblpartydetails ON aspen_tblpartydetails.nPartyId = aspen_tblinwardentry.nPartyId where aspen_tblpartydetails.nPartyName = '".$partyname."' and aspen_tblinwardentry.dReceivedDate BETWEEN '".$frmdate."' AND '".$todate."'";
 		
 		$querymain = $this->db->query($sqlrpt);
 		$queryTotalWeight = $this->db->query($sqlTotalWeight);
@@ -171,7 +171,7 @@ class customer_inward_model extends Base_module_model {
 	}
 	
 	function totalweight_check($partyname='',$frmdate='',$todate='') {
-		$sql=  "SELECT SUM( fQuantity ) as weight FROM aspen_tblinwardentry LEFT JOIN aspen_tblpartydetails ON aspen_tblpartydetails.nPartyId = aspen_tblinwardentry.nPartyId where aspen_tblpartydetails.nPartyName = '".$partyname."' and aspen_tblinwardentry.dReceivedDate BETWEEN '".$frmdate."' AND '".$todate."'and fpresent > 0";
+		$sql=  "SELECT SUM( fQuantity ) as weight FROM aspen_tblinwardentry LEFT JOIN aspen_tblpartydetails ON aspen_tblpartydetails.nPartyId = aspen_tblinwardentry.nPartyId where aspen_tblpartydetails.nPartyName = '".$partyname."' and aspen_tblinwardentry.dReceivedDate BETWEEN '".$frmdate."' AND '".$todate."'";
 
 		$query = $this->db->query($sql);
 		$arr='';

@@ -39,9 +39,6 @@ class factory_material_model extends Base_module_model {
                     aspen_tblinwardentry
                         LEFT JOIN
                     aspen_tblpartydetails ON aspen_tblpartydetails.nPartyId = aspen_tblinwardentry.nPartyId
-                WHERE
-                    fpresent > 0
-                    $condition
                 GROUP BY aspen_tblpartydetails.nPartyName with rollup";
   
         $query = $this->db->query($sql);
@@ -70,9 +67,6 @@ class factory_material_model extends Base_module_model {
                     aspen_tblinwardentry
                         LEFT JOIN
                     aspen_tblpartydetails ON aspen_tblpartydetails.nPartyId = aspen_tblinwardentry.nPartyId
-                WHERE
-                    fpresent > 0
-                    $condition
                 GROUP BY aspen_tblpartydetails.nPartyName with rollup";
 
         $querymain = $this->db->query($sqlrpt);
