@@ -83,7 +83,7 @@ class customer_outward_model extends Base_module_model {
                 GROUP BY aspen_tblbilldetails.nBillNo
                 ORDER BY aspen_tblbilldetails.dBillDate desc";
 
-        $sqlrpt112 = "select round(sum(aspen_tblbilldetails.fTotalWeight),3) as bweight from aspen_tblinwardentry left join aspen_tblbilldetails on aspen_tblbilldetails.vIRnumber = aspen_tblinwardentry.vIRnumber LEFT JOIN aspen_tblpartydetails ON aspen_tblpartydetails.nPartyId = aspen_tblinwardentry.nPartyId where aspen_tblpartydetails.nPartyName='" . $partyname . "' and aspen_tblbilldetails.dBillDate  BETWEEN '" . $frmdate . "' AND '" . $todate . "'";
+        $sqlrpt112 = "select round(sum(aspen_tblbilldetails.fTotalWeight),3) as bweight from aspen_tblinwardentry left join aspen_tblbilldetails on aspen_tblbilldetails.vIRnumber = aspen_tblinwardentry.vIRnumber LEFT JOIN aspen_tblpartydetails ON aspen_tblpartydetails.nPartyId = aspen_tblinwardentry.nPartyId where aspen_tblpartydetails.nPartyName='" . $partyname . "' and aspen_tblbilldetails.dBillDate  BETWEEN '" . $frmdate . "' AND '" . $todate . "' and fpresent > 0";
 
         $querymain = $this->db->query($sqlrpt);
         $querymain112 = $this->db->query($sqlrpt112);
@@ -213,7 +213,7 @@ class customer_outward_model extends Base_module_model {
     }
 
     function totalweight_check($partyname = '', $frmdate = '', $todate = '') {
-        $sql = "select round(sum(aspen_tblbilldetails.fTotalWeight),3) as bweight from aspen_tblinwardentry left join aspen_tblbilldetails on aspen_tblbilldetails.vIRnumber = aspen_tblinwardentry.vIRnumber LEFT JOIN aspen_tblpartydetails ON aspen_tblpartydetails.nPartyId = aspen_tblinwardentry.nPartyId where aspen_tblpartydetails.nPartyName='" . $partyname . "' and aspen_tblbilldetails.dBillDate  BETWEEN '" . $frmdate . "' AND '" . $todate . "'";
+        $sql = "select round(sum(aspen_tblbilldetails.fTotalWeight),3) as bweight from aspen_tblinwardentry left join aspen_tblbilldetails on aspen_tblbilldetails.vIRnumber = aspen_tblinwardentry.vIRnumber LEFT JOIN aspen_tblpartydetails ON aspen_tblpartydetails.nPartyId = aspen_tblinwardentry.nPartyId where aspen_tblpartydetails.nPartyName='" . $partyname . "' and aspen_tblbilldetails.dBillDate  BETWEEN '" . $frmdate . "' AND '" . $todate . "'and fpresent > 0";
 
         $query = $this->db->query($sql);
         $arr = '';
