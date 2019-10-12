@@ -26,21 +26,20 @@ class factory_material_model extends Base_module_model {
 
     function export_partyname() {
         $condition = '';
+        $condition1 = '';
         if(isset($_POST['frmdate']) && isset($_POST['todate'])) {
-            $condition = "AND aspen_tblinwardentry.dReceivedDate BETWEEN '".$_POST['frmdate']."' AND '".$_POST['todate']."'";
+            $condition = "WHERE  aspen_tblinwardentry.dReceivedDate BETWEEN '".$_POST['frmdate']."' AND '".$_POST['todate']."'";
+            $condition1 = "WHERE aspen_tblbilldetails.dBillDate BETWEEN '".$_POST['frmdate']."' AND '".$_POST['todate']."'";
         }
- 
-        $sql = "SELECT 
-                    aspen_tblpartydetails.nPartyName as partyname,
-                    SUM(aspen_tblinwardentry.fQuantity) AS inweight,
-                    SUM(aspen_tblinwardentry.billedweight) AS outweight,
-                    SUM(aspen_tblinwardentry.fQuantity) - SUM(aspen_tblinwardentry.billedweight) as balance 
-                FROM
-                    aspen_tblinwardentry
-                        LEFT JOIN
-                    aspen_tblpartydetails ON aspen_tblpartydetails.nPartyId = aspen_tblinwardentry.nPartyId
-                GROUP BY aspen_tblpartydetails.nPartyName with rollup";
-  
+
+        $sql = "SELECT aspen_tblpartydetails.nPartyName as partyname, COALESCE(t1.inweight,0) as inweight, COALESCE(t2.outweight, 0) as outweight, COALESCE(t1.inweight,0)-COALESCE(t2.outweight, 0) as balance
+     FROM aspen_tblpartydetails
+     LEFT JOIN 
+        (SELECT aspen_tblpartydetails.nPartyId,round(SUM(aspen_tblinwardentry.fQuantity),3) AS inweight from aspen_tblinwardentry LEFT JOIN aspen_tblpartydetails ON aspen_tblpartydetails.nPartyId = aspen_tblinwardentry.nPartyId $condition group by aspen_tblpartydetails.nPartyId) t1
+    on aspen_tblpartydetails.nPartyId = t1.nPartyId
+     LEFT JOIN
+    (SELECT  aspen_tblpartydetails.nPartyId ,round(sum(aspen_tblbilldetails.fTotalWeight),3) AS outweight FROM aspen_tblinwardentry LEFT JOIN aspen_tblpartydetails ON aspen_tblpartydetails.nPartyId = aspen_tblinwardentry.nPartyId left join aspen_tblbilldetails on aspen_tblinwardentry.vIRnumber = aspen_tblbilldetails.vIRnumber $condition1 group by aspen_tblpartydetails.nPartyId with rollup) t2 on aspen_tblpartydetails.nPartyId = t2.nPartyId;";
+
         $query = $this->db->query($sql);
 
         $arr = '';
@@ -54,22 +53,33 @@ class factory_material_model extends Base_module_model {
 
 
     function billgeneratemodel() {
-        $condition = '';
-        if(isset($_REQUEST['frmdate']) && isset($_REQUEST['todate'])) {
-            $condition = "AND aspen_tblinwardentry.dReceivedDate BETWEEN '".$_REQUEST['frmdate']."' AND '".$_REQUEST['todate']."'";
-        }
-        $sqlrpt = "SELECT 
-                    aspen_tblpartydetails.nPartyName as partyname,
-                    SUM(aspen_tblinwardentry.fQuantity) AS inweight,
-                    SUM(aspen_tblinwardentry.billedweight) AS outweight,
-                    SUM(aspen_tblinwardentry.fQuantity) - SUM(aspen_tblinwardentry.billedweight) as balance 
-                FROM
-                    aspen_tblinwardentry
-                        LEFT JOIN
-                    aspen_tblpartydetails ON aspen_tblpartydetails.nPartyId = aspen_tblinwardentry.nPartyId
-                GROUP BY aspen_tblpartydetails.nPartyName with rollup";
 
-        $querymain = $this->db->query($sqlrpt);
+        $condition = '';
+        $condition1 = '';
+        if(isset($_REQUEST['frmdate']) && isset($_REQUEST['todate'])) {
+            $condition = "WHERE  aspen_tblinwardentry.dReceivedDate BETWEEN '".$_REQUEST['frmdate']."' AND '".$_REQUEST['todate']."'";
+            $condition1 = "WHERE aspen_tblbilldetails.dBillDate BETWEEN '".$_REQUEST['frmdate']."' AND '".$_REQUEST['todate']."'";
+        }
+
+        $sql = "SELECT aspen_tblpartydetails.nPartyName as partyname, COALESCE(t1.inweight,0) as inweight, COALESCE(t2.outweight, 0) as outweight, COALESCE(t1.inweight,0)-COALESCE(t2.outweight, 0) as balance
+     FROM aspen_tblpartydetails
+     LEFT JOIN 
+        (SELECT aspen_tblpartydetails.nPartyId,round(SUM(aspen_tblinwardentry.fQuantity),3) AS inweight from aspen_tblinwardentry LEFT JOIN aspen_tblpartydetails ON aspen_tblpartydetails.nPartyId = aspen_tblinwardentry.nPartyId $condition group by aspen_tblpartydetails.nPartyId) t1
+    on aspen_tblpartydetails.nPartyId = t1.nPartyId
+     LEFT JOIN
+    (SELECT  aspen_tblpartydetails.nPartyId ,round(sum(aspen_tblbilldetails.fTotalWeight),3) AS outweight FROM aspen_tblinwardentry LEFT JOIN aspen_tblpartydetails ON aspen_tblpartydetails.nPartyId = aspen_tblinwardentry.nPartyId left join aspen_tblbilldetails on aspen_tblinwardentry.vIRnumber = aspen_tblbilldetails.vIRnumber $condition1 group by aspen_tblpartydetails.nPartyId with rollup) t2 on aspen_tblpartydetails.nPartyId = t2.nPartyId;";
+
+
+        $sumSql = " SELECT sum(COALESCE(t1.inweight,0)) as tot_inweight, sum(COALESCE(t2.outweight,0)) as tot_outweight, sum(COALESCE(t1.inweight,0)-COALESCE(t2.outweight, 0)) as tot_balance
+         FROM aspen_tblpartydetails
+         LEFT JOIN 
+             (SELECT aspen_tblpartydetails.nPartyId,round(SUM(aspen_tblinwardentry.fQuantity),3) AS inweight from aspen_tblinwardentry LEFT JOIN aspen_tblpartydetails ON aspen_tblpartydetails.nPartyId = aspen_tblinwardentry.nPartyId $condition group by aspen_tblpartydetails.nPartyId) t1
+         on aspen_tblpartydetails.nPartyId = t1.nPartyId
+          LEFT JOIN
+        (SELECT  aspen_tblpartydetails.nPartyId ,round(sum(aspen_tblbilldetails.fTotalWeight),3) AS outweight FROM aspen_tblinwardentry LEFT JOIN aspen_tblpartydetails ON aspen_tblpartydetails.nPartyId = aspen_tblinwardentry.nPartyId left join aspen_tblbilldetails on aspen_tblinwardentry.vIRnumber = aspen_tblbilldetails.vIRnumber $condition1 group by aspen_tblpartydetails.nPartyId) t2 on aspen_tblpartydetails.nPartyId = t2.nPartyId;";
+
+        $querymain = $this->db->query($sql);
+        $querySum = $this->db->query($sumSql);
 
 
         $pdf = new TCPDF(PDF_PAGE_ORIENTATION, PDF_UNIT, PDF_PAGE_FORMAT, true, 'UTF-8', false);
@@ -118,17 +128,18 @@ class factory_material_model extends Base_module_model {
 			</tr>';
 
         if ($querymain->num_rows() > 0) {
-            $resultCount = count($querymain->result())-1;
-            for($i = 0; $i < $resultCount; $i++) {
+
+            foreach ($querymain->result() as $rowitem) {
                 $html .= '			
                          <tr>
-                         <td align="center"><h2>' . $querymain->result()[$i]->partyname . '</h2></td>			
-                         <td align="center"><h2>' .number_format((float)$querymain->result()[$i]->inweight,3) . '</h2></td>			
-                         <td align="center" ><h2>' .number_format((float)$querymain->result()[$i]->outweight,3) . '</h2></td>
-                         <td align="center" ><h2>' .number_format((float)$querymain->result()[$i]->balance,3) . '</h2></td>		
+                         <td align="center"><h2>' . $rowitem->partyname . '</h2></td>			
+                         <td align="center"><h2>' .number_format((float)$rowitem->inweight,3) . '</h2></td>			
+                         <td align="center" ><h2>' .number_format((float)$rowitem->outweight,3) . '</h2></td>
+                         <td align="center" ><h2>' .number_format((float)$rowitem->balance,3) . '</h2></td>		
                          </tr>';
             }
-            $html .= '                    
+            if ($querySum->num_rows() > 0) {
+                    $html .= '                    
             <tr>
             <td align="center">&nbsp;</td>
             <td align="center">&nbsp;</td>
@@ -137,10 +148,11 @@ class factory_material_model extends Base_module_model {
             <tr>
             <th align="center"><h2>Total</h2></th>
         			
-                 <td align="center"><h2>' .number_format((float)$querymain->result()[$resultCount]->inweight,3) . '</h2></td>			
-                 <td align="center" ><h2>' .number_format((float)$querymain->result()[$resultCount]->outweight,3) . '</h2></td>
-                 <td align="center" ><h2>' .number_format((float)$querymain->result()[$resultCount]->balance,3) . '</h2></td>		
+                 <td align="center"><h2>' . number_format((float)$querySum->result()[0]->tot_inweight, 3) . '</h2></td>			
+                 <td align="center" ><h2>' . number_format((float)$querySum->result()[0]->tot_outweight, 3) . '</h2></td>
+                 <td align="center" ><h2>' . number_format((float)$querySum->result()[0]->tot_balance, 3) . '</h2></td>		
             </tr>';
+            }
         } else {
             $html .= '
                     <tr>
@@ -202,22 +214,33 @@ class factory_material_model extends Base_module_model {
         }
         return $arr;
     }
-   /* function totalweight_check($partyname='',$frmdate='',$todate='') {
-		$sql=  "SELECT SUM( fQuantity ) as weight FROM aspen_tblinwardentry LEFT JOIN aspen_tblpartydetails ON aspen_tblpartydetails.nPartyId = aspen_tblinwardentry.nPartyId where aspen_tblpartydetails.nPartyName = '".$partyname."' and aspen_tblinwardentry.dReceivedDate BETWEEN '".$frmdate."' AND '".$todate."'";
 
-		$query = $this->db->query($sql);
-		$arr='';
-		if ($query->num_rows() > 0)
-		{
-		   foreach ($query->result() as $row)
-		   {
-		      $arr[] =$row;
-		   }
-		}
-		return $arr;
-	}*/
+    function totalweight_check() {
+        $condition = '';
+        $condition1 = '';
+        if(isset($_POST['frmdate']) && isset($_POST['todate'])) {
+            $condition = "WHERE  aspen_tblinwardentry.dReceivedDate BETWEEN '".$_POST['frmdate']."' AND '".$_POST['todate']."'";
+            $condition1 = "WHERE aspen_tblbilldetails.dBillDate BETWEEN '".$_POST['frmdate']."' AND '".$_POST['todate']."'";
+        }
 
+        $sql = " SELECT sum(COALESCE(t1.inweight,0)) as tot_inweight, sum(COALESCE(t2.outweight,0)) as tot_outweight, sum(COALESCE(t1.inweight,0)-COALESCE(t2.outweight, 0)) as tot_balance
+         FROM aspen_tblpartydetails
+         LEFT JOIN 
+             (SELECT aspen_tblpartydetails.nPartyId,round(SUM(aspen_tblinwardentry.fQuantity),3) AS inweight from aspen_tblinwardentry LEFT JOIN aspen_tblpartydetails ON aspen_tblpartydetails.nPartyId = aspen_tblinwardentry.nPartyId $condition group by aspen_tblpartydetails.nPartyId) t1
+         on aspen_tblpartydetails.nPartyId = t1.nPartyId
+          LEFT JOIN
+        (SELECT  aspen_tblpartydetails.nPartyId ,round(sum(aspen_tblbilldetails.fTotalWeight),3) AS outweight FROM aspen_tblinwardentry LEFT JOIN aspen_tblpartydetails ON aspen_tblpartydetails.nPartyId = aspen_tblinwardentry.nPartyId left join aspen_tblbilldetails on aspen_tblinwardentry.vIRnumber = aspen_tblbilldetails.vIRnumber $condition1 group by aspen_tblpartydetails.nPartyId) t2 on aspen_tblpartydetails.nPartyId = t2.nPartyId;";
 
+        $query = $this->db->query($sql);
+
+        $arr = '';
+        if ($query->num_rows() > 0) {
+            foreach ($query->result() as $row) {
+                $arr[] = $row;
+            }
+        }
+        return $arr;
+	}
 }
 
 class factorymaterial_model extends Base_module_model

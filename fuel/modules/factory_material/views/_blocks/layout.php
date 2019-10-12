@@ -84,37 +84,36 @@
         $("#datepicker").datepicker();
     });
 
-   
+
+    function totalweight_check(withDates) {
+        var dataString = '';
+        if(withDates){
+            var selector = $('#selector').val();
+            var selector1 = $('#selector1').val();
+            dataString = 'frmdate=' + selector + '&todate=' + selector1;
+            if (selector == '' && selector1 == '') {
+                alert("Please select all the values");
+
+            }
+        }
+
+        $.ajax({
+            type: "POST",
+            url: "<?php echo fuel_url('factory_material/totalweight_check');?>/",
+            data: dataString,
+            datatype: "json",
+            success: function (msg) {
+                msg = eval(msg);
+                document.getElementById("totalinwardweight_calcualation").value = parseFloat(msg[0].tot_inweight).toFixed(3);
+                document.getElementById("totaloutwardweight_calcualation").value = parseFloat(msg[0].tot_outweight).toFixed(3);
+                document.getElementById("totalbalanceweight_calcualation").value = parseFloat(msg[0].tot_balance).toFixed(3);
+            }
+        });
+    }
+
 </script>
 
 <script>
-    /*function functionpdf(){
-        var selector = $('#selector').val();
-        var selector1 = $('#selector1').val();
-        //	alert(selector);
-        if( selector == ' ' || selector1  == ' ')
-        {
-        alert("Please select the Date ");
-        }
-        else {
-        $("#check_bar").html('<span style="font-size:20px; color:red">Please wait.. Loading PDF might take some time..</span>');
-        var dataString =  'frmdate='+selector+'&todate='+selector1;
-        $.ajax({
-               type: "POST",
-              // url : "<?php echo fuel_url('billing_statement/billing_pdf');?>/",
-		//   data: dataString,
-		   success: function(msg)
-		   {  
-			$("#check_bar").html('');
-			var dataString =  'frmdate='+selector+'&todate='+selector1;
-			var url = "<?php echo fuel_url('factory_material/billing_pdf');?>/?"+dataString;
-		    window.open(url);
-		   }  
-		}); 
-
-	}
-}*/
-
     function functionpdf(withDates) {
         var dataString = '';
         if(withDates){
@@ -125,11 +124,11 @@
                 alert("Please select all the values");
 
             }
-        } 
-       
+        }
+
 // document.getElementById("fromdate").value = document.getElementById("selector").value;
         $("#export").show();
-         
+
             $.ajax({
                 type: "POST",
                 url: "<?php echo fuel_url('factory_material/export_party');?>",
@@ -158,26 +157,19 @@
                     mediaClass += '<td>' + parseFloat(item.balance).toFixed(3) + '</td>';
                     mediaClass += '</tr>';
                  }
-                 var total = msg[msg.length-1];
-                 console.log(total);
-                 document.getElementById("totalinwardweight_calcualation").value = parseFloat(total.inweight).toFixed(3);
-                 document.getElementById("totaloutwardweight_calcualation").value = parseFloat(total.outweight).toFixed(3);
-                 document.getElementById("totalbalanceweight_calcualation").value = parseFloat(total.balance).toFixed(3);
                 mediaClass += '</table>';
 
                 $('#DynamicGridp_2').html(mediaClass);
                 $("#myTabels").tablesorter();
-               // totalweight_check();
-
-
+               totalweight_check(withDates);
             });
-        
+
     }
 
     function tableToExcel() {
-	
+
     var tab_text = '<html xmlns:x="urn:schemas-microsoft-com:office:excel">';
-    
+
 tab_text = tab_text + '<head><xml><x:ExcelWorkbook><x:ExcelWorksheets><x:ExcelWorksheet>';
 tab_text = tab_text + '<x:WorksheetOptions><x:Panes></x:Panes></x:WorksheetOptions></x:ExcelWorksheet>';
 tab_text = tab_text + '</x:ExcelWorksheets></x:ExcelWorkbook></xml></head><body>';

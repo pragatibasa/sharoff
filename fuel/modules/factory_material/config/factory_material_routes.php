@@ -1,4 +1,4 @@
-<?php 
+<?php
 //link the controller to the nav link
 
 $route[FUEL_ROUTE.'factory_material'] = FUEL_FOLDER.'/module';
@@ -19,3 +19,4 @@ $route[FUEL_ROUTE.'factory_material/checklengthexist'] = 'factory_material/check
 $route[FUEL_ROUTE.'factory_material/minlengthexist'] = 'factory_material/minlengthexist';
 $route[FUEL_ROUTE.'factory_material/maxlengthexist'] = 'factory_material/maxlengthexist';
 $route[FUEL_ROUTE.'factory_material/export_party'] = 'factory_material/export_party';
+$route[FUEL_ROUTE.'factory_material/totalweight_check'] = 'factory_material/totalweight_check';

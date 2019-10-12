@@ -127,23 +127,16 @@ class factory_material extends Fuel_base_controller
     }
 
 
-    function billing_pdf()
-    {
+    function billing_pdf() {
         $this->load->module_model(FACTORY_MATERIAL_FOLDER, 'factory_material_model');
         $billgenerateb = $this->factory_material_model->billgeneratemodel();
     }
-    /*function totalweight_check($partyname = '',$frmdate = '', $todate = '') {
-		if(empty($partyname)) { 
-			$frmdate = $_POST['frmdate'];	
-			$todate = $_POST['todate'];	
-		}
-		$wei = $this->factory_material_model->totalweight_check($partyname,$frmdate, $todate);
-		$weijson = json_encode($wei);
-		print $weijson;
-	
-	}*/
-	
 
+    function totalweight_check() {
+		$wei = $this->factory_material_model->totalweight_check();
+		$weijson = json_encode($wei);
+		echo $weijson; exit;
+	}
 }
 /* End of file */
 /* Location: ./fuel/modules/controllers*/
