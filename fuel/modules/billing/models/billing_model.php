@@ -178,7 +178,7 @@ class Billing_model extends Base_module_model {
 		if(!empty($partyname) && !empty($partyid))
 		{
 		$sqldir.="WHERE aspen_tblpartydetails.nPartyName='".$partyname."' and aspen_tblinwardentry.vIRnumber='".$partyid."'";
-		
+
 		$query = $this->db->query($sqldir);
 		}
 		$arr='';
@@ -351,7 +351,7 @@ left join aspen_tblbillingstatus on aspen_tblinwardentry.vIRnumber=aspen_tblbill
 		Left join aspen_tblinwardentry on aspen_tblinwardentry.nMatId  = aspen_tblmatdescription.nMatId
 		Left join aspen_tbl_directbill on aspen_tbl_directbill.nMatId  = aspen_tblmatdescription.nMatId
 		where aspen_tblmatdescription.vDescription='".$mat_desc."'  AND aspen_tblinwardentry.vIRnumber='".$pid."'";
-		
+
 		$query = $this->db->query($sqllv);
 		$arr='';
 		if ($query->num_rows() > 0) {
@@ -360,7 +360,7 @@ left join aspen_tblbillingstatus on aspen_tblinwardentry.vIRnumber=aspen_tblbill
 				$arr[] =$row;
 			}
 		}
-	
+
 		return $arr;
 
 	}
@@ -752,7 +752,7 @@ and aspen_tblinwardentry.vIRnumber='".$partyid."'
 		left join aspen_tblinwardentry on aspen_tblinwardentry.nMatId=aspen_tblmatdescription.nMatId
 		left join aspen_tblbillingstatus on aspen_tblinwardentry.vIRnumber=aspen_tblbillingstatus.vIRnumber
 		 where aspen_tblmatdescription.vDescription= '".$mat_desc."' and aspen_tblinwardentry.vIRnumber='".$partyid."' order by aspen_tblbillingstatus.nActualNo asc";
-	}	
+	}
 		$query = $this->db->query($sql);
 		$arr='';
 		if ($query->num_rows() > 0) {
@@ -1542,7 +1542,7 @@ function billgeneratemodelslit($coilno='',$partyname='',$description='',$lorryno
 										select CONCAT_WS('-',CONCAT_WS(',', 'To M/s.',nPartyName,vAddress1,vAddress2,vCity),nPinId) from aspen_tblpartydetails
 										right join aspen_tblinwardentry on aspen_tblinwardentry.nPartyId = aspen_tblpartydetails.nPartyId
 										where  aspen_tblinwardentry.vIRnumber='$partyid'";
-		
+
 										$resObjServiceTaxDetails = $this->db->query($sqlServiceTaxNAddressDetails);
 		$serviceTaxPercent = $resObjServiceTaxDetails->result()[0]->nPercentage;
 		$strBillingAddress = $resObjServiceTaxDetails->result()[1]->nPercentage;
@@ -1650,27 +1650,88 @@ function billgeneratemodelslit($coilno='',$partyname='',$description='',$lorryno
 			where ai.vIRnumber = '$partyid'";
 			$strquery = $this->db->query($strSql);
 
-			if($strquery->result()[0]->nBillingUpdates) {
 				$strBundleSql = "select * from aspen_tblBillBundleAssociation as abb 
 				left join aspen_tblcuttinginstruction ac on ac.nSno = abb.nBundleNumber and ac.vIRnumber = '$partyid'
 				 where nBillNumber = $billid";
 
 				$queryBundle = $this->db->query($strBundleSql);
 				$strBundle = '';
+				$strBundle1 = '';
 				if ($queryBundle->num_rows() > 0) {
 					$index = 1;
 					foreach($queryBundle->result() as $key => $row) {
 						$strBundle .= "\n".$index++.') '.$row->nLength.'mm - '.$row->nNoOfPcs.'Nos - '.$row->fbilledWeight.'M/T';
 					}
-				} 
-	
-				sendSMS($strquery->result()[0]->nBillingUpdates,'Bill raised for coil no '.$partyid."\n".$strquery->result()[0]->vDescription.' '.$strquery->result()[0]->fThickness.'mm x '.$strquery->result()[0]->fWidth.'mm'.$strBundle."\n".'Appx weight '.$txttotalweight.'M/T'."\n".'Loaded in '.$txtoutward_num."\n".'On:'.date('d/m/Y')."\n".'Invoice no:'.$billid."\n".'Driver no:'.$driverContact);
-			}
+				}
+
+				sendSMS('','Bill raised for coil no '.$partyid."\n".$strquery->result()[0]->vDescription.' '.$strquery->result()[0]->fThickness.'mm x '.$strquery->result()[0]->fWidth.'mm'.$strBundle."\n".'Appx weight '.$txttotalweight.'M/T'."\n".'Loaded in '.$txtoutward_num."\n".'On:'.date('d/m/Y')."\n".'Invoice no:'.$billid."\n".'Driver no:'.$driverContact);
+		    }
+
+
+			$strEmailHtml = '<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+						<html xmlns="http://www.w3.org/1999/xhtml">
+						<head>
+						<title>Cutting bill for coil number '.$partyid.'</title>
+						<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+						<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+						<meta name="viewport" content="width=device-width, initial-scale=1.0 " />
+						<style>
+						</style>
+						</head>';
+
+			$strEmailHtml .= '<h4>Dear Customer,</h4>';
+			$strEmailHtml .= '<h4>A Bill has been generated for coil number '.$partyid.'. The following info is for your  perusal:</h4>';
+			$strEmailHtml .= '<table style="width:80%; border-collapse: collapse;" cellpadding="5">
+						<tr>
+							<td style="border: 1px solid black;">Coil Number</td>
+							<td style="border: 1px solid black;">'.$partyid.'</td>
+						</tr>
+						<tr>
+							<td style="border: 1px solid black;">Material Description</td>
+							<td style="border: 1px solid black;">'.$strquery->result()[0]->vDescription.'</td>
+						</tr>
+						<tr>
+							<td style="border: 1px solid black;">Thickness</td>
+							<td style="border: 1px solid black;">'.$strquery->result()[0]->fThickness.' mm</td>
+						</tr>
+						<tr>
+							<td style="border: 1px solid black;">Width</td>
+							<td style="border: 1px solid black;">'.$strquery->result()[0]->fWidth.' mm</td>
+						</tr>
+						<tr>
+							<td style="border: 1px solid black;">Appx weight</td>
+							<td style="border: 1px solid black;">'.$txttotalweight.' M/T</td>
+						</tr>
+						<tr>
+							<td style="border: 1px solid black;">Loaded in vehicle no</td>
+							<td style="border: 1px solid black;">'.$txtoutward_num.'</td>
+						</tr>
+						<tr>
+							<td style="border: 1px solid black;">On</td>
+							<td style="border: 1px solid black;">'.date('d/m/Y').'</td>
+						</tr>
+						<tr>
+							<td style="border: 1px solid black;">Invoice no</td>
+							<td style="border: 1px solid black;">'.$billid.'</td>
+						</tr>
+						<tr>
+							<td style="border: 1px solid black;">Driver no</td>
+							<td style="border: 1px solid black;">'.$driverContact.'</td>
+						</tr>
+						<tr>
+							<td style="border: 1px solid black;">Bill Details</td>
+							<td style="border: 1px solid black;word-wrap: break-word;overflow-wrap: break-word;">'.$strBundle1.'</td>
+						</tr>
+					  </table>';
+
+			$strEmailHtml .= '<p>For Sharoff Steel Pvt Ltd</p>
+					  <p>Please contact our unit coordinator for any clarification.</p>';
+
+			$strEmailHtml .= '<p style="color:#999999;">This is a system generated mail. Please do not reply here.</p>';
+			$pdfname = $this->finalbillgeneratemodel($partyid,$actualnumberbundle,'', '',$billid,'', true);
+			sendEmail('', 'Bill generated for coil number '.$partyid, $strEmailHtml, $pdfname);
 		}
-		else{
-			return 0;
-		}
-	}
+
 
 
 	function directbillingbill($billid,$partyid,$pname,$cust_add,$cust_rm,$mat_desc,$thic,$wid,$len,$wei,$inv_no,$totalweight_check,$totalrate,$totalamt,$txthandling,$txtadditional_type,$txtamount_mt,$txtoutward_num,$txtscrap,$txtservicetax,$txteductax,$txtsecedutax,$txtgrandtotal,$container,$driverContact){
@@ -1748,16 +1809,74 @@ function billgeneratemodelslit($coilno='',$partyname='',$description='',$lorryno
 		$query88 = $this->db->query($sql88);
 		$query3 = $this->db->query($sql14);
 		$query66 = $this->db->query($sql66);
-			
+
 		$strSql = "select ai.*,ap.*,am.* from aspen_tblinwardentry as ai 
 		left join aspen_tblmatdescription as am on ai.nMatId = am.nMatId 
 		left join aspen_tblpartydetails as ap on ap.nPartyId = ai.nPartyId
 		where ai.vIRnumber = '".$partyid."'";
 		$strquery = $this->db->query($strSql);
 
-		if($strquery->result()[0]->nBillingUpdates) {
-			sendSMS($strquery->result()[0]->nBillingUpdates,'Bill raised for coil no '.$partyid."\n".$strquery->result()[0]->vDescription.' '.$strquery->result()[0]->fThickness.'mm x '.$strquery->result()[0]->fWidth.'mm'."\n".'Appx weight '.$totalweight_check.'kgs'."\n".'Loaded in '.$txtoutward_num."\n".'On:'.date('d/m/Y')."\n".'Invoice no:'.$billid."\n".'.Driver no:'.$driverContact);
-		}
+			sendSMS('','Bill raised for coil no '.$partyid."\n".$strquery->result()[0]->vDescription.' '.$strquery->result()[0]->fThickness.'mm x '.$strquery->result()[0]->fWidth.'mm'."\n".'Appx weight '.$totalweight_check.'kgs'."\n".'Loaded in '.$txtoutward_num."\n".'On:'.date('d/m/Y')."\n".'Invoice no:'.$billid."\n".'.Driver no:'.$driverContact);
+
+
+            $strEmailHtml = '<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+                            <html xmlns="http://www.w3.org/1999/xhtml">
+                            <head>
+                            <title>Slitting bill for coil number '.$partyid.'</title>
+                            <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+                            <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+                            <meta name="viewport" content="width=device-width, initial-scale=1.0 " />
+                            <style>
+                            </style>
+                            </head>';
+
+            $strEmailHtml .= '<h4>Dear Customer,</h4>';
+            $strEmailHtml .= '<h4>A Bill has been generated for coil number '.$partyid.'. The following info is for your  perusal:</h4>';
+            $strEmailHtml .= '<table style="width:80%; border-collapse: collapse;" cellpadding="5">
+                            <tr>
+                                <td style="border: 1px solid black;">Coil Number</td>
+                                <td style="border: 1px solid black;">'.$partyid.'</td>
+                            </tr>
+                            <tr>
+                                <td style="border: 1px solid black;">Material Description</td>
+                                <td style="border: 1px solid black;">'.$strquery->result()[0]->vDescription.'</td>
+                            </tr>
+                            <tr>
+                                <td style="border: 1px solid black;">Thickness</td>
+                                <td style="border: 1px solid black;">'.$strquery->result()[0]->fThickness.' mm</td>
+                            </tr>
+                            <tr>
+                                <td style="border: 1px solid black;">Width</td>
+                                <td style="border: 1px solid black;">'.$strquery->result()[0]->fWidth.' mm</td>
+                            </tr>
+                            <tr>
+                                <td style="border: 1px solid black;">Appx weight</td>
+                                <td style="border: 1px solid black;">'.$totalweight_check.' M/T</td>
+                            </tr>
+                            <tr>
+                                <td style="border: 1px solid black;">Loaded in vehicle no</td>
+                                <td style="border: 1px solid black;">'.$txtoutward_num.'</td>
+                            </tr>
+                            <tr>
+                                <td style="border: 1px solid black;">On</td>
+                                <td style="border: 1px solid black;">'.date('d/m/Y').'</td>
+                            </tr>
+                            <tr>
+                                <td style="border: 1px solid black;">Invoice no</td>
+                                <td style="border: 1px solid black;">'.$billid.'</td>
+                            </tr>
+                            <tr>
+                                <td style="border: 1px solid black;">Driver no</td>
+                                <td style="border: 1px solid black;">'.$driverContact.'</td>
+                            </tr>
+                          </table>';
+
+            $strEmailHtml .= '<p>For Sharoff Steel Pvt Ltd</p>
+                          <p>Please contact our unit coordinator for any clarification.</p>';
+
+            $strEmailHtml .= '<p style="color:#999999;">This is a system generated mail. Please do not reply here.</p>';
+            $pdfname = $this->billing_direct($billid,$partyid, $_POST['gstType'], true);
+            sendEmail('', 'Bill generated for coil number '.$partyid, $strEmailHtml, $pdfname);
 
 	}
 
@@ -2076,14 +2195,13 @@ function billgeneratemodelslit($coilno='',$partyname='',$description='',$lorryno
 		$query4 = $this->db->query($sql15);
 		$queryBundleBillingAssociationInsert = $this->db->query($sqlBundleBillingAssociationInsert);
 		$query33 = $this->db->query($sql33);
-		
+
 		$strSql = "select ai.*,ap.*,am.* from aspen_tblinwardentry as ai 
 		left join aspen_tblmatdescription as am on ai.nMatId = am.nMatId 
 		left join aspen_tblpartydetails as ap on ap.nPartyId = ai.nPartyId
 		where ai.vIRnumber = '".$partyid."'";
 		$strquery = $this->db->query($strSql);
 
-		if($strquery->result()[0]->nBillingUpdates) {
 			$strBundleSql = "select nWidth,count(nWidth) as count,sum(nWeight) as sum from aspen_tblBillBundleAssociation as abb  left join aspen_tblslittinginstruction as asi on asi.nSno = abb.nBundleNumber where abb.nBillNumber = $billid and asi.vIRnumber = '".$partyid."' and asi.nSno in ($bundleIds) group by nWidth,nLength;";
 
 			$queryBundle = $this->db->query($strBundleSql);
@@ -2093,10 +2211,72 @@ function billgeneratemodelslit($coilno='',$partyname='',$description='',$lorryno
 				foreach($queryBundle->result() as $key => $row) {
 					$strBundle .= "\n".$index++.') '.$row->nWidth.'mm - '.$row->count.'Nos - '.($row->sum).'kgs';
 				}
-			} 
+			}
 
-			sendSMS($strquery->result()[0]->nBillingUpdates,'Bill raised for coil no '.$partyid."\n".$strquery->result()[0]->vDescription.' '.$strquery->result()[0]->fThickness.'mm x '.$strquery->result()[0]->fWidth.'mm'.$strBundle."\n".'Appx weight '.$totalweight_check.'kgs'."\n".'Loaded in '.$txtoutward_num."\n".'On:'.date('d/m/Y')."\n".'Invoice no:'.$billid."\n".'Driver no:'.$driverContact);
-		}
+			sendSMS('','Bill raised for coil no '.$partyid."\n".$strquery->result()[0]->vDescription.' '.$strquery->result()[0]->fThickness.'mm x '.$strquery->result()[0]->fWidth.'mm'.$strBundle."\n".'Appx weight '.$totalweight_check.'kgs'."\n".'Loaded in '.$txtoutward_num."\n".'On:'.date('d/m/Y')."\n".'Invoice no:'.$billid."\n".'Driver no:'.$driverContact);
+
+            $strEmailHtml = '<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+                            <html xmlns="http://www.w3.org/1999/xhtml">
+                            <head>
+                            <title>Slitting bill for coil number '.$partyid.'</title>
+                            <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+                            <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+                            <meta name="viewport" content="width=device-width, initial-scale=1.0 " />
+                            <style>
+                            </style>
+                            </head>';
+
+            $strEmailHtml .= '<h4>Dear Customer,</h4>';
+            $strEmailHtml .= '<h4>A Bill has been generated for coil number '.$partyid.'. The following info is for your  perusal:</h4>';
+            $strEmailHtml .= '<table style="width:80%; border-collapse: collapse;" cellpadding="5">
+                            <tr>
+                                <td style="border: 1px solid black;">Coil Number</td>
+                                <td style="border: 1px solid black;">'.$partyid.'</td>
+                            </tr>
+                            <tr>
+                                <td style="border: 1px solid black;">Material Description</td>
+                                <td style="border: 1px solid black;">'.$strquery->result()[0]->vDescription.'</td>
+                            </tr>
+                            <tr>
+                                <td style="border: 1px solid black;">Thickness</td>
+                                <td style="border: 1px solid black;">'.$strquery->result()[0]->fThickness.' mm</td>
+                            </tr>
+                            <tr>
+                                <td style="border: 1px solid black;">Width</td>
+                                <td style="border: 1px solid black;">'.$strquery->result()[0]->fWidth.' mm</td>
+                            </tr>
+                            <tr>
+                                <td style="border: 1px solid black;">Appx weight</td>
+                                <td style="border: 1px solid black;">'.$totalweight_check.' M/T</td>
+                            </tr>
+                            <tr>
+                                <td style="border: 1px solid black;">Loaded in vehicle no</td>
+                                <td style="border: 1px solid black;">'.$txtoutward_num.'</td>
+                            </tr>
+                            <tr>
+                                <td style="border: 1px solid black;">On</td>
+                                <td style="border: 1px solid black;">'.date('d/m/Y').'</td>
+                            </tr>
+                            <tr>
+                                <td style="border: 1px solid black;">Invoice no</td>
+                                <td style="border: 1px solid black;">'.$billid.'</td>
+                            </tr>
+                            <tr>
+                                <td style="border: 1px solid black;">Driver no</td>
+                                <td style="border: 1px solid black;">'.$driverContact.'</td>
+                            </tr>
+                            <tr>
+                                <td style="border: 1px solid black;">Bill Details</td>
+                                <td style="border: 1px solid black;word-wrap: break-word;overflow-wrap: break-word;">'.$strBundle1.'</td>
+                            </tr>
+                          </table>';
+
+            $strEmailHtml .= '<p>For '.$this->companyData->company_name.'.</p>
+                          <p>Please contact our unit coordinator for any clarification.</p>';
+
+            $strEmailHtml .= '<p style="color:#999999;">This is a system generated mail. Please do not reply here.</p>';
+            $pdfname = $this->slittingpdf($partyid, $billid, $_POST['gstType'], true);
+            sendEmail('', 'Bill generated for coil number '.$partyid, $strEmailHtml, $pdfname);
 	}
 
 	function savebundlemodel(){
@@ -2110,7 +2290,7 @@ function billgeneratemodelslit($coilno='',$partyname='',$description='',$lorryno
 	}
 
 
-function finalbillgeneratemodel($partyid='',$actualnumberbundle='',$cust_add='',$cust_rm='',$billid='',$gstType) {
+function finalbillgeneratemodel($partyid='',$actualnumberbundle='',$cust_add='',$cust_rm='',$billid='',$gstType,$returnPdf = false) {
 	$sqlbilling= "select aspen_tblbilldetails.nBillNo as billnumber,
 	DATE_FORMAT(aspen_tblbilldetails.dBillDate, '%d/%m/%Y') as billdate,
 	aspen_tblpartydetails.nPartyName as partyname,
@@ -2351,10 +2531,14 @@ EOD;
 		// Add Javascript code
 		$pdf->IncludeJS($js);*/
 
-	$pdf->writeHTML($html, true, 0, true, true);
-	$pdf->Ln();
+		$pdf->writeHTML($html, true, 0, true, true);
+        $pdf->Ln();
 		$pdf->lastPage();
-		$pdf->Output($pdfname, 'I');
+		if($returnPdf) {
+            $pdf->Output($pdfname, 'F');
+            return $pdfname;
+        } else
+            $pdf->Output($pdfname, 'I');
 	}
 
 
@@ -2826,7 +3010,7 @@ EOD;
 		$pdf->Output($pdfname, 'I');
 	}
 
-	function slittingpdf($partyid='',$billnumber='',$gstType) {
+	function slittingpdf($partyid='',$billnumber='',$gstType,$returnPdf = false) {
 
 		$sqlbilling= "select aspen_tblbilldetails.nBillNo as billnumber,
 		DATE_FORMAT(aspen_tblbilldetails.dBillDate, '%d-%m-%Y') as billdate,
@@ -3076,7 +3260,11 @@ $gstSection = '';
 		$pdf->writeHTML($html, true, 0, true, true);
 		$pdf->Ln();
 		$pdf->lastPage();
-		$pdf->Output($pdfname, 'I');
+        if($returnPdf) {
+            $pdf->Output($pdfname, 'F');
+            return $pdfname;
+        } else
+            $pdf->Output($pdfname, 'I');
 	}
 
 /*	function billing_direct($billid='',$partyid='',$pname='',$cust_add='',$cust_rm='',$mat_desc='',$thic='',$wid='',$len='',$wei='',$inv_no='',$totalweight_check='',$totalrate='',$totalamt='',$txthandling='',$txtadditional_type='',$txtamount_mt='',$txtoutward_num='',$txtscrap='',$txtservicetax='',$txteductax='',$txtsecedutax='',$txtgrandtotal='',$container='') {
@@ -3327,69 +3515,125 @@ $gstSection = '';
 	}
 	*/
 
-	function billing_direct($billid='',$partyid='',$pname='',$cust_add='',$cust_rm='',$mat_desc='',$thic='',$wid='',$len='',$wei='',$inv_no='',$totalweight_check='',$totalrate='',$totalamt='',$txthandling='',$txtadditional_type='',$txtamount_mt='',$txtoutward_num='',$txtscrap='',$txtservicetax='',$txteductax='',$txtsecedutax='',$txtgrandtotal='',$container='',$gstType)
+    function billing_direct($billid='',$partyid='',$gstType, $returnPdf = '')
 	{
-	$sqlrpt = "select aspen_tblbilldetails.vOutLorryNo as lorryno,
-	aspen_tblbilldetails.fTotalWeight as totalweight,
-	aspen_tblbilldetails.ntotalpcs as totalpcs,
-	aspen_tblbilldetails.ntotalamount as totamount,
-	aspen_tblbilldetails.vBillType as billType,
-	aspen_tblpartydetails.nPartyName as pname,
-	aspen_tblmatdescription.vDescription as description,
-	aspen_tblinwardentry.fWidth as wid,
-	aspen_tblinwardentry.fThickness as thic,
-	aspen_tblinwardentry.vIRnumber as coilno
-	from aspen_tblinwardentry
-		LEFT JOIN aspen_tblbilldetails  ON aspen_tblbilldetails.vIRnumber=aspen_tblinwardentry.vIRnumber
-		LEFT JOIN aspen_tblmatdescription  ON aspen_tblmatdescription.nMatId=aspen_tblinwardentry.nMatId
-		LEFT JOIN aspen_tblpartydetails ON aspen_tblpartydetails .nPartyId=aspen_tblinwardentry.nPartyId
-		where
-    aspen_tblpartydetails.nPartyName='".$pname."' and aspen_tblinwardentry.vIRnumber='".$partyid."'";
+        $sqlrpt = "SELECT 
+                aspen_tblbilldetails.vOutLorryNo AS lorryno,
+                aspen_tblbilldetails.fTotalWeight AS totalweight,
+                aspen_tblbilldetails.ntotalpcs AS totalpcs,
+                aspen_tblbilldetails.ntotalamount AS totamount,
+                aspen_tblbilldetails.vBillType AS billType,
+                aspen_tblpartydetails.nPartyName AS pname,
+                aspen_tblmatdescription.vDescription AS description,
+                aspen_tblinwardentry.fWidth AS wid,
+                aspen_tblinwardentry.fThickness AS thic,
+                aspen_tblinwardentry.vIRnumber AS coilno,                
+                aspen_tblinwardentry.vInvoiceNo AS inv_no,
+                aspen_tblbilldetails.fTotalWeight AS totalweight_check,
+                aspen_tblbilldetails.fWeightAmount as txthandling,
+                aspen_tblbilldetails.nsubtotal as totalamt,
+                aspen_tblbilldetails.fServiceTax as totalservicetax,
+                aspen_tblbilldetails.vAdditionalChargeType as txtadditional_type,
+                aspen_tblbilldetails.fAmount as txtamount_mt,
+                aspen_tblbilldetails.vOutLorryNo as txtoutward_num,   
+                aspen_tblbilldetails.nServiceTaxPercent as txtservicetax,
+                aspen_tblbilldetails.fGrantTotal as txtgrandtotal,
+                aspen_tblbilldetails.grandtot_words as container
+            FROM
+                aspen_tblbilldetails
+                    LEFT JOIN
+                aspen_tblinwardentry ON aspen_tblinwardentry.vIRnumber = aspen_tblbilldetails.vIRnumber
+                    LEFT JOIN
+                aspen_tblmatdescription ON aspen_tblmatdescription.nMatId = aspen_tblinwardentry.nMatId
+                    LEFT JOIN
+                aspen_tblpartydetails ON aspen_tblpartydetails.nPartyId = aspen_tblinwardentry.nPartyId
+            WHERE
+                aspen_tblinwardentry.vIRnumber = '".$partyid."' and nBillNo =$billid";
 
-		$querymain = $this->db->query($sqlrpt);
+        $querymain = $this->db->query($sqlrpt);
 
-		$sql1="Select now() as billdate,
-		dReceivedDate as inwarddate,
-		vAddress1 as add1,
-		vAddress1 as add2,
-		vCity as city, nPinId as pincode,
-		nTinNumber as tin_number,
-		nCgstNumber as cgstNumber
-		from aspen_tblinwardentry LEFT JOIN aspen_tblpartydetails ON aspen_tblpartydetails.nPartyId=aspen_tblinwardentry.nPartyId where
-    aspen_tblpartydetails.nPartyName='".$pname."' and aspen_tblinwardentry.vIRnumber='".$partyid."'";
+        $sql1="SELECT 
+                    NOW() AS billdate,
+                    dReceivedDate AS inwarddate,
+                    vAddress1 AS add1,
+                    vAddress1 AS add2,
+                    vCity AS city,
+                    nPinId AS pincode,
+                    nTinNumber AS tin_number,
+                    nCgstNumber AS cgstNumber
+                FROM
+                    aspen_tblinwardentry
+                        LEFT JOIN
+                    aspen_tblpartydetails ON aspen_tblpartydetails.nPartyId = aspen_tblinwardentry.nPartyId
+                WHERE
+                    aspen_tblinwardentry.vIRnumber = '".$partyid."'";
 
-    	$querymain1 = $this->db->query($sql1);
+        $querymain1 = $this->db->query($sql1);
 
 		$serviceTaxPercent = $this->getServiceTaxPercent();
 
-		$inwarddate = date('d-m-Y',strtotime($querymain1->row(0)->inwarddate));
-		$tin_number = $querymain1->row(0)->tin_number;
-		$cgstNumber = $querymain1->row(0)->cgstNumber;
-		$billType = $querymain->row(0)->billType;
-		$billdate = date( 'd-m-Y',strtotime($querymain1->row(0)->billdate));
-		$add1= $querymain1->row(0)->add1;
-		$add2= $querymain1->row(0)->add2;
-		$city= $querymain1->row(0)->city;
-		$pinCode = $querymain1->row(0)->pincode;
+        $inwarddate = date('d-m-Y',strtotime($querymain1->row(0)->inwarddate));
+        $tin_number = $querymain1->row(0)->tin_number;
+        $cgstNumber = $querymain1->row(0)->cgstNumber;
+        $billType = $querymain->row(0)->billType;
+        $billdate = date( 'd-m-Y',strtotime($querymain1->row(0)->billdate));
+        $add1= $querymain1->row(0)->add1;
+        $add2= $querymain1->row(0)->add2;
+        $city= $querymain1->row(0)->city;
+        $pinCode = $querymain1->row(0)->pincode;
+        $mat_desc = $querymain->row(0)->description;
+        $thic = $querymain->row(0)->thic;
+        $wid = $querymain->row(0)->wid;
+        $inv_no = $querymain->row(0)->inv_no;
+        $totalweight_check = $querymain->row(0)->totalweight_check;
+        $txthandling = $querymain->row(0)->txthandling;
+        $totalamt = $querymain->row(0)->totalamt;
+        $txtadditional_type = $querymain->row(0)->txtadditional_type;
+        $txtamount_mt = $querymain->row(0)->txtamount_mt;
+        $txtoutward_num = $querymain->row(0)->txtoutward_num;
+        $txtservicetax = $querymain->row(0)->totalservicetax;
+        $txtgrandtotal = $querymain->row(0)->txtgrandtotal;
+        $container = $querymain->row(0)->container;
+        $pname = $querymain->row(0)->pname;
 
-		$pdf = new TCPDF(PDF_PAGE_ORIENTATION, PDF_UNIT, PDF_PAGE_FORMAT, true, 'UTF-8', false);
-		$pdfname= 'loadingslip_'.$pname.'.pdf';
-		$resolution= array(72, 150);
-		$pdf->SetAuthor('ASPEN');
-		$pdf->SetTitle('Invoice');
-		$pdf->SetSubject('Invoice');
-		$pdf->SetKeywords('Aspen, bill, invoice');
-		$pdf->setHeaderFont(Array(PDF_FONT_NAME_MAIN, '', PDF_FONT_SIZE_MAIN));
-		$pdf->setFooterFont(Array(PDF_FONT_NAME_DATA, '', PDF_FONT_SIZE_DATA));
-		$pdf->SetDefaultMonospacedFont(PDF_FONT_MONOSPACED);
-		$pdf->SetMargins(PDF_MARGIN_LEFT, PDF_MARGIN_TOP, PDF_MARGIN_RIGHT);
-		$pdf->SetHeaderMargin(PDF_MARGIN_HEADER);
-		$pdf->SetFooterMargin(PDF_MARGIN_FOOTER);
-		$pdf->SetAutoPageBreak(TRUE, PDF_MARGIN_BOTTOM);
-		$pdf->setImageScale(PDF_IMAGE_SCALE_RATIO);
-		$pdf->SetFont('helvetica', '', 7);
-		$pdf->AddPage();
-		//$coilno='',$partyname='',$description='',$lorryno='',$totalpcs='',$totalweight='',$totamount=''
+        if($gstType == 'Within') {
+            $gstSection	= '<tr>
+							<td width="89%">
+							<h3><b>CGST @ 9%</b></h3>
+							</td> <td><h3>'.($txtservicetax/2).'</h3></td>
+						</tr>
+						<tr>
+							<td width="89%">
+							<h3><b>SGST @ 9%</b></h3>
+							</td> <td><h3>'.($txtservicetax/2).'</h3></td>
+						</tr>';
+
+        } else if($gstType == 'Inter') {
+            $gstSection	= '<tr>
+							<td width="89%">
+							<h3><b>IGST @ 18%</b></h3>
+							</td> <td><h3>'.ceil($txtservicetax).'</h3></td>
+						</tr>';
+        }
+
+        $pdf = new TCPDF(PDF_PAGE_ORIENTATION, PDF_UNIT, PDF_PAGE_FORMAT, true, 'UTF-8', false);
+        $pdfname= 'DirectBill'.$partyid.'.pdf';
+        $resolution= array(72, 150);
+        $pdf->SetAuthor('ASPEN');
+        $pdf->SetTitle('Invoice');
+        $pdf->SetSubject('Invoice');
+        $pdf->SetKeywords('Aspen, bill, invoice');
+        $pdf->setHeaderFont(Array(PDF_FONT_NAME_MAIN, '', PDF_FONT_SIZE_MAIN));
+        $pdf->setFooterFont(Array(PDF_FONT_NAME_DATA, '', PDF_FONT_SIZE_DATA));
+        $pdf->SetDefaultMonospacedFont(PDF_FONT_MONOSPACED);
+        $pdf->SetMargins(PDF_MARGIN_LEFT, PDF_MARGIN_TOP, PDF_MARGIN_RIGHT);
+        $pdf->SetHeaderMargin(PDF_MARGIN_HEADER);
+        $pdf->SetFooterMargin(PDF_MARGIN_FOOTER);
+        $pdf->SetAutoPageBreak(TRUE, PDF_MARGIN_BOTTOM);
+        $pdf->setImageScale(PDF_IMAGE_SCALE_RATIO);
+        $pdf->SetFont('helvetica', '', 7);
+        $pdf->AddPage();
+        //$coilno='',$partyname='',$description='',$lorryno='',$totalpcs='',$totalweight='',$totamount=''
 
 $html = '<table width="100%"  cellspacing="0" cellpadding="5" border="0">
 			<tr>
@@ -3420,7 +3664,7 @@ $html = '<table width="100%"  cellspacing="0" cellpadding="5" border="0">
 				<td width="30%" align:"left">
 					<h3>To M/s., &nbsp; '.$pname.' , '.$add1.' &nbsp;'.$add2.',&nbsp;'.$city.'-'.$pinCode.'</h3>
 				</td>
-				<td width="40%" align="center"><h3> Desp. By Lorry No. : '.$txtoutward_num.'</h3> </td>
+				<td width="40%" align="center"><h3> Desp. By Vehicle No. : '.$txtoutward_num.'</h3> </td>
 				<td width="33.33%" align:"right"><h3>Delivery: Full &nbsp; Part-1&nbsp; Part-2</h3></td>
 			</tr>
 			<tr><td></td></tr>
@@ -3433,7 +3677,7 @@ $html = '<table width="100%"  cellspacing="0" cellpadding="5" border="0">
 			</tr></table>';
 
 
-		$html .= '
+        $html .= '
 		<hr color=#00CC33 size=5 width=100>
 		<table cellspacing="0" cellpadding="3" border="0px" width="100%">
 		<tr>
@@ -3489,10 +3733,14 @@ $html = '<table width="100%"  cellspacing="0" cellpadding="5" border="0">
 		</tr>
 
 		</table>';
-		$pdf->writeHTML($html, true, 0, true, true);
-		$pdf->Ln();
-		$pdf->lastPage();
-		$pdf->Output($pdfname, 'I');
+        $pdf->writeHTML($html, true, 0, true, true);
+        $pdf->Ln();
+        $pdf->lastPage();
+        if($returnPdf) {
+            $pdf->Output($pdfname, 'F');
+            return $pdfname;
+        } else
+            $pdf->Output($pdfname, 'I');
 	}
 
 		/*function directbillingmodelpdf($partyid='') {

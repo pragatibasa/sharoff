@@ -8,21 +8,21 @@ class Billing_instruction_model extends Base_module_model {
     {
         parent::__construct('aspen_tblbilldetails');// table name
     }
-	
+
 	function example(){
 		return true;
 	}
-	
+
 	function delete_bundlenumber($bundle='',$coilnumber='') {
 		$sql ="DELETE FROM aspen_tblbillingstatus WHERE nSno = '".$bundle."' and vIRnumber='".$coilnumber."'";
 		$query = $this->db->query($sql);
-	}	
-	
+	}
+
 	 function billintable_model($pid){
 		 if(isset( $POST['pid'])) {
 			$pid = $POST['pid'];
 		  }
-		  $sql = "select * from aspen_tblcuttinginstruction "; 
+		  $sql = "select * from aspen_tblcuttinginstruction ";
 		  if(isset($pid)) {
 			$sql.="WHERE aspen_tblcuttinginstruction.vIRnumber='".$pid."'";
 		  }
@@ -34,10 +34,10 @@ class Billing_instruction_model extends Base_module_model {
 				{
 					$arra[] =$row;
 				}
-			} 
+			}
 		return $arra;
 	  }
-	  
+
 	function processchk($pid){
 	$sqllv = "SELECT aspen_tblinwardentry.vprocess as process FROM aspen_tblinwardentry WHERE vIRnumber='".$pid."'";
 		$query = $this->db->query($sqllv);
@@ -47,10 +47,10 @@ class Billing_instruction_model extends Base_module_model {
 			{
 				$arr[] =$row;
 			}
-		}	
+		}
 		return $arr;
 	}
-	
+
 	function billistdetails($partyid = '') {
 	$sqlci = "SELECT aspen_tblbillingstatus.nSno as bundlenumber,round(nBundleweight,3)
 				 as weight,aspen_tblcuttinginstruction.nLength as length,aspen_tblcuttinginstruction.vIRnumber as coilnumber
@@ -75,7 +75,7 @@ class Billing_instruction_model extends Base_module_model {
 		}
 		return $arr;
 	}
-	
+
 	function loadfolderlistslit($partyid = '') {
 		$sqlsi = "SELECT aspen_tblslittinginstruction.nSno as slitnumber,
 					aspen_tblslittinginstruction.nLength as length,
@@ -99,11 +99,11 @@ class Billing_instruction_model extends Base_module_model {
 		}
 		return $arr;
 	}
-	
+
 	function loadfolderlistrecoil($partyid = '') {
 	$sqlsi = "select Distinct aspen_tblrecoiling.nSno as recoilnumber,aspen_tblrecoiling.nNoOfRecoils as noofrecoil,aspen_tblrecoiling.dStartDate as sdate,aspen_tblrecoiling.dEndDate as edate,aspen_tblbillingstatus.nActualNo as noofsheetsbilled ,aspen_tblbillingstatus.vBillingStatus as billingstatus from aspen_tblrecoiling
 		  LEFT JOIN aspen_tblbillingstatus  ON aspen_tblrecoiling.vIRnumber=aspen_tblbillingstatus.vIRnumber  WHERE  aspen_tblrecoiling.nSno = aspen_tblbillingstatus.nSno and aspen_tblrecoiling.vIRnumber='".$partyid."' and  aspen_tblrecoiling.vStatus =  'Ready To Bill' Group by  aspen_tblbillingstatus.nSno";
-		
+
 	$query = $this->db->query($sqlsi);
 		$arr='';
 		if ($query->num_rows() > 0)
@@ -116,7 +116,7 @@ class Billing_instruction_model extends Base_module_model {
 		return $arr;
 	}
 
-	
+
 	function billingviewmodel($pid, $pname, $process){
 		if(isset($pid) && isset($pname)) {
 			$partyname = $pname;
@@ -126,14 +126,14 @@ class Billing_instruction_model extends Base_module_model {
 		$sqlCheckInwardEntryStatus = 'SELECT vStatus from aspen_tblinwardentry WHERE vIRnumber="'.$partyid.'"';
 		$checkInwardsStatusQuery = $this->db->query($sqlCheckInwardEntryStatus );
 		$checkInwardsStatusRow = $checkInwardsStatusQuery->result();
-		
+
 		if( $checkInwardsStatusRow[0]->vStatus == 'RECEIVED' || $process != '') {
 			$sql ="SELECT aspen_tblinwardentry.vIRnumber,aspen_tblmatdescription.vDescription,aspen_tblinwardentry.fThickness,aspen_tblinwardentry.fWidth,round(fQuantity,3) as fQuantity, aspen_tblinwardentry.vInvoiceNo,aspen_tblinwardentry.vStatus,aspen_tblinwardentry.fpresent
 			FROM aspen_tblinwardentry LEFT JOIN aspen_tblmatdescription ON aspen_tblmatdescription.nMatId = aspen_tblinwardentry.nMatId
 			LEFT JOIN aspen_tblpartydetails ON aspen_tblpartydetails.nPartyId = aspen_tblinwardentry.nPartyId ";
 			if(!empty($partyname) && !empty($partyid)) {
 				$sql.="WHERE aspen_tblpartydetails.nPartyName='".$partyname."' and aspen_tblinwardentry.vIRnumber='".$partyid."' ";
-			}	
+			}
 		} else {
 			$sql = "select inw.vIRnumber,
 					aspen_tblmatdescription.vDescription,
@@ -146,11 +146,11 @@ class Billing_instruction_model extends Base_module_model {
 					LEFT JOIN aspen_tblmatdescription ON aspen_tblmatdescription.nMatId = inw.nMatId
 					LEFT JOIN aspen_tblpartydetails ON aspen_tblpartydetails.nPartyId = inw.nPartyId
 					left join (select 
-					coalesce(aspen_tblcuttinginstruction.vIRnumber,$partyid) as vIRnumber,coalesce(round(sum(nBundleweight-(nBundleweight*nBilledNumber/nNoOfPieces)),2),0) as fQuantity from aspen_tblcuttinginstruction left join aspen_tblbillingstatus on aspen_tblcuttinginstruction.vIRnumber = aspen_tblbillingstatus.vIRnumber and aspen_tblcuttinginstruction.nSno = aspen_tblbillingstatus.nSno where aspen_tblcuttinginstruction.vIRnumber =$partyid) t on t.vIRnumber = inw.vIRnumber
-					left join (select coalesce(aspen_tblslittinginstruction.vIRnumber,$partyid) as vIRnumber,coalesce(sum(nWeight),0) as nWeight from aspen_tblslittinginstruction LEFT JOIN aspen_tblbillingstatus ON aspen_tblslittinginstruction.vIRnumber=aspen_tblbillingstatus.vIRnumber WHERE aspen_tblslittinginstruction.nSno = aspen_tblbillingstatus.nSno and aspen_tblslittinginstruction.vIRnumber='$partyid' and aspen_tblbillingstatus.vBillingStatus != 'Billed') p on p.vIRnumber = inw.vIRnumber 
+					coalesce(aspen_tblcuttinginstruction.vIRnumber, '$partyid') as vIRnumber,coalesce(round(sum(nBundleweight-(nBundleweight*nBilledNumber/nNoOfPieces)),2),0) as fQuantity from aspen_tblcuttinginstruction left join aspen_tblbillingstatus on aspen_tblcuttinginstruction.vIRnumber = aspen_tblbillingstatus.vIRnumber and aspen_tblcuttinginstruction.nSno = aspen_tblbillingstatus.nSno where aspen_tblcuttinginstruction.vIRnumber = '$partyid') t on t.vIRnumber = inw.vIRnumber
+					left join (select coalesce(aspen_tblslittinginstruction.vIRnumber, '$partyid') as vIRnumber,coalesce(sum(nWeight),0) as nWeight from aspen_tblslittinginstruction LEFT JOIN aspen_tblbillingstatus ON aspen_tblslittinginstruction.vIRnumber=aspen_tblbillingstatus.vIRnumber WHERE aspen_tblslittinginstruction.nSno = aspen_tblbillingstatus.nSno and aspen_tblslittinginstruction.vIRnumber='$partyid' and aspen_tblbillingstatus.vBillingStatus != 'Billed') p on p.vIRnumber = inw.vIRnumber 
 					where inw.vIRnumber='$partyid'";
 		}
-		
+
 
 		$query = $this->db->query($sql);
 		$arr='';
@@ -172,7 +172,7 @@ class Billing_instruction_model extends Base_module_model {
 		LEFT JOIN aspen_tblpartydetails ON aspen_tblpartydetails.nPartyId = aspen_tblinwardentry.nPartyId ";
 		if(!empty($partyname) && !empty($partyid)) {
 		$sql.="WHERE aspen_tblpartydetails.nPartyName='".$partyname."' and aspen_tblinwardentry.vIRnumber='".$partyid."' ";
-		}	
+		}
 		$query = $this->db->query($sql);
 		$arr='';
 		if ($query->num_rows() > 0)
@@ -190,7 +190,7 @@ class Billing_instruction_model extends Base_module_model {
 		$checkquery = $this->db->query($checkdata);
 		return $checkquery->result()[0]->count;
 	}
-} 
+}
 class Billinginstruction_model extends Base_module_record {
- 
+
 }

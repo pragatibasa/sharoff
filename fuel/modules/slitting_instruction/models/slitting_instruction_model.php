@@ -1,21 +1,21 @@
-<?php  
+<?php
 if (!defined('BASEPATH')) exit('No direct script access allowed');
- 
+
 class slitting_instruction_model extends Base_module_model {
-	
+
  	public $required = array('vIRnumber','nSno','dDate','nLength','nNoOfPieces','nTotalWeight');
 	protected $key_field = 'vIRnumber';
-	
+
     function __construct()
     {
         parent::__construct('aspen_tblslittinginstruction');
     }
-		
+
 	function getcoildetails() {
-		
+
 		$this->save($save);
 	}
-	
+
 	function formdisplay()
 	{
 		$fields['nPartyName']['label'] = 'Party Name';
@@ -41,17 +41,17 @@ class slitting_instruction_model extends Base_module_model {
 			{
 				$arr[] =$row;
 			}
-		}	
+		}
 
 		return $arr;
 	}
-	
+
 	function delete_slitnumbermodel($Slitingnumber='', $Pid='') {
 		$sql ="DELETE FROM aspen_tblslittinginstruction WHERE vIRnumber ='".$Pid."' and nSno = '".$Slitingnumber."'";
 		$query = $this->db->query($sql);
 	}
-	
-  
+
+
 	function editbundlemodel(){
 		if(isset( $_POST['bundlenumber']) && isset( $_POST['width_v'])) {
 			$bundlenumber = $_POST['bundlenumber'];
@@ -63,36 +63,96 @@ class slitting_instruction_model extends Base_module_model {
 
     	$query1=$this->db->query ($sql);
 	}
-	 
-	function savechangemodel (){ 
+
+	function savechangemodel (){
 		$sql = $this->db->query ("UPDATE aspen_tblslittinginstruction SET vStatus='WIP-Slitting' WHERE vIRnumber='".$_POST['pid']."' and nSno!=0");
 		$sql = $this->db->query ("UPDATE aspen_tblinwardentry SET vprocess='Slitting',vStatus='Work In Progress' WHERE vIRnumber='".$_POST['pid']."'");
-		
+
 		$strSql = "select ai.*,ap.*,am.* from aspen_tblinwardentry as ai 
 		left join aspen_tblmatdescription as am on ai.nMatId = am.nMatId 
 		left join aspen_tblpartydetails as ap on ap.nPartyId = ai.nPartyId
 		where ai.vIRnumber = '".$_POST['pid']."'";
 		$query = $this->db->query($strSql);
 
-		if($query->result()[0]->nProcessUpdates) {
-			$strBundleSql = "select count(nWidth) as count, nWidth,sum(nWeight) as totalWeight from aspen_tblslittinginstruction where vIRnumber='".$_POST['pid']."' group by nWidth With Rollup";
-			$queryBundle = $this->db->query($strBundleSql);
-			if ($queryBundle->num_rows() > 0) {
-				$strBundle = '';
-				$index = 1;
-				$totalWeight = 0;
-				foreach($queryBundle->result() as $key => $row) {
-					if($row->nWidth !== NULL)
-						$strBundle .= '\n'.$index++.') '.$row->nWidth.'mm - '.$row->count.'Nos - '.$row->totalWeight.'M/T';
-					else 
-						$totalWeight = $row->totalWeight;
-				}
-			} 
+        $strBundleSql = "select count(nWidth) as count, nWidth,sum(nWeight) as totalWeight from aspen_tblslittinginstruction where vIRnumber='".$_POST['pid']."' group by nWidth With Rollup";
+        $queryBundle = $this->db->query($strBundleSql);
+        if ($queryBundle->num_rows() > 0) {
+            $strBundle = '';
+            $strBundle1 = '';
+            $index = 1;
+            $totalWeight = 0;
+            foreach($queryBundle->result() as $key => $row) {
+                if($row->nWidth !== NULL) {
+                    $strBundle .= '%n' . $index . ') ' . $row->nWidth . 'mm - ' . $row->count . 'Nos - ' . $row->totalWeight . 'kgs';
+                    $strBundle1 .= $index . ') ' . $row->nWidth . 'mm - ' . $row->count . 'Nos - ' . $row->totalWeight . 'kgs<br>';
+                    $index++;
+                } else
+                    $totalWeight = $row->totalWeight;
+            }
+        }
+        //    sendSMS('','Slitting instruction given for Coil '.$_POST['pid'].'%n'.$query->result()[0]->vDescription.' '.$query->result()[0]->fThickness.'mm x '.$query->result()[0]->fWidth.'mm%nProcess:Slitting'.$strBundle.'%nTotal weight '.$totalWeight.'kgs');
 
-			sendSMS($query->result()[0]->nProcessUpdates,'Slitting instruction given for Coil '.$_POST['pid'].'\n'.$query->result()[0]->vDescription.' '.$query->result()[0]->fThickness.'mm x '.$query->result()[0]->fWidth.'mm\nProcess:Slitting'.$strBundle.'\nTotal weight '.$totalWeight.'M/T');
-		}
+
+            $strEmailHtml = '<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+                            <html xmlns="http://www.w3.org/1999/xhtml">
+                            <head>
+                            <title>Slitting Instruction</title>
+                            <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+                            <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+                            <meta name="viewport" content="width=device-width, initial-scale=1.0 " />
+                            <style>
+                            </style>
+                            </head>';
+
+            $strEmailHtml .= '<h4>Dear Customer,</h4>';
+            $strEmailHtml .= '<h4>Slitting instruction has been given for coil number '.$_POST['pid'].'. The following info is for your  perusal:</h4>';
+            $strEmailHtml .= '<table style="width:80%; border-collapse: collapse;" cellpadding="5">
+                            <tr>
+                                <td style="border: 1px solid black;">Coil Number</td>
+                                <td style="border: 1px solid black;">'.$_POST['pid'].'</td>
+                            </tr>
+                            <tr>
+                                <td style="border: 1px solid black;">Material Description</td>
+                                <td style="border: 1px solid black;">'.$query->result()[0]->vDescription.'</td>
+                            </tr>
+                            <tr>
+                                <td style="border: 1px solid black;">Thickness</td>
+                                <td style="border: 1px solid black;">'.$query->result()[0]->fThickness.' mm</td>
+                            </tr>
+                            <tr>
+                                <td style="border: 1px solid black;">Width</td>
+                                <td style="border: 1px solid black;">'.$query->result()[0]->fWidth.' mm</td>
+                            </tr>
+                            <tr>
+                                <td style="border: 1px solid black;">Quantity</td>
+                                <td style="border: 1px solid black;">'.$query->result()[0]->fQuantity.' kgs</td>
+                            </tr>                            <tr>
+                                <td style="border: 1px solid black;">Received Date</td>
+                                <td style="border: 1px solid black;">'.$query->result()[0]->dReceivedDate.'</td>
+                            </tr>
+                            </tr>       
+                            <tr>
+                                <td style="border: 1px solid black;">Process</td>
+                                <td style="border: 1px solid black;">Slitting</td>
+                            </tr>
+                            <tr>
+                                <td style="border: 1px solid black;">Slitting Details</td>
+                                <td style="border: 1px solid black;word-wrap: break-word;overflow-wrap: break-word;">'.$strBundle1.'</td>
+                            </tr>
+                            <tr>
+                                <td style="border: 1px solid black;">Total Weight</td>
+                                <td style="border: 1px solid black;word-wrap: break-word;overflow-wrap: break-word;">'.$totalWeight.'</td>
+                            </tr>
+                          </table>';
+
+            $strEmailHtml .= '<p>For Sharoff Steel Pvt ltd</p>
+                          <p>Please contact our unit coordinator for any clarification.</p>';
+
+            $strEmailHtml .= '<p style="color:#999999;">This is a system generated mail. Please do not reply here.</p>';
+
+            sendEmail('', 'Slitting instruction given for coil number '.$_POST['pid'], $strEmailHtml);
 	}
-	
+
 	function getCuttingInstruction($pid) {
 		if(isset($pid)) {
 			$partyid = $pid;
@@ -123,7 +183,7 @@ class slitting_instruction_model extends Base_module_model {
 		$queryExhaustedLength = $this->db->query($strExhaustedLength);
 
 		$floatUsedLength = 0;
-		
+
 		if($queryExhaustedLength->num_rows() > 0) {
 		   	$floatUsedLength = $queryExhaustedLength->result()[0]->usedLength;
 		}
@@ -131,13 +191,13 @@ class slitting_instruction_model extends Base_module_model {
 		$arr[0]->remaining_weight = round((($arr[0]->fQuantity/($arr[0]->fThickness*$arr[0]->fWidth*785)))*100000000)- $floatUsedLength;
 
 		return json_encode($arr[0]);
-	}	
-		
+	}
+
 function BundleTable($pid) {
  if(isset( $_POST['pid'])) {
   $pid = $_POST['pid'];
   }
-  $sql = "select nSno,dDate,nWidth from aspen_tblslittinginstruction  "; 
+  $sql = "select nSno,dDate,nWidth from aspen_tblslittinginstruction  ";
   if(isset($pid)) {
   $sql.="WHERE aspen_tblslittinginstruction.vIRnumber='".$pid."'";
   }
@@ -149,7 +209,7 @@ function BundleTable($pid) {
     {
     $arra[] =$row;
     }
-    } 
+    }
     return $arra;
   }
 
@@ -160,7 +220,7 @@ function BundleTable($pid) {
 			$sql = $this->db->query ("Insert into aspen_tblslittinginstruction(vIRnumber,dDate,nWidth,nWeight,nLength,vStatus) VALUES(  '". $pid. "','". $date. "','". $width. "','".$weight."','".$length."','WIP-Slitting')");
 		}
   	}
-		
+
 	function deleteslittingmodel($deleteid)
 	{
 		 $querycheck = $this->db->query("select * from aspen_tblslittinginstruction where nSno = '".$deleteid."'");
@@ -172,7 +232,7 @@ function BundleTable($pid) {
 		return false;
 	  }
     }
-	
+
 	function slitlistdetails($partyid = '') {
 		$sqlci = "select aspen_tblslittinginstruction.nSno as Sno,DATE_FORMAT(aspen_tblslittinginstruction.dDate, '%d-%m-%Y') AS Slittingdate,aspen_tblslittinginstruction.nWidth as width, aspen_tblslittinginstruction.vIRnumber as pnumber, aspen_tblslittinginstruction.nWeight as weight, aspen_tblslittinginstruction.nLength as length FROM aspen_tblslittinginstruction WHERE aspen_tblslittinginstruction.vIRnumber='".$partyid."' and aspen_tblslittinginstruction.vStatus in ('','WIP-Slitting')";
 		$query = $this->db->query($sqlci);
@@ -185,13 +245,13 @@ function BundleTable($pid) {
 		   }
 		}
 		return $arr;
-  	}	
-		
+  	}
+
 	function delete_coilnumber($Sno='', $partynumber='') {
 		$sql ="DELETE FROM aspen_tblslittinginstruction WHERE vIRnumber ='".$partynumber."' and nSno = '".$Sno."'";
 		$query = $this->db->query($sql);
-	}	
-		
+	}
+
 	function getBalanceLength( $partynumber, $remaining_weight ) {
 		$sql = "select COALESCE( ($remaining_weight - sum( distinct nLength ) ),$remaining_weight ) as balance from aspen_tblslittinginstruction where vIRnumber = '$partynumber'";
 		$query = $this->db->query($sql);
@@ -217,17 +277,17 @@ function BundleTable($pid) {
 		$sql = ("UPDATE aspen_tblslittinginstruction SET vStatus='RECEIVED' ");
 		$sql.="WHERE aspen_tblslittinginstruction.vIRnumber='".$_POST['pid']."'";
 		$query1=$this->db->query ($sql);
-	  
+
 		$sql1 =("UPDATE aspen_tblinwardentry SET vStatus='RECEIVED'");
 		$sql1.="WHERE vIRnumber='".$_POST['pid']."'";
 		$query1=$this->db->query ($sql1);
-	  
+
 		$sql2 ="DELETE FROM aspen_tblslittinginstruction WHERE vIRnumber='".$_POST['pid']."'";
 		$query = $this->db->query($sql2);
 	}
 }
 
 class Splittinginstructions_model extends Base_module_record {
-	
- 	
+
+
 }

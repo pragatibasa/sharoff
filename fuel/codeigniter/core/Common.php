@@ -1,4 +1,9 @@
 <?php  if ( ! defined('BASEPATH')) exit('No direct script access allowed');
+require 'vendor/autoload.php';
+
+use PHPMailer\PHPMailer\PHPMailer;
+use Aws\Ses\SesClient;
+use Aws\Ses\Exception\SesException;
 /**
  * CodeIgniter
  *
@@ -514,48 +519,92 @@ return $_config[0];
 		}
 	}
 
-//	function sendSMS($contact,$msg) {
-//        $user="T2014082804"; //your username
-//        $password="adminsharoff"; //your password
-//        $mobilenumbers="919379394798"; //enter Mobile numbers comma seperated
-//        $message = "* We offer JSW steel material at best price *"; //enter Your Message
-//        $senderid="SHAROFF"; //Your senderid
-//        $messagetype="N"; //Type Of Your Message
-//        $url="http://info.bulksms-service.com/WebserviceSMS.aspx";
-//        //domain name: Domain name Replace With Your Domain
-//        $message = urlencode($message);
-//        $ch = curl_init();
-//        if (!$ch){die("Couldn't initialize a cURL handle");}
-//        $ret = curl_setopt($ch, CURLOPT_URL,$url);
-//        curl_setopt ($ch, CURLOPT_POST, 1);
-//        curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
-//        curl_setopt($ch, CURLOPT_SSL_VERIFYHOST, 2);
-//        curl_setopt ($ch, CURLOPT_POSTFIELDS,
-//            "User=$user&passwd=$password&mobilenumber=$mobilenumbers&message=$message&sid=$senderid&mtype=$messagetype");
-//        $ret = curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
-//
-////If you are behind proxy then please uncomment below line and provide your proxy ip with port.
-//// $ret = curl_setopt($ch, CURLOPT_PROXY, "PROXY IP ADDRESS:PORT");
-//
-//        $curlresponse = curl_exec($ch); // execute
-//        if(curl_errno($ch))
-//            echo 'curl error : '. curl_error($ch);
-//
-//        if (empty($ret)) {
-//            // some kind of an error happened
-//            die(curl_error($ch));
-//            curl_close($ch); // close cURL handler
-//        } else {
-//            $info = curl_getinfo($ch);
-//            curl_close($ch); // close cURL handler
-//            //echo "<br>";
-//            echo $curlresponse;    //echo "Message Sent Succesfully" ;
-//
-//        }
-//
-//    }
+function sendEmail($recipients = '', $subject, $body, $filePath = '') {
+            $sender = 'info@sharoffsteel.in';
+            $senderName = 'Sharoff Steel Pvt Ltd';
+            $recipient = 'pragatibasa@gmail.com';
+            $usernameSmtp = 'AKIA4UEQ6BHBYRYZSUHA';
 
+            $passwordSmtp = 'BFZAf0BtkgCIc/Tilt90rNRQWOAwTvayzNUiadRyMLJx';
 
+            $configurationSet = 'sharoffsteel';
+            $host = 'email-smtp.us-east-1.amazonaws.com';
+            $port = 587;
+
+            $mail = new PHPMailer(true);
+
+           try {
+                // Specify the SMTP settings.
+                $mail->isSMTP();
+                $mail->setFrom($sender, $senderName);
+                $mail->Username   = $usernameSmtp;
+                $mail->Password   = $passwordSmtp;
+                $mail->Host       = $host;
+                $mail->Port       = $port;
+                $mail->SMTPAuth   = true;
+                $mail->SMTPSecure = 'tls';
+                $mail->addCustomHeader('X-SES-CONFIGURATION-SET', $configurationSet);
+
+                // Specify the message recipients.
+                $mail->addAddress('sharoffsteel@gmail.com');
+                // You can also add CC, BCC, and additional To recipients here.
+
+                // Specify the content of the message.
+                $mail->isHTML(true);
+                $mail->Subject    = $subject;
+                $mail->Body       = $body;
+                if( $filePath != '' )
+                    $mail->addAttachment($filePath);
+
+                $mail->Send();
+                echo "Email sent!" , PHP_EOL;
+                if( $filePath != '' )
+                    unlink($filePath);
+            } catch (phpmailerException $e) {
+                echo "An error occurred. {$e->errorMessage()}", PHP_EOL; //Catch errors from PHPMailer.
+            } catch (Exception $e) {
+                echo "Email not sent. {$mail->ErrorInfo}", PHP_EOL; //Catch errors from Amazon SES.
+            }
+       }
+
+	function sendSMS($contact,$msg) {
+        $user="T2014082804"; //your username
+        $password="adminsharoff"; //your password
+        $mobilenumbers="+919845375601"; //enter Mobile numbers comma seperated
+        $message = "* We offer JSW steel material at best price *"; //enter Your Message
+        $senderid="SHAROFF"; //Your senderid
+        $messagetype="N"; //Type Of Your Message
+        $url="http://info.bulksms-service.com/WebserviceSMS.aspx";
+        //domain name: Domain name Replace With Your Domain
+        $message = urlencode($msg);
+        $ch = curl_init();
+        if (!$ch){die("Couldn't initialize a cURL handle");}
+        $ret = curl_setopt($ch, CURLOPT_URL,$url);
+        curl_setopt ($ch, CURLOPT_POST, 1);
+        curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
+        curl_setopt($ch, CURLOPT_SSL_VERIFYHOST, 2);
+        curl_setopt ($ch, CURLOPT_POSTFIELDS,
+            "User=$user&passwd=$password&mobilenumber=$mobilenumbers&message=$message&sid=$senderid&mtype=$messagetype");
+        $ret = curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
+
+//If you are behind proxy then please uncomment below line and provide your proxy ip with port.
+// $ret = curl_setopt($ch, CURLOPT_PROXY, "PROXY IP ADDRESS:PORT");
+
+        $curlresponse = curl_exec($ch); // execute
+        if(curl_errno($ch))
+            echo 'curl error : '. curl_error($ch);
+
+        if (empty($ret)) {
+            // some kind of an error happened
+            die(curl_error($ch));
+            curl_close($ch); // close cURL handler
+        } else {
+            $info = curl_getinfo($ch);
+            curl_close($ch); // close cURL handler
+            //echo "<br>";
+            echo $curlresponse;    //echo "Message Sent Succesfully" ;
+        }
+    }
 
 /* End of file Common.php */
 /* Location: ./system/core/Common.php */
