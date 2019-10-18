@@ -114,7 +114,7 @@ class Cutting_instruction_model extends Base_module_model {
 						   </tr>
 						 </table>';
 
-		$strEmailHtml .= '<p>For Sharoff Steel Pvt ltd</p>';
+		$strEmailHtml .= '<p>For Sharoff Steel Traders</p>';
 
 		$strEmailHtml .= '<p style="color:#999999;">This is a system generated mail. Please do not reply here.</p>';
 

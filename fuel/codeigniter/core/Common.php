@@ -521,7 +521,7 @@ return $_config[0];
 
 function sendEmail($recipients = '', $subject, $body, $filePath = '') {
             $sender = 'info@sharoffsteel.in';
-            $senderName = 'Sharoff Steel Pvt Ltd';
+            $senderName = 'Sharoff Steel Traders';
             $recipient = 'pragatibasa@gmail.com';
             $usernameSmtp = 'AKIA4UEQ6BHBYRYZSUHA';
 

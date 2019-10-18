@@ -277,7 +277,7 @@ class inward_model extends Base_module_model {
                                 <td style="border: 1px solid black;">'.$icno.'</td>
                             </tr>
                           </table>';
-            $strEmailHtml .= '<p>For Sharoff Steel Pvt ltd</p>
+            $strEmailHtml .= '<p>For Sharoff Steel Traders</p>
 			<p>Please contact our unit coordinator for any clarification.</p>';
             $strEmailHtml .= '<p style="color:#999999;">This is a system generated mail. Please do not reply here.</p>';
             sendEmail($query->result()[0]->vemailaddress, 'New coil received for '.$pname, $strEmailHtml);
