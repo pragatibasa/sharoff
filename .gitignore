@@ -2,3 +2,4 @@
 fuel/application/config/database.php
 .idea/workspace.xml
 .DS_Store
+vendor
