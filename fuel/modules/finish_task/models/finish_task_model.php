@@ -85,14 +85,31 @@ class finish_task_model extends Base_module_model {
 			$txtbundleweight = $txtbundleweight;
 			$txtboxscrap = $txtboxscrap;
 		}
-	
 		$query = $this->db->query ("UPDATE aspen_tblinwardentry  SET vStatus='Ready To Bill' WHERE vIRnumber='".$pid."'");
 		$query = $this->db->query ("UPDATE aspen_tblcuttinginstruction  SET vStatus='Ready To Bill' WHERE vIRnumber='".$pid."' and nSno=$txtbundleids");
-
-		$sql = $this->db->query ("Insert into aspen_tblbillingstatus (nSno,vBillingStatus,fWeight,dBillDate,nActualNo,vIRnumber,nScrapSent,nbalance) VALUES ('".$txtbundleids. "',
-  'Not Billed' ,'". $txtbundleweight. "','0','0','". $pid. "','". $txtboxscrap. "', ( SELECT nNoOfPieces FROM aspen_tblcuttinginstruction WHERE vIRnumber = '".$pid."' AND nSno = ".$txtbundleids." ) )");
-			
+        $sql = $this->db->query ("Insert into aspen_tblbillingstatus (nSno,vBillingStatus,fWeight,dBillDate,nActualNo,vIRnumber,nScrapSent,nbalance) VALUES ('".$txtbundleids. "',
+		'Not Billed' ,'". $txtbundleweight. "','0','0','". $pid. "','". $txtboxscrap. "', ( SELECT nNoOfPieces FROM aspen_tblcuttinginstruction WHERE vIRnumber = '".$pid."' AND nSno = ".$txtbundleids." ) )");
+		
+		$strSql = "select ai.*,ap.*,am.* from aspen_tblinwardentry as ai 
+	    left join aspen_tblmatdescription as am on ai.nMatId = am.nMatId 
+	    left join aspen_tblpartydetails as ap on ap.nPartyId = ai.nPartyId
+		where ai.vIRnumber = '".$_POST['pid']."'";
+		$query = $this->db->query($strSql);
+		$strBundleSql = "select * from aspen_tblcuttinginstruction where vIRnumber = '".$_POST['pid']."'";
+        $queryBundle = $this->db->query($strBundleSql);
+        if ($queryBundle->num_rows() > 0) {
+         $strBundle = '';
+         $strBundle1 = '';
+         $index = 1;
+         foreach($queryBundle->result() as $key => $row) {
+             $strBundle .= "\n".$index.') '.$row->nLength.'mm - '.$row->nNoOfPieces.'Nos';
+             $strBundle1 .= $index.') '.$row->nLength.'mm - '.$row->nNoOfPieces.'Nos<br>';
+             $index++;
+         }
+     }
+	 sendSMS('','Cutting task completed for coil no '.$_POST['pid']."\n Mat Desc:".$query->result()[0]->vDescription.' '."\n".$query->result()[0]->fThickness.'mm x'.$query->result()[0]->fWidth.'mm' ."\n Process:CTL". "\n Coil Weight:".$query->result()[0]->fQuantity.$strBundle);
 	}
+
 		
 	function finishmodelrecoil($pid, $pname,$txtbundleids,$txtbundleweight){
 		if(isset($pid) && isset($pname) && isset($txtbundleids)&& isset($txtbundleweight)) {
@@ -103,8 +120,7 @@ class finish_task_model extends Base_module_model {
 		}
 		$query = $this->db->query ("UPDATE aspen_tblinwardentry  SET vStatus='Ready To Bill' WHERE vIRnumber='".$partyid."'");
 		$query = $this->db->query ("UPDATE aspen_tblrecoiling  SET vStatus='Ready To Bill' WHERE vIRnumber='".$partyid."' and nSno='".$txtbundleids."'");
-
-		$sql = $this->db->query ("Insert into aspen_tblbillingstatus (nSno,vBillingStatus,fWeight,dBillDate,nActualNo,vIRnumber ) VALUES ('". $txtbundleids. "',
+        $sql = $this->db->query ("Insert into aspen_tblbillingstatus (nSno,vBillingStatus,fWeight,dBillDate,nActualNo,vIRnumber ) VALUES ('". $txtbundleids. "',
 		'Not Billed' ,'". $txtbundleweight. "','0','0','". $pid. "' )");
 	}
 		
@@ -117,11 +133,28 @@ class finish_task_model extends Base_module_model {
 		}
 		$query = $this->db->query ("UPDATE aspen_tblinwardentry  SET vStatus='Ready To Bill' WHERE vIRnumber='".$partyid."'");
 		$query = $this->db->query ("UPDATE aspen_tblslittinginstruction  SET vStatus='Ready To Bill' WHERE vIRnumber='".$partyid."' and nSno='".$txtbundleids."'");
-
-	$sql = $this->db->query ("Insert into aspen_tblbillingstatus    (nSno,vBillingStatus,fWeight,dBillDate,nActualNo,vIRnumber ) VALUES ('". $txtbundleids. "',
-	'Not Billed' ,'". $txtbundleweight. "','0','0','". $pid. "' )");
-			
-	}
+        $sql = $this->db->query ("Insert into aspen_tblbillingstatus    (nSno,vBillingStatus,fWeight,dBillDate,nActualNo,vIRnumber ) VALUES ('". $txtbundleids. "',
+	    'Not Billed' ,'". $txtbundleweight. "','0','0','". $pid. "' )");
+		
+	    $strSql = "select ai.*,ap.*,am.* from aspen_tblinwardentry as ai 
+	    left join aspen_tblmatdescription as am on ai.nMatId = am.nMatId 
+	    left join aspen_tblpartydetails as ap on ap.nPartyId = ai.nPartyId
+	    where ai.vIRnumber = '".$_POST['pid']."'";
+		$query = $this->db->query($strSql);
+		$strBundleSql = "select * from aspen_tblslittinginstruction where vIRnumber = '".$_POST['pid']."'";
+        $queryBundle = $this->db->query($strBundleSql);
+        if ($queryBundle->num_rows() > 0) {
+         $strBundle = '';
+         $strBundle1 = '';
+         $index = 1;
+         foreach($queryBundle->result() as $key => $row) {
+             $strBundle .= "\n".$index.') '.$row->nLength.'mm';
+             $strBundle1 .= $index.') '.$row->nLength.'mm<br>';
+             $index++;
+         }
+     }
+		sendSMS('','Slitting task completed for coil no '.$_POST['pid']."\n Mat Desc:".$query->result()[0]->vDescription.' '."\n".$query->result()[0]->fThickness.'mm x'.$query->result()[0]->fWidth.'mm' ."\n Process:STL". "\n Coil Weight:".$query->result()[0]->fQuantity.$strBundle);
+	   	}
 		
 	function getfinishmodel($pid, $pname){
 		if(isset($pid) && isset($pname)){
@@ -268,7 +301,8 @@ class finish_task_model extends Base_module_model {
 	   }
 	}
 	return $arr;
-  }	
+	
+}	
   
   function finishweight_model($partyid = '') 
 {

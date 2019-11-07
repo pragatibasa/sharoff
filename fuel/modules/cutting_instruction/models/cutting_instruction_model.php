@@ -58,13 +58,13 @@ class Cutting_instruction_model extends Base_module_model {
          $strBundle1 = '';
          $index = 1;
          foreach($queryBundle->result() as $key => $row) {
-             $strBundle .= '%n'.$index.') '.$row->nLength.'mm - '.$row->nNoOfPieces.'Nos - '.$row->nBundleweight.'kgs';
+             $strBundle .= "\n".$index.') '.$row->nLength.'mm - '.$row->nNoOfPieces.'Nos - '.$row->nBundleweight.'kgs';
              $strBundle1 .= $index.') '.$row->nLength.'mm - '.$row->nNoOfPieces.'Nos - '.$row->nBundleweight.'kgs <br>';
              $index++;
          }
      }
 
-     sendSMS('','Cutting instruction given for Coil no '.$_POST['pid']."\n".$query->result()[0]->vDescription.' '.$query->result()[0]->fThickness.'mm x '.$query->result()[0]->fWidth.'mm%nProcess:CTL'.$strBundle);
+     sendSMS('','Cutting instruction given for coil no '.$_POST['pid']."\n".$query->result()[0]->vDescription.' '."\n".$query->result()[0]->fThickness.'mm x'.$query->result()[0]->fWidth.'mm' ."\n Process:CTL". $strBundle);
 	//if($query->result()[0]->vemailaddress) {
 		$strEmailHtml = '<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 						   <html xmlns="http://www.w3.org/1999/xhtml">
