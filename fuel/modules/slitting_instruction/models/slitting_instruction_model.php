@@ -83,7 +83,7 @@ class slitting_instruction_model extends Base_module_model {
             $totalWeight = 0;
             foreach($queryBundle->result() as $key => $row) {
                 if($row->nWidth !== NULL) {
-                    $strBundle .= '%n' . $index . ') ' . $row->nWidth . 'mm - ' . $row->count . 'Nos - ' . $row->totalWeight . 'kgs';
+                    $strBundle .= '\n' . $index . ') ' . $row->nWidth . 'mm - ' . $row->count . 'Nos - ' . $row->totalWeight . 'kgs';
                     $strBundle1 .= $index . ') ' . $row->nWidth . 'mm - ' . $row->count . 'Nos - ' . $row->totalWeight . 'kgs<br>';
                     $index++;
                 } else
@@ -125,7 +125,7 @@ class slitting_instruction_model extends Base_module_model {
                             </tr>
                             <tr>
                                 <td style="border: 1px solid black;">Quantity</td>
-                                <td style="border: 1px solid black;">'.$query->result()[0]->fQuantity.' kgs</td>
+                                <td style="border: 1px solid black;">'.number_format($query->result()[0]->fQuantity,3).' kgs</td>
                             </tr>                            <tr>
                                 <td style="border: 1px solid black;">Received Date</td>
                                 <td style="border: 1px solid black;">'.$query->result()[0]->dReceivedDate.'</td>
@@ -141,7 +141,7 @@ class slitting_instruction_model extends Base_module_model {
                             </tr>
                             <tr>
                                 <td style="border: 1px solid black;">Total Weight</td>
-                                <td style="border: 1px solid black;word-wrap: break-word;overflow-wrap: break-word;">'.$totalWeight.'</td>
+                                <td style="border: 1px solid black;word-wrap: break-word;overflow-wrap: break-word;">'.number_format($totalWeight,3).'</td>
                             </tr>
                           </table>';
 

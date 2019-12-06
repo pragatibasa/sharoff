@@ -6,52 +6,52 @@
     color: #FFFFFF;
     text-shadow: 0 -1px 0 rgba(0, 0, 0, 0.25);
 }</style>
-<div id="innerpanel"> 
+<div id="innerpanel">
 &nbsp;
 &nbsp;
 <fieldset>
 <legend>Coil Details</legend>
-	<div>  
+	<div>
 		<table cellpadding="0" cellspacing="10" border="0">
 			<tr>
 				<td>
 					<label><?=lang('party_id')?></label>
-				</td>  
+				</td>
 				<td>
 					<input id="pid" name="vIRnumber" type="text" DISABLED/>
 				</td>
 				<td>
 					<label><?=lang('party_name')?></label>
 				</td>
-				<td> 
+				<td>
 					<input id="pname" type="text" value="<?php echo $partyname; ?>" DISABLED />
 				</td>
 			</tr>
-			<tr>	
+			<tr>
 				<td>
 					<label><?=lang('Material_description')?></label>
-				</td> 
+				</td>
 				<td>
 					<input id="mat_desc" name="vDescription" type="text" DISABLED/>
 				</td>
 				<td>
 					<label><?=lang('width_txt')?></label>
-				</td> 
+				</td>
 				<td>
 					<input id="wid" name="fWidth" type="text" DISABLED/> (in mm)
 				</td>
-			</tr>	
+			</tr>
 			<tr>
 				<td>
 					<label><?=lang('thickness_txt')?></label>
-				</td>  
+				</td>
 				<td>
 					<input id="thic" name="fThickness" type="text" DISABLED/> (in mm)
 				</td>
 				<td>
 					<label><?=lang('weight_txt')?></label>
 				</td>
-				<td> 
+				<td>
 					<input id="wei" name="fQuantity" type="text" DISABLED/> (in tons)
 				</td>
 			</tr>
@@ -59,10 +59,10 @@
 	</div>
 </fieldset>
 <fieldset>
-<legend>Slitting Instruction</legend>	
+<legend>Slitting Instruction</legend>
 <table width="100%" cellpadding="0" cellspacing="0" border="0">
 <tr>
-<td width="40%" align="left" valign="top">	
+<td width="40%" align="left" valign="top">
 <form id="cisave" method="post" action="" class="__fuel_edit__" style="font-size:14px;width:500px;">
 		<div class="pad-10 hide">
 			<div id="date_text_label"> Date </div>
@@ -79,7 +79,7 @@
 			<input id="slitNumber" type="hidden"/>
 		</div>
 		<div class="pad-10">
-			<div id="bundle_width_text_label" style="height:20px;"> 
+			<div id="bundle_width_text_label" style="height:20px;">
 					<span style="float:left;">Width</span>
 					<span style="float:left;margin-left:115px;">No.</span>
 					<span style="float:right;padding-right:208px;">Weight</span>
@@ -104,13 +104,13 @@
 			<input id="reset" type="reset" value="Reset" onclick="functionreset();"/>-->
 			<input class="btn btn-success" type="button" value="Add New Size" id="newsize" onClick="functionsave();"/> &nbsp; &nbsp; &nbsp;
 			<input class="btn btn-danger" id="reset" type="reset" value="Reset" onClick="functionreset();" /> &nbsp; &nbsp; &nbsp;
-			<input class=" btn-info"  type="button" value="UPDATE/EDIT"  id="edit" onClick="functionedit();" hidden/> &nbsp; &nbsp; &nbsp; 
+			<input class=" btn-info"  type="button" value="UPDATE/EDIT"  id="edit" onClick="functionedit();" hidden/> &nbsp; &nbsp; &nbsp;
 		</div>
 </form>
 </td>
-<td width="60%" align="left" valign="top">							
+<td width="60%" align="left" valign="top">
     <div id="contentsholder" class="flexcroll" style="width:100%; height:350px; overflow-x:hidden; overflow-y:auto;">
-		<div id="content" style="width:100%; min-height:350px; overflow:hidden;"> 
+		<div id="content" style="width:100%; min-height:350px; overflow:hidden;">
 			<div id="DynamicGrid_2">
 				No Record!
 			</div>
@@ -118,16 +118,16 @@
 	</div>
 </td>
 </tr>
-<td>	
+<td>
 </td>
 <td align="right">
 	<label>Total Weight</label>
-		<input id="txttotalwidth" type="text" DISABLED/> (in tons)  
-		<input id="txtHiddentotalwidth" type="hidden" /> 
+		<input id="txttotalwidth" type="text" DISABLED/> (in tons)
+		<input id="txtHiddentotalwidth" type="hidden" />
 		&nbsp; &nbsp; &nbsp;
 		<input type="button" onclick="cancelcoil();" value="Cancel" id="cancelcoil" class="btn btn-danger">
-		<input class="btn btn-success"  id="saveci" type="button" value="Save" onClick="savechange();"/>  
-		<input id="finishci" type="button" value="Finsh" onClick="finishinstructionbutton();" hidden/>&nbsp; &nbsp; &nbsp;		
+		<input class="btn btn-success"  id="saveci" type="button" value="Save" onClick="savechange();"/>
+		<input id="finishci" type="button" value="Finsh" onClick="finishinstructionbutton();" hidden/>&nbsp; &nbsp; &nbsp;
 </td>
 </tr>
 </table>
@@ -148,7 +148,7 @@ function cancelcoil(){
                  type: 'POST',
                 url: "<?php echo fuel_url('slitting_instruction/cancelcoils');?>",
 				data: dataString,
-                success: function(){  
+                success: function(){
 				alert("Changed Succesfully");
 				refresh_folderlist();
 			}
@@ -160,7 +160,7 @@ $(document).on( 'click', '.__fuel_edit_marker_new__',function() {
 	var kgs = '';
 	if($(this).prev('.weight').val() !== '')
 		kgs = 'Tons';
-	$(this).after('<span class="measure">'+Tons+'</span><span title="Delete" class="ico_delete" style="margin-top: 10px; height: 8px; margin-left: 5px; padding: 5px; position: absolute; width: 7px;cursor:pointer;"></span><input type="text" class="width" style="width:130px; margin-right: 4px;" name="width" id="width_v"><input class="count" style="width:60px;" type="text" name="count" value="1"/><input class="weight" type="text" name="weight" disabled style="width:130px;margin-left:4px;"/> <span class="measure"></span><span title="Click to add new width" style="position: absolute; padding: 8px; margin-left: 5px; margin-top: 7px;cursor: pointer;" class="__fuel_edit_marker_new__"></span>');
+	$(this).after('<span class="measure">'+kgs+'</span><span title="Delete" class="ico_delete" style="margin-top: 10px; height: 8px; margin-left: 5px; padding: 5px; position: absolute; width: 7px;cursor:pointer;"></span><input type="text" class="width" style="width:130px; margin-right: 4px;" name="width" id="width_v"><input class="count" style="width:60px;" type="text" name="count" value="1"/><input class="weight" type="text" name="weight" disabled style="width:130px;margin-left:4px;"/> <span class="measure"></span><span title="Click to add new width" style="position: absolute; padding: 8px; margin-left: 5px; margin-top: 7px;cursor: pointer;" class="__fuel_edit_marker_new__"></span>');
 	$(this).next('.ico_delete').css('margin-left','4px');
 	$(this).remove();
 });
@@ -172,7 +172,7 @@ $(document).on( 'click', '.ico_delete', function() {
 
 	if( $('#length_v').val() !== '' )
 		$(this).prev('.width').val(0).trigger('keyup').remove();
-	else 
+	else
 		$(this).prev('.width').remove();
 	$(this).remove();
 	calculateTotalWidth();
@@ -181,7 +181,7 @@ $(document).on( 'click', '.ico_delete', function() {
 $('#length_v').on('keydown', function(e) {
     var key   = e.keyCode ? e.keyCode : e.which;
     if (!( [8, 9, 13, 27, 46].indexOf(key) !== -1 ||
-         (key == 65 && ( e.ctrlKey || e.metaKey  ) ) || 
+         (key == 65 && ( e.ctrlKey || e.metaKey  ) ) ||
          (key >= 35 && key <= 40) ||
          (key >= 48 && key <= 57 && !(e.shiftKey || e.altKey)) ||
          (key >= 96 && key <= 105)
@@ -265,13 +265,13 @@ function balance() {
 	var pid = $('#pid').val();
 	var remaining_length = $('#remaining_length').val();
 	var dataString = 'remaining_length='+remaining_length+'&pid='+pid;
-	$('#length_v').val(remaining_length);	
+	$('#length_v').val(remaining_length);
 	return false;
 	$.ajax({
         type: 'POST',
         url: "<?php echo fuel_url('slitting_instruction/getBalanceLength');?>",
 		data: dataString,
-		success: function(msg){  
+		success: function(msg){
 			$('#length_v').val(remaining_length);
 		}
     });
@@ -280,7 +280,7 @@ function balance() {
 function loadfolderlist(account, accname) {
 	$('#DynamicGrid_2').hide();
 	var loading = '<div id="DynamicGridLoading_2"> '+
-            	   ' <img src="<?=img_path() ?>loading.gif" /><span> Loading slit List... </span> '+ 
+            	   ' <img src="<?=img_path() ?>loading.gif" /><span> Loading slit List... </span> '+
     	    	   ' </div>';
     $("#content").empty();
 	$('#content').html(loading);
@@ -294,9 +294,9 @@ function loadfolderlist(account, accname) {
 			$('#DynamicGrid_2').hide();
 			$('#DynamicGridLoading_2').hide();
 			var loading1 = '<div id="error_msg"> '+
-                           'No Result!'+ 
+                           'No Result!'+
 						   '</div>';
-			$('#content').html(loading1);  
+			$('#content').html(loading1);
 			} else{
             var partydata = [];
             var totalWeight = 0;
@@ -324,9 +324,9 @@ function loadfolderlist(account, accname) {
             // If there are files
 				$('#DynamicGrid_2').hide();
 				$('#DynamicGridLoading_2').hide();
-				$('#content').html(CreateTableViewX(partydata, "lightPro", true)); 
-				var lcScrollbar = $('#contentsholder');	 
-				fleXenv.updateScrollBars(lcScrollbar); 
+				$('#content').html(CreateTableViewX(partydata, "lightPro", true));
+				var lcScrollbar = $('#contentsholder');
+				fleXenv.updateScrollBars(lcScrollbar);
 				$(".ico_coil_delete").click(function (e) {
                 // When a delete icon is clicked, stop the href action
                 //  and do an ajax call to delete it instead
@@ -341,11 +341,11 @@ function loadfolderlist(account, accname) {
 				$('#DynamicGrid_2').hide();
 				$('#DynamicGridLoading_2').hide();
 				var loading1 = '<div id="error_msg"> '+
-							   'No Result!'+ 
+							   'No Result!'+
 							   '</div>';
-				$('#content').html(loading1); 
-				var lfScrollbar = $('#contentsholder');	 
-				fleXenv.updateScrollBars(lfScrollbar);  
+				$('#content').html(loading1);
+				var lfScrollbar = $('#contentsholder');
+				fleXenv.updateScrollBars(lfScrollbar);
                 }
 			}
     });
@@ -354,8 +354,8 @@ function loadfolderlist(account, accname) {
 function totalwidth_check() {
 	var partyid = $('#pid').val();
 	var dataString = '&partyid='+partyid;
-	$.ajax({  
-	   type: "POST",  
+	$.ajax({
+	   type: "POST",
 	   url : "<?php echo fuel_url('slitting_instruction/totalwidth');?>/",
 		data: dataString,
 		datatype : "json",
@@ -369,8 +369,8 @@ function totalwidth_check() {
 				$('#txtHiddentotalwidth').val(j.totalWidth);
 				document.getElementById("txttotalwidth").value = weight;
 			});
-	   }  
-	}); 
+	   }
+	});
 }
 
 function deleteItem(sn){
@@ -386,9 +386,9 @@ function deleteItem(sn){
 		url	: "<?php echo fuel_url('slitting_instruction/delete_slit');?>",
 		data : dataString,
 		datatype: json,
-			success: function(msg){ 
+			success: function(msg){
 				refresh_folderlist();
-				
+
 				var pid = $('#pid').val();
 				var dataString = '&pid='+pid;
 				totalwidth_check();
@@ -400,7 +400,7 @@ function deleteItem(sn){
 						var msg3=JSON.parse(msg);
 						$('#remaining_length').val(msg3.remaining_weight);
 					}
-    			}); 
+    			});
 			}
 		});
     } else {
@@ -411,7 +411,7 @@ function deleteItem(sn){
 function savechange(id) {
     var pid = $('#pid').val();
 	var dataString = 'pid='+pid;
-	
+
 	$.ajax({
 		type: 'POST',
 		url: "<?php echo fuel_url('slitting_instruction/save_button');?>",
@@ -438,9 +438,9 @@ function functionedit(){
 	var width_v = $('#width_v').val();
 	var pid = $('#pid').val();
 	var dataString = 'bundlenumber='+bundlenumber+'&width_v='+width_v+'&pid='+pid;
-	$.ajax({  
-		type: "POST",  
-		url : "<?php echo fuel_url('slitting_instruction/editbundle');?>/",  
+	$.ajax({
+		type: "POST",
+		url : "<?php echo fuel_url('slitting_instruction/editbundle');?>/",
 		data: dataString,
 		success: function(msg){
 			alert("Updated Successfully");
@@ -462,9 +462,9 @@ function functionedit(){
 					var msg3=JSON.parse(msg);
 					$('#remaining_length').val(msg3.remaining_weight);
 				}
-    		});	
-		}  
-	}); 
+    		});
+		}
+	});
 }
 
 function radioload(nSno,length,width,weight) {
@@ -511,11 +511,11 @@ function functionsave() {
 	 	return false;
 	 } else{
 		var dataString = 'date1='+date1+'&widths='+allWidths+'&pid='+pid+'&length='+length+'&thickness='+thickness;
-		$.ajax({  
-			type: "POST",  
-			url : "<?php echo fuel_url('slitting_instruction/savebundleslit');?>/",  
+		$.ajax({
+			type: "POST",
+			url : "<?php echo fuel_url('slitting_instruction/savebundleslit');?>/",
 			data: dataString,
-			success: function(msg){  
+			success: function(msg){
 				$('#balance_length').removeAttr('checked');
 				$('#length_v,.width,.weight,#weight_v').val('');
 				$('#bundle_width_text_label').next('div').empty();
@@ -523,23 +523,23 @@ function functionsave() {
 				refresh_folderlist();
 				var pid = $('#pid').val();
 				var dataString = '&pid='+pid;
-				
+
 				$.ajax({
 				    type: 'POST',
         			url: "<?php echo fuel_url('slitting_instruction/getBalanceLength');?>",
 					data: dataString,
-					success: function(msg){  
+					success: function(msg){
 						var msg3=JSON.parse(msg);
 						$('#remaining_length').val(msg3.remaining_weight);
 					}
-    			}); 	
+    			});
 			}
-		}); 
+		});
 	}
 }
 
 function addDate(){
-	date = new Date();             
+	date = new Date();
 	var month = date.getMonth()+1;
 	var day = date.getDate();
 	var year = date.getFullYear();
@@ -556,11 +556,11 @@ function finishinstructionbutton(id){
 	var pid  =	$('#pid').val();
 	var party = $('#pname').val();
 	var dataString = 'partyid='+pid+'&partyname='+party+'&task=sit';
-	$.ajax({  
-	type: "POST",  
-	url	: "<?php echo site_url('finish_task/finish_slit');?>/",  
+	$.ajax({
+	type: "POST",
+	url	: "<?php echo site_url('finish_task/finish_slit');?>/",
 	data: dataString,
-	success: function(){  
+	success: function(){
 		setTimeout("location.href='<?= site_url('fuel/finish_task'); ?>/?"+ dataString+"'", 3000);
 		}
 	});
@@ -569,14 +569,14 @@ function finishinstructionbutton(id){
 function deleterecord(){
 	var deleteid = $('#deletevalue').val();
 	var dataString = 'number='+deleteid;
-		$.ajax({  
-			type: "POST",  
-			url	: "<?php echo fuel_url('slitting_instruction/deleterow');?>/",  
+		$.ajax({
+			type: "POST",
+			url	: "<?php echo fuel_url('slitting_instruction/deleterow');?>/",
 			data: dataString,
-			success: function(msg){  
+			success: function(msg){
 			$("#deletemsg").html(msg);
 			$('#deletevalue').val('');
-			}  
-		}); 
+			}
+		});
 }
 </script>
