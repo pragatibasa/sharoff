@@ -237,9 +237,6 @@ function deleterow($deleteid)
  return  $leftweight;
   }
 
-
-
-
 function savebundle() {
 	if(isset( $_POST['pid']) && isset( $_POST['bundlenumber']) && isset( $_POST['date1']) && isset( $_POST['length']) && isset( $_POST['rate'])&& isset( $_POST['bundleweight']) ) {
 		$bundlenumber = $_POST['bundlenumber'];

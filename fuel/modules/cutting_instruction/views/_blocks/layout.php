@@ -6,29 +6,29 @@
     color: #FFFFFF;
     text-shadow: 0 -1px 0 rgba(0, 0, 0, 0.25);
 }</style>
-<div id="innerpanel"> 
+<div id="innerpanel">
 <fieldset>
 <legend>Coil Details</legend>
-	<div>  
+	<div>
 		<table cellpadding="0" cellspacing="10" border="0">
 			<tr>
 				<td>
 					<label><?=lang('party_id')?></label>
-				</td>  
+				</td>
 				<td>
 					<input id="pid" name="vIRnumber" type="text" DISABLED />
 				</td>
 				<td>
 					<label><?=lang('party_name')?></label>
 				</td>
-				<td> 
+				<td>
 					<input id="pname" type="text" value="<?php echo $partyname; ?>"  DISABLED />
 				</td>
 			</tr>
-			<tr>	
+			<tr>
 				<td>
 					<label><?=lang('Material_description')?></label>
-				</td> 
+				</td>
 				<td colspan="3">
 					<input id="	" name="vDescription" type="text" DISABLED/>
 				</td>
@@ -36,43 +36,43 @@
 			<tr>
 				<td>
 					<label><?=lang('width_txt')?></label>
-				</td> 
+				</td>
 				<td>
 					<input id="wid" name="fWidth" type="text" DISABLED/> (in mm)
-					
+
 				</td>
 				<td>
 					<label><?=lang('length_txt')?></label>
 				</td>
-				<td> 
+				<td>
 					<input id="len" name="fLength" type="text" DISABLED />(in mm)
 				</td>
-			</tr>	
+			</tr>
 			<tr>
 				<td>
 					<label><?=lang('thickness_txt')?></label>
-				</td>  
+				</td>
 				<td>
 					<input id="thic" name="fThickness" type="text" DISABLED/>(in mm)
 				</td>
 				<td>
 					<label><?=lang('weight_txt')?></label>
 				</td>
-				
-				<td> 
-					<input id="wei" name="fQuantity" type="text" DISABLED/> (in tons)				
+
+				<td>
+					<input id="wei" name="fQuantity" type="text" DISABLED/> (in tons)
 				</td>
 			</tr>
 		</table>
 	</div>
 </fieldset>
-	
+
 
 <fieldset>
-<legend>Cutting Instruction</legend>	
+<legend>Cutting Instruction</legend>
 <table width="100%" cellpadding="0" cellspacing="0" border="0">
 <tr>
-<td width="40%" align="left" valign="top">	
+<td width="40%" align="left" valign="top">
 <form id="cisave" method="post" action="">
 		<div class="pad-10">
 			<div id="bundle_number_text_label" hidden> Bundle Number </div>
@@ -82,11 +82,11 @@
 		<div class="pad-10">
 			<div id="date_text_label"> Date </div>
 			<input type="text" id="date1" value="<?php echo date("Y-m-d"); ?>" />
-		</div>	
+		</div>
 		<div class="pad-10">
 			<div id="cutting_reference_no_text_label"> Cutting Reference No </div>
-			<input id= "cuttingreferenceno" type="text"  name="cuttingreferenceno" /> 
-		</div>							
+			<input id= "cuttingreferenceno" type="text"  name="cuttingreferenceno" />
+		</div>
 		<div class="pad-10">
 			<div id="length_text_label"> Length </div>
 			<input id= "length" type="text"  name="Length" /> (in mm)
@@ -99,7 +99,7 @@
 			<input id= "rate" type="text"  name="Rate" onkeyup="doweight();" />
 		</div>
 		<div class="pad-10">
-		
+
 			<div id="bundle_weight_text_label"> Weight  </div>
 			<input id="bundleweight" type="text" name="bundle_weight" DISABLED />(in tons)
 	<!--	<input type="button" value="Approximate Weight" id="weight_id" onclick="doweight();" />-->
@@ -110,13 +110,13 @@
 			<input id="reset" type="reset" value="Reset" onclick="fucntionreset()"/>-->
 			<input class="btn btn-success" type="button" value="Add New Size" id="newsize" onClick="functionsave();"/> &nbsp; &nbsp; &nbsp;
 			<input class="btn btn-danger" id="reset" type="reset" value="Reset" onClick="fucntionreset();" /> &nbsp; &nbsp; &nbsp;
-			<input class=" btn-info"  type="button" value="UPDATE/EDIT"  id="edit" onClick="functionedit();" hidden/> &nbsp; &nbsp; &nbsp; 
+			<input class=" btn-info"  type="button" value="UPDATE/EDIT"  id="edit" onClick="functionedit();" hidden/> &nbsp; &nbsp; &nbsp;
 		</div>
 </form>
 </td>
-<td width="60%" align="left" valign="top">							
+<td width="60%" align="left" valign="top">
     <div id="contentsholder" class="flexcroll" style="width:100%; height:350px; overflow-x:hidden; overflow-y:auto;">
-		<div id="content" style="width:100%; min-height:350px; overflow:hidden;"> 
+		<div id="content" style="width:100%; min-height:350px; overflow:hidden;">
 			<div id="DynamicGrid_2">
 				No Record!
 			</div>
@@ -124,16 +124,16 @@
 	</div>
 </td>
 </tr>
-<td>	
+<td>
 </td>
 <td align="right">
 
 		<label>Total Weight</label>
-		<input id="totalweight_calcualation" type="text" DISABLED/>(in tons)  
+		<input id="totalweight_calcualation" type="text" DISABLED/>(in tons)
 		&nbsp; &nbsp; &nbsp;
-		<input class="btn btn-danger" id="cancelcoil" type="button" value="Cancel" onClick="cancelcoil();"/> 
+		<input class="btn btn-danger" id="cancelcoil" type="button" value="Cancel" onClick="cancelcoil();"/>
 		&nbsp; &nbsp; &nbsp;
-		<input class="btn btn-success"  id="saveci" type="button" value="Save" onClick="savechange();"/>  
+		<input class="btn btn-success"  id="saveci" type="button" value="Save" onClick="savechange();"/>
 		&nbsp; &nbsp; &nbsp;
 			<div id="check_bar" style="padding-top:10px;">&nbsp;</div>
 		<!--<input id="finishci" type="button" value="Finsh" onClick="finishinstructionbutton();"/>-->
@@ -149,9 +149,9 @@
 function totalweight_check(){
 	var partyid = $('#pid').val();
 	var dataString = '&partyid='+partyid;
-$.ajax({  
-	   type: "POST",  
-	   url : "<?php echo fuel_url('cutting_instruction/totalweight_check');?>/",  
+$.ajax({
+	   type: "POST",
+	   url : "<?php echo fuel_url('cutting_instruction/totalweight_check');?>/",
 		data: dataString,
 		datatype : "json",
 		success: function(msg){
@@ -159,14 +159,14 @@ $.ajax({
 		$.each(msg3, function(i, j){
 			 var weight = j.weight;
 			document.getElementById("totalweight_calcualation").value = parseFloat(weight).toFixed(3);});
-	   }  
-	}); 
+	   }
+	});
 }
 
 function loadfolderlist(account, accname) {
 	$('#DynamicGrid_2').hide();
 	var loading = '<div id="DynamicGridLoading_2"> '+
-            	   ' <img src="<?=img_path() ?>loading.gif" /><span> Loading Bundle List... </span> '+ 
+            	   ' <img src="<?=img_path() ?>loading.gif" /><span> Loading Bundle List... </span> '+
     	    	   ' </div>';
     $("#content").empty();
 	$('#content').html(loading);
@@ -180,9 +180,9 @@ function loadfolderlist(account, accname) {
 			$('#DynamicGrid_2').hide();
 			$('#DynamicGridLoading_2').hide();
 			var loading1 = '<div id="error_msg"> '+
-                           'No Result!'+ 
+                           'No Result!'+
 						   '</div>';
-			$('#content').html(loading1);  
+			$('#content').html(loading1);
 			} else{
             var partydata = [];
             for (var i = 0; i < msg.length; i++) {
@@ -193,7 +193,7 @@ function loadfolderlist(account, accname) {
             thisdata["length(in mm)"] = item.length;
             thisdata["No of sheets"] = item.noofsheets;
             thisdata["weight(in Tons)"] = parseFloat(item.weight).toFixed(3);
-            
+
             if( item.status !== 'Billed' && item.status !== 'Ready To Bill') {
 				var dl = '<a class="ico_coil_delete" title="Delete" href="'+item.dl+'" onClick=deleteItem('+item.bundlenumber+')><img src="<?php echo img_path('iconset/ico_cancel.png'); ?>" /></a>';
 				var edit = '<a class="ico_coil_edit" title="Edit" href="#" onClick=radioload('+item.bundlenumber+','+item.processdate+','+item.length+','+item.noofsheets+')><img src="<?php echo img_path('iconset/ico_edit.png'); ?>" /></a>';
@@ -205,9 +205,9 @@ function loadfolderlist(account, accname) {
             // If there are files
 				$('#DynamicGrid_2').hide();
 				$('#DynamicGridLoading_2').hide();
-				$('#content').html(CreateTableViewX(partydata, "lightPro", true)); 
-				var lcScrollbar = $('#contentsholder');	 
-				fleXenv.updateScrollBars(lcScrollbar); 
+				$('#content').html(CreateTableViewX(partydata, "lightPro", true));
+				var lcScrollbar = $('#contentsholder');
+				fleXenv.updateScrollBars(lcScrollbar);
 				$(".ico_coil_delete").click(function (e) {
                 // When a delete icon is clicked, stop the href action
                 //  and do an ajax call to delete it instead
@@ -222,11 +222,11 @@ function loadfolderlist(account, accname) {
 				$('#DynamicGrid_2').hide();
 				$('#DynamicGridLoading_2').hide();
 				var loading1 = '<div id="error_msg"> '+
-							   'No Result!'+ 
+							   'No Result!'+
 							   '</div>';
-				$('#content').html(loading1); 
-				var lfScrollbar = $('#contentsholder');	 
-				fleXenv.updateScrollBars(lfScrollbar);  
+				$('#content').html(loading1);
+				var lfScrollbar = $('#contentsholder');
+				fleXenv.updateScrollBars(lfScrollbar);
                 }
 			}
     });
@@ -256,8 +256,8 @@ function deleteItem(pd){
 		url	: "<?php echo fuel_url('cutting_instruction/delete_bundle');?>",
 		data : dataString,
 		datatype: json,
-			success: function(msg){ 
-				refresh_folderlist(); 
+			success: function(msg){
+				refresh_folderlist();
 			}
 		});
     }else{
@@ -280,7 +280,7 @@ function fucntionreset(){
 	$('#length').val('');
 	$('#rate').val('');
 	$('#bundleweight').val('');
-	
+
 		$("#edit").hide();
 		$("#newsize").show();
 }
@@ -290,14 +290,14 @@ function finishinstructionbutton(id)
 	var partyid   =	$('#pid').val();
 	var partyname = $('#pname').val();
 	var dataString = 'partyid='+partyid+'&partyname='+partyname+'&task=cit';
-	$.ajax({  
-		type: "POST",  
-		success: function(){  
+	$.ajax({
+		type: "POST",
+		success: function(){
 		setTimeout("location.href='<?= site_url('fuel/finish_task'); ?>/?"+ dataString+"'", 3000);
 		}
 		});
 }
- 
+
 function dobalanceradio()
 {
 	var pid   =	$('#pid').val();
@@ -308,16 +308,16 @@ function dobalanceradio()
 	var bundleweight = $('#bundleweight').val();
 	//var result= weight-(0.00785 *width*thickness*length)
 	//var resultbundle= (0.00000785 *width*thickness*length);
-	
+
 	var dataString = 'pid='+pid+'&bundlenumber='+bundlenumber+'&date1='+date1+'&length='+length+'&bundleweight='+bundleweight+'&rate='+rate;
-$.ajax({  
-		type: "POST",  
-		url	: "<?php echo site_url('cutting_instruction/dobalancedetails');?>/",  
+$.ajax({
+		type: "POST",
+		url	: "<?php echo site_url('cutting_instruction/dobalancedetails');?>/",
 		data: dataString,
-		success: function(){  
+		success: function(){
 		}
 		});
-	
+
 }
 function savechange(id){
 	var pid   =	$('#pid').val();
@@ -335,15 +335,15 @@ function savechange(id){
                 type: 'POST',
                 url: "<?php echo fuel_url('cutting_instruction/save_button');?>",
 				data: dataString,
-                success: function(){  
+                success: function(){
 				$("#check_bar").html('');
 				alert("Saved Succesfully");
 				refresh_folderlist();
 			}
         });
     }
-}	
-	
+}
+
 function doweight() {
 	var pid   =	$('#pid').val();
 	var width = $('#wid').val();
@@ -351,7 +351,7 @@ function doweight() {
 	var length = $('#length').val();
 	var rate = $('#rate').val();
 	var weight = $('#wei').val();
-	
+
 
 	//alert(width + ' - ' + thickness + ' - ' + length + ' - ' + rate + ' - ' + weight);
 	if(width == '' || thickness == '' || length == '' ){
@@ -378,7 +378,7 @@ function balance(){
 	var width = $('#wid').val();
 	var length = $('#length').val();
 	//var resultbundle= (0.00000785 *width*thickness*length*rate);
-	
+
     if(bal_radio.checked) {
        // document.getElementById('rate').value = 'rate';
 		//document.getElementById('length').value='';
@@ -404,7 +404,7 @@ function functionedit(){
 	var rate = parseFloat($('#rate').val()).toFixed(3);
 	var bundleweight = parseFloat($('#bundleweight').val()).toFixed(3);
 
-	totalweight_check();	
+	totalweight_check();
 	if(bundlenumber == '' || length =='' || rate =='')
 	{
 		alert('INVALID');
@@ -412,9 +412,9 @@ function functionedit(){
 	}
 	else{
 	   var dataString = 'bundlenumber='+bundlenumber+'&pid='+pid+'&length='+length+'&rate='+rate+'&bundleweight='+bundleweight;
-	   $.ajax({  
-	   type: "POST",  
-	   url : "<?php echo fuel_url('cutting_instruction/editbundle');?>/",  
+	   $.ajax({
+	   type: "POST",
+	   url : "<?php echo fuel_url('cutting_instruction/editbundle');?>/",
 	   data: dataString,
 	   success: function(msg){
 		refresh_folderlist();
@@ -424,44 +424,42 @@ function functionedit(){
 		$('#bundleweight').val('');
 		$("#edit").hide();
 		$("#newsize").show();
-	   }  
-	  }); 
+	   }
+	  });
 	}
 	}
- 
- function functionsave(){
- var bundlenumber = $('#bundlenumber').val();
- var date1 = $('#date1').val();
- var pid = $('#pid').val();
- var length = $('#length').val();
- var rate = $('#rate').val();
- var bundleweight = $('#bundleweight').val();
-	totalweight_check();	
- if( rate ==''|| bundleweight =='')
- {
-  alert('ENTER SOMETHING');
-  return false;
- }
- else{
- var dataString = 'bundlenumber='+bundlenumber+'&date1='+date1+'&length='+length+'&rate='+rate+'&pid='+pid+'&bundleweight='+bundleweight;
- alert('SAVED');
-  $.ajax({  
-   type: "POST",  
-   url : "<?php echo fuel_url('cutting_instruction/savebundledetails');?>/",  
-   data: dataString,
-   success: function(){  
-		refresh_folderlist();
-		$('#bundlenumber').val('');
-		$('#length').val('');
-		$('#rate').val('');
-		$('#bundleweight').val('');
-	}
-	});
-   /*dataType: "json"
-   }).done(function( msg ) {
-       refresh_folderlist();
-   });*/
- }
+
+ function functionsave() {
+     var bundlenumber = $('#bundlenumber').val();
+     var date1 = $('#date1').val();
+     var pid = $('#pid').val();
+     var length = $('#length').val();
+     var rate = $('#rate').val();
+     var bundleweight = $('#bundleweight').val();
+        totalweight_check();
+     if( rate ==''|| bundleweight =='') {
+          alert('ENTER SOMETHING');
+          return false;
+     } else {
+         var dataString = 'bundlenumber='+bundlenumber+'&date1='+date1+'&length='+length+'&rate='+rate+'&pid='+pid+'&bundleweight='+bundleweight;
+         alert('SAVED');
+          $.ajax({
+           type: "POST",
+           url : "<?php echo fuel_url('cutting_instruction/savebundledetails');?>/",
+           data: dataString,
+           success: function(){
+                refresh_folderlist();
+                $('#bundlenumber').val('');
+                $('#length').val('');
+                $('#rate').val('');
+                $('#bundleweight').val('');
+            }
+            });
+           /*dataType: "json"
+           }).done(function( msg ) {
+               refresh_folderlist();
+           });*/
+     }
 }
 
  function number(){
@@ -470,7 +468,7 @@ if(bal_num.checked) {
         document.getElementById('rate').value = '';
 }
 }
-	
+
 function cancelcoil(){
 	var date1 = $('#date1').val();
 	var pid   =	$('#pid').val();
@@ -480,11 +478,11 @@ function cancelcoil(){
                 type: 'POST',
                 url: "<?php echo fuel_url('cutting_instruction/cancelcoils');?>",
 				data: dataString,
-                success: function(){  
+                success: function(){
 				alert("Changed Succesfully");
 				refresh_folderlist();
 			}
         });
     }
-	
+
 </script>

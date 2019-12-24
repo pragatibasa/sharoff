@@ -116,13 +116,11 @@ class workin_progress_model extends Base_module_model {
     }
 
     function workweight_model() {
-        $sqlbw = "select sum(distinct(fpresent))  AS totalweight From aspen_tblinwardentry LEFT JOIN aspen_tblcuttinginstruction  ON aspen_tblcuttinginstruction.vIRnumber=aspen_tblinwardentry.vIRnumber LEFT JOIN aspen_tblrecoiling  ON aspen_tblrecoiling .vIRnumber=aspen_tblinwardentry.vIRnumber LEFT JOIN aspen_tblslittinginstruction ON aspen_tblslittinginstruction.vIRnumber=aspen_tblinwardentry.vIRnumber
-where aspen_tblinwardentry.vStatus = 'Work In Progress' or aspen_tblslittinginstruction.vStatus='WIP-Slitting' or aspen_tblrecoiling.vStatus='WIP-Recoiling' or aspen_tblcuttinginstruction.vStatus='WIP-Cutting' ";
+        $sqlbw = "select sum(x.weight) AS totalweight from (select fpresent AS weight From aspen_tblinwardentry LEFT JOIN aspen_tblcuttinginstruction ON aspen_tblcuttinginstruction.vIRnumber=aspen_tblinwardentry.vIRnumber LEFT JOIN aspen_tblrecoiling ON aspen_tblrecoiling.vIRnumber=aspen_tblinwardentry.vIRnumber LEFT JOIN aspen_tblslittinginstruction ON aspen_tblslittinginstruction.vIRnumber=aspen_tblinwardentry.vIRnumber where aspen_tblinwardentry.vStatus = 'Work In Progress' or aspen_tblslittinginstruction.vStatus='WIP-Slitting' or aspen_tblrecoiling.vStatus='WIP-Recoiling' or aspen_tblcuttinginstruction.vStatus='WIP-Cutting' GROUP BY aspen_tblinwardentry.vIRnumber) x";
+
         $query = $this->db->query($sqlbw);
-        if ($query->num_rows() > 0)
-        {
-            foreach ($query->result() as $rowbw)
-            {
+        if ($query->num_rows() > 0) {
+            foreach ($query->result() as $rowbw) {
                 $bweight =$rowbw->totalweight;
             }
         }
@@ -132,10 +130,8 @@ where aspen_tblinwardentry.vStatus = 'Work In Progress' or aspen_tblslittinginst
     function generate_cuttingslip_model() {
         $sqlcs = "select aspen_tblpartydetails.nPartyName as partyname,aspen_tblmatdescription.vDescription as materialdescription,vInvoiceNo as Invoicenumber,fWidth as Width,fThickness as Thickness,fQuantity as Weight from aspen_tblinwardentry LEFT JOIN aspen_tblmatdescription  ON aspen_tblmatdescription.nMatId=aspen_tblinwardentry.nMatId LEFT JOIN aspen_tblpartydetails ON aspen_tblpartydetails .nPartyId=aspen_tblinwardentry.nPartyId where aspen_tblinwardentry.vIRnumber='".$_POST['coilnumber']."'";
         $query = $this->db->query($sqlcs);
-        if ($query->num_rows() > 0)
-        {
-            foreach ($query->result() as $row)
-            {
+        if ($query->num_rows() > 0) {
+            foreach ($query->result() as $row) {
                 $arr[] =$row;
             }
         }

@@ -8,15 +8,15 @@
 </script>
 
 <div class="tab-boxpr">
-    <div style="width:640px;">
+    <div style="width:640px;float:left;">
         <a href="javascript:">
             <div class="tabLinkpr activeLinkpr" id="contpr-1" style="float:left;"><h1>Workin Progress</h1></div>
         </a>
     </div>
+    <div style="float:right;background: none" >
+        <a style="border:none;padding:0px;"  href="#" id="export" onclick="tableToExcel('myTable','Workin Progress');"><input class="btn btn-success" type="button" value="Export to Excel"/> </a>&nbsp; &nbsp; &nbsp;
+    </div>
 </div>
-<div>
-  <a style="border:none;padding:0px;position: absolute; right:0;"  href="#" id="export" onclick="tableToExcel('myTable','Workin Progress');"><input class="btn btn-success" type="button" value="Export to Excel"/> </a>&nbsp; &nbsp; &nbsp;
-  </div>
 
 <!-- MAIN Workinprogress @START -->
 <div id="main_content" style="overflow:hidden;">
@@ -69,7 +69,6 @@
                                     echo $cs = '<a title="Quality Report" href="' . $workinprogress_lists[$i]->qc . '"><span class="badge" style="color: #FFFFFF;" >Quality Report</span></a>';
                                     ?> </td>
                                 </tr>
-                                <tr class="even"></tr>
                             <?php }
                             } ?>
                             </tbody>
@@ -114,18 +113,16 @@
         document.getElementById('partnamecheck').value = coilnumber;
 }
 function tableToExcel() {
-	
+
     var tab_text = '<html xmlns:x="urn:schemas-microsoft-com:office:excel">';
-    
+
 
 
 tab_text = tab_text + '<head><xml><x:ExcelWorkbook><x:ExcelWorksheets><x:ExcelWorksheet>';
 tab_text = tab_text + '<x:WorksheetOptions><x:Panes></x:Panes></x:WorksheetOptions></x:ExcelWorksheet>';
 tab_text = tab_text + '</x:ExcelWorksheets></x:ExcelWorkbook></xml></head><body>';
 tab_text = tab_text + '<table><tr><td style="font-size:60px; font-style:italic; font-family:fantasy;" colspan="7" align="center"><h1>Workin Progress</h1></td><td></td><td></td><td></td><td></td></tr></table>';
-//tab_text = tab_text + '<tr></tr><tr><td><b>Party Name : </b>'+$('#party_account_name').val()+'</td><td><b>From Date : </b>'+$('#selector').val()+'</td><td><b>To Date : </b>'+$('#selector1').val()+'</td></tr><tr><td></td></tr></table>';
 tab_text = tab_text + "<table border='1px'>";
-
 tab_text = tab_text + $('#myTable').html();
 tab_text = tab_text + '</table>';
 
